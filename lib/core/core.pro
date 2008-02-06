@@ -10,5 +10,5 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += serial.h
-SOURCES += serial.cpp
+HEADERS += serial.h device.h
+SOURCES += serial.cpp device.cpp
