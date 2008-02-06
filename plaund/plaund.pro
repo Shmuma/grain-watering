@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-CONFIG = qt
+CONFIG = qt debug
 QT -= gui
 
 TARGET = 
@@ -12,6 +12,9 @@ INCLUDEPATH += .
 
 LIBS += -L../lib/core -lcore
 INCLUDEPATH += ../lib/core
+
+QMAKE_CXXFLAGS_DEBUG += -O0
+QMAKE_LFLAGS_DEBUG += -g
 
 # Input
 SOURCES += main.cpp

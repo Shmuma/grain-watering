@@ -3,11 +3,14 @@
 ######################################################################
 
 TEMPLATE = lib
-CONFIG = staticlib qt
+CONFIG = staticlib qt debug
 QT -= gui
 TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += .
+
+QMAKE_CXXFLAGS_DEBUG += -O0
+QMAKE_LFLAGS_DEBUG += -g
 
 # Input
 HEADERS += serial.h device.h

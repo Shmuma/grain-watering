@@ -19,12 +19,12 @@ SerialPort::SerialPort (const QString& device) throw (QString)
 {
     // initialize port
     struct termios oldtio, newtio;
-    int fd = open (device.toAscii ().constData (), O_RDWR | O_NOCTTY);
+    _fd = open (device.toAscii ().constData (), O_RDWR | O_NOCTTY);
     
-    if (fd < 0)
+    if (_fd < 0)
         throw QString ("Cannot open device %1").arg (device);
 
-    tcgetattr(fd, &oldtio);
+    tcgetattr(_fd, &oldtio);
     memset (&newtio, 0, sizeof (newtio));
 
     newtio.c_cflag = B19200 | CRTSCTS | CS8 | CLOCAL | CREAD;
@@ -47,11 +47,78 @@ SerialPort::SerialPort (const QString& device) throw (QString)
     newtio.c_cc[VWERASE]  = 0;     /* Ctrl-w */
     newtio.c_cc[VLNEXT]   = 0;     /* Ctrl-v */
     newtio.c_cc[VEOL2]    = 0;     /* '\0' */    
-    tcflush (fd, TCIFLUSH);
+    tcflush (_fd, TCIFLUSH);
     
-    if (tcsetattr (fd, TCSANOW, &newtio) < -1)
+    if (tcsetattr (_fd, TCSANOW, &newtio) < -1)
         throw QString ("Serial line initialization error %1").arg (errno);
     _valid = true;
 }
 
+
+void SerialPort::send (const QByteArray& data) throw (QString)
+{
+    if (write (_fd, data.constData (), data.count ()) < 0)
+        throw QString ("Error transmitting data %d").arg (errno);
+}
+
+
+QByteArray SerialPort::receive () throw (QString)
+{
+    // wait for sync byte
+    char c, cc[4];
+    QByteArray res;
+
+    while (1) {
+        if (read (_fd, &c, 1) < 0)
+            throw QString ("Error receiving data %d").arg (errno);
+        if (c == (char)0xAA)
+            break;
+    }
+    
+    res.append (c);
+    
+    // read four bytes of data
+    if (read (_fd, cc, 4) < 0)
+        throw QString ("Error receiving data %d").arg (errno);
+    
+    res.append (cc[0]);
+    res.append (cc[1]);
+    res.append (cc[2]);
+    res.append (cc[3]);
+
+    return res;
+}
+
+
+// --------------------------------------------------
+// FakeSerialPort
+// --------------------------------------------------
+FakeSerialPort::FakeSerialPort (const QString& input, const QString& output) throw (QString)
+    : in (input),
+      out (output)
+{
+    if (!in.open (QIODevice::ReadOnly | QIODevice::Unbuffered))
+        throw QString ("Cannot open file %1 for reading").arg (input);
+    if (!out.open (QIODevice::WriteOnly | QIODevice::Unbuffered))
+        throw QString ("Cannot open file %1 for writing").arg (output);
+    _valid = true;
+}
+
+
+void FakeSerialPort::send (const QByteArray& data) throw (QString)
+{
+    out.write (data);
+}
+
+
+QByteArray FakeSerialPort::receive () throw (QString)
+{
+    QByteArray res;
+
+    // read until we get AA byte
+    while ((res = in.read (1)) != QByteArray (1, 0xAA));
+    res += in.read (4);
+
+    return res;
+}
 

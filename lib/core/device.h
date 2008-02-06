@@ -7,7 +7,8 @@
 class Device
 {
 private:
-    SerialPort _port;
+    //    SerialPort _port;
+    FakeSerialPort _port;
     bool _manual;
     
 public:
@@ -15,6 +16,8 @@ public:
 
     bool initialize ();
     
+    void updateState () throw (QString);
+
     bool isManualMode () const
         { return _manual; };
 };
@@ -24,7 +27,8 @@ class DeviceCommand
 {
 public:
     enum kind_t {
-        INIT = 0xFF,
+        Init  = 0xFF,
+        State = 0x04,
     };
 
 private:
@@ -40,9 +44,17 @@ public:
     DeviceCommand (kind_t kind);
     DeviceCommand (const QByteArray& data);
 
+    bool operator == (const DeviceCommand& cmd) const;
+
     QByteArray pack () const;
-    bool isValid () const
+    bool valid () const
         { return _valid; };
+
+    char low () const
+    { return _low; };
+    
+    char high () const
+    { return _high; };
 };
 
 #endif
