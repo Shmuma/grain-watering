@@ -4,8 +4,17 @@
 #include <QtCore>
 #include "serial.h"
 
+
 class Device
 {
+public:
+    enum stages_mask_t {
+	Stg_First  = 1,
+	Stg_Second = 2,
+	Stg_Third  = 4,
+	Stg_Fourth = 8,
+    };
+
 private:
     SerialPort* _port;
     bool _manual;
@@ -25,6 +34,16 @@ public:
     int getGrainTemperature () const;
     int getGrainNature () const;
     int getWaterFlow () const;
+
+    bool getSystemPowered () const;
+    bool getGrainPresent () const;
+    bool getBSUPowered () const;
+    int getWaterPressure () const;
+    int getControllerID () const;
+    stages_mask_t getControllerConfig () const;
+    int getP5State () const;
+    int getP4State () const;
+    int getCleanResult () const;
 };
 
 
@@ -39,6 +58,15 @@ public:
 	GetGrainTemperature	= 0x10,
 	GetGrainNature		= 0x14,
 	GetWaterFlow		= 0x18,
+	GetSystemPowered	= 0x1C,
+	GetGrainPresent		= 0x20,
+	GetBSUPowered		= 0x24,
+	GetWaterPressure	= 0x50,
+	GetControllerID		= 0x30,
+	GetControllerConfig	= 0x34,
+	GetP5State		= 0x58,
+	GetP4State		= 0x5C,
+	GetCleanResult		= 0x70,
     };
 
     enum stage_t {

@@ -56,7 +56,7 @@ int Device::getGrainFlow () const
 {
     DeviceCommand cmd (DeviceCommand::GetGrainFlow);
     _port->send (cmd.pack ());
-    return DeviceCommand (_port->receive (cmd.delay ()+1)).value ();
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).high ();
 }
 
 
@@ -64,7 +64,7 @@ int Device::getGrainHumidity () const
 {
     DeviceCommand cmd (DeviceCommand::GetGrainHumidity);
     _port->send (cmd.pack ());
-    return DeviceCommand (_port->receive (cmd.delay ()+1)).value ();
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).high ();
 }
 
 
@@ -72,7 +72,7 @@ int Device::getGrainTemperature () const
 {
     DeviceCommand cmd (DeviceCommand::GetGrainTemperature);
     _port->send (cmd.pack ());
-    return DeviceCommand (_port->receive (cmd.delay ()+1)).value ();
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).high ();
 }
 
 
@@ -80,7 +80,7 @@ int Device::getGrainNature () const
 {
     DeviceCommand cmd (DeviceCommand::GetGrainNature);
     _port->send (cmd.pack ());
-    return DeviceCommand (_port->receive (cmd.delay ()+1)).value ();
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).high ();
 }
 
 
@@ -91,6 +91,80 @@ int Device::getWaterFlow () const
     return DeviceCommand (_port->receive (cmd.delay ()+1)).value ();
 }
 
+
+// TODO: ask about this command
+bool Device::getSystemPowered () const
+{
+//     DeviceCommand cmd (DeviceCommand::GetSystemPowered);
+//     _port->send (cmd.pack ());
+//     return DeviceCommand (_port->receive (cmd.delay ()+1)).value ();
+    return false;
+}
+
+
+bool Device::getGrainPresent () const
+{
+    DeviceCommand cmd (DeviceCommand::GetGrainPresent);
+    _port->send (cmd.pack ());
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).low () == (char)0xF0;
+}
+
+
+bool Device::getBSUPowered () const
+{
+    DeviceCommand cmd (DeviceCommand::GetBSUPowered);
+    _port->send (cmd.pack ());
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).low () == (char)0xF0;
+}
+
+
+int Device::getWaterPressure () const
+{
+    DeviceCommand cmd (DeviceCommand::GetWaterPressure);
+    _port->send (cmd.pack ());
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).high ();
+}
+
+
+int Device::getControllerID () const
+{
+    DeviceCommand cmd (DeviceCommand::GetControllerID);
+    _port->send (cmd.pack ());
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).high ();
+}
+
+
+// TODO: unclean docs. Is this command returs value previously set by SetControllerConfig?
+Device::stages_mask_t Device::getControllerConfig () const
+{
+    DeviceCommand cmd (DeviceCommand::GetControllerConfig);
+    _port->send (cmd.pack ());
+    return (stages_mask_t)DeviceCommand (_port->receive (cmd.delay ()+1)).getReplyStage ();
+}
+
+
+int Device::getP5State () const
+{
+    DeviceCommand cmd (DeviceCommand::GetP5State);
+    _port->send (cmd.pack ());
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).low ();
+}
+
+
+int Device::getP4State () const
+{
+    DeviceCommand cmd (DeviceCommand::GetP4State);
+    _port->send (cmd.pack ());
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).low ();
+}
+
+
+int Device::getCleanResult () const
+{
+    DeviceCommand cmd (DeviceCommand::GetCleanResult);
+    _port->send (cmd.pack ());
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).low ();
+}
 
 
 // --------------------------------------------------
@@ -155,15 +229,9 @@ QByteArray DeviceCommand::pack () const
 int DeviceCommand::delay () const
 {
     switch (_kind) {
-    case Init:
-	return 1;
     case GetStateWord:
 	return 2;
-    case GetGrainFlow:
-    case GetGrainHumidity:
-    case GetGrainTemperature:
-    case GetGrainNature:
-    case GetWaterFlow:
+    default:
 	return 1;
     }
 }
@@ -177,6 +245,8 @@ void DeviceCommand::setStage (stage_t stg)
     case GetGrainTemperature:
     case GetGrainNature:
     case GetWaterFlow:
+    case GetGrainPresent:
+    case GetBSUPowered:
 	_low = (char)stg;
 	break;
     }
