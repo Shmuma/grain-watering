@@ -2,7 +2,6 @@
 #define __SERIAL_H__
 
 #include <QtCore>
-//#include <qstring.h>
 
 
 // abstract serial port base
@@ -18,6 +17,9 @@ protected:
 public:
     SerialPort ()
         : _valid (true)
+    {};
+
+    virtual ~SerialPort ()
     {};
 
     bool valid () const
@@ -43,6 +45,7 @@ public:
 };
 
 
+
 class FileSerialPort : public SerialPort
 {
 private:
@@ -50,6 +53,24 @@ private:
 
 public:
     FileSerialPort (const QString& input, const QString& output) throw (QString);
+
+    virtual void send (const QByteArray& data) throw (QString);
+    virtual QByteArray receive (int timeout = -1) throw (QString);
+};
+
+
+
+class SerialRecorder : public SerialPort
+{
+private:
+    SerialPort* _port;
+    QString _outFile;
+    QMap<QByteArray, QByteArray> _hash;
+    QByteArray _last;
+
+public:
+    SerialRecorder (SerialPort* port, const QString& outFile);
+    virtual ~SerialRecorder ();
 
     virtual void send (const QByteArray& data) throw (QString);
     virtual QByteArray receive (int timeout = -1) throw (QString);

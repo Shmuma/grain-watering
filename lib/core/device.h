@@ -11,8 +11,7 @@ private:
     bool _manual;
     
 public:
-    Device () throw (QString);
-    ~Device ();
+    Device (SerialPort* port) throw (QString);
 
     bool initialize ();
     

@@ -7,16 +7,10 @@
 // --------------------------------------------------
 // Device
 // --------------------------------------------------
-Device::Device () throw (QString)
-    : _port (new FileSerialPort ("input.dat", "output.dat")),
+Device::Device (SerialPort* port) throw (QString)
+    : _port (port),
       _manual (true)
 {
-}
-
-
-Device::~Device ()
-{
-    delete _port;
 }
 
 

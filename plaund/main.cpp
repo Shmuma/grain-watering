@@ -10,7 +10,9 @@
 int main ()
 {
     try {
-        Device device;
+        SerialPort* port = new SerialRecorder (new FileSerialPort ("input.dat", "output.dat"), 
+                                               QString ("trace.dat"));
+        Device device (port);
 
         while (1) {
             if (!device.initialize ())
@@ -33,6 +35,7 @@ int main ()
         }
 
         printf ("Device in auto mode, do job\n");
+        delete port;
 
     } catch (QString msg) {
         printf ("Error: %s\n", msg.toAscii ().constData ());

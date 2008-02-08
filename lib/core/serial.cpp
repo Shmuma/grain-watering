@@ -126,3 +126,47 @@ QByteArray FileSerialPort::receive (int) throw (QString)
     return res;
 }
 
+
+// --------------------------------------------------
+// SerialRecorder
+// --------------------------------------------------
+SerialRecorder::SerialRecorder (SerialPort* port, const QString& outFile)
+    : _port (port),
+      _outFile (outFile)
+{
+}
+
+
+SerialRecorder::~SerialRecorder ()
+{
+    // flush collected data into out file
+    QFile file (_outFile);
+
+    if (!file.open (QIODevice::WriteOnly)) {
+        printf ("SerialRecorder: cannot open output file\n");
+        return;
+    }
+        
+    QDataStream stream (&file);
+    stream << _hash;
+
+    file.close ();
+    delete _port;
+}
+
+
+void SerialRecorder::send (const QByteArray& data) throw (QString)
+{
+    _port->send (data);
+    _last = data;
+}
+
+
+QByteArray SerialRecorder::receive (int timeout) throw (QString)
+{
+    QByteArray res = _port->receive (timeout);
+
+    _hash[_last] = res;
+
+    return res;
+}
