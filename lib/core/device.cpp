@@ -8,21 +8,25 @@
 // Device
 // --------------------------------------------------
 Device::Device () throw (QString)
-//    : _port ("/dev/ttyS0"),
-    : _port ("input.dat", "output.dat"),
+    : _port (new FileSerialPort ("input.dat", "output.dat")),
       _manual (true)
 {
 }
 
 
+Device::~Device ()
+{
+    delete _port;
+}
+
 
 bool Device::initialize ()
 {
     // send to port initial sequence
-    _port.send (DeviceCommand (DeviceCommand::Init).pack ());
+    _port->send (DeviceCommand (DeviceCommand::Init).pack ());
 
     // wait for the same sequence from device
-    DeviceCommand cmd (_port.receive ());
+    DeviceCommand cmd (_port->receive (2));
 
     return cmd == DeviceCommand (DeviceCommand::Init);
 }
@@ -30,9 +34,9 @@ bool Device::initialize ()
 
 void Device::updateState () throw (QString)
 {
-    _port.send (DeviceCommand (DeviceCommand::State).pack ());
+    _port->send (DeviceCommand (DeviceCommand::State).pack ());
 
-    DeviceCommand cmd (_port.receive ());
+    DeviceCommand cmd (_port->receive (4));
     
     // parse state word
     switch (cmd.low ()) {

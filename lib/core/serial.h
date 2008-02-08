@@ -4,38 +4,55 @@
 #include <QtCore>
 //#include <qstring.h>
 
+
+// abstract serial port base
 class SerialPort
 {
 private:
-    QString _device;
     bool _valid;
-    int _fd;
+
+protected:
+    void setValid (bool val = true)
+    { _valid = val; };
 
 public:
-    SerialPort (const QString& device) throw (QString);
+    SerialPort ()
+        : _valid (true)
+    {};
 
     bool valid () const
     { return _valid; };
-
-    void send (const QByteArray& data) throw (QString);
-    QByteArray receive () throw (QString);
+    
+    virtual void send (const QByteArray& data) throw (QString) = 0;
+    virtual QByteArray receive (int timeout = -1) throw (QString) = 0;
 };
 
 
-class FakeSerialPort
+
+class RealSerialPort : public SerialPort
+{
+private:
+    QString _device;
+    int _fd;
+
+public:
+    RealSerialPort (const QString& device) throw (QString);
+
+    virtual void send (const QByteArray& data) throw (QString);
+    virtual QByteArray receive (int timeout = -1) throw (QString);
+};
+
+
+class FileSerialPort : public SerialPort
 {
 private:
     QFile in, out;
-    bool _valid;
 
 public:
-    FakeSerialPort (const QString& input, const QString& output) throw (QString);
+    FileSerialPort (const QString& input, const QString& output) throw (QString);
 
-    bool valid () const
-    { return _valid; };
-
-    void send (const QByteArray& data) throw (QString);
-    QByteArray receive () throw (QString);
+    virtual void send (const QByteArray& data) throw (QString);
+    virtual QByteArray receive (int timeout = -1) throw (QString);
 };
 
 

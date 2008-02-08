@@ -7,12 +7,12 @@
 class Device
 {
 private:
-    //    SerialPort _port;
-    FakeSerialPort _port;
+    SerialPort* _port;
     bool _manual;
     
 public:
     Device () throw (QString);
+    ~Device ();
 
     bool initialize ();
     

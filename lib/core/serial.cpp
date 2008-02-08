@@ -11,12 +11,14 @@
 
 
 // --------------------------------------------------
-// SerailPort class implementation
+// RealSerailPort class implementation
 // --------------------------------------------------
-SerialPort::SerialPort (const QString& device) throw (QString)
-    : _device (device),
-      _valid (false)
+RealSerialPort::RealSerialPort (const QString& device) throw (QString)
+    : _device (device)
 {
+    // port is not connected by default
+    setValid (false);
+
     // initialize port
     struct termios oldtio, newtio;
     _fd = open (device.toAscii ().constData (), O_RDWR | O_NOCTTY);
@@ -51,18 +53,19 @@ SerialPort::SerialPort (const QString& device) throw (QString)
     
     if (tcsetattr (_fd, TCSANOW, &newtio) < -1)
         throw QString ("Serial line initialization error %1").arg (errno);
-    _valid = true;
+
+    setValid ();
 }
 
 
-void SerialPort::send (const QByteArray& data) throw (QString)
+void RealSerialPort::send (const QByteArray& data) throw (QString)
 {
     if (write (_fd, data.constData (), data.count ()) < 0)
         throw QString ("Error transmitting data %d").arg (errno);
 }
 
 
-QByteArray SerialPort::receive () throw (QString)
+QByteArray RealSerialPort::receive (int timeout) throw (QString)
 {
     // wait for sync byte
     char c, cc[4];
@@ -91,27 +94,28 @@ QByteArray SerialPort::receive () throw (QString)
 
 
 // --------------------------------------------------
-// FakeSerialPort
+// FileSerialPort
 // --------------------------------------------------
-FakeSerialPort::FakeSerialPort (const QString& input, const QString& output) throw (QString)
+FileSerialPort::FileSerialPort (const QString& input, const QString& output) throw (QString)
     : in (input),
       out (output)
 {
+    setValid (false);
     if (!in.open (QIODevice::ReadOnly | QIODevice::Unbuffered))
         throw QString ("Cannot open file %1 for reading").arg (input);
     if (!out.open (QIODevice::WriteOnly | QIODevice::Unbuffered))
         throw QString ("Cannot open file %1 for writing").arg (output);
-    _valid = true;
+    setValid ();
 }
 
 
-void FakeSerialPort::send (const QByteArray& data) throw (QString)
+void FileSerialPort::send (const QByteArray& data) throw (QString)
 {
     out.write (data);
 }
 
 
-QByteArray FakeSerialPort::receive () throw (QString)
+QByteArray FileSerialPort::receive (int) throw (QString)
 {
     QByteArray res;
 
