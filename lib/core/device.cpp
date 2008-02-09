@@ -34,6 +34,7 @@ DeviceCommand::DeviceCommand (const QByteArray& data)
     if (data[1] != (char)0xFF && data[1] != 1 && data[1] != 2 && data[1] != 3 && data[1] != 4)
 	return;
 
+    _kind = (kind_t)data[1];
     _reply_stage = (stage_t)(unsigned char)data[1];
     _low = data[2];
     _high = data[3];
