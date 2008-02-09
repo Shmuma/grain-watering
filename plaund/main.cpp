@@ -10,8 +10,9 @@
 int main ()
 {
     try {
-        SerialPort* port = new SerialRecorder (new FileSerialPort ("input.dat", "output.dat"), 
-                                               QString ("trace.dat"));
+//         SerialPort* port = new SerialRecorder (new FileSerialPort ("input.dat", "output.dat"), 
+//                                                QString ("trace.dat"));
+	SerialPort* port = new FileSerialPort ("input.dat", "output.dat");
         Device device (port);
 
         while (1) {
