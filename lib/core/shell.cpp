@@ -12,6 +12,8 @@ Interpreter::Interpreter (Device* device)
     // initialize vocabulary
     _commands["help"] 		= CommandMeta (1, NULL, "Show help for command", "Show help for command\n");
     _commands["connect"] 	= CommandMeta (0, &Interpreter::connect, "Connect to device", "Send initialization sequence to device\n");
+    _commands["getstate"]	= CommandMeta (0, &Interpreter::getStateWord, "Get status word", "Obtain and parse status word. Possible values:\n"
+					       "manual|auto - system state\n");
 }
 
 
@@ -60,7 +62,10 @@ QString Interpreter::getHelp (const QString& cmd)
 	QMap<QString, CommandMeta>::const_iterator it = _commands.begin ();
 
 	while (it != _commands.constEnd ()) {
-	    res += it.key () + "\t\t" + it.value ().hint () + "\n";
+	    res += it.key ();
+	    if (it.key ().length () < 8)
+		res += "\t";
+	    res += "\t" + it.value ().hint () + "\n";
 	    it++;
 	}
 
@@ -76,5 +81,20 @@ QString Interpreter::getHelp (const QString& cmd)
 
 QString Interpreter::connect (const QStringList& args)
 {
-    return "";
+    return getBoolReply (_dev->initialize ());
+}
+
+
+QString Interpreter::getStateWord (const QStringList& args)
+{
+    try {
+	QString res;
+
+	_dev->updateState ();
+	res += _dev->isManualMode () ? "manual" : "auto";
+
+	return res + "\n";
+    } catch (QString msg) {
+	return QString ("ERROR: ") + msg + "\n";
+    }
 }

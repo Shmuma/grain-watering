@@ -95,7 +95,7 @@ class Device
 {
 private:
     SerialPort* _port;
-    bool _manual;
+    bool _manual, _connected;
     
 protected:
     static char getLow (int value)
@@ -112,6 +112,8 @@ public:
 
     bool isManualMode () const
         { return _manual; };
+    bool isConnected () const
+        { return _connected; };
 
     int getGrainFlow (DeviceCommand::stage_t stage) const;
     int getGrainHumidity (DeviceCommand::stage_t stage) const;

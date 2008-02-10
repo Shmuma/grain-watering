@@ -16,7 +16,11 @@ private:
     Device* _dev;
     QMap<QString, CommandMeta> _commands;
 
+    static QString getBoolReply (bool res)
+    { return res ? "OK\n" : "ERROR\n"; };
+
     QString connect (const QStringList& args);
+    QString getStateWord (const QStringList& args);
 
 public:
     Interpreter (Device* device);

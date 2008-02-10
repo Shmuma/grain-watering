@@ -112,7 +112,8 @@ bool DeviceCommand::isOK (const QByteArray& data, kind_t kind, stage_t stage)
 // --------------------------------------------------
 Device::Device (SerialPort* port) throw (QString)
     : _port (port),
-      _manual (true)
+      _manual (true),
+      _connected (false)
 {
 }
 
@@ -127,7 +128,7 @@ bool Device::initialize ()
     // wait for the same sequence from device
     DeviceCommand cmd (_port->receive (_cmd.delay ()+1));
 
-    return cmd == DeviceCommand (DeviceCommand::Init);
+    return _connected = (cmd == DeviceCommand (DeviceCommand::Init));
 }
 
 
