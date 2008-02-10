@@ -16,12 +16,28 @@ private:
     Device* _dev;
     QMap<QString, CommandMeta> _commands;
 
-    static QString getBoolReply (bool res)
-    { return res ? "OK\n" : "ERROR\n"; };
+    static QString checkBoolReply (bool res)
+        { return res ? "OK\n" : "ERROR\n"; };
+    static QString boolToReply (bool res)
+        { return res ? "TRUE\n" : "FALSE\n"; };
+    static DeviceCommand::stage_t parseStage (const QString& stage) throw (QString);
 
     QString connect (const QStringList& args);
     QString getStateWord (const QStringList& args);
+    QString getGrainFlow (const QStringList& args);
+    QString getGrainHumidity (const QStringList& args);
+    QString getGrainTemperature (const QStringList& args);
+    QString getGrainNature (const QStringList& args);
+    QString getWaterFlow (const QStringList& args);
+    QString getWaterPressure (const QStringList& args);
+    QString getControllerID (const QStringList& args);
+    QString getP4State (const QStringList& args);
+    QString getP5State (const QStringList& args);
+    QString getCleanResult (const QStringList& args);
 
+    QString isSystemPowered (const QStringList& args);
+    QString isGrainPresent (const QStringList& args);
+    QString isBSUPowered (const QStringList& args);
 public:
     Interpreter (Device* device);
 
@@ -49,16 +65,16 @@ public:
     {};
 
     QString hint () const
-    { return _hint; };
+        { return _hint; };
 
     QString help () const
-    { return _help; };
+        { return _help; };
 
     int args () const
-    { return _args; };
+        { return _args; };
 
     handler_t handler () const
-    { return _handler; };
+        { return _handler; };
 };
 
 #endif
