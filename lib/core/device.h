@@ -113,15 +113,15 @@ public:
     bool isManualMode () const
         { return _manual; };
 
-    int getGrainFlow () const;
-    int getGrainHumidity () const;
-    int getGrainTemperature () const;
-    int getGrainNature () const;
-    int getWaterFlow () const;
+    int getGrainFlow (DeviceCommand::stage_t stage) const;
+    int getGrainHumidity (DeviceCommand::stage_t stage) const;
+    int getGrainTemperature (DeviceCommand::stage_t stage) const;
+    int getGrainNature (DeviceCommand::stage_t stage) const;
+    int getWaterFlow (DeviceCommand::stage_t stage) const;
 
     bool getSystemPowered () const;
-    bool getGrainPresent () const;
-    bool getBSUPowered () const;
+    bool getGrainPresent (DeviceCommand::stage_t stage) const;
+    bool getBSUPowered (DeviceCommand::stage_t stage) const;
     int getWaterPressure () const;
     int getControllerID () const;
     int getP5State () const;

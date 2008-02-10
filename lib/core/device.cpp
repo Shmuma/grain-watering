@@ -155,41 +155,41 @@ void Device::updateState () throw (QString)
 }
 
 
-int Device::getGrainFlow () const
+int Device::getGrainFlow (DeviceCommand::stage_t stage) const
 {
-    DeviceCommand cmd (DeviceCommand::GetGrainFlow);
+    DeviceCommand cmd (DeviceCommand::GetGrainFlow, (char)stage);
     _port->send (cmd.pack ());
     return DeviceCommand (_port->receive (cmd.delay ()+1)).high ();
 }
 
 
-int Device::getGrainHumidity () const
+int Device::getGrainHumidity (DeviceCommand::stage_t stage) const
 {
-    DeviceCommand cmd (DeviceCommand::GetGrainHumidity);
+    DeviceCommand cmd (DeviceCommand::GetGrainHumidity, (char)stage);
     _port->send (cmd.pack ());
     return DeviceCommand (_port->receive (cmd.delay ()+1)).high ();
 }
 
 
-int Device::getGrainTemperature () const
+int Device::getGrainTemperature (DeviceCommand::stage_t stage) const
 {
-    DeviceCommand cmd (DeviceCommand::GetGrainTemperature);
+    DeviceCommand cmd (DeviceCommand::GetGrainTemperature, (char)stage);
     _port->send (cmd.pack ());
     return DeviceCommand (_port->receive (cmd.delay ()+1)).high ();
 }
 
 
-int Device::getGrainNature () const
+int Device::getGrainNature (DeviceCommand::stage_t stage) const
 {
-    DeviceCommand cmd (DeviceCommand::GetGrainNature);
+    DeviceCommand cmd (DeviceCommand::GetGrainNature, (char)stage);
     _port->send (cmd.pack ());
     return DeviceCommand (_port->receive (cmd.delay ()+1)).high ();
 }
 
 
-int Device::getWaterFlow () const
+int Device::getWaterFlow (DeviceCommand::stage_t stage) const
 {
-    DeviceCommand cmd (DeviceCommand::GetWaterFlow);
+    DeviceCommand cmd (DeviceCommand::GetWaterFlow, (char)stage);
     _port->send (cmd.pack ());
     return DeviceCommand (_port->receive (cmd.delay ()+1)).value ();
 }
@@ -205,17 +205,17 @@ bool Device::getSystemPowered () const
 }
 
 
-bool Device::getGrainPresent () const
+bool Device::getGrainPresent (DeviceCommand::stage_t stage) const
 {
-    DeviceCommand cmd (DeviceCommand::GetGrainPresent);
+    DeviceCommand cmd (DeviceCommand::GetGrainPresent, (char)stage);
     _port->send (cmd.pack ());
     return DeviceCommand (_port->receive (cmd.delay ()+1)).low () == (char)0xF0;
 }
 
 
-bool Device::getBSUPowered () const
+bool Device::getBSUPowered (DeviceCommand::stage_t stage) const
 {
-    DeviceCommand cmd (DeviceCommand::GetBSUPowered);
+    DeviceCommand cmd (DeviceCommand::GetBSUPowered, (char)stage);
     _port->send (cmd.pack ());
     return DeviceCommand (_port->receive (cmd.delay ()+1)).low () == (char)0xF0;
 }
