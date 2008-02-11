@@ -34,7 +34,6 @@ Interpreter::Interpreter (Device* device)
 					       "Get P5 state value\n");
     _commands["getcleanresult"] = CommandMeta (0, &Interpreter::getCleanResult, "Get clean result", 
 					       "Get result of last clean\n");
-
     _commands["ispowered"]	= CommandMeta (0, &Interpreter::isSystemPowered, "Checks system power", 
 					       "Check system power state. Returns TRUE if on or FALSE otherwise\n");
     _commands["isgrainpresent"]	= CommandMeta (1, &Interpreter::isGrainPresent, "Checks for grain at stage", 
@@ -43,6 +42,11 @@ Interpreter::Interpreter (Device* device)
     _commands["isbsupowered"]	= CommandMeta (1, &Interpreter::isBSUPowered, "Checks for BSU power state", 
 					       "Checks for BSU power at stage, identified by number 1 to 4.\n"
 					       "Returns TRUE if power is on or FALSE otherwise.\n");
+    _commands["setwatergate"]	= CommandMeta (2, &Interpreter::setWaterGate, "Set water gate position",
+                                               "Set water gate. First argument is a section number (1..4), second is a value assigned.\n");
+    _commands["setfiltergate"]  = CommandMeta (6, &Interpreter::setFilterGate, "Set filter gates",
+                                               "Set filter gates. Six number arguments can be zero or one. First five are for stage gates.\n"
+                                               "Last is for engine\n");
 }
 
 
@@ -128,6 +132,23 @@ DeviceCommand::stage_t Interpreter::parseStage (const QString& stage) throw (QSt
 
     return (DeviceCommand::stage_t)res;
 }
+
+
+bool Interpreter::parseBool (const QString& value) throw (QString)
+{
+    int res;
+    bool ok;
+
+    res = value.toInt (&ok);
+    if (!ok)
+	throw QString ("bool value '%s' is incorrect").arg (value);
+
+    if (res > 2 || res < 0)
+        throw QString ("bool value '%s' is incorrect").arg (value);
+
+    return res == 1;
+}
+
 
 
 
@@ -223,4 +244,40 @@ QString Interpreter::isGrainPresent (const QStringList& args)
 QString Interpreter::isBSUPowered (const QStringList& args)
 {
     return boolToReply (_dev->getBSUPowered (parseStage (args[0])));
+}
+
+
+QString Interpreter::setWaterGate (const QStringList& args)
+{
+    DeviceCommand::stage_t stage = parseStage (args[0]);
+    bool ok;
+    int value;
+
+    value = args[1].toInt (&ok);
+    if (!ok)
+	throw QString ("value is incorrect");
+
+    switch (stage) {
+    case DeviceCommand::Stg_First:
+        return checkBoolReply (_dev->setWaterGateS1 (value));
+    case DeviceCommand::Stg_Second:
+        return checkBoolReply (_dev->setWaterGateS2 (value));
+    case DeviceCommand::Stg_Third:
+        return checkBoolReply (_dev->setWaterGateS3 (value));
+    case DeviceCommand::Stg_Fourth:
+        return checkBoolReply (_dev->setWaterGateS4 (value));
+    default:
+        throw QString ("unexpected stage");
+    }
+}
+
+
+QString Interpreter::setFilterGate (const QStringList& args)
+{
+    bool a[6];
+
+    for (int i = 0; i < 6; i++)
+        a[i] = parseBool (args[i]);
+    
+    return checkBoolReply (_dev->setFilterGates (a[0], a[1], a[2], a[3], a[4], a[5]));
 }

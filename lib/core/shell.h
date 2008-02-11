@@ -21,6 +21,7 @@ private:
     static QString boolToReply (bool res)
         { return res ? "TRUE\n" : "FALSE\n"; };
     static DeviceCommand::stage_t parseStage (const QString& stage) throw (QString);
+    static bool parseBool (const QString& stage) throw (QString);
 
     QString connect (const QStringList& args);
     QString getStateWord (const QStringList& args);
@@ -38,6 +39,9 @@ private:
     QString isSystemPowered (const QStringList& args);
     QString isGrainPresent (const QStringList& args);
     QString isBSUPowered (const QStringList& args);
+
+    QString setWaterGate (const QStringList& args);
+    QString setFilterGate (const QStringList& args);
 public:
     Interpreter (Device* device);
 
