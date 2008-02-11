@@ -10,43 +10,66 @@ Interpreter::Interpreter (Device* device)
     : _dev (device)
 {
     // initialize vocabulary
-    _commands["help"] 		= CommandMeta (1, NULL, "Show help for command", "Show help for command\n");
-    _commands["connect"] 	= CommandMeta (0, &Interpreter::connect, "Connect to device", "Send initialization sequence to device\n");
-    _commands["getstate"]	= CommandMeta (0, &Interpreter::getStateWord, "Get status word", "Obtain and parse status word. Possible values:\n"
+    _commands["help"] 		= CommandMeta (1, NULL, "Show help for command", "help [command]", 
+					       "Show help for command\n");
+    _commands["connect"] 	= CommandMeta (0, &Interpreter::connect, "Connect to device", "connect",
+					       "Send initialization sequence to device\n");
+    _commands["getstate"]	= CommandMeta (0, &Interpreter::getStateWord, "Get status word", "getstate",
+					       "Obtain and parse status word. Possible values:\n"
 					       "manual | auto - system state\n");
-    _commands["getgrainflow"]	= CommandMeta (1, &Interpreter::getGrainFlow, "Get grain flow through stage", "Get grain flow through stage, "
-					       "identified by number 1 to 4\n");
+    _commands["getgrainflow"]	= CommandMeta (1, &Interpreter::getGrainFlow, "Get grain flow through stage", "getgrainflow 1|2|3|4",
+					       "Get grain flow through stage, identified by number 1 to 4\n");
     _commands["gethumidity"]	= CommandMeta (1, &Interpreter::getGrainHumidity, "Get grain humidity at given stage", 
-					       "Get grain humidity at stage, identified by number 1 to 4\n");
+					       "gethumidity 1|2|3|4", "Get grain humidity at stage, identified by number 1 to 4\n");
     _commands["gettemperature"]	= CommandMeta (1, &Interpreter::getGrainTemperature, "Get grain temperature at given stage", 
-					       "Get grain temperature at stage, identified by number 1 to 4\n");
+					       "gettemperature 1|2|3|4", "Get grain temperature at stage, identified by number 1 to 4\n");
     _commands["getnature"]	= CommandMeta (1, &Interpreter::getGrainNature, "Get grain nature at given stage", 
-					       "Get grain nature at stage, identified by number 1 to 4\n");
+					       "getnature 1|2|3|4", "Get grain nature at stage, identified by number 1 to 4\n");
     _commands["getwaterflow"]	= CommandMeta (1, &Interpreter::getWaterFlow, "Get water flow through stage", 
-					       "Get water flow through stage, identified by number 1 to 4\n");
+					       "getwaterflow 1|2|3|4", "Get water flow through stage, identified by number 1 to 4\n");
     _commands["getwaterpressure"] = CommandMeta (0, &Interpreter::getWaterPressure, "Get global water pressure", 
-					       "Get global water pressure through system\n");
+						 "getwaterpressure", "Get global water pressure through system\n");
     _commands["getcontrollerid"] = CommandMeta (0, &Interpreter::getControllerID, "Get controller ID", 
-					       "Get system's controller ID\n");
+						"getcontrollerid", "Get system's controller ID\n");
     _commands["getp4state"]	= CommandMeta (0, &Interpreter::getP4State, "Get P4 state", 
-					       "Get P4 state value\n");
+					       "getp4state", "Get P4 state value\n");
     _commands["getp5state"]	= CommandMeta (0, &Interpreter::getP5State, "Get P5 state", 
-					       "Get P5 state value\n");
+					       "getp5state", "Get P5 state value\n");
     _commands["getcleanresult"] = CommandMeta (0, &Interpreter::getCleanResult, "Get clean result", 
-					       "Get result of last clean\n");
+					       "getcleanresult", "Get result of last clean\n");
     _commands["ispowered"]	= CommandMeta (0, &Interpreter::isSystemPowered, "Checks system power", 
-					       "Check system power state. Returns TRUE if on or FALSE otherwise\n");
+					       "ispowered", "Check system power state. Returns TRUE if on or FALSE otherwise\n");
     _commands["isgrainpresent"]	= CommandMeta (1, &Interpreter::isGrainPresent, "Checks for grain at stage", 
-					       "Checks for grain at stage, identified by number 1 to 4.\n"
+					       "isgrainpresent 1|2|3|4", "Checks for grain at stage, identified by number 1 to 4.\n"
 					       "Returns TRUE if grain present or FALSE otherwise.\n");
     _commands["isbsupowered"]	= CommandMeta (1, &Interpreter::isBSUPowered, "Checks for BSU power state", 
-					       "Checks for BSU power at stage, identified by number 1 to 4.\n"
+					       "isbsupowered 1|2|3|4", "Checks for BSU power at stage, identified by number 1 to 4.\n"
 					       "Returns TRUE if power is on or FALSE otherwise.\n");
-    _commands["setwatergate"]	= CommandMeta (2, &Interpreter::setWaterGate, "Set water gate position",
-                                               "Set water gate. First argument is a section number (1..4), second is a value assigned.\n");
-    _commands["setfiltergate"]  = CommandMeta (6, &Interpreter::setFilterGate, "Set filter gates",
+    _commands["setwatergate"]	= CommandMeta (2, &Interpreter::setWaterGate, "Set water gate position", "setwatergate 1|2|3|4 value", 
+					       "Set water gate. First argument is a section number (1..4), second is a value assigned.\n");
+    _commands["setfiltergate"]  = CommandMeta (6, &Interpreter::setFilterGate, "Set filter gates", "setfiltergate 0|1 0|1 0|1 0|1 0|1 0|1",
                                                "Set filter gates. Six number arguments can be zero or one. First five are for stage gates.\n"
                                                "Last is for engine\n");
+    _commands["setkgates"]	= CommandMeta (3, &Interpreter::setKGates, "Set K gates states", "setkgates 1|2|3|4 0|1 0|1",
+					       "Set K gates states. First argument must be stage number (1..4), second argument sets K gate,\n"
+					       "third KK gate\n");
+    _commands["setstages"]	= CommandMeta (4, &Interpreter::setStages, "Set available stages", "setstages 0|1 0|1 0|1 0|1",
+					       "Commands sets stages presence. Each of four argument can be 0 or 1.\n"
+					       "Zero value mean stage is missing, one mean stage is present.n\n");
+    _commands["startwater"]	= CommandMeta (1, &Interpreter::startWater, "Start water on given stage", "startwater 1|2|3|4",
+					       "Turns water on stage given in first argument (1..4)\n");
+    _commands["stopwater"]	= CommandMeta (1, &Interpreter::stopWater, "Stop water on given stage", "stopwater 1|2|3|4",
+					       "Turns water off stage given in first argument (1..4)\n");
+    _commands["powergate"]	= CommandMeta (2, &Interpreter::powerGate, "Turns power of gate on or off", "powergate 1|2|3|4 0|1",
+					       "Turns power of stage (given in first argument 1..4) on (1) or off (0)\n");
+    _commands["clean"]		= CommandMeta (4, &Interpreter::cleanSystem, "Starts system cleaning", "clean 0|1 0|1 0|1 0|1",
+					       "Initiates system cleaning process in stages marked with 1.\n");
+    _commands["drainwater"]	= CommandMeta (4, &Interpreter::drainWater, "Drains water from stages", "drainwater 0|1 0|1 0|1 0|1",
+					       "Drains water from stages given in four arguments (0 or 1)\n");
+    _commands["setoutputsignal"]= CommandMeta (1, &Interpreter::setOutputSignal, "Sets output signal on or off", "setoutputsignal 0|1",
+					       "Sets output signal on (1) or off (0)\n");
+    _commands["startfilterautomat"]= CommandMeta (0, &Interpreter::startFilterAutomat, "Starts filter automat", "startfilterautomat",
+					       "Starts filter automat\n");
 }
 
 
@@ -117,7 +140,7 @@ QString Interpreter::getHelp (const QString& cmd)
     if (_commands.find (cmd) == _commands.constEnd ())
 	return QString ("Unknown command '%1'. Use help to see available commands\n").arg (cmd);
 
-    return _commands[cmd].help ();
+    return QString ("Usage: %1\n\n").arg (_commands[cmd].usage ()) + _commands[cmd].help ();
 }
 
 
@@ -280,4 +303,59 @@ QString Interpreter::setFilterGate (const QStringList& args)
         a[i] = parseBool (args[i]);
     
     return checkBoolReply (_dev->setFilterGates (a[0], a[1], a[2], a[3], a[4], a[5]));
+}
+
+
+QString Interpreter::setKGates (const QStringList& args)
+{
+    return checkBoolReply (_dev->setKGates (parseStage (args[0]), parseBool (args[1]), parseBool (args[2])));
+}
+
+
+QString Interpreter::setStages (const QStringList& args)
+{
+    return checkBoolReply (_dev->setStages (parseBool (args[0]), parseBool (args[1]), parseBool (args[2]), parseBool (args[3])));
+}
+
+
+QString Interpreter::startWater (const QStringList& args)
+{
+    return checkBoolReply (_dev->startWater (parseStage (args[0])));
+}
+
+
+QString Interpreter::stopWater (const QStringList& args)
+{
+    return checkBoolReply (_dev->stopWater (parseStage (args[0])));
+}
+
+
+QString Interpreter::powerGate (const QStringList& args)
+{
+    return checkBoolReply (_dev->powerGates (parseStage (args[0]), parseBool (args[1])));
+}
+
+
+QString Interpreter::cleanSystem (const QStringList& args)
+{
+    return checkBoolReply (_dev->cleanSystem (parseBool (args[0]), parseBool (args[1]), parseBool (args[2]), parseBool (args[3])));
+}
+
+
+QString Interpreter::drainWater (const QStringList& args)
+{
+    return checkBoolReply (_dev->drainWater (parseBool (args[0]), parseBool (args[1]), parseBool (args[2]), parseBool (args[3])));
+}
+
+
+QString Interpreter::setOutputSignal (const QStringList& args)
+{
+    return checkBoolReply (_dev->setOutputSignal (parseBool (args[0])));
+
+}
+
+
+QString Interpreter::startFilterAutomat (const QStringList& args)
+{
+    return checkBoolReply (_dev->startFilterAutomat ());
 }

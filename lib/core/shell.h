@@ -42,6 +42,17 @@ private:
 
     QString setWaterGate (const QStringList& args);
     QString setFilterGate (const QStringList& args);
+    QString setKGates (const QStringList& args);
+    QString setStages (const QStringList& args);
+    
+    QString startWater (const QStringList& args);
+    QString stopWater (const QStringList& args);
+
+    QString powerGate (const QStringList& args);
+    QString cleanSystem (const QStringList& args);
+    QString drainWater (const QStringList& args);
+    QString setOutputSignal (const QStringList& args);
+    QString startFilterAutomat (const QStringList& args);
 public:
     Interpreter (Device* device);
 
@@ -54,13 +65,15 @@ class CommandMeta
 {
 private:
     int _args;
-    QString _hint, _help;
+    QString _hint, _usage, _help;
     handler_t _handler;
 
 public:
-    CommandMeta (int args, handler_t handler, const QString& hint, const QString& help)
+    CommandMeta (int args, handler_t handler, const QString& hint, 
+		 const QString& usage, const QString& help)
 	: _args (args),
 	  _hint (hint),
+	  _usage (usage),
 	  _help (help),
 	  _handler (handler)
     {};
@@ -70,6 +83,9 @@ public:
 
     QString hint () const
         { return _hint; };
+
+    QString usage () const
+        { return _usage; };
 
     QString help () const
         { return _help; };

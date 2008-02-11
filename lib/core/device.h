@@ -31,7 +31,7 @@ public:
 	SetWaterGateS4		= 0x44,
 	SetFilterGates		= 0x48,
 	SetKGates		= 0x4C,
-	SetControllerConfig	= 0x34,
+	SetStages		= 0x34,
 
 	StartWater		= 0x28,
 	StopWater		= 0x2C,
@@ -138,7 +138,7 @@ public:
     bool setFilterGates (bool g1, bool g2, bool g3, bool g4, bool g5, bool engine);
     bool setKGates (DeviceCommand::stage_t stage, bool k, bool kk);
 
-    bool setControllerConfig (bool s1, bool s2, bool s3, bool s4);
+    bool setStages (bool s1, bool s2, bool s3, bool s4);
 
     bool startWater (DeviceCommand::stage_t stage);
     bool stopWater (DeviceCommand::stage_t stage);

@@ -322,7 +322,7 @@ bool Device::setKGates (DeviceCommand::stage_t stage, bool k, bool kk)
 }
 
 
-bool Device::setControllerConfig (bool s1, bool s2, bool s3, bool s4)
+bool Device::setStages (bool s1, bool s2, bool s3, bool s4)
 {
     char bitmask = 0;
     bitmask |= s1 ? 1 : 0;
@@ -330,9 +330,9 @@ bool Device::setControllerConfig (bool s1, bool s2, bool s3, bool s4)
     bitmask |= s3 ? 4 : 0;
     bitmask |= s4 ? 8 : 0;
 
-    DeviceCommand cmd (DeviceCommand::SetControllerConfig, bitmask);
+    DeviceCommand cmd (DeviceCommand::SetStages, bitmask);
     _port->send (cmd.pack ());
-    return DeviceCommand::isOK (_port->receive (cmd.delay ()+1), DeviceCommand::SetControllerConfig, DeviceCommand::Stg_All);
+    return DeviceCommand::isOK (_port->receive (cmd.delay ()+1), DeviceCommand::SetStages, DeviceCommand::Stg_All);
 }
 
 
