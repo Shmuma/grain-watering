@@ -3,8 +3,9 @@
 ######################################################################
 
 TEMPLATE = app
-CONFIG = qt debug
+CONFIG += qt console debug
 QT -= gui
+QT += network
 
 TARGET = 
 DEPENDPATH += .
@@ -17,4 +18,5 @@ QMAKE_CXXFLAGS_DEBUG += -O0
 QMAKE_LFLAGS_DEBUG += -g
 
 # Input
-SOURCES += main.cpp
+SOURCES += main.cpp server.cpp
+HEADERS += server.h
