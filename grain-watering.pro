@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS = lib plaund
+SUBDIRS = lib plaund gui
