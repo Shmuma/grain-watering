@@ -14,6 +14,13 @@ protected:
     virtual void timerEvent (QTimerEvent* event);
 
     void refreshScreenClock ();
+
+protected slots:
+    void configButtonToggled (bool on);
+    void checkButtonToggled (bool on);
+    void paramsButtonToggled (bool on);
+    void sensorsButtonToggled (bool on);
+
 public:
     MainWindow ();
 };

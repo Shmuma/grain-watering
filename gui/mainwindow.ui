@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>956</width>
-    <height>650</height>
+    <width>794</width>
+    <height>696</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -182,6 +182,9 @@
           <property name="checkable" >
            <bool>true</bool>
           </property>
+          <property name="checked" >
+           <bool>true</bool>
+          </property>
           <property name="autoExclusive" >
            <bool>true</bool>
           </property>
@@ -312,26 +315,174 @@
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QFrame" name="frame_2" >
-      <property name="frameShape" >
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow" >
-       <enum>QFrame::Raised</enum>
-      </property>
-      <layout class="QVBoxLayout" >
+     <widget class="QWidget" name="" >
+      <layout class="QHBoxLayout" >
+       <property name="spacing" >
+        <number>1</number>
+       </property>
        <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
+        <widget class="QFrame" name="settingsPanel" >
+         <property name="frameShape" >
+          <enum>QFrame::StyledPanel</enum>
          </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
+         <property name="frameShadow" >
+          <enum>QFrame::Raised</enum>
          </property>
-        </spacer>
+         <layout class="QVBoxLayout" >
+          <item>
+           <widget class="QStackedWidget" name="stackedWidget" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="currentIndex" >
+             <number>2</number>
+            </property>
+            <widget class="QWidget" name="config" >
+             <layout class="QVBoxLayout" >
+              <item>
+               <widget class="QGroupBox" name="groupBox_2" >
+                <property name="title" >
+                 <string>Active stages</string>
+                </property>
+                <layout class="QVBoxLayout" >
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_5" >
+                   <property name="text" >
+                    <string>Stage 1</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_6" >
+                   <property name="text" >
+                    <string>Stage 2</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_7" >
+                   <property name="text" >
+                    <string>Stage 3</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_8" >
+                   <property name="text" >
+                    <string>Stage 4</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer>
+                   <property name="orientation" >
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" >
+                    <size>
+                     <width>20</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="check" />
+            <widget class="QWidget" name="sensors" >
+             <layout class="QVBoxLayout" >
+              <item>
+               <widget class="QCheckBox" name="checkBox" >
+                <property name="text" >
+                 <string>CheckBox</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBox_2" >
+                <property name="text" >
+                 <string>CheckBox</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBox_3" >
+                <property name="text" >
+                 <string>CheckBox</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBox_4" >
+                <property name="text" >
+                 <string>CheckBox</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="params" />
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="outlinePanel" >
+         <property name="frameShape" >
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow" >
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" >
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
