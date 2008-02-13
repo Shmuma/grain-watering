@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>596</width>
+    <width>956</width>
     <height>650</height>
    </rect>
   </property>
@@ -26,7 +26,10 @@
        <property name="frameShadow" >
         <enum>QFrame::Raised</enum>
        </property>
-       <layout class="QVBoxLayout" >
+       <layout class="QHBoxLayout" >
+        <property name="spacing" >
+         <number>0</number>
+        </property>
         <property name="leftMargin" >
          <number>0</number>
         </property>
@@ -40,7 +43,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QPushButton" name="connectButton" >
+         <widget class="DoubleClickButton" name="connectButton" >
           <property name="text" >
            <string>Connect</string>
           </property>
@@ -135,14 +138,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QFrame" name="frame_4" >
-       <property name="frameShape" >
-        <enum>QFrame::Panel</enum>
+      <widget class="QGroupBox" name="groupBox" >
+       <property name="title" >
+        <string/>
        </property>
-       <property name="frameShadow" >
-        <enum>QFrame::Raised</enum>
-       </property>
-       <layout class="QVBoxLayout" >
+       <layout class="QHBoxLayout" >
+        <property name="spacing" >
+         <number>0</number>
+        </property>
         <property name="leftMargin" >
          <number>0</number>
         </property>
@@ -163,35 +166,14 @@
           <property name="checkable" >
            <bool>true</bool>
           </property>
+          <property name="autoExclusive" >
+           <bool>true</bool>
+          </property>
           <property name="flat" >
            <bool>true</bool>
           </property>
          </widget>
         </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QFrame" name="frame_5" >
-       <property name="frameShape" >
-        <enum>QFrame::Panel</enum>
-       </property>
-       <property name="frameShadow" >
-        <enum>QFrame::Raised</enum>
-       </property>
-       <layout class="QVBoxLayout" >
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>0</number>
-        </property>
         <item>
          <widget class="QPushButton" name="stopButton" >
           <property name="text" >
@@ -200,41 +182,23 @@
           <property name="checkable" >
            <bool>true</bool>
           </property>
+          <property name="autoExclusive" >
+           <bool>true</bool>
+          </property>
           <property name="flat" >
            <bool>true</bool>
           </property>
          </widget>
         </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QFrame" name="frame_6" >
-       <property name="frameShape" >
-        <enum>QFrame::Panel</enum>
-       </property>
-       <property name="frameShadow" >
-        <enum>QFrame::Raised</enum>
-       </property>
-       <layout class="QVBoxLayout" >
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>0</number>
-        </property>
         <item>
          <widget class="QPushButton" name="pauseButton" >
           <property name="text" >
            <string>Pause</string>
           </property>
           <property name="checkable" >
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive" >
            <bool>true</bool>
           </property>
           <property name="flat" >
@@ -311,16 +275,16 @@
          <number>0</number>
         </property>
         <property name="leftMargin" >
-         <number>2</number>
+         <number>0</number>
         </property>
         <property name="topMargin" >
-         <number>2</number>
+         <number>0</number>
         </property>
         <property name="rightMargin" >
-         <number>2</number>
+         <number>0</number>
         </property>
         <property name="bottomMargin" >
-         <number>2</number>
+         <number>0</number>
         </property>
         <item>
          <widget class="QLabel" name="dateAndTimeLabel" >
@@ -383,6 +347,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DoubleClickButton</class>
+   <extends>QPushButton</extends>
+   <header>doubleclickbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
