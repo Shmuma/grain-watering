@@ -15,3 +15,6 @@ QMAKE_LFLAGS_DEBUG += -g
 HEADERS += mainwindow.h
 SOURCES += main.cpp mainwindow.cpp
 FORMS += mainwindow.ui
+
+
+TRANSLATIONS = gui_ru.ts
