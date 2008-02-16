@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>794</width>
-    <height>696</height>
+    <height>713</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -315,7 +315,7 @@
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QWidget" name="" >
+     <widget class="QWidget" name="layoutWidget" >
       <layout class="QHBoxLayout" >
        <property name="spacing" >
         <number>1</number>
@@ -338,7 +338,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex" >
-             <number>2</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="config" >
              <layout class="QVBoxLayout" >
@@ -394,7 +394,199 @@
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="check" />
+            <widget class="QWidget" name="check" >
+             <layout class="QVBoxLayout" >
+              <item>
+               <widget class="QPushButton" name="checkStateButton" >
+                <property name="text" >
+                 <string>State</string>
+                </property>
+                <property name="checkable" >
+                 <bool>true</bool>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton" >
+                <property name="text" >
+                 <string>Water</string>
+                </property>
+                <property name="checkable" >
+                 <bool>true</bool>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_2" >
+                <property name="text" >
+                 <string>Grain sensors</string>
+                </property>
+                <property name="checkable" >
+                 <bool>true</bool>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBox_9" >
+                <property name="text" >
+                 <string>grain sensors enabled</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QStackedWidget" name="checkStackedWidget" >
+                <property name="currentIndex" >
+                 <number>3</number>
+                </property>
+                <widget class="QWidget" name="state" >
+                 <layout class="QVBoxLayout" >
+                  <item>
+                   <widget class="QCheckBox" name="checkStateStage1Check" >
+                    <property name="text" >
+                     <string>Stage 1</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkStateStage2Check" >
+                    <property name="text" >
+                     <string>Stage 2</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkStateStage3Check" >
+                    <property name="text" >
+                     <string>Stage 3</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkStateStage4Check" >
+                    <property name="text" >
+                     <string>Stage 4</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer>
+                    <property name="orientation" >
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" >
+                     <size>
+                      <width>20</width>
+                      <height>16</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="water" >
+                 <layout class="QVBoxLayout" >
+                  <item>
+                   <widget class="QCheckBox" name="checkWaterStage1Check" >
+                    <property name="text" >
+                     <string>Stage 1</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkWaterStage2Check" >
+                    <property name="text" >
+                     <string>Stage 2</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkWaterStage3Check" >
+                    <property name="text" >
+                     <string>Stage 3</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkWaterStage4Check" >
+                    <property name="text" >
+                     <string>Stage 4</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer>
+                    <property name="orientation" >
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" >
+                     <size>
+                      <width>20</width>
+                      <height>16</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="sensors" >
+                 <layout class="QVBoxLayout" >
+                  <item>
+                   <widget class="QCheckBox" name="checkGrainStage1Check" >
+                    <property name="text" >
+                     <string>Stage 1</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkGrainStage2Check" >
+                    <property name="text" >
+                     <string>Stage 2</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkGrainStage3Check" >
+                    <property name="text" >
+                     <string>Stage 3</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkGrainStage4Check" >
+                    <property name="text" >
+                     <string>Stage 4</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer>
+                    <property name="orientation" >
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" >
+                     <size>
+                      <width>20</width>
+                      <height>16</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="page" />
+               </widget>
+              </item>
+             </layout>
+            </widget>
             <widget class="QWidget" name="sensors" >
              <layout class="QVBoxLayout" >
               <item>

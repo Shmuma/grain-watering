@@ -10,6 +10,9 @@ class MainWindow : public QWidget, private Ui::MainWindow
 {
     Q_OBJECT
 
+private:
+    bool _switchingToolButtons;
+
 protected:
     virtual void timerEvent (QTimerEvent* event);
 

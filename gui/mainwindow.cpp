@@ -9,7 +9,8 @@
 // MainWindow
 // --------------------------------------------------
 MainWindow::MainWindow ()
-    : QWidget (0)
+    : QWidget (0),
+      _switchingToolButtons (false)
 {
     setupUi (this);
 
@@ -42,59 +43,67 @@ void MainWindow::refreshScreenClock ()
 
 void MainWindow::configButtonToggled (bool on)
 {
-    checkButton->setChecked (false);
-    paramsButton->setChecked (false);
-    sensorsButton->setChecked (false);
-
     if (on) {
+        _switchingToolButtons = true;
+        checkButton->setChecked (false);
+        paramsButton->setChecked (false);
+        sensorsButton->setChecked (false);
+        _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (0);
 	settingsPanel->show ();
     }
     else
-	settingsPanel->hide ();
+        if (!_switchingToolButtons)
+            settingsPanel->hide ();
 }
 
 
 void MainWindow::checkButtonToggled (bool on)
 {
-    configButton->setChecked (false);
-    paramsButton->setChecked (false);
-    sensorsButton->setChecked (false);
-
     if (on) {
+        _switchingToolButtons = true;
+        configButton->setChecked (false);
+        paramsButton->setChecked (false);
+        sensorsButton->setChecked (false);
+        _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (1);
 	settingsPanel->show ();
     }
     else
-	settingsPanel->hide ();
+        if (!_switchingToolButtons)
+            settingsPanel->hide ();
 }
 
 
 void MainWindow::paramsButtonToggled (bool on)
 {
-    checkButton->setChecked (false);
-    configButton->setChecked (false);
-    sensorsButton->setChecked (false);
-
     if (on) {
+        _switchingToolButtons = true;
+        configButton->setChecked (false);
+        checkButton->setChecked (false);
+        sensorsButton->setChecked (false);
+        _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (2);
 	settingsPanel->show ();
     }
     else
-	settingsPanel->hide ();
+        if (!_switchingToolButtons)
+            settingsPanel->hide ();
 }
 
 
 void MainWindow::sensorsButtonToggled (bool on)
 {
-    checkButton->setChecked (false);
-    paramsButton->setChecked (false);
-    configButton->setChecked (false);
-
     if (on) {
+        _switchingToolButtons = true;
+        configButton->setChecked (false);
+        checkButton->setChecked (false);
+        paramsButton->setChecked (false);
+        _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (3);
 	settingsPanel->show ();
     }
     else
-	settingsPanel->hide ();
+        if (!_switchingToolButtons)
+            settingsPanel->hide ();
 }
