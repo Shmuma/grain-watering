@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "stagecontrol.h"
 
 #include <QtCore>
 #include <QtGui>
@@ -26,6 +27,13 @@ MainWindow::MainWindow ()
 
     // hide settings panel
     settingsPanel->hide ();
+
+    // tune stage controls
+    stageControl1->setNumber (1);
+    stageControl1->setEnabled (true);
+    stageControl2->setNumber (2);
+    stageControl3->setNumber (3);
+    stageControl4->setNumber (4);
 }
 
 

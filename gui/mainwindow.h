@@ -4,6 +4,7 @@
 #include <QtCore>
 #include <QtGui>
 #include "ui_mainwindow.h"
+#include "stagecontrol.h"
 
 
 class MainWindow : public QWidget, private Ui::MainWindow

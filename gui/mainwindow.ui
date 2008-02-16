@@ -1,12 +1,13 @@
 <ui version="4.0" >
+ <author>Max Lapan</author>
  <class>MainWindow</class>
  <widget class="QWidget" name="MainWindow" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>794</width>
-    <height>713</height>
+    <width>975</width>
+    <height>745</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -322,6 +323,12 @@
        </property>
        <item>
         <widget class="QFrame" name="settingsPanel" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="frameShape" >
           <enum>QFrame::StyledPanel</enum>
          </property>
@@ -646,32 +653,18 @@
          <property name="frameShadow" >
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QVBoxLayout" >
+         <layout class="QHBoxLayout" >
           <item>
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" >
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
+           <widget class="StageControl" native="1" name="stageControl1" />
           </item>
           <item>
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" >
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
+           <widget class="StageControl" native="1" name="stageControl2" />
+          </item>
+          <item>
+           <widget class="StageControl" native="1" name="stageControl3" />
+          </item>
+          <item>
+           <widget class="StageControl" native="1" name="stageControl4" />
           </item>
          </layout>
         </widget>
@@ -696,7 +689,14 @@
    <extends>QPushButton</extends>
    <header>doubleclickbutton.h</header>
   </customwidget>
+  <customwidget>
+   <class>StageControl</class>
+   <extends>QWidget</extends>
+   <header>stagecontrol.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
+ <includes/>
  <resources/>
  <connections/>
 </ui>
