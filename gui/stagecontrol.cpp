@@ -18,6 +18,7 @@ void StageControl::paintEvent (QPaintEvent* event)
 {
     QPainter p (this);
     QRect r;
+    QPoint pt, pt2;
 
     p.setFont (QFont ("Arial", 15));
     if (_enabled)
@@ -29,6 +30,12 @@ void StageControl::paintEvent (QPaintEvent* event)
 
     r.setRect (10, 50, (geometry ().width () / 2)-10, 120);
     p.drawRect (r);
+
+    pt = QPoint (r.topLeft ().x () + r.width () / 3, r.topLeft ().y ());
+    p.drawLine (pt, pt + QPoint (0, -10));
+    pt2 = pt + QPoint (r.width () / 3, 0);
+    p.drawLine (pt2, pt2 + QPoint (0, -10));
+
     p.setFont (QFont ("Arial", 13));
     p.drawText (r.adjusted (5, 5, -5, 30-120), Qt::AlignHCenter, tr ("Sensor"));
     p.setFont (QFont ("Arial", 11));
@@ -42,5 +49,13 @@ void StageControl::paintEvent (QPaintEvent* event)
     p.drawText (r.adjusted (5, 20, -5, 40-90), Qt::AlignLeft, tr ("%1 %").arg (_humidity));
     p.drawText (r.adjusted (5, 40, -5, 60-90), Qt::AlignLeft, tr ("%1 g/l").arg (_nature));
     p.drawText (r.adjusted (5, 60, -5, 0),     Qt::AlignLeft, tr ("%1 C").arg (_temp));
+
+    // water gate rect
+    r.setRect (geometry ().width () / 2, 180, (geometry ().width ()/2)-10, 80);
+    p.drawRect (r);
+    p.setFont (QFont ("Arial", 13));
+    p.drawText (r.adjusted (5, 5, -5, 55-90), Qt::AlignHCenter, tr ("Water gate").replace (' ', '\n'));
+    p.setFont (QFont ("Arial", 11));
+    p.drawText (r.adjusted (5, 55, -5, -5), Qt::AlignHCenter, tr ("Water flow"));
 }
 
