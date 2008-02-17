@@ -15,43 +15,52 @@ public:
 
     void setNumber (int number)
     { _number = number; update (); };
-
     int number () const
     { return _number; };
     
     void setEnabled (bool enabled)
     { _enabled = enabled; update (); };
-    
     bool enabled () const
     { return _enabled; };
 
     void setGrainFlow (int flow)
-    { _flow = flow; };
+    { _flow = flow; update (); };
     int grainFlow () const
     { return _flow; };
 
     void setHumidity (int humidity)
-    { _humidity = humidity; };
+    { _humidity = humidity; update (); };
     int humidity () const
     { return _humidity; };
 
     void setNature (int nature)
-    { _nature = nature; };
+    { _nature = nature; update (); };
     int nature () const
     { return _nature; };
 
     void setTemperature (int temp)
-    { _temp = temp; };
+    { _temp = temp; update (); };
     int temperature () const
     { return _temp; };
     
+    void setWaterFlow (int waterFlow)
+    { _waterFlow = waterFlow; update (); };
+    int waterFlow () const
+    { return _waterFlow; };
+
+    void setTargetHumidity (int humidity)
+    { _targetHumidity = humidity; update (); };
+    int targetHumidity () const
+    { return _targetHumidity; };
 private:
     int _number;
     bool _enabled;
-    long _flow;
-    long _humidity;
-    long _nature;
-    long _temp;
+    int _flow;
+    int _humidity;
+    int _nature;
+    int _temp;
+    int _waterFlow;
+    int _targetHumidity;
 };
 
 #endif

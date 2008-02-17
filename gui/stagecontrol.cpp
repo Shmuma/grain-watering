@@ -10,7 +10,7 @@ StageControl::StageControl (QWidget* parent)
 {
     _number = 0;
     _enabled = false;
-    _flow = _humidity = _nature = _temp = 0;
+    _flow = _humidity = _nature = _temp = _waterFlow = _targetHumidity = 0;
 }
 
 
@@ -57,5 +57,15 @@ void StageControl::paintEvent (QPaintEvent* event)
     p.drawText (r.adjusted (5, 5, -5, 55-90), Qt::AlignHCenter, tr ("Water gate").replace (' ', '\n'));
     p.setFont (QFont ("Arial", 11));
     p.drawText (r.adjusted (5, 55, -5, -5), Qt::AlignHCenter, tr ("Water flow"));
+
+    p.drawText (r.adjusted (r.width ()/3, r.height ()+5, 0, 20), Qt::AlignHCenter, tr ("%1 l/h").arg (_waterFlow));
+
+    r = QRect (10, 290, geometry ().width ()-20, 40);
+    p.drawRect (r);
+    p.drawText (r.adjusted (15, 5, -5, -5), Qt::AlignLeft | Qt::AlignVCenter, tr ("BSU"));
+    r.translate (0, 35);
+    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("Given grain humidity"));
+    r.adjust (r.width ()/2, 20, 0, 20);
+    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (_targetHumidity));
 }
 
