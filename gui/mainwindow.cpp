@@ -25,12 +25,20 @@ MainWindow::MainWindow ()
     connect (paramsButton, SIGNAL(toggled(bool)), this, SLOT(paramsButtonToggled(bool)));
     connect (sensorsButton, SIGNAL(toggled(bool)), this, SLOT(sensorsButtonToggled(bool)));
 
+    // connect active stages checkboxes
+    connect (stage1ActiveCheckBox, SIGNAL(toggled(bool)), this, SLOT(stage1ActiveCheckBoxToggled(bool)));
+    connect (stage2ActiveCheckBox, SIGNAL(toggled(bool)), this, SLOT(stage2ActiveCheckBoxToggled(bool)));
+    connect (stage3ActiveCheckBox, SIGNAL(toggled(bool)), this, SLOT(stage3ActiveCheckBoxToggled(bool)));
+    connect (stage4ActiveCheckBox, SIGNAL(toggled(bool)), this, SLOT(stage4ActiveCheckBoxToggled(bool)));
+
+    // state signals
+    connect (&_state, SIGNAL(stageEnabledChanged(int, bool)), this, SLOT(stageEnabledChanged(int, bool)));
+
     // hide settings panel
     settingsPanel->hide ();
 
     // tune stage controls
     stageControl1->setNumber (1);
-    stageControl1->setEnabled (true);
     stageControl2->setNumber (2);
     stageControl3->setNumber (3);
     stageControl4->setNumber (4);
@@ -114,4 +122,47 @@ void MainWindow::sensorsButtonToggled (bool on)
     else
         if (!_switchingToolButtons)
             settingsPanel->hide ();
+}
+
+
+void MainWindow::stage1ActiveCheckBoxToggled (bool on)
+{
+    _state.setStageEnabled (1, on);
+}
+
+
+void MainWindow::stage2ActiveCheckBoxToggled (bool on)
+{
+    _state.setStageEnabled (2, on);
+}
+
+
+void MainWindow::stage3ActiveCheckBoxToggled (bool on)
+{
+    _state.setStageEnabled (3, on);
+}
+
+
+void MainWindow::stage4ActiveCheckBoxToggled (bool on)
+{
+    _state.setStageEnabled (4, on);
+}
+
+
+void MainWindow::stageEnabledChanged (int stages, bool enabled)
+{
+    switch (stages) {
+    case 1:
+        stageControl1->setEnabled (enabled);
+        break;
+    case 2:
+        stageControl2->setEnabled (enabled);
+        break;
+    case 3:
+        stageControl3->setEnabled (enabled);
+        break;
+    case 4:
+        stageControl4->setEnabled (enabled);
+        break;
+    }
 }

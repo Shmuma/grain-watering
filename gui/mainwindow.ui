@@ -345,7 +345,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex" >
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="config" >
              <layout class="QVBoxLayout" >
@@ -356,28 +356,28 @@
                 </property>
                 <layout class="QVBoxLayout" >
                  <item>
-                  <widget class="QCheckBox" name="checkBox_5" >
+                  <widget class="QCheckBox" name="stage1ActiveCheckBox" >
                    <property name="text" >
                     <string>Stage 1</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="checkBox_6" >
+                  <widget class="QCheckBox" name="stage2ActiveCheckBox" >
                    <property name="text" >
                     <string>Stage 2</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="checkBox_7" >
+                  <widget class="QCheckBox" name="stage3ActiveCheckBox" >
                    <property name="text" >
                     <string>Stage 3</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="checkBox_8" >
+                  <widget class="QCheckBox" name="stage4ActiveCheckBox" >
                    <property name="text" >
                     <string>Stage 4</string>
                    </property>
@@ -696,7 +696,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <includes/>
  <resources/>
  <connections/>
 </ui>
