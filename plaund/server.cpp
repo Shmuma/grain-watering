@@ -19,9 +19,9 @@ PlaundServer::PlaundServer (int tcp_port)
     : _tcp_port (tcp_port)
 {
     listen (QHostAddress::Any, _tcp_port);
-    //    _port = new SerialRecorder (new FileSerialPort ("input.dat", "output.dat"), 
+    _port = new SerialRecorder (new RealSerialPort ("/dev/ttyS2"), "log.dat");
     //QString ("trace.dat"));
-    _port = new FileSerialPort ("input.dat", "output.dat");
+    //_port = new FileSerialPort ("input.dat", "output.dat");
     _device = new Device (_port);
     _interp = new Interpreter (_device);
 }
