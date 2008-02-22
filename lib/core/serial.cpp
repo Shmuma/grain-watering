@@ -130,27 +130,23 @@ QByteArray FileSerialPort::receive (int) throw (QString)
 // --------------------------------------------------
 // SerialRecorder
 // --------------------------------------------------
-SerialRecorder::SerialRecorder (SerialPort* port, const QString& outFile)
+SerialRecorder::SerialRecorder (SerialPort* port, const QString& inFile, const QString& outFile)
     : _port (port),
-      _outFile (outFile)
+      _inf (inFile),
+      _outf (outFile)
 {
+    if (!_inf.open (QIODevice::WriteOnly))
+        throw QString ("Serial recorder cannot open input file '%1'").arg (inFile);
+    if (!_outf.open (QIODevice::WriteOnly))
+        throw QString ("Serial recorder cannot open output file '%1'").arg (outFile);
+
 }
 
 
 SerialRecorder::~SerialRecorder ()
 {
-    // flush collected data into out file
-    QFile file (_outFile);
-
-    if (!file.open (QIODevice::WriteOnly)) {
-        printf ("SerialRecorder: cannot open output file\n");
-        return;
-    }
-        
-    QDataStream stream (&file);
-    stream << _hash;
-
-    file.close ();
+    _inf.close ();
+    _outf.close ();
     delete _port;
 }
 
@@ -158,15 +154,17 @@ SerialRecorder::~SerialRecorder ()
 void SerialRecorder::send (const QByteArray& data) throw (QString)
 {
     _port->send (data);
-    _last = data;
+    _inf.write (data);
+    _inf.flush ();
 }
 
 
 QByteArray SerialRecorder::receive (int timeout) throw (QString)
 {
     QByteArray res = _port->receive (timeout);
-
-    _hash[_last] = res;
+    _outf.write (res);
+    _outf.flush ();
 
     return res;
 }
+

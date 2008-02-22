@@ -7,9 +7,13 @@
 
 int main ()
 {
-    PlaundServer server (12345);
+    try {
+        PlaundServer server (12345);
 
-    server.startProcessing ();
+        server.startProcessing ();
+    } catch (QString s) {
+        printf ("Fatal error: %s\n", s.toAscii ().constData ());
+    }
 
     return 0;
 }

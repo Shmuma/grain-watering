@@ -64,12 +64,10 @@ class SerialRecorder : public SerialPort
 {
 private:
     SerialPort* _port;
-    QString _outFile;
-    QMap<QByteArray, QByteArray> _hash;
-    QByteArray _last;
+    QFile _inf, _outf;
 
 public:
-    SerialRecorder (SerialPort* port, const QString& outFile);
+    SerialRecorder (SerialPort* port, const QString& inFile, const QString& outFile);
     virtual ~SerialRecorder ();
 
     virtual void send (const QByteArray& data) throw (QString);
