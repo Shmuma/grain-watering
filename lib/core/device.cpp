@@ -224,7 +224,7 @@ int Device::getControllerID () const
 {
     DeviceCommand cmd (DeviceCommand::GetControllerID);
     _port->send (cmd.pack ());
-    return DeviceCommand (_port->receive (cmd.delay ()+1)).high ();
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).value ();
 }
 
 

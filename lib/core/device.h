@@ -80,8 +80,8 @@ public:
     char high () const
     { return _high; };
 
-    int value () const
-    { return (int)_high*256 + _low; };
+    unsigned int value () const
+    { return (unsigned int)_high*256 + _low; };
 
     int delay () const;
 
