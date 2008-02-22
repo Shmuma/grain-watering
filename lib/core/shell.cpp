@@ -37,8 +37,6 @@ Interpreter::Interpreter (Device* device)
 					       "getp5state", "Get P5 state value\n");
     _commands["getcleanresult"] = CommandMeta (0, &Interpreter::getCleanResult, "Get clean result", 
 					       "getcleanresult", "Get result of last clean\n");
-    _commands["ispowered"]	= CommandMeta (0, &Interpreter::isSystemPowered, "Checks system power", 
-					       "ispowered", "Check system power state. Returns TRUE if on or FALSE otherwise\n");
     _commands["isgrainpresent"]	= CommandMeta (1, &Interpreter::isGrainPresent, "Checks for grain at stage", 
 					       "isgrainpresent 1|2|3|4", "Checks for grain at stage, identified by number 1 to 4.\n"
 					       "Returns TRUE if grain present or FALSE otherwise.\n");
@@ -249,12 +247,6 @@ QString Interpreter::getP5State (const QStringList& args)
 QString Interpreter::getCleanResult (const QStringList& args)
 {
     return QString::number (_dev->getCleanResult ()) + "\n";
-}
-
-
-QString Interpreter::isSystemPowered (const QStringList& args)
-{
-    return boolToReply (_dev->getSystemPowered ());
 }
 
 

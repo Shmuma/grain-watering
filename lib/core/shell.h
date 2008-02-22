@@ -36,7 +36,6 @@ private:
     QString getP5State (const QStringList& args);
     QString getCleanResult (const QStringList& args);
 
-    QString isSystemPowered (const QStringList& args);
     QString isGrainPresent (const QStringList& args);
     QString isBSUPowered (const QStringList& args);
 

@@ -196,16 +196,6 @@ int Device::getWaterFlow (DeviceCommand::stage_t stage) const
 }
 
 
-// TODO: ask about this command
-bool Device::getSystemPowered () const
-{
-//     DeviceCommand cmd (DeviceCommand::GetSystemPowered);
-//     _port->send (cmd.pack ());
-//     return DeviceCommand (_port->receive (cmd.delay ()+1)).value ();
-    return false;
-}
-
-
 bool Device::getGrainPresent (DeviceCommand::stage_t stage) const
 {
     DeviceCommand cmd (DeviceCommand::GetGrainPresent, (char)stage);

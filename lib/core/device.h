@@ -16,7 +16,6 @@ public:
 	GetGrainTemperature	= 0x10,
 	GetGrainNature		= 0x14,
 	GetWaterFlow		= 0x18,
-	GetSystemPowered	= 0x1C,
 	GetGrainPresent		= 0x20,
 	GetBSUPowered		= 0x24,
 	GetWaterPressure	= 0x50,
@@ -121,7 +120,6 @@ public:
     int getGrainNature (DeviceCommand::stage_t stage) const;
     int getWaterFlow (DeviceCommand::stage_t stage) const;
 
-    bool getSystemPowered () const;
     bool getGrainPresent (DeviceCommand::stage_t stage) const;
     bool getBSUPowered (DeviceCommand::stage_t stage) const;
     int getWaterPressure () const;
