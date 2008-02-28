@@ -8,6 +8,7 @@
 #include "stagecontrol.h"
 #include "controller.h"
 #include "daemon.h"
+#include "logger.h"
 
 
 class MainWindow : public QWidget, private Ui::MainWindow
@@ -36,6 +37,9 @@ protected slots:
     void stage3ActiveCheckBoxToggled (bool on);
     void stage4ActiveCheckBoxToggled (bool on);
 
+    // logger
+    void loggerMessage (Logger::severity_t sev, const QString& msg);
+
     // state slots
     void stageEnabledChanged (int stages, bool enabled);
 
@@ -44,7 +48,6 @@ protected slots:
 
     // daemon signals
     void connectedChanged (bool value);
-
 public:
     MainWindow ();
 };

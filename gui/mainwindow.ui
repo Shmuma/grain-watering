@@ -671,14 +671,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QTextBrowser" name="textBrowser" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Maximum" hsizetype="Expanding" >
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
+     <widget class="QListWidget" name="logListView" />
     </widget>
    </item>
   </layout>

@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "stagecontrol.h"
+#include "logger.h"
 
 #include <QtCore>
 #include <QtGui>
@@ -19,6 +20,11 @@ MainWindow::MainWindow ()
     // fire timer every second to update display's clocks
     startTimer (1000);
     refreshScreenClock ();
+
+    // logger
+    Logger::instance ()->setMinSeverity (Logger::Debug);
+    connect (Logger::instance (), SIGNAL (message (Logger::severity_t, const QString&)), 
+             this, SLOT (loggerMessage (Logger::severity_t, const QString&)));
 
     // connect tool buttons
     connect (configButton, SIGNAL(toggled(bool)), this, SLOT(configButtonToggled(bool)));
@@ -172,6 +178,12 @@ void MainWindow::stageEnabledChanged (int stages, bool enabled)
         stageControl4->setEnabled (enabled);
         break;
     }
+}
+
+
+void MainWindow::loggerMessage (Logger::severity_t sev, const QString& msg)
+{
+    logListView->addItem (msg);
 }
 
 
