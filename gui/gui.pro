@@ -4,6 +4,7 @@
 
 TEMPLATE = app
 CONFIG += debug
+QT += network
 TARGET =
 DEPENDPATH += .
 INCLUDEPATH += .
@@ -12,8 +13,8 @@ QMAKE_CXXFLAGS_DEBUG += -O0
 QMAKE_LFLAGS_DEBUG += -g
 
 # Input
-HEADERS += mainwindow.h doubleclickbutton.h stagecontrol.h controller.h
-SOURCES += main.cpp mainwindow.cpp doubleclickbutton.cpp stagecontrol.cpp controller.cpp
+HEADERS += mainwindow.h doubleclickbutton.h stagecontrol.h controller.h daemon.h
+SOURCES += main.cpp mainwindow.cpp doubleclickbutton.cpp stagecontrol.cpp controller.cpp daemon.cpp
 FORMS += mainwindow.ui
 
 

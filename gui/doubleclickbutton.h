@@ -13,6 +13,9 @@ protected:
     virtual void mouseDoubleClickEvent (QMouseEvent * event);
     virtual void mousePressEvent (QMouseEvent *event);
 
+signals:
+    void doubleClicked ();
+
 public:
     DoubleClickButton (QWidget* parent);
 };

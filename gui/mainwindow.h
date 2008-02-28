@@ -7,6 +7,7 @@
 #include "ui_mainwindow.h"
 #include "stagecontrol.h"
 #include "controller.h"
+#include "daemon.h"
 
 
 class MainWindow : public QWidget, private Ui::MainWindow
@@ -16,6 +17,7 @@ class MainWindow : public QWidget, private Ui::MainWindow
 private:
     bool _switchingToolButtons;
     ControllerState _state;
+    Daemon _daemon;
 
 protected:
     virtual void timerEvent (QTimerEvent* event);
@@ -36,6 +38,12 @@ protected slots:
 
     // state slots
     void stageEnabledChanged (int stages, bool enabled);
+
+    // connect button clicked
+    void connectButtonClicked ();
+
+    // daemon signals
+    void connectedChanged (bool value);
 
 public:
     MainWindow ();

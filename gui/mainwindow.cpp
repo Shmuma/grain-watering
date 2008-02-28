@@ -11,7 +11,8 @@
 // --------------------------------------------------
 MainWindow::MainWindow ()
     : QWidget (0),
-      _switchingToolButtons (false)
+      _switchingToolButtons (false),
+      _daemon ("localhost", 12345)
 {
     setupUi (this);
 
@@ -42,6 +43,12 @@ MainWindow::MainWindow ()
     stageControl2->setNumber (2);
     stageControl3->setNumber (3);
     stageControl4->setNumber (4);
+
+    // connect button
+    connect (connectButton, SIGNAL (doubleClicked ()), this, SLOT (connectButtonClicked ()));
+
+    // daemon state signals
+    connect (&_daemon, SIGNAL (connectedChanged (bool)), this, SLOT (connectedChanged (bool)));
 }
 
 
@@ -165,4 +172,24 @@ void MainWindow::stageEnabledChanged (int stages, bool enabled)
         stageControl4->setEnabled (enabled);
         break;
     }
+}
+
+
+// GUI events
+void MainWindow::connectButtonClicked ()
+{
+    // Try to connect/disconnect. Don't care about GUI update, daemon
+    // sends signal about state change.
+    if (_daemon.connected ())
+        _daemon.disconnect ();
+    else
+        _daemon.connect ();
+}
+
+
+// daemon signals handlers
+void MainWindow::connectedChanged (bool value)
+{
+    // toggle connect button
+    connectButton->setChecked (value);
 }

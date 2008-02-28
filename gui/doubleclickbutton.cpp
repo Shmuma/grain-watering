@@ -12,12 +12,12 @@ DoubleClickButton::DoubleClickButton (QWidget* parent)
 }
 
 
-void DoubleClickButton::mouseDoubleClickEvent (QMouseEvent * event)
+void DoubleClickButton::mouseDoubleClickEvent (QMouseEvent*)
 {
-    toggle ();
+    doubleClicked ();
 }
 
 
-void DoubleClickButton::mousePressEvent (QMouseEvent *event)
+void DoubleClickButton::mousePressEvent (QMouseEvent*)
 {
 }
