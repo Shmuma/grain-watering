@@ -17,34 +17,13 @@ private:
     Device* _device;
     Interpreter* _interp;
 
-protected:
-    void newConnection (int fd);
+protected slots:
+    void newConnection ();
+    void handleCommand ();
 
 public:
     PlaundServer (int tcp_port);
     ~PlaundServer ();
-
-    void startProcessing ();
-};
-
-
-class ConnHandler : public QThread
-{
-    Q_OBJECT
-
-private:
-    Interpreter* _interp;
-    int _fd;
-
-protected:
-    virtual void run ();
-
-public: 
-    ConnHandler (Interpreter* interp, int fd)
-        : QThread (),
-          _interp (interp),
-          _fd (fd)
-    {};
 };
 
 

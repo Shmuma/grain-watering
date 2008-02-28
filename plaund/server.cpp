@@ -19,12 +19,14 @@ PlaundServer::PlaundServer (int tcp_port)
     : _tcp_port (tcp_port)
 {
     listen (QHostAddress::Any, _tcp_port);
-    //    _port = new SerialRecorder (new RealSerialPort ("/dev/ttyS1"), "in.dat", "out.dat");
+    _port = new SerialRecorder (new RealSerialPort ("/dev/ttyS1"), "in.dat", "out.dat");
     //QString ("trace.dat"));
-    _port = new SerialRecorder (new FileSerialPort ("input.dat", "output.dat"), "in.dat", "out.dat");
+    //_port = new SerialRecorder (new FileSerialPort ("input.dat", "output.dat"), "in.dat", "out.dat");
     //_port = new FileSerialPort ("input.dat", "output.dat");
     _device = new Device (_port);
     _interp = new Interpreter (_device);
+
+    connect (this, SIGNAL (newConnection ()), this, SLOT (newConnection ()));
 }
 
 
@@ -36,55 +38,37 @@ PlaundServer::~PlaundServer ()
 }
 
 
-void PlaundServer::startProcessing ()
+
+void PlaundServer::newConnection ()
 {
-    while (1) {
-        if (waitForNewConnection ())
-            newConnection (nextPendingConnection ()->socketDescriptor ());
-    }
+    printf ("New connection arrived\n");
+    QTcpSocket* sock = nextPendingConnection ();
+
+    sock->write ("\nWelcome to plaund interactive shell.\nUse 'help' to see list of commands.\n\n");
+    sock->write ("> ");
+    sock->flush ();
+
+    connect (sock, SIGNAL (readyRead ()), this, SLOT (handleCommand ()));
 }
 
 
-void PlaundServer::newConnection (int fd)
+void PlaundServer::handleCommand ()
 {
-    ConnHandler* handler = new ConnHandler (_interp, fd);
-    connect(handler, SIGNAL(finished()), handler, SLOT(deleteLater()));
-    handler->start ();
-}
+    QTcpSocket* sock = dynamic_cast<QTcpSocket*> (sender ());
 
+    if (!sock)
+        return;
+    
+    QString l = sock->readLine ().trimmed ().toLower ();
 
-// --------------------------------------------------
-// ConnHandler
-// --------------------------------------------------
-void ConnHandler::run ()
-{
-    static QMutex mutex;
-    FILE* f = fdopen (_fd, "w+");
-
-    QTextStream stm (f);
-    QString l, r;
-    bool prompt = false;
-
-    stm << "\nWelcome to plaund interactive shell.\nUse 'help' to see list of commands.\n\n";
-    stm.flush ();
-
-    while (!feof (f)) {
-        if (!prompt) {
-            stm << "> ";
-            stm.flush ();
-            prompt = true;
-        }
-
-        l = stm.readLine ();
-        if (!l.isNull ()) {
-            mutex.lock ();
-            r = _interp->exec (l);
-            stm << r;
-            stm.flush ();
-            prompt = false;
-            mutex.unlock ();
-        }
+    if (l == "halt") {
+        QCoreApplication::quit ();
+        return;
     }
 
-    printf ("Client disconnected\n");
+    QString r = _interp->exec (l);
+    sock->write (r.toUtf8 ());
+    sock->write ("> ");
+    sock->flush ();
 }
+
