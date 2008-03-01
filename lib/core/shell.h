@@ -3,6 +3,7 @@
 
 #include <QtCore>
 #include "device.h"
+#include "database.h"
 
 class CommandMeta;
 class Interpreter;
@@ -15,6 +16,7 @@ class Interpreter
 private:
     Device* _dev;
     QMap<QString, CommandMeta> _commands;
+    Database _db;
 
     // interpreter state
     // this bit mask initialized by setstages command and read by getstages command.

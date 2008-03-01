@@ -5,6 +5,7 @@
 TEMPLATE = lib
 CONFIG = staticlib qt debug
 QT -= gui
+QT += sql
 TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += .
@@ -13,5 +14,5 @@ QMAKE_CXXFLAGS_DEBUG += -O0
 QMAKE_LFLAGS_DEBUG += -g
 
 # Input
-HEADERS += serial.h device.h shell.h
-SOURCES += serial.cpp device.cpp shell.cpp
+HEADERS += serial.h device.h shell.h database.h
+SOURCES += serial.cpp device.cpp shell.cpp database.cpp

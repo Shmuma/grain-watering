@@ -1,6 +1,6 @@
 #include <QtCore>
 #include "shell.h"
-
+#include "database.h"
 
 
 // --------------------------------------------------
@@ -8,7 +8,8 @@
 // --------------------------------------------------
 Interpreter::Interpreter (Device* device)
     : _dev (device),
-      _stages (0)
+      _stages (0),
+      _db ("plaund.db")
 {
     // initialize vocabulary
     // hardware commands
@@ -114,15 +115,22 @@ QString Interpreter::exec (const QString& line)
 	return QString ("Error: there is no handler associated with this command\n");
 
     handler_t h = meta.handler ();
+    QString res;
+    bool ok;
 
     try {
 	// throw away first argument (command)
 	items.erase (items.begin ());
 
-	return (this->*h)(items);
+	res = (this->*h)(items);
+        ok = true;
     } catch (QString msg) {
-	return QString ("ERROR: ") + msg + "\n";
+        ok = false;
+	res = QString ("ERROR: ") + msg + "\n";
     }
+
+    _db.appendCommandHistory (line, res, ok);
+    return res;
 }
 
 

@@ -5,7 +5,7 @@
 TEMPLATE = app
 CONFIG += qt console debug
 QT -= gui
-QT += network
+QT += network sql
 
 TARGET = 
 DEPENDPATH += .
