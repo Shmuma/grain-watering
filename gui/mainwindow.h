@@ -45,9 +45,14 @@ protected slots:
 
     // connect button clicked
     void connectButtonClicked ();
+    void consoleSendButtonClicked ();
+    void switchToStagesView ();
+    void switchToHistoryView ();
+    void switchToConsoleView ();
 
     // daemon signals
     void connectedChanged (bool value);
+    void daemonTextReceived (const QString& msg);
 public:
     MainWindow ();
 };

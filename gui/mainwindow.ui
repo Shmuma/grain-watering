@@ -251,9 +251,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="historyButton" >
+         <widget class="QPushButton" name="viewButton" >
           <property name="text" >
-           <string>History</string>
+           <string>View</string>
           </property>
           <property name="checkable" >
            <bool>true</bool>
@@ -316,11 +316,8 @@
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QWidget" name="layoutWidget" >
+     <widget class="QWidget" name="" >
       <layout class="QHBoxLayout" >
-       <property name="spacing" >
-        <number>1</number>
-       </property>
        <item>
         <widget class="QFrame" name="settingsPanel" >
          <property name="sizePolicy" >
@@ -646,27 +643,117 @@
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="outlinePanel" >
-         <property name="frameShape" >
-          <enum>QFrame::StyledPanel</enum>
+        <widget class="QStackedWidget" name="mainStackWidget" >
+         <property name="currentIndex" >
+          <number>0</number>
          </property>
-         <property name="frameShadow" >
-          <enum>QFrame::Raised</enum>
-         </property>
-         <layout class="QHBoxLayout" >
-          <item>
-           <widget class="StageControl" native="1" name="stageControl1" />
-          </item>
-          <item>
-           <widget class="StageControl" native="1" name="stageControl2" />
-          </item>
-          <item>
-           <widget class="StageControl" native="1" name="stageControl3" />
-          </item>
-          <item>
-           <widget class="StageControl" native="1" name="stageControl4" />
-          </item>
-         </layout>
+         <widget class="QWidget" name="page_2" >
+          <layout class="QHBoxLayout" >
+           <item>
+            <widget class="QFrame" name="outlinePanel" >
+             <layout class="QHBoxLayout" >
+              <property name="leftMargin" >
+               <number>0</number>
+              </property>
+              <property name="topMargin" >
+               <number>0</number>
+              </property>
+              <property name="rightMargin" >
+               <number>0</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="StageControl" native="1" name="stageControl1" />
+              </item>
+              <item>
+               <widget class="StageControl" native="1" name="stageControl2" />
+              </item>
+              <item>
+               <widget class="StageControl" native="1" name="stageControl3" />
+              </item>
+              <item>
+               <widget class="StageControl" native="1" name="stageControl4" />
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_4" >
+          <layout class="QVBoxLayout" >
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="label" >
+             <property name="text" >
+              <string>History page stub</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_3" >
+          <layout class="QVBoxLayout" >
+           <item>
+            <layout class="QHBoxLayout" >
+             <item>
+              <widget class="QLineEdit" name="consoleCommandInput" />
+             </item>
+             <item>
+              <widget class="QPushButton" name="consoleSendButton" >
+               <property name="text" >
+                <string>&amp;Send</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="consoleEditor" >
+             <property name="font" >
+              <font>
+               <family>Terminus</family>
+              </font>
+             </property>
+             <property name="readOnly" >
+              <bool>true</bool>
+             </property>
+             <property name="html" >
+              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Terminus'; font-size:11pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Plaund interactive console.&lt;/p>&lt;/body>&lt;/html></string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>
@@ -690,5 +777,22 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>consoleCommandInput</sender>
+   <signal>returnPressed()</signal>
+   <receiver>consoleSendButton</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>698</x>
+     <y>82</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>905</x>
+     <y>82</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

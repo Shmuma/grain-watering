@@ -52,9 +52,40 @@ MainWindow::MainWindow ()
 
     // connect button
     connect (connectButton, SIGNAL (doubleClicked ()), this, SLOT (connectButtonClicked ()));
+    connect (consoleSendButton, SIGNAL (clicked ()), this, SLOT (consoleSendButtonClicked ()));
+
+    // view button
+    QMenu* connectMenu = new QMenu (this);
+    QActionGroup* actionGroup = new QActionGroup (this);
+    QAction* action;
+
+    action = new QAction (tr ("Stages"), this);
+    action->setCheckable (true);
+    action->setChecked (true);
+    action->setShortcut (tr ("Ctrl+S"));
+    actionGroup->addAction (action);
+    connectMenu->addAction (action);
+    connect (action, SIGNAL (triggered ()), this, SLOT (switchToStagesView ()));
+
+    action = new QAction (tr ("History"), this);
+    action->setCheckable (true);
+    action->setShortcut (tr ("Ctrl+H"));
+    actionGroup->addAction (action);
+    connectMenu->addAction (action);
+    connect (action, SIGNAL (triggered ()), this, SLOT (switchToHistoryView ()));
+
+    action = new QAction (tr ("Console"), this);
+    action->setCheckable (true);
+    action->setShortcut (tr ("Ctrl+C"));
+    actionGroup->addAction (action);
+    connectMenu->addAction (action);
+    connect (action, SIGNAL (triggered ()), this, SLOT (switchToConsoleView ()));
+
+    viewButton->setMenu (connectMenu);
 
     // daemon state signals
     connect (&_daemon, SIGNAL (connectedChanged (bool)), this, SLOT (connectedChanged (bool)));
+    connect (&_daemon, SIGNAL (textArrived (const QString&)), this, SLOT (daemonTextReceived (const QString&)));
 }
 
 
@@ -204,4 +235,45 @@ void MainWindow::connectedChanged (bool value)
 {
     // toggle connect button
     connectButton->setChecked (value);
+}
+
+
+void MainWindow::daemonTextReceived (const QString& msg)
+{
+    consoleEditor->append (msg);
+    consoleEditor->moveCursor (QTextCursor::End);
+}
+
+
+void MainWindow::consoleSendButtonClicked ()
+{
+    if (!consoleCommandInput->text ().isEmpty ()) {
+        if (consoleCommandInput->text () == "clear") {
+            consoleEditor->clear ();
+            consoleCommandInput->clear ();
+        }
+        else {
+            _daemon.sendRawCommand (consoleCommandInput->text ());
+            consoleEditor->insertPlainText (consoleCommandInput->text ());
+            consoleEditor->moveCursor (QTextCursor::End);
+            consoleCommandInput->clear ();
+        }
+    }
+}
+
+
+void MainWindow::switchToStagesView ()
+{
+    mainStackWidget->setCurrentIndex (0);
+}
+
+
+void MainWindow::switchToHistoryView ()
+{
+    mainStackWidget->setCurrentIndex (1);
+}
+
+void MainWindow::switchToConsoleView ()
+{
+    mainStackWidget->setCurrentIndex (2);
 }

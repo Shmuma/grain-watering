@@ -124,11 +124,8 @@ QString Interpreter::getHelp (const QString& cmd)
 
 	while (it != _commands.constEnd ()) {
 	    res += it.key ();
-	    if (it.key ().length () < 16)
-		res += "\t";
-	    if (it.key ().length () < 8)
-		res += "\t";
-	    res += "\t" + it.value ().hint () + "\n";
+            res += QString (40-it.key ().length (), ' ');
+	    res += it.value ().hint () + "\n";
 	    it++;
 	}
 
