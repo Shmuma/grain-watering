@@ -7,9 +7,11 @@
 // Interpreter
 // --------------------------------------------------
 Interpreter::Interpreter (Device* device)
-    : _dev (device)
+    : _dev (device),
+      _stages (0)
 {
     // initialize vocabulary
+    // hardware commands
     _commands["help"] 		= CommandMeta (1, NULL, "Show help for command", "help [command]", 
 					       "Show help for command\n", CommandMeta::c_hardware);
     _commands["connect"] 	= CommandMeta (0, &Interpreter::connect, "Connect to device", "connect",
@@ -72,6 +74,11 @@ Interpreter::Interpreter (Device* device)
 					       "Sets output signal on (1) or off (0)\n", CommandMeta::c_hardware);
     _commands["startfilterautomat"]= CommandMeta (0, &Interpreter::startFilterAutomat, "Starts filter automat", "startfilterautomat",
                                                   "Starts filter automat\n", CommandMeta::c_hardware);
+
+    // state commands
+    _commands["getstages"]	= CommandMeta (0, &Interpreter::getStages, "Get available stages", "getstages",
+					       "Command gets active stages previously set by setstages command.\n"
+                                               "It returns comma-separated list of active stages number.\n", CommandMeta::c_state);
 }
 
 
@@ -124,35 +131,27 @@ QString Interpreter::getHelp (const QString& cmd)
     // show generic information with list of commands
     if (cmd.isEmpty ()) {
 	QString res = "List of available commands. Use 'help command' for details.\n";
-        CommandMeta::kind_t kind = CommandMeta::c_null;
 	QMap<QString, CommandMeta>::const_iterator it = _commands.begin ();
+        QMap<CommandMeta::kind_t, QString> cmds;
 
 	while (it != _commands.constEnd ()) {
-            if (kind != it.value ().kind ()) {
-                // we reached new category. Appends its head.
-                kind = it.value ().kind ();
-                switch (kind) {
-                case CommandMeta::c_null:
-                    break;
-                case CommandMeta::c_hardware:
-                    res += "\nHardware commands:\n";
-                    break;
-                case CommandMeta::c_state:
-                    res += "\nState commands:\n";
-                    break;
-                case CommandMeta::c_history:
-                    res += "\nHistory commands:\n";
-                    break;
-                case CommandMeta::c_meta:
-                    res += "\nMeta commands:\n";
-                    break;
-                }
-            }
-	    res += QString (4, ' ') + it.key ();
-            res += QString (40-it.key ().length (), ' ');
-	    res += it.value ().hint () + "\n";
+	    cmds[it.value ().kind ()] += QString (4, ' ') + it.key ();
+            cmds[it.value ().kind ()] += QString (40-it.key ().length (), ' ');
+	    cmds[it.value ().kind ()] += it.value ().hint () + "\n";
 	    it++;
 	}
+
+        if (!cmds[CommandMeta::c_hardware].isEmpty ())
+            res += "\nHardware commands:\n" + cmds[CommandMeta::c_hardware];
+
+        if (!cmds[CommandMeta::c_state].isEmpty ())
+            res += "\nState commands:\n" + cmds[CommandMeta::c_state];
+
+        if (!cmds[CommandMeta::c_history].isEmpty ())
+            res += "\nHistory commands:\n" + cmds[CommandMeta::c_history];
+
+        if (!cmds[CommandMeta::c_meta].isEmpty ())
+            res += "\nMeta commands:\n" + cmds[CommandMeta::c_meta];
 
 	return res;
     }
@@ -328,7 +327,19 @@ QString Interpreter::setKGates (const QStringList& args)
 
 QString Interpreter::setStages (const QStringList& args)
 {
-    return checkBoolReply (_dev->setStages (parseBool (args[0]), parseBool (args[1]), parseBool (args[2]), parseBool (args[3])));
+    bool res = _dev->setStages (parseBool (args[0]), parseBool (args[1]), parseBool (args[2]), parseBool (args[3]));
+    if (res) {
+        _stages = 0;
+        if (parseBool (args[0]))
+            _stages |= 1;
+        if (parseBool (args[1]))
+            _stages |= 1 << 1;
+        if (parseBool (args[2]))
+            _stages |= 1 << 2;
+        if (parseBool (args[3]))
+            _stages |= 1 << 3;
+    }
+    return checkBoolReply (res);
 }
 
 
@@ -372,4 +383,20 @@ QString Interpreter::setOutputSignal (const QStringList& args)
 QString Interpreter::startFilterAutomat (const QStringList& args)
 {
     return checkBoolReply (_dev->startFilterAutomat ());
+}
+
+
+QString Interpreter::getStages (const QStringList& args)
+{
+    QString res;
+
+    if (_stages & 1)
+        res += " 1";
+    if (_stages & 1 << 1)
+        res += " 2";
+    if (_stages & 1 << 2)
+        res += " 3";
+    if (_stages & 1 << 3)
+        res += " 4";
+    return res.trimmed ().replace (' ', ',') + "\n";
 }

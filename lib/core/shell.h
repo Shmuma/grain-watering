@@ -16,6 +16,10 @@ private:
     Device* _dev;
     QMap<QString, CommandMeta> _commands;
 
+    // interpreter state
+    // this bit mask initialized by setstages command and read by getstages command.
+    int _stages;
+
     static QString checkBoolReply (bool res)
         { return res ? "OK\n" : "ERROR\n"; };
     static QString boolToReply (bool res)
@@ -52,6 +56,8 @@ private:
     QString drainWater (const QStringList& args);
     QString setOutputSignal (const QStringList& args);
     QString startFilterAutomat (const QStringList& args);
+
+    QString getStages (const QStringList& args);
 public:
     Interpreter (Device* device);
 
