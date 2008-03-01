@@ -62,19 +62,30 @@ public:
 
 class CommandMeta
 {
+public:
+    enum kind_t {
+        c_null,
+        c_hardware,
+        c_state,
+        c_history,
+        c_meta,
+    };
+
 private:
     int _args;
     QString _hint, _usage, _help;
     handler_t _handler;
+    kind_t _kind;
 
 public:
     CommandMeta (int args, handler_t handler, const QString& hint, 
-		 const QString& usage, const QString& help)
+		 const QString& usage, const QString& help, kind_t kind)
 	: _args (args),
 	  _hint (hint),
 	  _usage (usage),
 	  _help (help),
-	  _handler (handler)
+	  _handler (handler),
+          _kind (kind)
     {};
 
     CommandMeta ()
@@ -94,6 +105,9 @@ public:
 
     handler_t handler () const
         { return _handler; };
+
+    kind_t kind () const
+        { return _kind; };
 };
 
 #endif
