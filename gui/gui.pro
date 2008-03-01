@@ -13,8 +13,8 @@ QMAKE_CXXFLAGS_DEBUG += -O0
 QMAKE_LFLAGS_DEBUG += -g
 
 # Input
-HEADERS += mainwindow.h doubleclickbutton.h stagecontrol.h controller.h daemon.h logger.h
-SOURCES += main.cpp mainwindow.cpp doubleclickbutton.cpp stagecontrol.cpp controller.cpp daemon.cpp logger.cpp
+HEADERS += mainwindow.h doubleclickbutton.h stagecontrol.h daemon.h logger.h
+SOURCES += main.cpp mainwindow.cpp doubleclickbutton.cpp stagecontrol.cpp daemon.cpp logger.cpp
 FORMS += mainwindow.ui
 
 

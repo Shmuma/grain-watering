@@ -6,7 +6,6 @@
 
 #include "ui_mainwindow.h"
 #include "stagecontrol.h"
-#include "controller.h"
 #include "daemon.h"
 #include "logger.h"
 
@@ -17,7 +16,6 @@ class MainWindow : public QWidget, private Ui::MainWindow
 
 private:
     bool _switchingToolButtons;
-    ControllerState _state;
     Daemon _daemon;
 
 protected:
@@ -32,16 +30,10 @@ protected slots:
     void sensorsButtonToggled (bool on);
 
     // active state checkbox 
-    void stage1ActiveCheckBoxToggled (bool on);
-    void stage2ActiveCheckBoxToggled (bool on);
-    void stage3ActiveCheckBoxToggled (bool on);
-    void stage4ActiveCheckBoxToggled (bool on);
+    void applyStagesButtonClicked ();
 
     // logger
     void loggerMessage (Logger::severity_t sev, const QString& msg);
-
-    // state slots
-    void stageEnabledChanged (int stages, bool enabled);
 
     // connect button clicked
     void connectButtonClicked ();
@@ -53,6 +45,8 @@ protected slots:
     // daemon signals
     void connectedChanged (bool value);
     void daemonTextReceived (const QString& msg);
+    void daemonCommandSent (const QString& msg);
+
 public:
     MainWindow ();
 };

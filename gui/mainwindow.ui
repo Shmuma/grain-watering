@@ -316,7 +316,7 @@
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QWidget" name="" >
+     <widget class="QWidget" name="layoutWidget" >
       <layout class="QHBoxLayout" >
        <item>
         <widget class="QFrame" name="settingsPanel" >
@@ -377,6 +377,13 @@
                   <widget class="QCheckBox" name="stage4ActiveCheckBox" >
                    <property name="text" >
                     <string>Stage 4</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="applyStagesButton" >
+                   <property name="text" >
+                    <string>Apply</string>
                    </property>
                   </widget>
                  </item>

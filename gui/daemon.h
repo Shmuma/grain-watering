@@ -14,6 +14,7 @@ private:
         c_empty,
         c_init,
         c_connect,
+        c_setstages,
     };
 
     QString _host;
@@ -24,9 +25,11 @@ private:
     bool _connected;
     bool _hw_connected;
     lastcommand_t _last;
+    bool _s1, _s2, _s3, _s4;
 
 protected:
     bool parseGenericReply (const QString& reply, QString& msg);
+    void sendCommand (const QString& cmd);
 
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
@@ -34,7 +37,10 @@ protected slots:
 
 signals:
     void connectedChanged (bool value);
+    void stagesActivityChanged (bool s1, bool s2, bool s3, bool s4);
+
     void textArrived (const QString& text);
+    void commandSent (const QString& text);
 
 public:
     Daemon (const QString& host, int port);
@@ -44,6 +50,7 @@ public:
 
     void connect ();
     void disconnect ();
+    void setStages (bool s1, bool s2, bool s3, bool s4);
 
     void sendRawCommand (const QString& text);
 };

@@ -33,13 +33,7 @@ MainWindow::MainWindow ()
     connect (sensorsButton, SIGNAL(toggled(bool)), this, SLOT(sensorsButtonToggled(bool)));
 
     // connect active stages checkboxes
-    connect (stage1ActiveCheckBox, SIGNAL(toggled(bool)), this, SLOT(stage1ActiveCheckBoxToggled(bool)));
-    connect (stage2ActiveCheckBox, SIGNAL(toggled(bool)), this, SLOT(stage2ActiveCheckBoxToggled(bool)));
-    connect (stage3ActiveCheckBox, SIGNAL(toggled(bool)), this, SLOT(stage3ActiveCheckBoxToggled(bool)));
-    connect (stage4ActiveCheckBox, SIGNAL(toggled(bool)), this, SLOT(stage4ActiveCheckBoxToggled(bool)));
-
-    // state signals
-    connect (&_state, SIGNAL(stageEnabledChanged(int, bool)), this, SLOT(stageEnabledChanged(int, bool)));
+    connect (applyStagesButton, SIGNAL (clicked ()), this, SLOT (applyStagesButtonClicked ()));
 
     // hide settings panel
     settingsPanel->hide ();
@@ -86,6 +80,7 @@ MainWindow::MainWindow ()
     // daemon state signals
     connect (&_daemon, SIGNAL (connectedChanged (bool)), this, SLOT (connectedChanged (bool)));
     connect (&_daemon, SIGNAL (textArrived (const QString&)), this, SLOT (daemonTextReceived (const QString&)));
+    connect (&_daemon, SIGNAL (commandSent (const QString&)), this, SLOT (daemonCommandSent (const QString&)));
 }
 
 
@@ -169,49 +164,6 @@ void MainWindow::sensorsButtonToggled (bool on)
 }
 
 
-void MainWindow::stage1ActiveCheckBoxToggled (bool on)
-{
-    _state.setStageEnabled (1, on);
-}
-
-
-void MainWindow::stage2ActiveCheckBoxToggled (bool on)
-{
-    _state.setStageEnabled (2, on);
-}
-
-
-void MainWindow::stage3ActiveCheckBoxToggled (bool on)
-{
-    _state.setStageEnabled (3, on);
-}
-
-
-void MainWindow::stage4ActiveCheckBoxToggled (bool on)
-{
-    _state.setStageEnabled (4, on);
-}
-
-
-void MainWindow::stageEnabledChanged (int stages, bool enabled)
-{
-    switch (stages) {
-    case 1:
-        stageControl1->setEnabled (enabled);
-        break;
-    case 2:
-        stageControl2->setEnabled (enabled);
-        break;
-    case 3:
-        stageControl3->setEnabled (enabled);
-        break;
-    case 4:
-        stageControl4->setEnabled (enabled);
-        break;
-    }
-}
-
-
 void MainWindow::loggerMessage (Logger::severity_t sev, const QString& msg)
 {
     logListView->addItem (msg);
@@ -245,6 +197,13 @@ void MainWindow::daemonTextReceived (const QString& msg)
 }
 
 
+void MainWindow::daemonCommandSent (const QString& msg)
+{
+    consoleEditor->insertPlainText (msg);
+    consoleEditor->moveCursor (QTextCursor::End);
+}
+
+
 void MainWindow::consoleSendButtonClicked ()
 {
     if (!consoleCommandInput->text ().isEmpty ()) {
@@ -254,8 +213,6 @@ void MainWindow::consoleSendButtonClicked ()
         }
         else {
             _daemon.sendRawCommand (consoleCommandInput->text ());
-            consoleEditor->insertPlainText (consoleCommandInput->text ());
-            consoleEditor->moveCursor (QTextCursor::End);
             consoleCommandInput->clear ();
         }
     }
@@ -277,3 +234,11 @@ void MainWindow::switchToConsoleView ()
 {
     mainStackWidget->setCurrentIndex (2);
 }
+
+void MainWindow::applyStagesButtonClicked ()
+{
+    _daemon.setStages (stage1ActiveCheckBox->isChecked (), stage2ActiveCheckBox->isChecked (), 
+                       stage3ActiveCheckBox->isChecked (), stage4ActiveCheckBox->isChecked ());
+}
+
+
