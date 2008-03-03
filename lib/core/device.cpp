@@ -27,18 +27,24 @@ DeviceCommand::DeviceCommand (const QByteArray& data)
     _valid = false;
 
     // we got invalid sequence
-    if (data[0] != (char)0xAA)
+    if (data[0] != (char)0xAA) {
+        printf ("DeviceCommand: input sequence started with %02x\n", data[0]);
         return;
+    }
 
     // we got invalid stage
-    if (data[1] != (char)0xFF && data[1] != 1 && data[1] != 2 && data[1] != 3 && data[1] != 4)
+    if (data[1] != (char)0xFF && data[1] != 1 && data[1] != 2 && data[1] != 3 && data[1] != 4) {
+        printf ("DeviceCommand: we got invalid stage value %02x\n", data[1]);
 	return;
+    }
 
     _kind = (kind_t)data[1];
     _reply_stage = (stage_t)(unsigned char)data[1];
     _low = data[2];
     _high = data[3];
     _valid = calcCRC () == data[4];
+    if (!_valid)
+        printf ("DeviceCommand: invalid CRC %02x (calc) != %02x (got)\n", calcCRC (), data[4]);
 }
 
 
