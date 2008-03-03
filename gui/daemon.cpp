@@ -67,7 +67,8 @@ void Daemon::socketReadyRead ()
     // read data from socket
     QString reply (_sock->readAll ());
     QString msg;
-    
+    int value;
+
     textArrived (reply);
     //    Logger::instance ()->log (Logger::Debug, QString ("Got data from socket. Last command %1, text %2").arg (QString::number (_last), reply));
 
@@ -101,6 +102,13 @@ void Daemon::socketReadyRead ()
             stagesActivityChanged (_s1, _s2, _s3, _s4);
         _last = c_empty;
         break;
+    case c_getgrainflow:
+        if (!parseNumberReply (reply, msg, &value))
+            Logger::instance ()->log (Logger::Error, QString ("Cannot get grain flow. Reason: '%1'").arg (msg));
+        else
+            grainFlowGot (_stage, value);
+        _last = c_empty;
+        break;
     }
 }
 
@@ -110,9 +118,27 @@ bool Daemon::parseGenericReply (const QString& reply, QString& msg)
     bool res = reply.startsWith ("OK");
 
     if (!res)
-        msg = reply.remove ("ERROR:").remove ('>').trimmed ();
+        msg = QString (reply).remove ("ERROR:").remove ('>').trimmed ();
 
     return res;
+}
+
+
+bool Daemon::parseNumberReply (const QString& reply, QString& msg, int* val)
+{
+    if (reply.startsWith ("ERROR:")) {
+        msg = QString (reply).remove ("ERROR:").remove ('>').trimmed ();
+        return false;
+    }
+        
+    bool ok;
+    QString str = QString (reply).remove (">").trimmed ();
+    *val = str.toInt (&ok);
+
+    if (!ok)
+        msg = QString (tr ("Expected number, got '%1'")).arg (reply);
+
+    return ok;
 }
 
 
@@ -134,4 +160,12 @@ void Daemon::setStages (bool s1, bool s2, bool s3, bool s4)
     _s1 = s1; _s2 = s2; _s3 = s3; _s4 = s4;
     sendCommand (QString ().sprintf ("setstages %d %d %d %d\n", s1 ? 1 : 0, s2 ? 1 : 0, s3 ? 1 : 0, s4 ? 1 : 0));
     _last = c_setstages;
+}
+
+
+void Daemon::getGrainFlow (int stage)
+{
+    _stage = stage;
+    sendCommand (QString ("getgrainflow %d\n").arg (QString::number (_stage)));
+    _last = c_getgrainflow;
 }

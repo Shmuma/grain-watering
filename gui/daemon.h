@@ -15,6 +15,7 @@ private:
         c_init,
         c_connect,
         c_setstages,
+        c_getgrainflow,
     };
 
     QString _host;
@@ -26,9 +27,11 @@ private:
     bool _hw_connected;
     lastcommand_t _last;
     bool _s1, _s2, _s3, _s4;
+    int _stage;
 
 protected:
     bool parseGenericReply (const QString& reply, QString& msg);
+    bool parseNumberReply (const QString& reply, QString& msg, int* val);
     void sendCommand (const QString& cmd);
 
 protected slots:
@@ -38,6 +41,7 @@ protected slots:
 signals:
     void connectedChanged (bool value);
     void stagesActivityChanged (bool s1, bool s2, bool s3, bool s4);
+    void grainFlowGot (int stage, int value);
 
     void textArrived (const QString& text);
     void commandSent (const QString& text);
@@ -51,6 +55,7 @@ public:
     void connect ();
     void disconnect ();
     void setStages (bool s1, bool s2, bool s3, bool s4);
+    void getGrainFlow (int stage);
 
     void sendRawCommand (const QString& text);
 };

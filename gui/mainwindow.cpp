@@ -82,6 +82,7 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (textArrived (const QString&)), this, SLOT (daemonTextReceived (const QString&)));
     connect (&_daemon, SIGNAL (commandSent (const QString&)), this, SLOT (daemonCommandSent (const QString&)));
     connect (&_daemon, SIGNAL (stagesActivityChanged (bool,bool,bool,bool)), this, SLOT (daemonStagesActivityChanged (bool,bool,bool,bool)));
+    connect (&_daemon, SIGNAL (grainFlowGot (int, int)), this, SLOT (daemonGrainFlowGot (int, int)));
 }
 
 
@@ -165,9 +166,26 @@ void MainWindow::sensorsButtonToggled (bool on)
 }
 
 
-void MainWindow::loggerMessage (Logger::severity_t sev, const QString& msg)
+void MainWindow::loggerMessage (Logger::severity_t, const QString& msg)
 {
     logListView->addItem (msg);
+}
+
+
+StageControl* MainWindow::getStageControl (int stage) const
+{
+    switch (stage) {
+    case 1:
+        return stageControl1;
+    case 2:
+        return stageControl2;
+    case 3:
+        return stageControl3;
+    case 4:
+        return stageControl4;
+    default:
+        return NULL;
+    }
 }
 
 
@@ -253,3 +271,8 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
     stageControl4->setEnabled (s4);
 }
 
+
+void MainWindow::daemonGrainFlowGot (int stage, int value)
+{
+    getStageControl (stage)->setGrainFlow (value);
+}
