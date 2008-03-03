@@ -46,6 +46,7 @@ protected slots:
     void connectedChanged (bool value);
     void daemonTextReceived (const QString& msg);
     void daemonCommandSent (const QString& msg);
+    void daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4);
 
 public:
     MainWindow ();

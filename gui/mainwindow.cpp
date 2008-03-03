@@ -81,6 +81,7 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (connectedChanged (bool)), this, SLOT (connectedChanged (bool)));
     connect (&_daemon, SIGNAL (textArrived (const QString&)), this, SLOT (daemonTextReceived (const QString&)));
     connect (&_daemon, SIGNAL (commandSent (const QString&)), this, SLOT (daemonCommandSent (const QString&)));
+    connect (&_daemon, SIGNAL (stagesActivityChanged (bool,bool,bool,bool)), this, SLOT (daemonStagesActivityChanged (bool,bool,bool,bool)));
 }
 
 
@@ -230,10 +231,12 @@ void MainWindow::switchToHistoryView ()
     mainStackWidget->setCurrentIndex (1);
 }
 
+
 void MainWindow::switchToConsoleView ()
 {
     mainStackWidget->setCurrentIndex (2);
 }
+
 
 void MainWindow::applyStagesButtonClicked ()
 {
@@ -241,4 +244,12 @@ void MainWindow::applyStagesButtonClicked ()
                        stage3ActiveCheckBox->isChecked (), stage4ActiveCheckBox->isChecked ());
 }
 
+
+void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4)
+{
+    stageControl1->setEnabled (s1);
+    stageControl2->setEnabled (s2);
+    stageControl3->setEnabled (s3);
+    stageControl4->setEnabled (s4);
+}
 
