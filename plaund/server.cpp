@@ -16,7 +16,8 @@
 // PlaundServer
 // --------------------------------------------------
 PlaundServer::PlaundServer (int tcp_port)
-    : _tcp_port (tcp_port)
+    : _tcp_port (tcp_port),
+      _autoMode (false)
 {
     listen (QHostAddress::Any, _tcp_port);
     //    _port = new SerialRecorder (new RealSerialPort ("/dev/ttyS1"), "in.dat", "out.dat");
@@ -27,6 +28,8 @@ PlaundServer::PlaundServer (int tcp_port)
     _interp = new Interpreter (_device);
 
     connect (this, SIGNAL (newConnection ()), this, SLOT (newConnection ()));
+
+    startTimer (5000);
 }
 
 
@@ -49,6 +52,7 @@ void PlaundServer::newConnection ()
     sock->flush ();
 
     connect (sock, SIGNAL (readyRead ()), this, SLOT (handleCommand ()));
+    _socks.push_back (sock);
 }
 
 
@@ -72,3 +76,19 @@ void PlaundServer::handleCommand ()
     sock->flush ();
 }
 
+
+void PlaundServer::timerEvent (QTimerEvent* event)
+{
+    QString res;
+    if (_interp->isAutoMode ()) {
+        res = _interp->exec ("automodetick\n");
+        // broadcast result of auto mode tick to all connected clients
+        QList<QTcpSocket*>::iterator it = _socks.begin ();
+
+        while (it != _socks.end ()) {
+            (*it)->write (res.toAscii ());
+            (*it)->flush ();
+            it++;
+        }
+    }
+}

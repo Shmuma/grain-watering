@@ -21,6 +21,7 @@ private:
     // interpreter state
     // this bit mask initialized by setstages command and read by getstages command.
     int _stages;
+    bool _autoMode;
 
     static QString checkBoolReply (bool res)
         { return res ? "OK\n" : "ERROR\n"; };
@@ -60,11 +61,19 @@ private:
     QString startFilterAutomat (const QStringList& args);
 
     QString getStages (const QStringList& args);
+
+    QString startAutoMode (const QStringList& args);
+    QString autoModeTick (const QStringList& args);
+    QString stopAutoMode (const QStringList& args);
+    QString toggleAutoMode (const QStringList& args);
 public:
     Interpreter (Device* device);
 
     QString exec (const QString& line);
     QString getHelp (const QString& cmd = QString ());
+
+    bool isAutoMode () const
+        { return _autoMode; };
 };
 
 

@@ -9,6 +9,7 @@
 Interpreter::Interpreter (Device* device)
     : _dev (device),
       _stages (0),
+      _autoMode (false),
       _db ("plaund.db")
 {
     // initialize vocabulary
@@ -80,6 +81,17 @@ Interpreter::Interpreter (Device* device)
     _commands["getstages"]	= CommandMeta (0, &Interpreter::getStages, "Get available stages", "getstages",
 					       "Command gets active stages previously set by setstages command.\n"
                                                "It returns comma-separated list of active stages number.\n", CommandMeta::c_state);
+
+    // meta commands
+    _commands["startautomode"]	= CommandMeta (0, &Interpreter::startAutoMode, "Starts auto mode", "startautomode",
+                                               "Command starts auto mode\n", CommandMeta::c_meta);
+    _commands["automodetick"]	= CommandMeta (0, &Interpreter::autoModeTick, "Performs auto mode actions", "automodetick",
+                                               "Performs auto mode actions. Should be called every 5 seconds in auto mode.\n", 
+                                               CommandMeta::c_meta);
+    _commands["stopautomode"]	= CommandMeta (0, &Interpreter::stopAutoMode, "Stops auto mode", "stopautomode",
+                                               "Command stop auto mode\n", CommandMeta::c_meta);
+    _commands["toggleautomode"]	= CommandMeta (0, &Interpreter::toggleAutoMode, "Pause/unpause auto mode", "toggleautomode",
+                                               "Pause/unpause auto mode\n", CommandMeta::c_meta);
 }
 
 
@@ -407,4 +419,44 @@ QString Interpreter::getStages (const QStringList& args)
     if (_stages & 1 << 3)
         res += " 4";
     return res.trimmed ().replace (' ', ',') + "\n";
+}
+
+
+QString Interpreter::startAutoMode (const QStringList& args)
+{
+    if (!_autoMode) {
+        _autoMode = true;
+    }
+
+    return QString ("OK: auto mode started\n");
+}
+
+
+QString Interpreter::autoModeTick (const QStringList& args)
+{
+    if (!_autoMode)
+        return QString ("ERROR: Auto mode is disabled\n");
+
+    // get water pressure
+    int press = _device->getWaterPressure ();
+    
+    // start water of all enabled stages (TODO: ask about repeated water)
+    return QString ("Auto: OK\n");
+}
+
+
+QString Interpreter::stopAutoMode (const QStringList& args)
+{
+    _autoMode = false;
+    return QString ("OK: auto mode stopped\n");
+}
+
+
+QString Interpreter::toggleAutoMode (const QStringList& args)
+{
+    _autoMode = !_autoMode;
+    if (_autoMode)
+        return QString ("OK: auto mode unpaused\n");
+    else
+        return QString ("OK: auto mode paused\n");
 }

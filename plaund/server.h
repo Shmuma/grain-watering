@@ -16,10 +16,15 @@ private:
     SerialPort* _port;
     Device* _device;
     Interpreter* _interp;
+    bool _autoMode;
+    QList<QTcpSocket*> _socks;
 
 protected slots:
     void newConnection ();
     void handleCommand ();
+
+protected:
+    void timerEvent (QTimerEvent* event);
 
 public:
     PlaundServer (int tcp_port);
