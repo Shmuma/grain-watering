@@ -438,7 +438,7 @@ QString Interpreter::autoModeTick (const QStringList& args)
         return QString ("ERROR: Auto mode is disabled\n");
 
     // get water pressure
-    int press = _device->getWaterPressure ();
+    int press = _dev->getWaterPressure ();
     
     // start water of all enabled stages (TODO: ask about repeated water)
     return QString ("Auto: OK\n");
