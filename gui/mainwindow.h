@@ -36,19 +36,29 @@ protected slots:
     // logger
     void loggerMessage (Logger::severity_t sev, const QString& msg);
 
-    // connect button clicked
+    // toolbar buttons
     void connectButtonClicked ();
     void consoleSendButtonClicked ();
     void switchToStagesView ();
     void switchToHistoryView ();
     void switchToConsoleView ();
+    void startButtonClicked ();
+    void stopButtonClicked ();
+    void pauseButtonClicked ();
 
     // daemon signals
     void connectedChanged (bool value);
+    void daemonHardwareConnected ();
     void daemonTextReceived (const QString& msg);
+    void daemonAutoTextReceived (const QString& msg);
     void daemonCommandSent (const QString& msg);
     void daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4);
     void daemonGrainFlowGot (int stage, int value);
+    void daemonAutoModeTickGot (bool state, int press);
+    void daemonAutoModeStarted ();
+    void daemonAutoModeStopped ();
+    void daemonAutoModeToggled (bool paused);
+    void daemonAutoModeGot (bool active, bool paused);
 
 public:
     MainWindow ();

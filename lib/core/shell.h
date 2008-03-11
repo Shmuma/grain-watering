@@ -22,6 +22,7 @@ private:
     // this bit mask initialized by setstages command and read by getstages command.
     int _stages;
     bool _autoMode;
+    bool _autoModePaused;
 
     static QString checkBoolReply (bool res)
         { return res ? "OK\n" : "ERROR\n"; };
@@ -66,6 +67,7 @@ private:
     QString autoModeTick (const QStringList& args);
     QString stopAutoMode (const QStringList& args);
     QString toggleAutoMode (const QStringList& args);
+    QString getAutoMode (const QStringList& args);
 public:
     Interpreter (Device* device);
 
@@ -74,6 +76,8 @@ public:
 
     bool isAutoMode () const
         { return _autoMode; };
+    bool isAutoModePaused () const
+        { return _autoModePaused; };
 };
 
 

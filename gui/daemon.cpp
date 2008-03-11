@@ -68,12 +68,26 @@ void Daemon::socketReadyRead ()
     QString reply (_sock->readAll ());
     QString msg;
     int value;
+    lastcommand_t p_last = _last;
+    QString auto_prefix ("Auto: ");
 
-    textArrived (reply);
+    if (!reply.startsWith (auto_prefix))
+        textArrived (reply);
+    else
+        autoTextArrived (reply.remove (auto_prefix).trimmed ());
     //    Logger::instance ()->log (Logger::Debug, QString ("Got data from socket. Last command %1, text %2").arg (QString::number (_last), reply));
 
-    switch (_last) {
-    case c_empty:                 // no command was issued, ignore this test
+    _last = c_empty;
+
+    switch (p_last) {
+    case c_empty:                 // no command was issued, check for auto mode message
+        if (reply.startsWith (auto_prefix)) {
+            bool state;
+            int pres;
+            
+            if (parseAutoModeTick (reply, &state, &pres))
+                autoModeTickGot (state, pres);
+        }
         break;
 
     case c_init:
@@ -92,22 +106,41 @@ void Daemon::socketReadyRead ()
         else {
             _hw_connected = true;
             Logger::instance ()->log (Logger::Information, QString ("Controller connected to hardware"));
+            hardwareConnected ();
         }
-        _last = c_empty;
         break;
     case c_setstages:
         if (!parseGenericReply (reply, msg))
             Logger::instance ()->log (Logger::Error, QString ("Cannot set active stages. Reason: '%1'").arg (msg));
         else
             stagesActivityChanged (_s1, _s2, _s3, _s4);
-        _last = c_empty;
         break;
     case c_getgrainflow:
         if (!parseNumberReply (reply, msg, &value))
             Logger::instance ()->log (Logger::Error, QString ("Cannot get grain flow. Reason: '%1'").arg (msg));
         else
             grainFlowGot (_stage, value);
-        _last = c_empty;
+        break;
+    case c_startautomode:
+        if (!parseGenericReply (reply, msg))
+            Logger::instance ()->log (Logger::Error, QString ("Cannot start auto mode. Reason: '%1'").arg (msg));
+        else
+            autoModeStarted ();
+        break;
+    case c_stopautomode:
+        if (!parseGenericReply (reply, msg))
+            Logger::instance ()->log (Logger::Error, QString ("Cannot stop auto mode. Reason: '%1'").arg (msg));
+        else
+            autoModeStopped ();
+        break;
+    case c_toggleautomode:
+        if (!parseGenericReply (reply, msg))
+            Logger::instance ()->log (Logger::Error, QString ("Cannot toggle auto mode. Reason: '%1'").arg (msg));
+        else
+            autoModeToggled (!msg.contains ("unpaused"));
+        break;
+    case c_getautomode:
+        autoModeGot (reply.split (",")[0] == "active", reply.split (",")[1] == "paused");
         break;
     }
 }
@@ -119,6 +152,8 @@ bool Daemon::parseGenericReply (const QString& reply, QString& msg)
 
     if (!res)
         msg = QString (reply).remove ("ERROR:").remove ('>').trimmed ();
+    else
+        msg = QString (reply).remove ("OK:").remove ('>').trimmed ();
 
     return res;
 }
@@ -139,6 +174,17 @@ bool Daemon::parseNumberReply (const QString& reply, QString& msg, int* val)
         msg = QString (tr ("Expected number, got '%1'")).arg (reply);
 
     return ok;
+}
+
+
+bool Daemon::parseAutoModeTick (const QString& reply, bool* state, int* press)
+{
+    QStringList l = QString (reply).remove (" ").split (",");
+
+    *state = l[0].split (":")[1] == "OK";
+    *press = l[1].split (":")[1].toInt ();
+
+    return true;
 }
 
 
@@ -168,4 +214,32 @@ void Daemon::getGrainFlow (int stage)
     _stage = stage;
     sendCommand (QString ("getgrainflow %d\n").arg (QString::number (_stage)));
     _last = c_getgrainflow;
+}
+
+
+void Daemon::startAutoMode ()
+{
+    sendCommand ("startautomode\n");
+    _last = c_startautomode;
+}
+
+
+void Daemon::stopAutoMode ()
+{
+    sendCommand ("stopautomode\n");
+    _last = c_stopautomode;
+}
+
+
+void Daemon::toggleAutoMode ()
+{
+    sendCommand ("toggleautomode\n");
+    _last = c_toggleautomode;
+}
+
+
+void Daemon::getAutoMode ()
+{
+    sendCommand ("getautomode\n");
+    _last = c_getautomode;
 }

@@ -257,6 +257,9 @@ QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
     case DeviceCommand::GetP5State:
         res = DeviceCommand (DeviceCommand::Stg_All, 0x2, 0x0).pack ();
         break;
+    case DeviceCommand::GetWaterPressure:
+        res = DeviceCommand (DeviceCommand::Stg_All, 0, 123).pack ();
+        break;
     case DeviceCommand::SetStages:
         res = DeviceCommand (kind, DeviceCommand::Stg_All).pack ();
         break;

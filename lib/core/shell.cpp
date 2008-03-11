@@ -10,6 +10,7 @@ Interpreter::Interpreter (Device* device)
     : _dev (device),
       _stages (0),
       _autoMode (false),
+      _autoModePaused (false),
       _db ("plaund.db")
 {
     // initialize vocabulary
@@ -92,6 +93,8 @@ Interpreter::Interpreter (Device* device)
                                                "Command stop auto mode\n", CommandMeta::c_meta);
     _commands["toggleautomode"]	= CommandMeta (0, &Interpreter::toggleAutoMode, "Pause/unpause auto mode", "toggleautomode",
                                                "Pause/unpause auto mode\n", CommandMeta::c_meta);
+    _commands["getautomode"]	= CommandMeta (0, &Interpreter::getAutoMode, "Get auto mode state", "getautomode",
+                                               "Get auto mode state. Valid answers: active, inactive and paused\n", CommandMeta::c_meta);
 }
 
 
@@ -426,6 +429,7 @@ QString Interpreter::startAutoMode (const QStringList& args)
 {
     if (!_autoMode) {
         _autoMode = true;
+        _autoModePaused = false;
     }
 
     return QString ("OK: auto mode started\n");
@@ -437,26 +441,43 @@ QString Interpreter::autoModeTick (const QStringList& args)
     if (!_autoMode)
         return QString ("ERROR: Auto mode is disabled\n");
 
+    if (_autoModePaused)
+        return QString ("ERROR: Auto mode is paused\n");
+
     // get water pressure
     int press = _dev->getWaterPressure ();
     
     // start water of all enabled stages (TODO: ask about repeated water)
-    return QString ("Auto: OK\n");
+    return QString ("Auto: OK, Pres: %1\n").arg (press);
 }
 
 
 QString Interpreter::stopAutoMode (const QStringList& args)
 {
-    _autoMode = false;
+    _autoModePaused = _autoMode = false;
     return QString ("OK: auto mode stopped\n");
 }
 
 
 QString Interpreter::toggleAutoMode (const QStringList& args)
 {
-    _autoMode = !_autoMode;
-    if (_autoMode)
-        return QString ("OK: auto mode unpaused\n");
+    if (!_autoMode)
+        return QString ("ERROR: auto mode not active\n");
+
+    _autoModePaused = !_autoModePaused;
+    if (!_autoModePaused)
+        return QString ("OK: unpaused\n");
     else
-        return QString ("OK: auto mode paused\n");
+        return QString ("OK: paused\n");
+}
+
+
+QString Interpreter::getAutoMode (const QStringList& args)
+{
+    QString res;
+
+    res = _autoMode ? "active" : "inactive";
+    res += ",";
+    res += _autoModePaused ? "paused" : "unpaused";
+    return res + "\n";
 }

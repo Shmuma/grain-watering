@@ -31,6 +31,9 @@ MainWindow::MainWindow ()
     connect (checkButton, SIGNAL(toggled(bool)), this, SLOT(checkButtonToggled(bool)));
     connect (paramsButton, SIGNAL(toggled(bool)), this, SLOT(paramsButtonToggled(bool)));
     connect (sensorsButton, SIGNAL(toggled(bool)), this, SLOT(sensorsButtonToggled(bool)));
+    connect (startButton, SIGNAL (clicked ()), this, SLOT (startButtonClicked ()));
+    connect (stopButton,  SIGNAL (clicked ()), this, SLOT (stopButtonClicked ()));
+    connect (pauseButton, SIGNAL (clicked ()), this, SLOT (pauseButtonClicked ()));
 
     // connect active stages checkboxes
     connect (applyStagesButton, SIGNAL (clicked ()), this, SLOT (applyStagesButtonClicked ()));
@@ -76,13 +79,21 @@ MainWindow::MainWindow ()
     connect (action, SIGNAL (triggered ()), this, SLOT (switchToConsoleView ()));
 
     viewButton->setMenu (connectMenu);
+    //    autoLogEditor->hide ();
 
     // daemon state signals
     connect (&_daemon, SIGNAL (connectedChanged (bool)), this, SLOT (connectedChanged (bool)));
+    connect (&_daemon, SIGNAL (hardwareConnected ()), this, SLOT (daemonHardwareConnected ()));
     connect (&_daemon, SIGNAL (textArrived (const QString&)), this, SLOT (daemonTextReceived (const QString&)));
+    connect (&_daemon, SIGNAL (autoTextArrived (const QString&)), this, SLOT (daemonAutoTextReceived (const QString&)));
     connect (&_daemon, SIGNAL (commandSent (const QString&)), this, SLOT (daemonCommandSent (const QString&)));
     connect (&_daemon, SIGNAL (stagesActivityChanged (bool,bool,bool,bool)), this, SLOT (daemonStagesActivityChanged (bool,bool,bool,bool)));
     connect (&_daemon, SIGNAL (grainFlowGot (int, int)), this, SLOT (daemonGrainFlowGot (int, int)));
+    connect (&_daemon, SIGNAL (autoModeTickGot (bool, int)), this, SLOT (daemonAutoModeTickGot (bool, int)));
+    connect (&_daemon, SIGNAL (autoModeGot (bool, bool)), this, SLOT (daemonAutoModeGot (bool, bool)));
+    connect (&_daemon, SIGNAL (autoModeStarted ()), this, SLOT (daemonAutoModeStarted ()));
+    connect (&_daemon, SIGNAL (autoModeStopped ()), this, SLOT (daemonAutoModeStopped ()));
+    connect (&_daemon, SIGNAL (autoModeToggled (bool)), this, SLOT (daemonAutoModeToggled (bool)));
 }
 
 
@@ -209,10 +220,24 @@ void MainWindow::connectedChanged (bool value)
 }
 
 
+// hardware connection got, fetch daemon state
+void MainWindow::daemonHardwareConnected ()
+{
+    _daemon.getAutoMode ();
+}
+
+
 void MainWindow::daemonTextReceived (const QString& msg)
 {
     consoleEditor->append (msg);
     consoleEditor->moveCursor (QTextCursor::End);
+}
+
+
+void MainWindow::daemonAutoTextReceived (const QString& msg)
+{
+    autoLogEditor->append (msg);
+    autoLogEditor->moveCursor (QTextCursor::End);
 }
 
 
@@ -275,4 +300,67 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
 void MainWindow::daemonGrainFlowGot (int stage, int value)
 {
     getStageControl (stage)->setGrainFlow (value);
+}
+
+
+void MainWindow::startButtonClicked ()
+{
+    _daemon.startAutoMode ();
+}
+
+
+void MainWindow::stopButtonClicked ()
+{
+    _daemon.stopAutoMode ();
+}
+
+
+void MainWindow::pauseButtonClicked ()
+{
+    _daemon.toggleAutoMode ();
+}
+
+
+void MainWindow::daemonAutoModeTickGot (bool state, int press)
+{
+    Logger::instance ()->log (Logger::Debug, QString ("Auto mode tick. State: %1, Press: %2").arg (state ? "OK" : "ERROR", QString::number (press)));
+}
+
+
+void MainWindow::daemonAutoModeStarted ()
+{
+    startButton->setChecked (true);
+    stopButton->setChecked (false);
+    autoLogEditor->show ();
+}
+
+
+void MainWindow::daemonAutoModeStopped ()
+{
+    startButton->setChecked (false);
+    stopButton->setChecked (true);
+    autoLogEditor->hide ();
+}
+
+
+void MainWindow::daemonAutoModeToggled (bool paused)
+{
+    pauseButton->setChecked (paused);
+}
+
+
+void MainWindow::daemonAutoModeGot (bool active, bool paused)
+{
+    if (active) {
+        startButton->setChecked (true);
+        stopButton->setChecked (false);
+        autoLogEditor->show ();
+    }
+    else {
+        startButton->setChecked (false);
+        stopButton->setChecked (true);
+        autoLogEditor->hide ();
+    }
+
+    pauseButton->setChecked (paused);
 }

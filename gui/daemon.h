@@ -16,6 +16,10 @@ private:
         c_connect,
         c_setstages,
         c_getgrainflow,
+        c_startautomode,
+        c_stopautomode,
+        c_toggleautomode,
+        c_getautomode,
     };
 
     QString _host;
@@ -33,6 +37,7 @@ protected:
     bool parseGenericReply (const QString& reply, QString& msg);
     bool parseNumberReply (const QString& reply, QString& msg, int* val);
     void sendCommand (const QString& cmd);
+    bool parseAutoModeTick (const QString& reply, bool* state, int* press);
 
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
@@ -40,11 +45,19 @@ protected slots:
 
 signals:
     void connectedChanged (bool value);
+    void hardwareConnected ();
     void stagesActivityChanged (bool s1, bool s2, bool s3, bool s4);
     void grainFlowGot (int stage, int value);
 
     void textArrived (const QString& text);
+    void autoTextArrived (const QString& text);
     void commandSent (const QString& text);
+
+    void autoModeTickGot (bool state, int press);
+    void autoModeStarted ();
+    void autoModeStopped ();
+    void autoModeToggled (bool paused);
+    void autoModeGot (bool active, bool paused);
 
 public:
     Daemon (const QString& host, int port);
@@ -56,6 +69,11 @@ public:
     void disconnect ();
     void setStages (bool s1, bool s2, bool s3, bool s4);
     void getGrainFlow (int stage);
+
+    void startAutoMode ();
+    void stopAutoMode ();
+    void toggleAutoMode ();
+    void getAutoMode ();
 
     void sendRawCommand (const QString& text);
 };
