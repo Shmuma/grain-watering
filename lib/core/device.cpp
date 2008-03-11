@@ -22,6 +22,15 @@ DeviceCommand::DeviceCommand (kind_t kind, char low, char high)
 }
 
 
+DeviceCommand::DeviceCommand (stage_t stage, char low, char high)
+    : _kind ((kind_t)(unsigned char)stage),
+      _low (low),
+      _high (high),
+      _valid (true)
+{
+}
+
+
 DeviceCommand::DeviceCommand (const QByteArray& data)
 {
     _valid = false;
@@ -32,19 +41,22 @@ DeviceCommand::DeviceCommand (const QByteArray& data)
         return;
     }
 
-    // we got invalid stage
-    if (data[1] != (char)0xFF && data[1] != 1 && data[1] != 2 && data[1] != 3 && data[1] != 4) {
-        printf ("DeviceCommand: we got invalid stage value %02x\n", data[1]);
-	return;
-    }
-
-    _kind = (kind_t)data[1];
+    _kind = (kind_t)(unsigned char)data[1];
     _reply_stage = (stage_t)(unsigned char)data[1];
     _low = data[2];
     _high = data[3];
     _valid = calcCRC () == data[4];
     if (!_valid)
         printf ("DeviceCommand: invalid CRC %02x (calc) != %02x (got)\n", calcCRC (), data[4]);
+}
+
+
+// OK command reply
+DeviceCommand::DeviceCommand (kind_t kind, stage_t stage)
+  : _kind ((kind_t)(unsigned char)stage),
+    _low (0x19),
+    _high ((unsigned char)kind)
+{
 }
 
 

@@ -23,7 +23,8 @@ PlaundServer::PlaundServer (int tcp_port)
     //    _port = new SerialRecorder (new RealSerialPort ("/dev/ttyS1"), "in.dat", "out.dat");
     //QString ("trace.dat"));
     //_port = new SerialRecorder (new FileSerialPort ("input.dat", "output.dat"), "in.dat", "out.dat");
-    _port = new FileSerialPort ("input.dat", "output.dat");
+    //    _port = new FileSerialPort ("input.dat", "output.dat");
+    _port = new SerialDeviceModel ();
     _device = new Device (_port);
     _interp = new Interpreter (_device);
 

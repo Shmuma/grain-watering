@@ -3,6 +3,8 @@
 
 #include <QtCore>
 
+class DeviceCommand;
+
 
 // abstract serial port base
 class SerialPort
@@ -69,6 +71,20 @@ private:
 public:
     SerialRecorder (SerialPort* port, const QString& inFile, const QString& outFile);
     virtual ~SerialRecorder ();
+
+    virtual void send (const QByteArray& data) throw (QString);
+    virtual QByteArray receive (int timeout = -1) throw (QString);
+};
+
+
+
+class SerialDeviceModel : public SerialPort
+{
+private:
+    DeviceCommand* _last;
+
+public:
+    SerialDeviceModel ();
 
     virtual void send (const QByteArray& data) throw (QString);
     virtual QByteArray receive (int timeout = -1) throw (QString);

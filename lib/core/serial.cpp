@@ -1,5 +1,6 @@
 #include <QtCore>
 #include "serial.h"
+#include "device.h"
 
 // serial port includes
 #include <termios.h>
@@ -189,3 +190,83 @@ QByteArray SerialRecorder::receive (int timeout) throw (QString)
     return res;
 }
 
+
+
+// --------------------------------------------------
+// SerialDeviceModel
+// --------------------------------------------------
+SerialDeviceModel::SerialDeviceModel ()
+    : SerialPort (),
+      _last (NULL)
+{
+}
+
+
+void SerialDeviceModel::send (const QByteArray& data) throw (QString)
+{
+    if (_last)
+        delete _last;
+    _last = new DeviceCommand (data);
+
+    if (!_last->valid ()) {
+        delete _last;
+        _last = NULL;
+        throw QString ("Invalid command data");
+    }
+}
+
+
+QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
+{
+    QByteArray res;
+    DeviceCommand::kind_t kind;
+
+    if (!_last)
+        throw QString ("There is no command to wait reply");
+
+    kind = _last->kind ();
+
+    switch (kind) {
+    case DeviceCommand::Init:
+        res = DeviceCommand (kind, 0xff, 0xff).pack ();
+        break;
+    case DeviceCommand::GetStateWord:
+        res = DeviceCommand (DeviceCommand::Stg_All, 0xf0, 0x0).pack ();
+        break;
+    case DeviceCommand::GetGrainFlow:
+    case DeviceCommand::GetGrainHumidity:
+    case DeviceCommand::GetGrainTemperature:
+    case DeviceCommand::GetGrainNature:
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0, 10+_last->low ()*10).pack ();
+        break;
+    case DeviceCommand::GetWaterFlow:
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 10+_last->low ()*10, _last->low ()).pack ();
+        break;
+    case DeviceCommand::GetGrainPresent:
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), _last->low () == 1 ? 0xF0 : 0x0F, 0).pack ();
+        break;
+    case DeviceCommand::GetBSUPowered:
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0xF0, 0).pack ();
+        break;
+    case DeviceCommand::GetControllerID:
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0x12, 0x34).pack ();
+        break;
+    case DeviceCommand::GetP4State:
+        res = DeviceCommand (DeviceCommand::Stg_All, 0x1, 0x0).pack ();
+        break;
+    case DeviceCommand::GetP5State:
+        res = DeviceCommand (DeviceCommand::Stg_All, 0x2, 0x0).pack ();
+        break;
+    case DeviceCommand::SetStages:
+        res = DeviceCommand (kind, DeviceCommand::Stg_All).pack ();
+        break;
+    default:
+        delete _last;
+        _last = NULL;
+        throw QString ("Command %1 unsupported so far").arg (kind);
+    }
+
+    delete _last;
+    _last = NULL;
+    return res;
+}

@@ -57,31 +57,37 @@ private:
 
 protected:
     char calcCRC () const
-    { return (char)0xAA + _kind + _low + _high; };
+        { return (char)0xAA + _kind + _low + _high; };
 
 public:
     DeviceCommand (kind_t kind, char low = 0, char high = 0);
+    DeviceCommand (stage_t stage, char low = 0, char high = 0);
     DeviceCommand (const QByteArray& data);
+    DeviceCommand (kind_t kind, stage_t stage);
 
     void setStage (stage_t stg);
 
     stage_t replyStage () const
-    { return _reply_stage; };
+        { return _reply_stage; };
 
     bool operator == (const DeviceCommand& cmd) const;
 
     QByteArray pack () const;
+
+    kind_t kind () const
+        { return _kind; };
+
     bool valid () const
         { return _valid; };
 
     char low () const
-    { return _low; };
+        { return _low; };
     
     char high () const
-    { return _high; };
+        { return _high; };
 
     unsigned int value () const
-    { return (unsigned int)_high*256 + _low; };
+        { return (unsigned int)_high*256 + _low; };
 
     int delay () const;
 
