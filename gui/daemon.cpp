@@ -13,8 +13,7 @@ Daemon::Daemon (const QString& host, int port)
       _port (port),
       _sock (new QTcpSocket (this)),
       _connected (false),
-      _hw_connected (false),
-      _last (c_empty)
+      _hw_connected (false)
 {
     QObject::connect (_sock, SIGNAL (stateChanged (QAbstractSocket::SocketState)), this, SLOT (socketStateChanged (QAbstractSocket::SocketState)));
     QObject::connect (_sock, SIGNAL (readyRead ()), this, SLOT (socketReadyRead ()));
@@ -53,7 +52,7 @@ void Daemon::socketStateChanged (QAbstractSocket::SocketState state)
         // message and then waits for our input. This state waits for
         // this banner, and after that tryes to check hardware
         // communication. See socketReadyRead function for this.
-        _last = c_init;
+        _queue.push_back (DaemonCommand (DaemonCommand::c_init));
         break;
 
     default:
@@ -68,19 +67,9 @@ void Daemon::socketReadyRead ()
     QString reply (_sock->readAll ());
     QString msg;
     int value;
-    lastcommand_t p_last = _last;
     QString auto_prefix ("Auto: ");
 
-    if (!reply.startsWith (auto_prefix))
-        textArrived (reply);
-    else
-        autoTextArrived (reply.remove (auto_prefix).trimmed ());
-    //    Logger::instance ()->log (Logger::Debug, QString ("Got data from socket. Last command %1, text %2").arg (QString::number (_last), reply));
-
-    _last = c_empty;
-
-    switch (p_last) {
-    case c_empty:                 // no command was issued, check for auto mode message
+    if (_queue.isEmpty ()) {
         if (reply.startsWith (auto_prefix)) {
             bool state;
             int pres;
@@ -88,16 +77,30 @@ void Daemon::socketReadyRead ()
             if (parseAutoModeTick (reply, &state, &pres))
                 autoModeTickGot (state, pres);
         }
+        return;
+    }
+
+    DaemonCommand cmd = _queue.front ();
+    _queue.pop_front ();
+
+    if (!reply.startsWith (auto_prefix))
+        textArrived (reply);
+    else
+        autoTextArrived (reply.remove (auto_prefix).trimmed ());
+    //    Logger::instance ()->log (Logger::Debug, QString ("Got data from socket. Last command %1, text %2").arg (QString::number (_last), reply));
+
+    switch (cmd.kind ()) {
+    case DaemonCommand::c_empty:
         break;
 
-    case c_init:
+    case DaemonCommand::c_init:
         // check hardware communication
         _hw_connected = false;
         sendCommand (QString ("connect\n"));
-        _last = c_connect;
+        _queue.push_back (DaemonCommand (DaemonCommand::c_connect));
         break;
 
-    case c_connect:
+    case DaemonCommand::c_connect:
         if (!parseGenericReply (reply, msg)) {
             // connect to hardware failed
             _hw_connected = false;
@@ -109,40 +112,40 @@ void Daemon::socketReadyRead ()
             hardwareConnected ();
         }
         break;
-    case c_setstages:
+    case DaemonCommand::c_setstages:
         if (!parseGenericReply (reply, msg))
             Logger::instance ()->log (Logger::Error, QString ("Cannot set active stages. Reason: '%1'").arg (msg));
         else
             stagesActivityChanged (_s1, _s2, _s3, _s4);
         break;
-    case c_getgrainflow:
+    case DaemonCommand::c_getgrainflow:
         if (!parseNumberReply (reply, msg, &value))
             Logger::instance ()->log (Logger::Error, QString ("Cannot get grain flow. Reason: '%1'").arg (msg));
         else
-            grainFlowGot (_stage, value);
+            grainFlowGot (cmd.stage (), value);
         break;
-    case c_startautomode:
+    case DaemonCommand::c_startautomode:
         if (!parseGenericReply (reply, msg))
             Logger::instance ()->log (Logger::Error, QString ("Cannot start auto mode. Reason: '%1'").arg (msg));
         else
             autoModeStarted ();
         break;
-    case c_stopautomode:
+    case DaemonCommand::c_stopautomode:
         if (!parseGenericReply (reply, msg))
             Logger::instance ()->log (Logger::Error, QString ("Cannot stop auto mode. Reason: '%1'").arg (msg));
         else
             autoModeStopped ();
         break;
-    case c_toggleautomode:
+    case DaemonCommand::c_toggleautomode:
         if (!parseGenericReply (reply, msg))
             Logger::instance ()->log (Logger::Error, QString ("Cannot toggle auto mode. Reason: '%1'").arg (msg));
         else
             autoModeToggled (!msg.contains ("unpaused"));
         break;
-    case c_getautomode:
+    case DaemonCommand::c_getautomode:
         autoModeGot (reply.split (",")[0] == "active", reply.split (",")[1] == "paused");
         break;
-    case c_getmetastate:
+    case DaemonCommand::c_getmetastate:
         handleMetaState (reply);
         break;
     }
@@ -208,50 +211,49 @@ void Daemon::setStages (bool s1, bool s2, bool s3, bool s4)
 {
     _s1 = s1; _s2 = s2; _s3 = s3; _s4 = s4;
     sendCommand (QString ().sprintf ("setstages %d %d %d %d\n", s1 ? 1 : 0, s2 ? 1 : 0, s3 ? 1 : 0, s4 ? 1 : 0));
-    _last = c_setstages;
+    _queue.push_back (DaemonCommand (DaemonCommand::c_setstages));
 }
 
 
 void Daemon::getGrainFlow (int stage)
 {
-    _stage = stage;
-    sendCommand (QString ("getgrainflow %d\n").arg (QString::number (_stage)));
-    _last = c_getgrainflow;
+    sendCommand (QString ("getgrainflow %d\n").arg (QString::number (stage)));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_getgrainflow, stage));
 }
 
 
 void Daemon::startAutoMode ()
 {
     sendCommand ("startautomode\n");
-    _last = c_startautomode;
+    _queue.push_back (DaemonCommand (DaemonCommand::c_startautomode));
 }
 
 
 void Daemon::stopAutoMode ()
 {
     sendCommand ("stopautomode\n");
-    _last = c_stopautomode;
+    _queue.push_back (DaemonCommand (DaemonCommand::c_stopautomode));
 }
 
 
 void Daemon::toggleAutoMode ()
 {
     sendCommand ("toggleautomode\n");
-    _last = c_toggleautomode;
+    _queue.push_back (DaemonCommand (DaemonCommand::c_toggleautomode));
 }
 
 
 void Daemon::getAutoMode ()
 {
     sendCommand ("getautomode\n");
-    _last = c_getautomode;
+    _queue.push_back (DaemonCommand (DaemonCommand::c_getautomode));
 }
 
 
 void Daemon::refreshState ()
 {
     sendCommand (QString ().sprintf ("getmetastate %d %d %d %d\n", _s1 ? 1 : 0, _s2 ? 1 : 0, _s3 ? 1 : 0, _s4 ? 1 : 0));
-    _last = c_getmetastate;
+    _queue.push_back (DaemonCommand (DaemonCommand::c_getmetastate));
 }
 
 
@@ -298,14 +300,12 @@ bool Daemon::handleMetaState (const QString& msg)
 void Daemon::startWater (int stage)
 {
     sendCommand (QString ().sprintf ("startwater %d\n", stage));
-    _last = c_startwater;
-    _stage = stage;
+    _queue.push_back (DaemonCommand (DaemonCommand::c_startwater, stage));
 }
 
 
 void Daemon::stopWater (int stage)
 {
     sendCommand (QString ().sprintf ("stopwater %d\n", stage));
-    _last = c_stopwater;
-    _stage = stage;
+    _queue.push_back (DaemonCommand (DaemonCommand::c_stopwater, stage));
 }

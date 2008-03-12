@@ -5,12 +5,10 @@
 #include <QtNetwork>
 
 
-class Daemon : public QObject
+class DaemonCommand
 {
-    Q_OBJECT
-
-private:
-    enum lastcommand_t {
+public:
+    enum kind_t {
         c_empty,
         c_init,
         c_connect,
@@ -24,7 +22,29 @@ private:
         c_startwater,
         c_stopwater,
     };
+    
+private:
+    kind_t _kind;
+    int _stage;
 
+public:
+    DaemonCommand (kind_t kind, int stage = 0)
+        : _kind (kind),
+          _stage (stage) {};
+
+    kind_t kind () const
+        { return _kind; };
+
+    int stage () const
+        { return _stage; };
+};
+
+
+class Daemon : public QObject
+{
+    Q_OBJECT
+
+private:
     QString _host;
     int _port;
     QTcpSocket* _sock;
@@ -32,9 +52,8 @@ private:
     // state
     bool _connected;
     bool _hw_connected;
-    lastcommand_t _last;
     bool _s1, _s2, _s3, _s4;
-    int _stage;
+    QList<DaemonCommand> _queue;
 
 protected:
     bool parseGenericReply (const QString& reply, QString& msg);
@@ -69,7 +88,7 @@ public:
     Daemon (const QString& host, int port);
 
     bool connected () const
-    { return _connected; };
+        { return _connected; };
 
     void connect ();
     void disconnect ();
