@@ -95,6 +95,8 @@ Interpreter::Interpreter (Device* device)
                                                "Pause/unpause auto mode\n", CommandMeta::c_meta);
     _commands["getautomode"]	= CommandMeta (0, &Interpreter::getAutoMode, "Get auto mode state", "getautomode",
                                                "Get auto mode state. Valid answers: active, inactive and paused\n", CommandMeta::c_meta);
+    _commands["getmetastate"]	= CommandMeta (4, &Interpreter::getMetaState, "Get current sensors state of given stages", "getmetastate 0|1 0|1 0|1 0|1",
+                                               "Get sensors of given stages.", CommandMeta::c_meta);
 }
 
 
@@ -479,5 +481,53 @@ QString Interpreter::getAutoMode (const QStringList& args)
     res = _autoMode ? "active" : "inactive";
     res += ",";
     res += _autoModePaused ? "paused" : "unpaused";
+    return res + "\n";
+}
+
+
+QString Interpreter::getMetaState (const QStringList& args)
+{
+    QString res;
+
+    res += "0: ";
+    res += "WP=" + QString::number (_dev->getWaterPressure ());
+
+    if (parseBool (args[0])) {
+        res += ", 1: ";
+        res += "WF=" + QString::number (_dev->getWaterFlow (DeviceCommand::Stg_First)) + " ";
+        res += "GF=" + QString::number (_dev->getGrainFlow (DeviceCommand::Stg_First)) + " ";
+        res += "GH=" + QString::number (_dev->getGrainHumidity (DeviceCommand::Stg_First)) + " ";
+        res += "GT=" + QString::number (_dev->getGrainTemperature (DeviceCommand::Stg_First)) + " ";
+        res += "GN=" + QString::number (_dev->getGrainNature (DeviceCommand::Stg_First));
+    }
+
+    if (parseBool (args[1])) {
+        res += ", 2: ";
+        res += "WF=" + QString::number (_dev->getWaterFlow (DeviceCommand::Stg_Second)) + " ";
+        res += "GF=" + QString::number (_dev->getGrainFlow (DeviceCommand::Stg_Second)) + " ";
+        res += "GH=" + QString::number (_dev->getGrainHumidity (DeviceCommand::Stg_Second)) + " ";
+        res += "GT=" + QString::number (_dev->getGrainTemperature (DeviceCommand::Stg_Second)) + " ";
+        res += "GN=" + QString::number (_dev->getGrainNature (DeviceCommand::Stg_Second));
+    }
+
+    if (parseBool (args[2])) {
+        res += ", 3: ";
+        res += "WF=" + QString::number (_dev->getWaterFlow (DeviceCommand::Stg_Third)) + " ";
+        res += "GF=" + QString::number (_dev->getGrainFlow (DeviceCommand::Stg_Third)) + " ";
+        res += "GH=" + QString::number (_dev->getGrainHumidity (DeviceCommand::Stg_Third)) + " ";
+        res += "GT=" + QString::number (_dev->getGrainTemperature (DeviceCommand::Stg_Third)) + " ";
+        res += "GN=" + QString::number (_dev->getGrainNature (DeviceCommand::Stg_Third));
+    }
+
+
+    if (parseBool (args[3])) {
+        res += ", 4: ";
+        res += "WF=" + QString::number (_dev->getWaterFlow (DeviceCommand::Stg_Fourth)) + " ";
+        res += "GF=" + QString::number (_dev->getGrainFlow (DeviceCommand::Stg_Fourth)) + " ";
+        res += "GH=" + QString::number (_dev->getGrainHumidity (DeviceCommand::Stg_Fourth)) + " ";
+        res += "GT=" + QString::number (_dev->getGrainTemperature (DeviceCommand::Stg_Fourth)) + " ";
+        res += "GN=" + QString::number (_dev->getGrainNature (DeviceCommand::Stg_Fourth));
+    }
+
     return res + "\n";
 }

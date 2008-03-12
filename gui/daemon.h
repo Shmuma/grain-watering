@@ -20,6 +20,7 @@ private:
         c_stopautomode,
         c_toggleautomode,
         c_getautomode,
+        c_getmetastate,
     };
 
     QString _host;
@@ -38,6 +39,7 @@ protected:
     bool parseNumberReply (const QString& reply, QString& msg, int* val);
     void sendCommand (const QString& cmd);
     bool parseAutoModeTick (const QString& reply, bool* state, int* press);
+    bool handleMetaState (const QString& msg);
 
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
@@ -59,6 +61,8 @@ signals:
     void autoModeToggled (bool paused);
     void autoModeGot (bool active, bool paused);
 
+    void metaStateGot (int water_pres, QMap<int, QList<int> > vals);
+
 public:
     Daemon (const QString& host, int port);
 
@@ -76,6 +80,8 @@ public:
     void getAutoMode ();
 
     void sendRawCommand (const QString& text);
+
+    void refreshState ();
 };
 
 

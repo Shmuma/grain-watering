@@ -68,6 +68,8 @@ private:
     QString stopAutoMode (const QStringList& args);
     QString toggleAutoMode (const QStringList& args);
     QString getAutoMode (const QStringList& args);
+
+    QString getMetaState (const QStringList& args);
 public:
     Interpreter (Device* device);
 

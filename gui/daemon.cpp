@@ -142,6 +142,9 @@ void Daemon::socketReadyRead ()
     case c_getautomode:
         autoModeGot (reply.split (",")[0] == "active", reply.split (",")[1] == "paused");
         break;
+    case c_getmetastate:
+        handleMetaState (reply);
+        break;
     }
 }
 
@@ -242,4 +245,51 @@ void Daemon::getAutoMode ()
 {
     sendCommand ("getautomode\n");
     _last = c_getautomode;
+}
+
+
+void Daemon::refreshState ()
+{
+    sendCommand (QString ().sprintf ("getmetastate %d %d %d %d\n", _s1 ? 1 : 0, _s2 ? 1 : 0, _s3 ? 1 : 0, _s4 ? 1 : 0));
+    _last = c_getmetastate;
+}
+
+
+bool Daemon::handleMetaState (const QString& msg)
+{
+    QStringList l = QString (msg).trimmed ().split (",");
+    int water_pres = 0;
+    QString s;
+    QStringList ll;
+    QMap<int, QList<int> > vals;
+
+    QStringList::iterator it = l.begin ();
+
+    while (it != l.end ()) {
+        s = *it;
+        ll = s.trimmed ().split (":", QString::SkipEmptyParts);
+        
+        int index = ll[0].toInt ();
+        s = ll[1];
+        ll = s.trimmed ().split (" ", QString::SkipEmptyParts);
+        
+        QStringList::iterator it2 = ll.begin ();
+        
+        while (it2 != ll.end ()) {
+            int val = (*it2).split ("=")[1].toInt ();
+            
+            if (index == 0)
+                water_pres = val;
+            else
+                vals[index].push_back (val);
+
+            it2++;
+        }
+
+        it++;
+    }
+
+    metaStateGot (water_pres, vals);
+
+    return true;
 }

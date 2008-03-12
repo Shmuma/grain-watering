@@ -59,6 +59,10 @@ protected slots:
     void daemonAutoModeStopped ();
     void daemonAutoModeToggled (bool paused);
     void daemonAutoModeGot (bool active, bool paused);
+    void daemonMetaStateGot (int water_pres, QMap<int, QList<int> > vals);
+
+    // check page
+    void stateRefreshButtonClicked ();
 
 public:
     MainWindow ();

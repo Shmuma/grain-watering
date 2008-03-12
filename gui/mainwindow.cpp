@@ -94,6 +94,9 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (autoModeStarted ()), this, SLOT (daemonAutoModeStarted ()));
     connect (&_daemon, SIGNAL (autoModeStopped ()), this, SLOT (daemonAutoModeStopped ()));
     connect (&_daemon, SIGNAL (autoModeToggled (bool)), this, SLOT (daemonAutoModeToggled (bool)));
+    connect (&_daemon, SIGNAL (metaStateGot (int, QMap<int, QList<int> >)), this, SLOT (daemonMetaStateGot (int, QMap<int, QList<int> >)));
+
+    connect (stateRefreshButton, SIGNAL (clicked ()), this, SLOT (stateRefreshButtonClicked ()));
 }
 
 
@@ -364,3 +367,52 @@ void MainWindow::daemonAutoModeGot (bool active, bool paused)
 
     pauseButton->setChecked (paused);
 }
+
+
+void MainWindow::daemonMetaStateGot (int water_pres, QMap<int, QList<int> > vals)
+{
+    stateTreeWidget->clear ();
+    QTreeWidgetItem* glob = new QTreeWidgetItem (stateTreeWidget);
+    glob->setText (0, tr ("Global"));
+             glob->setExpanded (true);
+
+    QTreeWidgetItem* n = new QTreeWidgetItem (glob);
+    n->setText (0, tr ("Water pressure"));
+    n->setText (1, QString::number (water_pres));
+
+    for (int i = 1; i <= 4; i++) {
+        if (vals.find (i) == vals.end ())
+            continue;
+        QTreeWidgetItem* item = new QTreeWidgetItem (stateTreeWidget);
+        item->setExpanded (true);
+        item->setText (0, tr ("Stage %1").arg (i));
+        
+        n = new QTreeWidgetItem (item);
+        n->setText (0, tr ("Water flow"));
+        n->setText (1, QString::number (vals[i][0]));
+            
+        n = new QTreeWidgetItem (item);
+        n->setText (0, tr ("Grain flow"));
+        n->setText (1, QString::number (vals[i][1]));
+            
+        n = new QTreeWidgetItem (item);
+        n->setText (0, tr ("Grain humidity"));
+        n->setText (1, QString::number (vals[i][2]));
+            
+        n = new QTreeWidgetItem (item);
+        n->setText (0, tr ("Grain temp."));
+        n->setText (1, QString::number (vals[i][3]));
+            
+        n = new QTreeWidgetItem (item);
+        n->setText (0, tr ("Grain nature"));
+        n->setText (1, QString::number (vals[i][4]));
+    }
+}
+
+
+void MainWindow::stateRefreshButtonClicked ()
+{
+    _daemon.refreshState ();
+}
+
+
