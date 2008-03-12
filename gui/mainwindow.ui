@@ -421,7 +421,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton" >
+               <widget class="QPushButton" name="checkWaterButton" >
                 <property name="text" >
                  <string>Water</string>
                 </property>
@@ -434,7 +434,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_2" >
+               <widget class="QPushButton" name="checkGrainSensorsButton" >
                 <property name="text" >
                  <string>Grain sensors</string>
                 </property>
@@ -524,10 +524,17 @@
                     <property name="sizeHint" >
                      <size>
                       <width>20</width>
-                      <height>16</height>
+                      <height>40</height>
                      </size>
                     </property>
                    </spacer>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="applyCheckWaterButton" >
+                    <property name="text" >
+                     <string>Apply</string>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </widget>
@@ -576,7 +583,6 @@
                   </item>
                  </layout>
                 </widget>
-                <widget class="QWidget" name="page" />
                </widget>
               </item>
              </layout>
@@ -741,8 +747,8 @@
               <property name="html" >
                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Terminus'; font-size:11pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Plaund interactive console.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Terminus'; font-size:12pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt;">Plaund interactive console.&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
              <widget class="QTextEdit" name="autoLogEditor" >
@@ -755,8 +761,8 @@ p, li { white-space: pre-wrap; }
               <property name="html" >
                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Verdana'; font-size:11pt; font-weight:400; font-style:normal;">
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Terminus';">&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Verdana'; font-size:12pt; font-weight:400; font-style:normal;">
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Terminus'; font-size:11pt;">&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
             </widget>

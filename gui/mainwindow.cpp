@@ -96,7 +96,11 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (autoModeToggled (bool)), this, SLOT (daemonAutoModeToggled (bool)));
     connect (&_daemon, SIGNAL (metaStateGot (int, QMap<int, QList<int> >)), this, SLOT (daemonMetaStateGot (int, QMap<int, QList<int> >)));
 
+    connect (checkStateButton, SIGNAL (pressed ()), this, SLOT (checkStateButtonPressed ()));
+    connect (checkWaterButton, SIGNAL (pressed ()), this, SLOT (checkWaterButtonPressed ()));
+    connect (checkGrainSensorsButton, SIGNAL (pressed ()), this, SLOT (checkGrainSensorsButtonPressed ()));
     connect (stateRefreshButton, SIGNAL (clicked ()), this, SLOT (stateRefreshButtonClicked ()));
+    connect (applyCheckWaterButton, SIGNAL (clicked ()), this, SLOT (applyCheckWaterButtonClicked ()));
 }
 
 
@@ -416,3 +420,25 @@ void MainWindow::stateRefreshButtonClicked ()
 }
 
 
+void MainWindow::checkStateButtonPressed ()
+{
+    checkStackedWidget->setCurrentIndex (0);
+}
+
+
+void MainWindow::checkWaterButtonPressed ()
+{
+    checkStackedWidget->setCurrentIndex (1);
+}
+
+
+void MainWindow::checkGrainSensorsButtonPressed ()
+{
+    checkStackedWidget->setCurrentIndex (2);
+}
+
+
+void MainWindow::applyCheckWaterButtonClicked ()
+{
+    
+}
