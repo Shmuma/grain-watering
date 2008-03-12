@@ -293,3 +293,19 @@ bool Daemon::handleMetaState (const QString& msg)
 
     return true;
 }
+
+
+void Daemon::startWater (int stage)
+{
+    sendCommand (QString ().sprintf ("startwater %d\n", stage));
+    _last = c_startwater;
+    _stage = stage;
+}
+
+
+void Daemon::stopWater (int stage)
+{
+    sendCommand (QString ().sprintf ("stopwater %d\n", stage));
+    _last = c_stopwater;
+    _stage = stage;
+}

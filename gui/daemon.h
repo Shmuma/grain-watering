@@ -21,6 +21,8 @@ private:
         c_toggleautomode,
         c_getautomode,
         c_getmetastate,
+        c_startwater,
+        c_stopwater,
     };
 
     QString _host;
@@ -78,6 +80,8 @@ public:
     void stopAutoMode ();
     void toggleAutoMode ();
     void getAutoMode ();
+    void startWater (int stage);
+    void stopWater (int stage);
 
     void sendRawCommand (const QString& text);
 
