@@ -95,6 +95,8 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (autoModeStopped ()), this, SLOT (daemonAutoModeStopped ()));
     connect (&_daemon, SIGNAL (autoModeToggled (bool)), this, SLOT (daemonAutoModeToggled (bool)));
     connect (&_daemon, SIGNAL (metaStateGot (int, QMap<int, QList<int> >)), this, SLOT (daemonMetaStateGot (int, QMap<int, QList<int> >)));
+    connect (&_daemon, SIGNAL (waterStarted (int)), this, SLOT (daemonWaterStarted (int)));
+    connect (&_daemon, SIGNAL (waterStopped (int)), this, SLOT (daemonWaterStopped (int)));
 
     connect (checkStateButton, SIGNAL (pressed ()), this, SLOT (checkStateButtonPressed ()));
     connect (checkWaterButton, SIGNAL (pressed ()), this, SLOT (checkWaterButtonPressed ()));
@@ -301,6 +303,11 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
     stageControl2->setEnabled (s2);
     stageControl3->setEnabled (s3);
     stageControl4->setEnabled (s4);
+
+    checkWaterStage1Check->setEnabled (s1);
+    checkWaterStage2Check->setEnabled (s2);
+    checkWaterStage3Check->setEnabled (s3);
+    checkWaterStage4Check->setEnabled (s4);
 }
 
 
@@ -414,6 +421,18 @@ void MainWindow::daemonMetaStateGot (int water_pres, QMap<int, QList<int> > vals
 }
 
 
+void MainWindow::daemonWaterStarted (int stage)
+{
+    Logger::instance ()->log (Logger::Information, tr ("Water started on %1 stage").arg (stage));
+}
+
+
+void MainWindow::daemonWaterStopped (int stage)
+{
+    Logger::instance ()->log (Logger::Information, tr ("Water stopped on %1 stage").arg (stage));
+}
+
+
 void MainWindow::stateRefreshButtonClicked ()
 {
     _daemon.refreshState ();
@@ -440,5 +459,29 @@ void MainWindow::checkGrainSensorsButtonPressed ()
 
 void MainWindow::applyCheckWaterButtonClicked ()
 {
-    
+    if (_daemon.isStageEnabled (1))
+        if (checkWaterStage1Check->isChecked ())
+            _daemon.startWater (1);
+        else
+            _daemon.stopWater (1);
+
+    if (_daemon.isStageEnabled (2))
+        if (checkWaterStage2Check->isChecked ())
+            _daemon.startWater (2);
+        else
+            _daemon.stopWater (3);
+
+    if (_daemon.isStageEnabled (3))
+        if (checkWaterStage3Check->isChecked ())
+            _daemon.startWater (3);
+        else
+            _daemon.stopWater (3);
+
+    if (_daemon.isStageEnabled (4))
+        if (checkWaterStage4Check->isChecked ())
+            _daemon.startWater (4);
+        else
+            _daemon.stopWater (4);
 }
+
+

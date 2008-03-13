@@ -147,6 +147,18 @@ void Daemon::socketReadyRead ()
                 case DaemonCommand::c_getmetastate:
                     handleMetaState (reply);
                     break;
+                case DaemonCommand::c_startwater:
+                    if (!parseGenericReply (reply, msg))
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot start water at stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()), msg));
+                    else
+                        waterStarted (cmd.stage ());
+                    break;
+                case DaemonCommand::c_stopwater:
+                    if (!parseGenericReply (reply, msg))
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot stop water at stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()), msg));
+                    else
+                        waterStopped (cmd.stage ());
+                    break;
                 }
             }
         }
@@ -319,4 +331,21 @@ void Daemon::stopWater (int stage)
 {
     sendCommand (QString ().sprintf ("stopwater %d\n", stage));
     _queue.push_back (DaemonCommand (DaemonCommand::c_stopwater, stage));
+}
+
+
+bool Daemon::isStageEnabled (int stage)
+{
+    switch (stage) {
+    case 1:
+        return _s1;
+    case 2:
+        return _s2;
+    case 3:
+        return _s3;
+    case 4:
+        return _s4;
+    default:
+        return false;
+    }
 }

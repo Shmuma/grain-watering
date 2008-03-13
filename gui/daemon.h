@@ -83,6 +83,9 @@ signals:
     void autoModeToggled (bool paused);
     void autoModeGot (bool active, bool paused);
 
+    void waterStarted (int stage);
+    void waterStopped (int stage);
+
     void metaStateGot (int water_pres, QMap<int, QList<int> > vals);
 
 public:
@@ -106,6 +109,8 @@ public:
     void sendRawCommand (const QString& text);
 
     void refreshState ();
+
+    bool isStageEnabled (int stage);
 };
 
 
