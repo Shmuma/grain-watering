@@ -63,18 +63,20 @@ void PlaundServer::handleCommand ()
 
     if (!sock)
         return;
-    
-    QString l = sock->readLine ().trimmed ().toLower ();
 
-    if (l == "halt") {
-        QCoreApplication::quit ();
-        return;
+    while (sock->canReadLine ()) {
+        QString l = sock->readLine ().trimmed ().toLower ();
+
+        if (l == "halt") {
+            QCoreApplication::quit ();
+            return;
+        }
+
+        QString r = _interp->exec (l);
+        sock->write (r.toUtf8 ());
+        sock->write ("> ");
+        sock->flush ();
     }
-
-    QString r = _interp->exec (l);
-    sock->write (r.toUtf8 ());
-    sock->write ("> ");
-    sock->flush ();
 }
 
 
