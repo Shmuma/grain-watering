@@ -63,91 +63,102 @@ void Daemon::socketStateChanged (QAbstractSocket::SocketState state)
 
 void Daemon::socketReadyRead ()
 {
-    // read data from socket
-    QString reply (_sock->readAll ());
-    QString msg;
+    QString reply, msg;
     int value;
     QString auto_prefix ("Auto: ");
+    QString prompt_prefix ("> ");
+    QStringList replies;
 
-    if (_queue.isEmpty ()) {
-        if (reply.startsWith (auto_prefix)) {
-            bool state;
-            int pres;
-            
-            if (parseAutoModeTick (reply, &state, &pres))
-                autoModeTickGot (state, pres);
-        }
+    reply = _data_buf + _sock->readAll ();
+
+    if (!reply.contains (prompt_prefix)) {
+        _data_buf = reply;
         return;
     }
 
-    DaemonCommand cmd = _queue.front ();
-    _queue.pop_front ();
+    // split read data using prompt as separator
+    replies = reply.split (prompt_prefix, QString::SkipEmptyParts);
+    
+    for (int i = 0; i < replies.size (); i++) {
+        reply = replies[i];
 
-    if (!reply.startsWith (auto_prefix))
-        textArrived (reply);
-    else
-        autoTextArrived (reply.remove (auto_prefix).trimmed ());
-    //    Logger::instance ()->log (Logger::Debug, QString ("Got data from socket. Last command %1, text %2").arg (QString::number (_last), reply));
+        if (!reply.startsWith (auto_prefix)) {
+            textArrived (reply+prompt_prefix);
 
-    switch (cmd.kind ()) {
-    case DaemonCommand::c_empty:
-        break;
+            if (!_queue.isEmpty ()) {
+                DaemonCommand cmd = _queue.front ();
+                _queue.pop_front ();
 
-    case DaemonCommand::c_init:
-        // check hardware communication
-        _hw_connected = false;
-        sendCommand (QString ("connect\n"));
-        _queue.push_back (DaemonCommand (DaemonCommand::c_connect));
-        break;
+                switch (cmd.kind ()) {
+                case DaemonCommand::c_empty:
+                    break;
 
-    case DaemonCommand::c_connect:
-        if (!parseGenericReply (reply, msg)) {
-            // connect to hardware failed
-            _hw_connected = false;
-            Logger::instance ()->log (Logger::Error, QString ("Connection to hardware failed. Reason: '%1'").arg (msg));
+                case DaemonCommand::c_init:
+                    _hw_connected = false;
+                    sendCommand (QString ("connect\n"));
+                    _queue.push_back (DaemonCommand (DaemonCommand::c_connect));
+                    break;
+
+                case DaemonCommand::c_connect:
+                    if (!parseGenericReply (reply, msg)) {
+                        // connect to hardware failed
+                        _hw_connected = false;
+                        Logger::instance ()->log (Logger::Error, tr ("Connection to hardware failed. Reason: '%1'").arg (msg));
+                    }
+                    else {
+                        _hw_connected = true;
+                        Logger::instance ()->log (Logger::Information, tr ("Controller connected to hardware"));
+                        hardwareConnected ();
+                    }
+                    break;
+                case DaemonCommand::c_setstages:
+                    if (!parseGenericReply (reply, msg))
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot set active stages. Reason: '%1'").arg (msg));
+                    else
+                        stagesActivityChanged (_s1, _s2, _s3, _s4);
+                    break;
+                case DaemonCommand::c_getgrainflow:
+                    if (!parseNumberReply (reply, msg, &value))
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot get grain flow. Reason: '%1'").arg (msg));
+                    else
+                        grainFlowGot (cmd.stage (), value);
+                    break;
+                case DaemonCommand::c_startautomode:
+                    if (!parseGenericReply (reply, msg))
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot start auto mode. Reason: '%1'").arg (msg));
+                    else
+                        autoModeStarted ();
+                    break;
+                case DaemonCommand::c_stopautomode:
+                    if (!parseGenericReply (reply, msg))
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot stop auto mode. Reason: '%1'").arg (msg));
+                    else
+                        autoModeStopped ();
+                    break;
+                case DaemonCommand::c_toggleautomode:
+                    if (!parseGenericReply (reply, msg))
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot toggle auto mode. Reason: '%1'").arg (msg));
+                    else
+                        autoModeToggled (!msg.contains ("unpaused"));
+                    break;
+                case DaemonCommand::c_getautomode:
+                    autoModeGot (reply.split (",")[0] == "active", reply.split (",")[1] == "paused");
+                    break;
+                case DaemonCommand::c_getmetastate:
+                    handleMetaState (reply);
+                    break;
+                }
+            }
         }
         else {
-            _hw_connected = true;
-            Logger::instance ()->log (Logger::Information, QString ("Controller connected to hardware"));
-            hardwareConnected ();
+            bool state;
+            int pres;
+
+            autoTextArrived (QString (reply).remove (auto_prefix).trimmed ());
+            if (parseAutoModeTick (reply, &state, &pres))
+                autoModeTickGot (state, pres);
         }
-        break;
-    case DaemonCommand::c_setstages:
-        if (!parseGenericReply (reply, msg))
-            Logger::instance ()->log (Logger::Error, QString ("Cannot set active stages. Reason: '%1'").arg (msg));
-        else
-            stagesActivityChanged (_s1, _s2, _s3, _s4);
-        break;
-    case DaemonCommand::c_getgrainflow:
-        if (!parseNumberReply (reply, msg, &value))
-            Logger::instance ()->log (Logger::Error, QString ("Cannot get grain flow. Reason: '%1'").arg (msg));
-        else
-            grainFlowGot (cmd.stage (), value);
-        break;
-    case DaemonCommand::c_startautomode:
-        if (!parseGenericReply (reply, msg))
-            Logger::instance ()->log (Logger::Error, QString ("Cannot start auto mode. Reason: '%1'").arg (msg));
-        else
-            autoModeStarted ();
-        break;
-    case DaemonCommand::c_stopautomode:
-        if (!parseGenericReply (reply, msg))
-            Logger::instance ()->log (Logger::Error, QString ("Cannot stop auto mode. Reason: '%1'").arg (msg));
-        else
-            autoModeStopped ();
-        break;
-    case DaemonCommand::c_toggleautomode:
-        if (!parseGenericReply (reply, msg))
-            Logger::instance ()->log (Logger::Error, QString ("Cannot toggle auto mode. Reason: '%1'").arg (msg));
-        else
-            autoModeToggled (!msg.contains ("unpaused"));
-        break;
-    case DaemonCommand::c_getautomode:
-        autoModeGot (reply.split (",")[0] == "active", reply.split (",")[1] == "paused");
-        break;
-    case DaemonCommand::c_getmetastate:
-        handleMetaState (reply);
-        break;
+
     }
 }
 

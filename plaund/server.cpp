@@ -83,13 +83,17 @@ void PlaundServer::timerEvent (QTimerEvent* event)
     QString res;
     if (_interp->isAutoMode ()) {
         res = _interp->exec ("automodetick\n");
-        // broadcast result of auto mode tick to all connected clients
-        QList<QTcpSocket*>::iterator it = _socks.begin ();
 
-        while (it != _socks.end ()) {
-            (*it)->write (res.toAscii ());
-            (*it)->flush ();
-            it++;
+        if (!res.isEmpty ()) {
+            // broadcast result of auto mode tick to all connected clients
+            QList<QTcpSocket*>::iterator it = _socks.begin ();
+
+            while (it != _socks.end ()) {
+                (*it)->write (res.toAscii ());
+                (*it)->write ("> ");
+                (*it)->flush ();
+                it++;
+            }
         }
     }
 }

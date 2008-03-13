@@ -48,6 +48,7 @@ private:
     QString _host;
     int _port;
     QTcpSocket* _sock;
+    QString _data_buf;
 
     // state
     bool _connected;

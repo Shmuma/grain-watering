@@ -441,10 +441,10 @@ QString Interpreter::startAutoMode (const QStringList& args)
 QString Interpreter::autoModeTick (const QStringList& args)
 {
     if (!_autoMode)
-        return QString ("ERROR: Auto mode is disabled\n");
+        return QString ();
 
     if (_autoModePaused)
-        return QString ("ERROR: Auto mode is paused\n");
+        return QString ();
 
     // get water pressure
     int press = _dev->getWaterPressure ();
