@@ -87,12 +87,18 @@ int DeviceCommand::delay () const
 {
     switch (_kind) {
     case GetStateWord:
-    case GetWaterFlow:
 	return 2;
     case StartWater:
 	return 3;
     case StopWater:
 	return 4;
+    case GetGrainFlow:
+    case GetGrainHumidity:
+    case GetGrainTemperature:
+    case GetGrainNature:
+    case GetWaterFlow:
+    case DrainWater:
+        return 5;
     default:
 	return 1;
     }
