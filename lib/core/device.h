@@ -52,7 +52,7 @@ public:
 private:
     kind_t _kind;
     stage_t _reply_stage;		// valid for reply only
-    char _low, _high;
+    unsigned char _low, _high;
     bool _valid;
 
 protected:
@@ -60,8 +60,8 @@ protected:
         { return (char)0xAA + _kind + _low + _high; };
 
 public:
-    DeviceCommand (kind_t kind, char low = 0, char high = 0);
-    DeviceCommand (stage_t stage, char low = 0, char high = 0);
+    DeviceCommand (kind_t kind, unsigned char low = 0, unsigned char high = 0);
+    DeviceCommand (stage_t stage, unsigned char low = 0, unsigned char high = 0);
     DeviceCommand (const QByteArray& data);
     DeviceCommand (kind_t kind, stage_t stage);
 
@@ -80,10 +80,10 @@ public:
     bool valid () const
         { return _valid; };
 
-    char low () const
+    unsigned char low () const
         { return _low; };
     
-    char high () const
+    unsigned char high () const
         { return _high; };
 
     unsigned int value () const
@@ -103,10 +103,10 @@ private:
     bool _manual, _connected;
     
 protected:
-    static char getLow (int value)
-        { return (char)(value % 256); };
-    static char getHigh (int value)
-        { return (char)((value >> 16) % 256); };
+    static unsigned char getLow (unsigned int value)
+        { return (unsigned char)(value % 256); };
+    static unsigned char getHigh (unsigned int value)
+        { return (unsigned char)((value >> 16) % 256); };
 
 public:
     Device (SerialPort* port) throw (QString);
@@ -120,24 +120,24 @@ public:
     bool isConnected () const
         { return _connected; };
 
-    int getGrainFlow (DeviceCommand::stage_t stage) const;
-    int getGrainHumidity (DeviceCommand::stage_t stage) const;
-    int getGrainTemperature (DeviceCommand::stage_t stage) const;
-    int getGrainNature (DeviceCommand::stage_t stage) const;
-    int getWaterFlow (DeviceCommand::stage_t stage) const;
+    unsigned int getGrainFlow (DeviceCommand::stage_t stage) const;
+    unsigned int getGrainHumidity (DeviceCommand::stage_t stage) const;
+    unsigned int getGrainTemperature (DeviceCommand::stage_t stage) const;
+    unsigned int getGrainNature (DeviceCommand::stage_t stage) const;
+    unsigned int getWaterFlow (DeviceCommand::stage_t stage) const;
 
     bool getGrainPresent (DeviceCommand::stage_t stage) const;
     bool getBSUPowered (DeviceCommand::stage_t stage) const;
-    int getWaterPressure () const;
-    int getControllerID () const;
-    int getP5State () const;
-    int getP4State () const;
-    int getCleanResult () const;
+    unsigned int getWaterPressure () const;
+    unsigned int getControllerID () const;
+    unsigned int getP5State () const;
+    unsigned int getP4State () const;
+    unsigned int getCleanResult () const;
 
-    bool setWaterGateS1 (int value);
-    bool setWaterGateS2 (int value);
-    bool setWaterGateS3 (int value);
-    bool setWaterGateS4 (int value);
+    bool setWaterGateS1 (unsigned int value);
+    bool setWaterGateS2 (unsigned int value);
+    bool setWaterGateS3 (unsigned int value);
+    bool setWaterGateS4 (unsigned int value);
 
     bool setFilterGates (bool g1, bool g2, bool g3, bool g4, bool g5, bool engine);
     bool setKGates (DeviceCommand::stage_t stage, bool k, bool kk);

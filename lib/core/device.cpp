@@ -8,7 +8,7 @@
 // --------------------------------------------------
 // DeviceCommand
 // --------------------------------------------------
-DeviceCommand::DeviceCommand (kind_t kind, char low, char high)
+DeviceCommand::DeviceCommand (kind_t kind, unsigned char low, unsigned char high)
     : _kind (kind),
       _low (low),
       _high (high),
@@ -22,7 +22,7 @@ DeviceCommand::DeviceCommand (kind_t kind, char low, char high)
 }
 
 
-DeviceCommand::DeviceCommand (stage_t stage, char low, char high)
+DeviceCommand::DeviceCommand (stage_t stage, unsigned char low, unsigned char high)
     : _kind ((kind_t)(unsigned char)stage),
       _low (low),
       _high (high),
@@ -180,7 +180,7 @@ void Device::updateState () throw (QString)
 }
 
 
-int Device::getGrainFlow (DeviceCommand::stage_t stage) const
+unsigned int Device::getGrainFlow (DeviceCommand::stage_t stage) const
 {
     DeviceCommand cmd (DeviceCommand::GetGrainFlow, (char)stage);
     _port->send (cmd.pack ());
@@ -188,7 +188,7 @@ int Device::getGrainFlow (DeviceCommand::stage_t stage) const
 }
 
 
-int Device::getGrainHumidity (DeviceCommand::stage_t stage) const
+unsigned int Device::getGrainHumidity (DeviceCommand::stage_t stage) const
 {
     DeviceCommand cmd (DeviceCommand::GetGrainHumidity, (char)stage);
     _port->send (cmd.pack ());
@@ -196,7 +196,7 @@ int Device::getGrainHumidity (DeviceCommand::stage_t stage) const
 }
 
 
-int Device::getGrainTemperature (DeviceCommand::stage_t stage) const
+unsigned int Device::getGrainTemperature (DeviceCommand::stage_t stage) const
 {
     DeviceCommand cmd (DeviceCommand::GetGrainTemperature, (char)stage);
     _port->send (cmd.pack ());
@@ -204,7 +204,7 @@ int Device::getGrainTemperature (DeviceCommand::stage_t stage) const
 }
 
 
-int Device::getGrainNature (DeviceCommand::stage_t stage) const
+unsigned int Device::getGrainNature (DeviceCommand::stage_t stage) const
 {
     DeviceCommand cmd (DeviceCommand::GetGrainNature, (char)stage);
     _port->send (cmd.pack ());
@@ -212,7 +212,7 @@ int Device::getGrainNature (DeviceCommand::stage_t stage) const
 }
 
 
-int Device::getWaterFlow (DeviceCommand::stage_t stage) const
+unsigned int Device::getWaterFlow (DeviceCommand::stage_t stage) const
 {
     DeviceCommand cmd (DeviceCommand::GetWaterFlow, (char)stage);
     _port->send (cmd.pack ());
@@ -224,7 +224,7 @@ bool Device::getGrainPresent (DeviceCommand::stage_t stage) const
 {
     DeviceCommand cmd (DeviceCommand::GetGrainPresent, (char)stage);
     _port->send (cmd.pack ());
-    return DeviceCommand (_port->receive (cmd.delay ()+1)).low () == (char)0xF0;
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).low () == (unsigned char)0xF0;
 }
 
 
@@ -232,11 +232,11 @@ bool Device::getBSUPowered (DeviceCommand::stage_t stage) const
 {
     DeviceCommand cmd (DeviceCommand::GetBSUPowered, (char)stage);
     _port->send (cmd.pack ());
-    return DeviceCommand (_port->receive (cmd.delay ()+1)).low () == (char)0xF0;
+    return DeviceCommand (_port->receive (cmd.delay ()+1)).low () == (unsigned char)0xF0;
 }
 
 
-int Device::getWaterPressure () const
+unsigned int Device::getWaterPressure () const
 {
     DeviceCommand cmd (DeviceCommand::GetWaterPressure);
     _port->send (cmd.pack ());
@@ -244,7 +244,7 @@ int Device::getWaterPressure () const
 }
 
 
-int Device::getControllerID () const
+unsigned int Device::getControllerID () const
 {
     DeviceCommand cmd (DeviceCommand::GetControllerID);
     _port->send (cmd.pack ());
@@ -252,7 +252,7 @@ int Device::getControllerID () const
 }
 
 
-int Device::getP5State () const
+unsigned int Device::getP5State () const
 {
     DeviceCommand cmd (DeviceCommand::GetP5State);
     _port->send (cmd.pack ());
@@ -260,7 +260,7 @@ int Device::getP5State () const
 }
 
 
-int Device::getP4State () const
+unsigned int Device::getP4State () const
 {
     DeviceCommand cmd (DeviceCommand::GetP4State);
     _port->send (cmd.pack ());
@@ -268,7 +268,7 @@ int Device::getP4State () const
 }
 
 
-int Device::getCleanResult () const
+unsigned int Device::getCleanResult () const
 {
     DeviceCommand cmd (DeviceCommand::GetCleanResult);
     _port->send (cmd.pack ());
@@ -276,7 +276,7 @@ int Device::getCleanResult () const
 }
 
 
-bool Device::setWaterGateS1 (int value)
+bool Device::setWaterGateS1 (unsigned int value)
 {
     DeviceCommand cmd (DeviceCommand::SetWaterGateS1, getLow (value), getHigh (value));
     _port->send (cmd.pack ());
@@ -284,7 +284,7 @@ bool Device::setWaterGateS1 (int value)
 }
 
 
-bool Device::setWaterGateS2 (int value)
+bool Device::setWaterGateS2 (unsigned int value)
 {
     DeviceCommand cmd (DeviceCommand::SetWaterGateS2, getLow (value), getHigh (value));
     _port->send (cmd.pack ());
@@ -292,7 +292,7 @@ bool Device::setWaterGateS2 (int value)
 }
 
 
-bool Device::setWaterGateS3 (int value)
+bool Device::setWaterGateS3 (unsigned int value)
 {
     DeviceCommand cmd (DeviceCommand::SetWaterGateS3, getLow (value), getHigh (value));
     _port->send (cmd.pack ());
@@ -300,7 +300,7 @@ bool Device::setWaterGateS3 (int value)
 }
 
 
-bool Device::setWaterGateS4 (int value)
+bool Device::setWaterGateS4 (unsigned int value)
 {
     DeviceCommand cmd (DeviceCommand::SetWaterGateS4, getLow (value), getHigh (value));
     _port->send (cmd.pack ());
