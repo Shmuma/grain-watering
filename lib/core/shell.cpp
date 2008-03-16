@@ -13,7 +13,8 @@ Interpreter::Interpreter (Device* device)
       _stages (0),
       _autoMode (false),
       _autoModePaused (false),
-      _db ("plaund.db")
+      _db ("plaund.db"),
+      _kfs (0)
 {
     // initialize vocabulary
     // hardware commands
@@ -101,6 +102,8 @@ Interpreter::Interpreter (Device* device)
                                                "Get sensors of given stages.", CommandMeta::c_meta);
     _commands["sleep"]		= CommandMeta (1, &Interpreter::sleep, "Sleep for given amount of seconds", "sleep n",
                                                "Command sleeps for given amount of seconds.\n", CommandMeta::c_meta);
+    _commands["setkfs"]		= CommandMeta (1, &Interpreter::setKfs, "Set water pressure coefficient", "setkfs n",
+                                               "Command sets Kfs coefficient, which used when calculating water pressure\n", CommandMeta::c_meta);
 }
 
 
@@ -254,7 +257,9 @@ QString Interpreter::getGrainHumidity (const QStringList& args)
 
 QString Interpreter::getGrainTemperature (const QStringList& args)
 {
-    return QString::number (_dev->getGrainTemperature (parseStage (args[0]))) + "\n";
+    double ut = _dev->getGrainTemperature (parseStage (args[0])) * 0.0094;
+
+    return QString::number (((1000 * ut / (2.4 - ut)) - 1000) / 3.86) + "\n";
 }
 
 
@@ -266,13 +271,16 @@ QString Interpreter::getGrainNature (const QStringList& args)
 
 QString Interpreter::getWaterFlow (const QStringList& args)
 {
-    return QString::number (_dev->getWaterFlow (parseStage (args[0]))) + "\n";
+    if (!_kfs)
+        return QString ("ERROR: Kfs not set\n");
+    else
+        return QString::number ((_dev->getWaterFlow (parseStage (args[0])) * 7200) / _kfs) + "\n";
 }
 
 
 QString Interpreter::getWaterPressure (const QStringList& args)
 {
-    return QString::number (_dev->getWaterPressure ()) + "\n";
+    return QString::number (_dev->getWaterPressure ()*0.0488 - 2.5) + "\n";
 }
 
 
@@ -548,6 +556,22 @@ QString Interpreter::sleep (const QStringList& args)
         return QString ("ERROR: not an integer value passed\n");
 
     ::sleep (res);
+
+    return QString ("OK\n");
+}
+
+
+QString Interpreter::setKfs (const QStringList& args)
+{
+    bool ok;
+    int res;
+    
+    res = args[0].toUInt (&ok);
+
+    if (!res)
+        return QString ("ERROR: not an integer value passed\n");
+
+    _kfs = res;
 
     return QString ("OK\n");
 }

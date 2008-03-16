@@ -23,6 +23,7 @@ private:
     int _stages;
     bool _autoMode;
     bool _autoModePaused;
+    int _kfs;
 
     static QString checkBoolReply (bool res)
         { return res ? "OK\n" : "ERROR\n"; };
@@ -71,6 +72,7 @@ private:
 
     QString getMetaState (const QStringList& args);
     QString sleep (const QStringList& args);
+    QString setKfs (const QStringList& args);
 public:
     Interpreter (Device* device);
 
