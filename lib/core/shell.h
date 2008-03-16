@@ -70,6 +70,7 @@ private:
     QString getAutoMode (const QStringList& args);
 
     QString getMetaState (const QStringList& args);
+    QString sleep (const QStringList& args);
 public:
     Interpreter (Device* device);
 

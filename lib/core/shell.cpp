@@ -2,6 +2,8 @@
 #include "shell.h"
 #include "database.h"
 
+#include <unistd.h>
+
 
 // --------------------------------------------------
 // Interpreter
@@ -97,6 +99,8 @@ Interpreter::Interpreter (Device* device)
                                                "Get auto mode state. Valid answers: active, inactive and paused\n", CommandMeta::c_meta);
     _commands["getmetastate"]	= CommandMeta (4, &Interpreter::getMetaState, "Get current sensors state of given stages", "getmetastate 0|1 0|1 0|1 0|1",
                                                "Get sensors of given stages.", CommandMeta::c_meta);
+    _commands["sleep"]		= CommandMeta (1, &Interpreter::sleep, "Sleep for given amount of seconds", "sleep n",
+                                               "Command sleeps for given amount of seconds.\n", CommandMeta::c_meta);
 }
 
 
@@ -530,4 +534,20 @@ QString Interpreter::getMetaState (const QStringList& args)
     }
 
     return res + "\n";
+}
+
+
+QString Interpreter::sleep (const QStringList& args)
+{
+    bool ok;
+    int res;
+    
+    res = args[0].toUInt (&ok);
+
+    if (!res)
+        return QString ("ERROR: not an integer value passed\n");
+
+    ::sleep (res);
+
+    return QString ("OK\n");
 }
