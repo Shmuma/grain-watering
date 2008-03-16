@@ -70,6 +70,9 @@ protected slots:
     void applyCheckWaterButtonClicked ();
     void stateRefreshButtonClicked ();
 
+    // console
+    void sendFileButtonClicked ();
+
 public:
     MainWindow ();
 };

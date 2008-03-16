@@ -219,7 +219,7 @@ bool Daemon::parseAutoModeTick (const QString& reply, bool* state, int* press)
 
 void Daemon::sendCommand (const QString& cmd)
 {
-    commandSent (cmd.trimmed ());
+    commandSent (cmd.trimmed () + "\n");
     _sock->write (cmd.toAscii ());
 }
 

@@ -49,7 +49,6 @@ MainWindow::MainWindow ()
 
     // connect button
     connect (connectButton, SIGNAL (doubleClicked ()), this, SLOT (connectButtonClicked ()));
-    connect (consoleSendButton, SIGNAL (clicked ()), this, SLOT (consoleSendButtonClicked ()));
 
     // view button
     QMenu* connectMenu = new QMenu (this);
@@ -103,6 +102,10 @@ MainWindow::MainWindow ()
     connect (checkGrainSensorsButton, SIGNAL (pressed ()), this, SLOT (checkGrainSensorsButtonPressed ()));
     connect (stateRefreshButton, SIGNAL (clicked ()), this, SLOT (stateRefreshButtonClicked ()));
     connect (applyCheckWaterButton, SIGNAL (clicked ()), this, SLOT (applyCheckWaterButtonClicked ()));
+
+    // console events
+    connect (consoleSendButton, SIGNAL (clicked ()), this, SLOT (consoleSendButtonClicked ()));
+    connect (sendFileButton, SIGNAL (clicked ()), this, SLOT (sendFileButtonClicked ()));
 }
 
 
@@ -484,4 +487,22 @@ void MainWindow::applyCheckWaterButtonClicked ()
             _daemon.stopWater (4);
 }
 
+
+void MainWindow::sendFileButtonClicked ()
+{
+    QString file = QFileDialog::getOpenFileName (this, tr ("Open script"), QString (), tr ("Scripts (*.txt)"));
+
+    QFile f (file);
+    QTextStream s (&f);
+
+    if (file.isNull ())
+        return;
+
+    if (!f.open (QIODevice::ReadOnly)) 
+        Logger::instance ()->log (Logger::Error, tr ("Cannot open script file '%1' for reading.").arg (file));
+    else {
+        while (!s.atEnd ())
+            _daemon.sendRawCommand (s.readLine () + "\n");
+    }
+}
 
