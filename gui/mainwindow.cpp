@@ -265,7 +265,7 @@ void MainWindow::consoleSendButtonClicked ()
             consoleCommandInput->clear ();
         }
         else {
-            _daemon.sendRawCommand (consoleCommandInput->text ());
+            _daemon.sendRawCommand (consoleCommandInput->text () + "\n");
             consoleCommandInput->clear ();
         }
     }
