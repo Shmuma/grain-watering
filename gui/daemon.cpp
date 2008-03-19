@@ -68,6 +68,7 @@ void Daemon::socketReadyRead ()
     QString auto_prefix ("Auto: ");
     QString prompt_prefix ("> ");
     QStringList replies;
+    bool s1, s2, s3, s4;
 
     reply = _data_buf + _sock->readAll ();
 
@@ -159,6 +160,23 @@ void Daemon::socketReadyRead ()
                     else
                         waterStopped (cmd.stage ());
                     break;
+                case DaemonCommand::c_getstages:
+                    if (!parseStagesReply (reply, msg, s1, s2, s3, s4))
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot get active stages. Reason: '%1'").arg (msg));
+                    else {
+                        stagesActivityChanged (s1, s2, s3, s4);
+                        _s1 = s1; _s2 = s2; _s3 = s3; _s4 = s4;
+                    }
+                    break;
+                case DaemonCommand::c_getgrainsensors:
+                    grainSensorsPresenceGot (reply.startsWith ("Yes"));
+                    break;
+                case DaemonCommand::c_setgrainsensors:
+                    if (!parseGenericReply (reply, msg))
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot change grain sensors presence. Reason: '%1'").arg (msg));
+                    else 
+                        grainSensorsPresenceGot (cmd.stage () != 0);
+                    break;
                 }
             }
         }
@@ -200,10 +218,48 @@ bool Daemon::parseNumberReply (const QString& reply, QString& msg, int* val)
     *val = str.toInt (&ok);
 
     if (!ok)
-        msg = QString (tr ("Expected number, got '%1'")).arg (reply);
+        msg = tr ("Expected number, got '%1'").arg (reply);
 
     return ok;
 }
+
+
+bool Daemon::parseStagesReply (const QString& reply, QString& msg, bool& s1, bool& s2, bool& s3, bool& s4)
+{
+    if (reply.startsWith ("ERROR:")) {
+        msg = QString (reply).remove ("ERROR:").remove ('>').trimmed ();
+        return false;
+    }
+
+    QStringList lst = reply.split (',');
+    bool ok;
+    int val;
+
+    s1 = s2 = s3 = s4 = false;
+
+    for (int i = 0; i < lst.size (); i++) {
+        val = lst[i].toInt (&ok);
+
+        if (!ok) {
+            msg = tr ("Expected number, got '%1'").arg (lst[i]);
+            return false;
+        }
+
+        switch (val) {
+        case 1:
+            s1 = true; break;
+        case 2:
+            s2 = true; break;
+        case 3:
+            s3 = true; break;
+        case 4:
+            s4 = true; break;
+        }
+    }
+
+    return true;
+}
+
 
 
 bool Daemon::parseAutoModeTick (const QString& reply, bool* state, int* press)
@@ -348,4 +404,27 @@ bool Daemon::isStageEnabled (int stage)
     default:
         return false;
     }
+}
+
+
+void Daemon::getStages ()
+{
+    sendCommand (QString ("getstages\n"));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_getstages));
+}
+
+
+void Daemon::isGrainSensorsPresent ()
+{
+    sendCommand (QString ("getgrainsensors\n"));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_getgrainsensors));
+}
+
+
+void Daemon::setGrainSensorsEnabled (bool val)
+{
+    int v = val ? 1 : 0;
+
+    sendCommand (QString ("setgrainsensors %1\n").arg (v));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_setgrainsensors, v));
 }

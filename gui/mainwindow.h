@@ -62,6 +62,7 @@ protected slots:
     void daemonMetaStateGot (int water_pres, QMap<int, QList<int> > vals);
     void daemonWaterStarted (int stage);
     void daemonWaterStopped (int stage);
+    void daemonGrainSensorsPresenceGot (bool value);
 
     // check page
     void checkStateButtonPressed ();
@@ -69,6 +70,7 @@ protected slots:
     void checkGrainSensorsButtonPressed ();
     void applyCheckWaterButtonClicked ();
     void stateRefreshButtonClicked ();
+    void grainSensorsEnabledChecked (bool val);
 
     // console
     void sendFileButtonClicked ();

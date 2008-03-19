@@ -85,6 +85,9 @@
         </property>
         <item>
          <widget class="QPushButton" name="configButton" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
           <property name="text" >
            <string>Config</string>
           </property>
@@ -98,6 +101,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="checkButton" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
           <property name="text" >
            <string>Check</string>
           </property>
@@ -111,6 +117,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="paramsButton" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
           <property name="text" >
            <string>Params</string>
           </property>
@@ -124,6 +133,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="sensorsButton" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
           <property name="text" >
            <string>Sensors</string>
           </property>
@@ -447,7 +459,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_9" >
+               <widget class="QCheckBox" name="grainSensorsEnabledCheck" >
                 <property name="text" >
                  <string>grain sensors enabled</string>
                 </property>

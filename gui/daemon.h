@@ -21,6 +21,9 @@ public:
         c_getmetastate,
         c_startwater,
         c_stopwater,
+        c_getstages,
+        c_getgrainsensors,
+        c_setgrainsensors,
     };
     
 private:
@@ -59,6 +62,7 @@ private:
 protected:
     bool parseGenericReply (const QString& reply, QString& msg);
     bool parseNumberReply (const QString& reply, QString& msg, int* val);
+    bool parseStagesReply (const QString& reply, QString& msg, bool& s1, bool& s2, bool& s3, bool& s4);
     void sendCommand (const QString& cmd);
     bool parseAutoModeTick (const QString& reply, bool* state, int* press);
     bool handleMetaState (const QString& msg);
@@ -72,6 +76,7 @@ signals:
     void hardwareConnected ();
     void stagesActivityChanged (bool s1, bool s2, bool s3, bool s4);
     void grainFlowGot (int stage, int value);
+    void grainSensorsPresenceGot (bool value);
 
     void textArrived (const QString& text);
     void autoTextArrived (const QString& text);
@@ -105,12 +110,15 @@ public:
     void getAutoMode ();
     void startWater (int stage);
     void stopWater (int stage);
+    void getStages ();
+    void isGrainSensorsPresent ();
 
     void sendRawCommand (const QString& text);
 
     void refreshState ();
 
     bool isStageEnabled (int stage);
+    void setGrainSensorsEnabled (bool val);
 };
 
 

@@ -14,7 +14,8 @@ Interpreter::Interpreter (Device* device)
       _autoMode (false),
       _autoModePaused (false),
       _db ("plaund.db"),
-      _kfs (0)
+      _kfs (0),
+      _grainSensorsPresent (true)
 {
     // initialize vocabulary
     // hardware commands
@@ -65,7 +66,7 @@ Interpreter::Interpreter (Device* device)
 					       "third KK gate\n", CommandMeta::c_hardware);
     _commands["setstages"]	= CommandMeta (4, &Interpreter::setStages, "Set available stages", "setstages 0|1 0|1 0|1 0|1",
 					       "Commands sets stages presence. Each of four argument can be 0 or 1.\n"
-					       "Zero value mean stage is missing, one mean stage is present.n\n", CommandMeta::c_hardware);
+					       "Zero value mean stage is missing, one mean stage is present.\n", CommandMeta::c_hardware);
     _commands["startwater"]	= CommandMeta (1, &Interpreter::startWater, "Start water on given stage", "startwater 1|2|3|4",
 					       "Turns water on stage given in first argument (1..4)\n", CommandMeta::c_hardware);
     _commands["stopwater"]	= CommandMeta (1, &Interpreter::stopWater, "Stop water on given stage", "stopwater 1|2|3|4",
@@ -104,6 +105,11 @@ Interpreter::Interpreter (Device* device)
                                                "Command sleeps for given amount of seconds.\n", CommandMeta::c_meta);
     _commands["setkfs"]		= CommandMeta (1, &Interpreter::setKfs, "Set water pressure coefficient", "setkfs n",
                                                "Command sets Kfs coefficient, which used when calculating water pressure\n", CommandMeta::c_meta);
+    _commands["setgrainsensors"]= CommandMeta (1, &Interpreter::setGrainSensors, "Set grainsensors presence", "setgrainsensors 0|1",
+                                               "Command sets grain sensors presense. This is an internal state flag.\n", CommandMeta::c_meta);
+    _commands["getgrainsensors"]= CommandMeta (0, &Interpreter::getGrainSensors, "Get grainsensors presence", "getgrainsensors",
+                                               "Command checks that grain sensors present. This is an internal state flag.\n", CommandMeta::c_meta);
+    
 }
 
 
@@ -573,5 +579,18 @@ QString Interpreter::setKfs (const QStringList& args)
 
     _kfs = res;
 
+    return QString ("OK\n");
+}
+
+
+QString Interpreter::getGrainSensors (const QStringList&)
+{
+    return _grainSensorsPresent ? QString ("Yes\n") : QString ("No\n");
+}
+
+
+QString Interpreter::setGrainSensors (const QStringList& args)
+{
+    _grainSensorsPresent = args[0] != "0";
     return QString ("OK\n");
 }

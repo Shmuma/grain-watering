@@ -96,12 +96,15 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (metaStateGot (int, QMap<int, QList<int> >)), this, SLOT (daemonMetaStateGot (int, QMap<int, QList<int> >)));
     connect (&_daemon, SIGNAL (waterStarted (int)), this, SLOT (daemonWaterStarted (int)));
     connect (&_daemon, SIGNAL (waterStopped (int)), this, SLOT (daemonWaterStopped (int)));
+    connect (&_daemon, SIGNAL (grainSensorsPresenceGot (bool)), this, SLOT (daemonGrainSensorsPresenceGot (bool)));
 
     connect (checkStateButton, SIGNAL (pressed ()), this, SLOT (checkStateButtonPressed ()));
     connect (checkWaterButton, SIGNAL (pressed ()), this, SLOT (checkWaterButtonPressed ()));
     connect (checkGrainSensorsButton, SIGNAL (pressed ()), this, SLOT (checkGrainSensorsButtonPressed ()));
     connect (stateRefreshButton, SIGNAL (clicked ()), this, SLOT (stateRefreshButtonClicked ()));
     connect (applyCheckWaterButton, SIGNAL (clicked ()), this, SLOT (applyCheckWaterButtonClicked ()));
+    connect (grainSensorsEnabledCheck, SIGNAL (toggled (bool)), this, SLOT (grainSensorsEnabledChecked (bool)));
+
 
     // console events
     connect (consoleSendButton, SIGNAL (clicked ()), this, SLOT (consoleSendButtonClicked ()));
@@ -229,13 +232,30 @@ void MainWindow::connectedChanged (bool value)
 {
     // toggle connect button
     connectButton->setChecked (value);
+
+    QPushButton* btns[] = {configButton, checkButton, paramsButton, sensorsButton};
+
+    for (uint i = 0; i < sizeof (btns) / sizeof (btns[0]); i++) {
+        btns[i]->setEnabled (value);
+        btns[i]->setChecked (false);
+    }
+
+    if (!value)
+        daemonStagesActivityChanged (false, false, false, false);
 }
 
 
 // hardware connection got, fetch daemon state
 void MainWindow::daemonHardwareConnected ()
 {
+    // auto mode
     _daemon.getAutoMode ();
+
+    // enabled stages
+    _daemon.getStages ();
+
+    // grain sensors presense
+    _daemon.isGrainSensorsPresent ();
 }
 
 
@@ -311,6 +331,11 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
     checkWaterStage2Check->setEnabled (s2);
     checkWaterStage3Check->setEnabled (s3);
     checkWaterStage4Check->setEnabled (s4);
+
+    stage1ActiveCheckBox->setChecked (s1);
+    stage2ActiveCheckBox->setChecked (s2);
+    stage3ActiveCheckBox->setChecked (s3);
+    stage4ActiveCheckBox->setChecked (s4);
 }
 
 
@@ -506,3 +531,15 @@ void MainWindow::sendFileButtonClicked ()
     }
 }
 
+
+void MainWindow::daemonGrainSensorsPresenceGot (bool value)
+{
+    grainSensorsEnabledCheck->setChecked (value);
+    checkGrainSensorsButton->setEnabled (value);
+}
+
+
+void MainWindow::grainSensorsEnabledChecked (bool val)
+{
+    _daemon.setGrainSensorsEnabled (val);
+}
