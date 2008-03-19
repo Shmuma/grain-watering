@@ -169,13 +169,16 @@ void Daemon::socketReadyRead ()
                     }
                     break;
                 case DaemonCommand::c_getgrainsensors:
-                    grainSensorsPresenceGot (reply.startsWith ("Yes"));
+                    grainSensorsPresenceGot (reply.startsWith ("TRUE"));
                     break;
                 case DaemonCommand::c_setgrainsensors:
                     if (!parseGenericReply (reply, msg))
                         Logger::instance ()->log (Logger::Error, tr ("Cannot change grain sensors presence. Reason: '%1'").arg (msg));
                     else 
                         grainSensorsPresenceGot (cmd.stage () != 0);
+                    break;
+                case DaemonCommand::c_isgrainpresent:
+                    grainPresenceGot (cmd.stage (), reply.startsWith ("TRUE"));
                     break;
                 }
             }
@@ -231,7 +234,7 @@ bool Daemon::parseStagesReply (const QString& reply, QString& msg, bool& s1, boo
         return false;
     }
 
-    QStringList lst = reply.split (',');
+    QStringList lst = QString (reply).remove ('>').trimmed ().split (',', QString::SkipEmptyParts);
     bool ok;
     int val;
 
@@ -427,4 +430,11 @@ void Daemon::setGrainSensorsEnabled (bool val)
 
     sendCommand (QString ("setgrainsensors %1\n").arg (v));
     _queue.push_back (DaemonCommand (DaemonCommand::c_setgrainsensors, v));
+}
+
+
+void Daemon::isGrainPresent (int stage)
+{
+    sendCommand (QString ("isgrainpresent %1\n").arg (stage));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_isgrainpresent, stage));
 }

@@ -97,6 +97,7 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (waterStarted (int)), this, SLOT (daemonWaterStarted (int)));
     connect (&_daemon, SIGNAL (waterStopped (int)), this, SLOT (daemonWaterStopped (int)));
     connect (&_daemon, SIGNAL (grainSensorsPresenceGot (bool)), this, SLOT (daemonGrainSensorsPresenceGot (bool)));
+    connect (&_daemon, SIGNAL (grainPresenceGot (int, bool)), this, SLOT (daemonGrainPresenceGot (int, bool)));
 
     connect (checkStateButton, SIGNAL (pressed ()), this, SLOT (checkStateButtonPressed ()));
     connect (checkWaterButton, SIGNAL (pressed ()), this, SLOT (checkWaterButtonPressed ()));
@@ -104,7 +105,7 @@ MainWindow::MainWindow ()
     connect (stateRefreshButton, SIGNAL (clicked ()), this, SLOT (stateRefreshButtonClicked ()));
     connect (applyCheckWaterButton, SIGNAL (clicked ()), this, SLOT (applyCheckWaterButtonClicked ()));
     connect (grainSensorsEnabledCheck, SIGNAL (toggled (bool)), this, SLOT (grainSensorsEnabledChecked (bool)));
-
+    connect (checkGrainStageApplyButton, SIGNAL (clicked ()), this, SLOT (checkGrainStageApplyClicked ()));
 
     // console events
     connect (consoleSendButton, SIGNAL (clicked ()), this, SLOT (consoleSendButtonClicked ()));
@@ -332,6 +333,11 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
     checkWaterStage3Check->setEnabled (s3);
     checkWaterStage4Check->setEnabled (s4);
 
+    checkGrainStage1Check->setEnabled (s1);
+    checkGrainStage2Check->setEnabled (s2);
+    checkGrainStage3Check->setEnabled (s3);
+    checkGrainStage4Check->setEnabled (s4);
+
     stage1ActiveCheckBox->setChecked (s1);
     stage2ActiveCheckBox->setChecked (s2);
     stage3ActiveCheckBox->setChecked (s3);
@@ -542,4 +548,43 @@ void MainWindow::daemonGrainSensorsPresenceGot (bool value)
 void MainWindow::grainSensorsEnabledChecked (bool val)
 {
     _daemon.setGrainSensorsEnabled (val);
+}
+
+
+void MainWindow::checkGrainStageApplyClicked ()
+{
+    if (checkGrainStage1Check->isChecked ())
+        _daemon.isGrainPresent (1);
+    if (checkGrainStage2Check->isChecked ())
+        _daemon.isGrainPresent (2);
+    if (checkGrainStage3Check->isChecked ())
+        _daemon.isGrainPresent (3);
+    if (checkGrainStage4Check->isChecked ())
+        _daemon.isGrainPresent (4);
+
+    checkGrainStage1Label->setText (QString ());
+    checkGrainStage2Label->setText (QString ());
+    checkGrainStage3Label->setText (QString ());
+    checkGrainStage4Label->setText (QString ());
+}
+
+
+void MainWindow::daemonGrainPresenceGot (int stage, bool value)
+{
+    QString text (value ? tr ("Present") : tr ("Not present"));
+
+    switch (stage) {
+    case 1:
+        checkGrainStage1Label->setText (text);
+        break;
+    case 2:
+        checkGrainStage2Label->setText (text);
+        break;
+    case 3:
+        checkGrainStage3Label->setText (text);
+        break;
+    case 4:
+        checkGrainStage4Label->setText (text);
+        break;
+    }
 }

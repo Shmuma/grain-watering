@@ -585,7 +585,7 @@ QString Interpreter::setKfs (const QStringList& args)
 
 QString Interpreter::getGrainSensors (const QStringList&)
 {
-    return _grainSensorsPresent ? QString ("Yes\n") : QString ("No\n");
+    return _grainSensorsPresent ? QString ("TRUE\n") : QString ("FALSE\n");
 }
 
 

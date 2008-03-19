@@ -24,6 +24,7 @@ public:
         c_getstages,
         c_getgrainsensors,
         c_setgrainsensors,
+        c_isgrainpresent,
     };
     
 private:
@@ -93,6 +94,8 @@ signals:
 
     void metaStateGot (int water_pres, QMap<int, QList<int> > vals);
 
+    void grainPresenceGot (int stage, bool val);
+
 public:
     Daemon (const QString& host, int port);
 
@@ -112,13 +115,14 @@ public:
     void stopWater (int stage);
     void getStages ();
     void isGrainSensorsPresent ();
+    void setGrainSensorsEnabled (bool val);
+    void isGrainPresent (int stage);
 
     void sendRawCommand (const QString& text);
 
     void refreshState ();
 
     bool isStageEnabled (int stage);
-    void setGrainSensorsEnabled (bool val);
 };
 
 

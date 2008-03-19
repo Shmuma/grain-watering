@@ -63,6 +63,7 @@ protected slots:
     void daemonWaterStarted (int stage);
     void daemonWaterStopped (int stage);
     void daemonGrainSensorsPresenceGot (bool value);
+    void daemonGrainPresenceGot (int stage, bool value);
 
     // check page
     void checkStateButtonPressed ();
@@ -71,6 +72,7 @@ protected slots:
     void applyCheckWaterButtonClicked ();
     void stateRefreshButtonClicked ();
     void grainSensorsEnabledChecked (bool val);
+    void checkGrainStageApplyClicked ();
 
     // console
     void sendFileButtonClicked ();
