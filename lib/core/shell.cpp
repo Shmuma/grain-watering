@@ -280,7 +280,7 @@ QString Interpreter::getWaterFlow (const QStringList& args)
     if (!_kfs)
         return QString ("ERROR: Kfs not set\n");
     else
-        return QString::number ((_dev->getWaterFlow (parseStage (args[0])) * 7200) / _kfs) + "\n";
+        return QString::number ((_dev->getWaterFlow (parseStage (args[0])) * 3600) / _kfs) + "\n";
 }
 
 
