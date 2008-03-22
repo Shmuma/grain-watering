@@ -542,6 +542,10 @@ void MainWindow::daemonGrainSensorsPresenceGot (bool value)
 {
     grainSensorsEnabledCheck->setChecked (value);
     checkGrainSensorsButton->setEnabled (value);
+    if (!value && checkGrainSensorsButton->isChecked ()) {
+        checkStateButton->setChecked (true);
+        checkStackedWidget->setCurrentIndex (0);
+    }
 }
 
 

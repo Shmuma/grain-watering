@@ -468,7 +468,7 @@
               <item>
                <widget class="QStackedWidget" name="checkStackedWidget" >
                 <property name="currentIndex" >
-                 <number>2</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="state" >
                  <layout class="QVBoxLayout" >
@@ -544,7 +544,7 @@
                   <item>
                    <widget class="QPushButton" name="applyCheckWaterButton" >
                     <property name="text" >
-                     <string>Change water</string>
+                     <string>Set water state</string>
                     </property>
                    </widget>
                   </item>
