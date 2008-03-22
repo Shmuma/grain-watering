@@ -503,7 +503,7 @@ void MainWindow::applyCheckWaterButtonClicked ()
         if (checkWaterStage2Check->isChecked ())
             _daemon.startWater (2);
         else
-            _daemon.stopWater (3);
+            _daemon.stopWater (2);
 
     if (_daemon.isStageEnabled (3))
         if (checkWaterStage3Check->isChecked ())
