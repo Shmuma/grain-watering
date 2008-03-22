@@ -64,7 +64,7 @@ void Daemon::socketStateChanged (QAbstractSocket::SocketState state)
 void Daemon::socketReadyRead ()
 {
     QString reply, msg;
-    int value;
+    double value;
     QString auto_prefix ("Auto: ");
     QString prompt_prefix ("> ");
     QStringList replies;
@@ -185,7 +185,7 @@ void Daemon::socketReadyRead ()
         }
         else {
             bool state;
-            int pres;
+            double pres;
 
             autoTextArrived (QString (reply).remove (auto_prefix).trimmed ());
             if (parseAutoModeTick (reply, &state, &pres))
@@ -209,7 +209,7 @@ bool Daemon::parseGenericReply (const QString& reply, QString& msg)
 }
 
 
-bool Daemon::parseNumberReply (const QString& reply, QString& msg, int* val)
+bool Daemon::parseNumberReply (const QString& reply, QString& msg, double* val)
 {
     if (reply.startsWith ("ERROR:")) {
         msg = QString (reply).remove ("ERROR:").remove ('>').trimmed ();
@@ -218,7 +218,7 @@ bool Daemon::parseNumberReply (const QString& reply, QString& msg, int* val)
         
     bool ok;
     QString str = QString (reply).remove (">").trimmed ();
-    *val = str.toInt (&ok);
+    *val = str.toDouble (&ok);
 
     if (!ok)
         msg = tr ("Expected number, got '%1'").arg (reply);
@@ -265,12 +265,12 @@ bool Daemon::parseStagesReply (const QString& reply, QString& msg, bool& s1, boo
 
 
 
-bool Daemon::parseAutoModeTick (const QString& reply, bool* state, int* press)
+bool Daemon::parseAutoModeTick (const QString& reply, bool* state, double* press)
 {
     QStringList l = QString (reply).remove (" ").split (",");
 
     *state = l[0].split (":")[1] == "OK";
-    *press = l[1].split (":")[1].toInt ();
+    *press = l[1].split (":")[1].toDouble ();
 
     return true;
 }
@@ -342,10 +342,10 @@ void Daemon::refreshState ()
 bool Daemon::handleMetaState (const QString& msg)
 {
     QStringList l = QString (msg).trimmed ().split (",");
-    int water_pres = 0;
+    double water_pres = 0;
     QString s;
     QStringList ll;
-    QMap<int, QList<int> > vals;
+    QMap<int, QList<double> > vals;
 
     QStringList::iterator it = l.begin ();
 
@@ -360,7 +360,7 @@ bool Daemon::handleMetaState (const QString& msg)
         QStringList::iterator it2 = ll.begin ();
         
         while (it2 != ll.end ()) {
-            int val = (*it2).split ("=")[1].toInt ();
+            double val = (*it2).split ("=")[1].toDouble ();
             
             if (index == 0)
                 water_pres = val;

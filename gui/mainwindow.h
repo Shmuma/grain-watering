@@ -54,12 +54,12 @@ protected slots:
     void daemonCommandSent (const QString& msg);
     void daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4);
     void daemonGrainFlowGot (int stage, int value);
-    void daemonAutoModeTickGot (bool state, int press);
+    void daemonAutoModeTickGot (bool state, double press);
     void daemonAutoModeStarted ();
     void daemonAutoModeStopped ();
     void daemonAutoModeToggled (bool paused);
     void daemonAutoModeGot (bool active, bool paused);
-    void daemonMetaStateGot (int water_pres, QMap<int, QList<int> > vals);
+    void daemonMetaStateGot (double water_pres, QMap<int, QList<double> > vals);
     void daemonWaterStarted (int stage);
     void daemonWaterStopped (int stage);
     void daemonGrainSensorsPresenceGot (bool value);

@@ -33,6 +33,13 @@ private:
     static DeviceCommand::stage_t parseStage (const QString& stage) throw (QString);
     static bool parseBool (const QString& stage) throw (QString);
 
+    double convertWaterFlow (unsigned int value)
+    { return _kfs ? ((value * 3600) / _kfs) : 0.0; };
+    double convertWaterPressure (unsigned int value)
+        { return value * 0.0488 - 2.5; };
+    double convertGrainTermperature (unsigned int value)
+        { return ((1000 * value * 0.0094 / (2.4 - value * 0.0094)) - 1000) / 3.86; };
+
     QString connect (const QStringList& args);
     QString getStateWord (const QStringList& args);
     QString getGrainFlow (const QStringList& args);

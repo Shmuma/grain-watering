@@ -62,10 +62,10 @@ private:
 
 protected:
     bool parseGenericReply (const QString& reply, QString& msg);
-    bool parseNumberReply (const QString& reply, QString& msg, int* val);
+    bool parseNumberReply (const QString& reply, QString& msg, double* val);
     bool parseStagesReply (const QString& reply, QString& msg, bool& s1, bool& s2, bool& s3, bool& s4);
     void sendCommand (const QString& cmd);
-    bool parseAutoModeTick (const QString& reply, bool* state, int* press);
+    bool parseAutoModeTick (const QString& reply, bool* state, double* press);
     bool handleMetaState (const QString& msg);
 
 protected slots:
@@ -83,7 +83,7 @@ signals:
     void autoTextArrived (const QString& text);
     void commandSent (const QString& text);
 
-    void autoModeTickGot (bool state, int press);
+    void autoModeTickGot (bool state, double press);
     void autoModeStarted ();
     void autoModeStopped ();
     void autoModeToggled (bool paused);
@@ -92,7 +92,7 @@ signals:
     void waterStarted (int stage);
     void waterStopped (int stage);
 
-    void metaStateGot (int water_pres, QMap<int, QList<int> > vals);
+    void metaStateGot (double water_pres, QMap<int, QList<double> > vals);
 
     void grainPresenceGot (int stage, bool val);
 

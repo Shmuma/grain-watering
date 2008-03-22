@@ -88,12 +88,12 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (commandSent (const QString&)), this, SLOT (daemonCommandSent (const QString&)));
     connect (&_daemon, SIGNAL (stagesActivityChanged (bool,bool,bool,bool)), this, SLOT (daemonStagesActivityChanged (bool,bool,bool,bool)));
     connect (&_daemon, SIGNAL (grainFlowGot (int, int)), this, SLOT (daemonGrainFlowGot (int, int)));
-    connect (&_daemon, SIGNAL (autoModeTickGot (bool, int)), this, SLOT (daemonAutoModeTickGot (bool, int)));
+    connect (&_daemon, SIGNAL (autoModeTickGot (bool, double)), this, SLOT (daemonAutoModeTickGot (bool, double)));
     connect (&_daemon, SIGNAL (autoModeGot (bool, bool)), this, SLOT (daemonAutoModeGot (bool, bool)));
     connect (&_daemon, SIGNAL (autoModeStarted ()), this, SLOT (daemonAutoModeStarted ()));
     connect (&_daemon, SIGNAL (autoModeStopped ()), this, SLOT (daemonAutoModeStopped ()));
     connect (&_daemon, SIGNAL (autoModeToggled (bool)), this, SLOT (daemonAutoModeToggled (bool)));
-    connect (&_daemon, SIGNAL (metaStateGot (int, QMap<int, QList<int> >)), this, SLOT (daemonMetaStateGot (int, QMap<int, QList<int> >)));
+    connect (&_daemon, SIGNAL (metaStateGot (double, QMap<int, QList<double> >)), this, SLOT (daemonMetaStateGot (double, QMap<int, QList<double> >)));
     connect (&_daemon, SIGNAL (waterStarted (int)), this, SLOT (daemonWaterStarted (int)));
     connect (&_daemon, SIGNAL (waterStopped (int)), this, SLOT (daemonWaterStopped (int)));
     connect (&_daemon, SIGNAL (grainSensorsPresenceGot (bool)), this, SLOT (daemonGrainSensorsPresenceGot (bool)));
@@ -369,7 +369,7 @@ void MainWindow::pauseButtonClicked ()
 }
 
 
-void MainWindow::daemonAutoModeTickGot (bool state, int press)
+void MainWindow::daemonAutoModeTickGot (bool state, double press)
 {
     Logger::instance ()->log (Logger::Debug, QString ("Auto mode tick. State: %1, Press: %2").arg (state ? "OK" : "ERROR", QString::number (press)));
 }
@@ -414,7 +414,7 @@ void MainWindow::daemonAutoModeGot (bool active, bool paused)
 }
 
 
-void MainWindow::daemonMetaStateGot (int water_pres, QMap<int, QList<int> > vals)
+void MainWindow::daemonMetaStateGot (double water_pres, QMap<int, QList<double> > vals)
 {
     stateTreeWidget->clear ();
     QTreeWidgetItem* glob = new QTreeWidgetItem (stateTreeWidget);
