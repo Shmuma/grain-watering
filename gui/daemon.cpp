@@ -352,22 +352,26 @@ bool Daemon::handleMetaState (const QString& msg)
     while (it != l.end ()) {
         s = *it;
         ll = s.trimmed ().split (":", QString::SkipEmptyParts);
-        
-        int index = ll[0].toInt ();
-        s = ll[1];
-        ll = s.trimmed ().split (" ", QString::SkipEmptyParts);
-        
-        QStringList::iterator it2 = ll.begin ();
-        
-        while (it2 != ll.end ()) {
-            double val = (*it2).split ("=")[1].toDouble ();
-            
-            if (index == 0)
-                water_pres = val;
-            else
-                vals[index].push_back (val);
 
-            it2++;
+        if (ll.size () == 2) {
+            int index = ll[0].toInt ();
+            s = ll[1];
+            ll = s.trimmed ().split (" ", QString::SkipEmptyParts);
+        
+            QStringList::iterator it2 = ll.begin ();
+        
+            while (it2 != ll.end ()) {
+                if (it2->contains ("=")) {
+                    double val = (*it2).split ("=")[1].toDouble ();
+            
+                    if (index == 0)
+                        water_pres = val;
+                    else
+                        vals[index].push_back (val);
+                }
+
+                it2++;
+            }
         }
 
         it++;
