@@ -109,7 +109,8 @@ Interpreter::Interpreter (Device* device)
                                                "Command sets grain sensors presense. This is an internal state flag.\n", CommandMeta::c_meta);
     _commands["getgrainsensors"]= CommandMeta (0, &Interpreter::getGrainSensors, "Get grainsensors presence", "getgrainsensors",
                                                "Command checks that grain sensors present. This is an internal state flag.\n", CommandMeta::c_meta);
-    
+    _commands["checktick"]	= CommandMeta (0, &Interpreter::checkTick, "Performs check loop actions", "checktick",
+                                               "Performs check loop actions. Should be called every 10 seconds.\n", CommandMeta::c_meta);
 }
 
 
@@ -588,4 +589,64 @@ QString Interpreter::setGrainSensors (const QStringList& args)
 {
     _grainSensorsPresent = args[0] != "0";
     return QString ("OK\n");
+}
+
+
+QString Interpreter::checkTick (const QStringList& args)
+{
+    static bool inProgress = false;
+
+    if (inProgress)
+        return QString ("Check: busy\n");
+
+    if (!_dev->isConnected ())
+        return QString ("Check: not connected\n");
+    if (!_dev->isManualMode ())
+        return QString ("Check: manual mode\n");
+
+    inProgress = true;
+
+    // get water pressure
+    QString res;
+    double waterPress = convertWaterPressure (_dev->getWaterPressure ());
+
+    res = QString ("Check: WP=%1").arg (QString::number (waterPress));
+
+    for (int i = 0; i < 4; i++) {
+        if (!isStageActive (i))
+            continue;
+
+        res += QString (" %1:").arg (i+1);
+
+        bool grain;
+
+        // for active stages do:
+        // 1. is grain present. If not present, skip other commands.
+
+        if (_grainSensorsPresent)
+            grain = _grainSensorsPresent && _dev->getGrainPresent (DeviceCommand::stageByNum (i));
+        else 
+            grain = true;
+
+        res += QString ("G=%1").arg (grain ? 1 : 0);
+
+        if (!grain)
+            continue;
+
+        // 2. get water flow,
+        // 3. get grain flow
+        // 4. get grain humidity
+        // 5. get grain nature
+        // 6. get grain termperature
+
+        res += ",WF=" + QString::number (convertWaterFlow (_dev->getWaterFlow (DeviceCommand::stageByNum (i))));
+        res += ",GF=" + QString::number (_dev->getGrainFlow (DeviceCommand::stageByNum (i)));
+        res += ",GH=" + QString::number (_dev->getGrainHumidity (DeviceCommand::stageByNum (i)));
+        res += ",GT=" + QString::number (convertGrainTermperature (_dev->getGrainTemperature (DeviceCommand::stageByNum (i))));
+        res += ",GN=" + QString::number (_dev->getGrainNature (DeviceCommand::stageByNum (i)));
+    }
+
+    inProgress = false;
+
+    return res + "\n";
 }

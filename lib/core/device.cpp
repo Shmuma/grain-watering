@@ -130,6 +130,23 @@ bool DeviceCommand::isOK (const QByteArray& data, kind_t kind, stage_t stage)
 }
 
 
+DeviceCommand::stage_t DeviceCommand::stageByNum (int stage)
+{
+    switch (stage) {
+    case 0:
+        return Stg_First;
+    case 1:
+        return Stg_Second;
+    case 2:
+        return Stg_Third;
+    case 3:
+        return Stg_Fourth;
+    }
+
+    return Stg_First;
+}
+
+
 
 // --------------------------------------------------
 // Device
@@ -144,6 +161,9 @@ Device::Device (SerialPort* port) throw (QString)
 
 bool Device::initialize ()
 {
+    if (_connected)
+        return true;
+
     DeviceCommand _cmd (DeviceCommand::Init);
 
     // send to port initial sequence

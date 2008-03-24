@@ -40,6 +40,9 @@ private:
     double convertGrainTermperature (unsigned int value)
         { return ((1000 * value * 0.0094 / (2.4 - value * 0.0094)) - 1000) / 3.86; };
 
+    bool isStageActive (int n)
+        { return (_stages & (1 << n)) > 0; };
+
     QString connect (const QStringList& args);
     QString getStateWord (const QStringList& args);
     QString getGrainFlow (const QStringList& args);
@@ -83,6 +86,8 @@ private:
     QString setKfs (const QStringList& args);
     QString setGrainSensors (const QStringList& args);
     QString getGrainSensors (const QStringList& args);
+
+    QString checkTick (const QStringList& args);
 
 public:
     Interpreter (Device* device);

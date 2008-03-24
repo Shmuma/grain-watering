@@ -30,7 +30,8 @@ PlaundServer::PlaundServer (int tcp_port)
 
     connect (this, SIGNAL (newConnection ()), this, SLOT (newConnection ()));
 
-    startTimer (5000);
+    _autoTimer = startTimer (5000);
+    _checkTimer = startTimer (10000);
 }
 
 
@@ -83,19 +84,24 @@ void PlaundServer::handleCommand ()
 void PlaundServer::timerEvent (QTimerEvent* event)
 {
     QString res;
-    if (_interp->isAutoMode ()) {
-        res = _interp->exec ("automodetick\n");
 
-        if (!res.isEmpty ()) {
-            // broadcast result of auto mode tick to all connected clients
-            QList<QTcpSocket*>::iterator it = _socks.begin ();
+    if (event->timerId () == _autoTimer) {
+        if (_interp->isAutoMode ())
+            res = _interp->exec ("automodetick\n");
+    }
+    else 
+        if (event->timerId () == _checkTimer)
+            res = _interp->exec ("checktick\n");
 
-            while (it != _socks.end ()) {
-                (*it)->write (res.toAscii ());
-                (*it)->write ("> ");
-                (*it)->flush ();
-                it++;
-            }
+    if (!res.isEmpty ()) {
+        // broadcast result of auto and check mode tick to all connected clients
+        QList<QTcpSocket*>::iterator it = _socks.begin ();
+
+        while (it != _socks.end ()) {
+            (*it)->write (res.toAscii ());
+            (*it)->write ("> ");
+            (*it)->flush ();
+            it++;
         }
     }
 }

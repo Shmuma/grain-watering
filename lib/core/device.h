@@ -92,6 +92,7 @@ public:
     int delay () const;
 
     static bool isOK (const QByteArray& data, kind_t kind, stage_t stage);
+    static stage_t stageByNum (int stage);
 };
 
 

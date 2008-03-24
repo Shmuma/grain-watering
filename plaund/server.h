@@ -18,6 +18,7 @@ private:
     Interpreter* _interp;
     bool _autoMode;
     QList<QTcpSocket*> _socks;
+    int _autoTimer, _checkTimer;
 
 protected slots:
     void newConnection ();
