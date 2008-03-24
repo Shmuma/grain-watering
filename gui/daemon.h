@@ -59,6 +59,7 @@ private:
     bool _hw_connected;
     bool _s1, _s2, _s3, _s4;
     QList<DaemonCommand> _queue;
+    QDateTime _lastCheck;
 
 protected:
     bool parseGenericReply (const QString& reply, QString& msg);
@@ -67,6 +68,7 @@ protected:
     void sendCommand (const QString& cmd);
     bool parseAutoModeTick (const QString& reply, bool* state, double* press);
     bool handleMetaState (const QString& msg);
+    void handleCheckTick (const QString& msg);
 
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
@@ -95,6 +97,15 @@ signals:
     void metaStateGot (double water_pres, QMap<int, QList<double> > vals);
 
     void grainPresenceGot (int stage, bool val);
+
+    // check loop signals
+    void waterPressureUpdated (double val);
+    void grainPresentUpdated (int stage, bool present);
+    void waterFlowUpdated (int stage, double val);
+    void grainFlowUpdated (int stage, double val);
+    void grainHumidityUpdated (int stage, double val);
+    void grainTemperatureUpdated (int stage, double val);
+    void grainNatureUpdated (int stage, double val);
 
 public:
     Daemon (const QString& host, int port);

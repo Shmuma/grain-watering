@@ -66,6 +66,7 @@ void Daemon::socketReadyRead ()
     QString reply, msg;
     double value;
     QString auto_prefix ("Auto: ");
+    QString check_prefix ("Check: ");
     QString prompt_prefix ("> ");
     QStringList replies;
     bool s1, s2, s3, s4;
@@ -83,7 +84,7 @@ void Daemon::socketReadyRead ()
     for (int i = 0; i < replies.size (); i++) {
         reply = replies[i];
 
-        if (!reply.startsWith (auto_prefix)) {
+        if (!reply.startsWith (auto_prefix) && !reply.startsWith (check_prefix)) {
             textArrived (reply+prompt_prefix);
 
             if (!_queue.isEmpty ()) {
@@ -184,12 +185,16 @@ void Daemon::socketReadyRead ()
             }
         }
         else {
-            bool state;
-            double pres;
+            if (reply.startsWith (auto_prefix)) {
+                bool state;
+                double pres;
 
-            autoTextArrived (QString (reply).remove (auto_prefix).trimmed ());
-            if (parseAutoModeTick (reply, &state, &pres))
-                autoModeTickGot (state, pres);
+                autoTextArrived (QString (reply).remove (auto_prefix).trimmed ());
+                if (parseAutoModeTick (reply, &state, &pres))
+                    autoModeTickGot (state, pres);
+            }
+            else
+                handleCheckTick (reply);
         }
 
     }
@@ -441,4 +446,69 @@ void Daemon::isGrainPresent (int stage)
 {
     sendCommand (QString ("isgrainpresent %1\n").arg (stage));
     _queue.push_back (DaemonCommand (DaemonCommand::c_isgrainpresent, stage));
+}
+
+
+void Daemon::handleCheckTick (const QString& msg)
+{
+    // parse values
+    QStringList stages = msg.split (" ");
+    double val;
+    bool ok;
+
+    if (stages.count () < 2)
+        return;
+    
+    if (!stages[1].startsWith ("WP="))
+        return;
+
+    _lastCheck = QDateTime::currentDateTime ();
+
+    val = stages[1].remove ("WP=").toDouble (&ok);
+
+    if (!ok)
+        return;
+
+    waterPressureUpdated (val);
+    
+    for (int i = 2; i < stages.count (); i++) {
+        QString val_str;
+        QStringList lst = stages[i].split (":"), l;
+        int stage;
+        QString key, val;
+        
+        if (lst.count () != 2) {
+            Logger::instance ()->log (Logger::Debug, QString ("CheckTick: Got invalid stage info at part %1").arg (i));            
+            continue;
+        }
+
+        val_str = lst[1];
+
+        stage = lst[0].toInt (&ok);
+        if (!ok)
+            continue;
+
+        lst = val_str.split (",");
+        
+        for (int j = 0; j < lst.count (); j++) {
+            l = lst[j].split ('=');
+            if (l.count () != 2)
+                continue;
+            key = l[0];
+            val = l[1];
+            
+            if (key == "G=")
+                grainPresentUpdated (stage, val == "1");
+            else if (key == "WF=")
+                waterFlowUpdated (stage, val.toDouble ());
+            else if (key == "GF=")
+                grainFlowUpdated (stage, val.toDouble ());
+            else if (key == "GH=")
+                grainHumidityUpdated (stage, val.toDouble ());
+            else if (key == "GN=")
+                grainNatureUpdated (stage, val.toDouble ());
+            else if (key == "GT=")
+                grainTemperatureUpdated (stage, val.toDouble ());
+        }
+    }
 }
