@@ -46,6 +46,10 @@ MainWindow::MainWindow ()
     stageControl2->setNumber (2);
     stageControl3->setNumber (3);
     stageControl4->setNumber (4);
+    stageControl1->hide ();
+    stageControl2->hide ();
+    stageControl3->hide ();
+    stageControl4->hide ();
 
     // connect button
     connect (connectButton, SIGNAL (doubleClicked ()), this, SLOT (connectButtonClicked ()));
@@ -98,6 +102,15 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (waterStopped (int)), this, SLOT (daemonWaterStopped (int)));
     connect (&_daemon, SIGNAL (grainSensorsPresenceGot (bool)), this, SLOT (daemonGrainSensorsPresenceGot (bool)));
     connect (&_daemon, SIGNAL (grainPresenceGot (int, bool)), this, SLOT (daemonGrainPresenceGot (int, bool)));
+
+    // daemon check loop events
+    connect (&_daemon, SIGNAL (waterPressureUpdated (double)), this, SLOT (daemonWaterPressureUpdated (double)));
+    connect (&_daemon, SIGNAL (grainPresentUpdated (int, bool)), this, SLOT (daemonGrainPresentUpdated (int, bool)));
+    connect (&_daemon, SIGNAL (waterFlowUpdated (int, double)), this, SLOT (daemonWaterFlowUpdated (int, double)));
+    connect (&_daemon, SIGNAL (grainFlowUpdated (int, double)), this, SLOT (daemonGrainFlowUpdated (int, double)));
+    connect (&_daemon, SIGNAL (grainHumidityUpdated (int, double)), this, SLOT (daemonGrainHumidityUpdated (int, double)));
+    connect (&_daemon, SIGNAL (grainTemperatureUpdated (int, double)), this, SLOT (daemonGrainTemperatureUpdated (int, double)));
+    connect (&_daemon, SIGNAL (grainNatureUpdated (int, double)), this, SLOT (daemonGrainNatureUpdated (int, double)));
 
     connect (checkStateButton, SIGNAL (pressed ()), this, SLOT (checkStateButtonPressed ()));
     connect (checkWaterButton, SIGNAL (pressed ()), this, SLOT (checkWaterButtonPressed ()));
@@ -327,6 +340,11 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
     stageControl2->setEnabled (s2);
     stageControl3->setEnabled (s3);
     stageControl4->setEnabled (s4);
+
+    stageControl1->setVisible (s1);
+    stageControl2->setVisible (s2);
+    stageControl3->setVisible (s3);
+    stageControl4->setVisible (s4);
 
     checkWaterStage1Check->setEnabled (s1);
     checkWaterStage2Check->setEnabled (s2);
@@ -592,3 +610,47 @@ void MainWindow::daemonGrainPresenceGot (int stage, bool value)
         break;
     }
 }
+
+
+void MainWindow::daemonWaterPressureUpdated (double val)
+{
+    // TODO
+}
+
+
+void MainWindow::daemonGrainPresentUpdated (int stage, bool present)
+{
+    getStageControl (stage)->setGrain (present);
+}
+
+
+void MainWindow::daemonWaterFlowUpdated (int stage, double val)
+{
+    getStageControl (stage)->setWaterFlow (val);
+}
+
+
+void MainWindow::daemonGrainFlowUpdated (int stage, double val)
+{
+    getStageControl (stage)->setGrainFlow (val);
+}
+
+
+void MainWindow::daemonGrainHumidityUpdated (int stage, double val)
+{
+    getStageControl (stage)->setHumidity (val);
+}
+
+
+void MainWindow::daemonGrainTemperatureUpdated (int stage, double val)
+{
+    getStageControl (stage)->setTemperature (val);
+}
+
+
+void MainWindow::daemonGrainNatureUpdated (int stage, double val)
+{
+    getStageControl (stage)->setNature (val);
+}
+
+

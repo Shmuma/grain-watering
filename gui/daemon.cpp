@@ -497,17 +497,17 @@ void Daemon::handleCheckTick (const QString& msg)
             key = l[0];
             val = l[1];
             
-            if (key == "G=")
+            if (key == "G")
                 grainPresentUpdated (stage, val == "1");
-            else if (key == "WF=")
+            else if (key == "WF")
                 waterFlowUpdated (stage, val.toDouble ());
-            else if (key == "GF=")
+            else if (key == "GF")
                 grainFlowUpdated (stage, val.toDouble ());
-            else if (key == "GH=")
+            else if (key == "GH")
                 grainHumidityUpdated (stage, val.toDouble ());
-            else if (key == "GN=")
+            else if (key == "GN")
                 grainNatureUpdated (stage, val.toDouble ());
-            else if (key == "GT=")
+            else if (key == "GT")
                 grainTemperatureUpdated (stage, val.toDouble ());
         }
     }

@@ -65,6 +65,15 @@ protected slots:
     void daemonGrainSensorsPresenceGot (bool value);
     void daemonGrainPresenceGot (int stage, bool value);
 
+    // daemon check loop
+    void daemonWaterPressureUpdated (double val);
+    void daemonGrainPresentUpdated (int stage, bool present);
+    void daemonWaterFlowUpdated (int stage, double val);
+    void daemonGrainFlowUpdated (int stage, double val);
+    void daemonGrainHumidityUpdated (int stage, double val);
+    void daemonGrainTemperatureUpdated (int stage, double val);
+    void daemonGrainNatureUpdated (int stage, double val);
+
     // check page
     void checkStateButtonPressed ();
     void checkWaterButtonPressed ();

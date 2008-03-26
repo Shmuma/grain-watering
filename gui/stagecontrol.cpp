@@ -9,7 +9,7 @@ StageControl::StageControl (QWidget* parent)
     : QWidget (parent)
 {
     _number = 0;
-    _enabled = false;
+    _grain = _enabled = false;
     _flow = _humidity = _nature = _temp = _waterFlow = _targetHumidity = 0;
 }
 
@@ -45,10 +45,10 @@ void StageControl::paintEvent (QPaintEvent* event)
     p.drawText (r.adjusted (5, 95, -5, 0),      Qt::AlignLeft, tr ("Temperature"));
 
     r.setRect (geometry ().width () / 2 + 10, 85, geometry ().width () / 2, 90);
-    p.drawText (r.adjusted (5, 0,  -5, 20-90), Qt::AlignLeft, tr ("%1 t/h").arg (_flow));
-    p.drawText (r.adjusted (5, 20, -5, 40-90), Qt::AlignLeft, tr ("%1 %").arg (_humidity));
-    p.drawText (r.adjusted (5, 40, -5, 60-90), Qt::AlignLeft, tr ("%1 g/l").arg (_nature));
-    p.drawText (r.adjusted (5, 60, -5, 0),     Qt::AlignLeft, tr ("%1 C").arg (_temp));
+    p.drawText (r.adjusted (5, 0,  -5, 20-90), Qt::AlignLeft, tr ("%1 t/h").arg (QString ().sprintf ("%.4f", _flow)));
+    p.drawText (r.adjusted (5, 20, -5, 40-90), Qt::AlignLeft, tr ("%1 %").arg (QString ().sprintf ("%.4f", _humidity)));
+    p.drawText (r.adjusted (5, 40, -5, 60-90), Qt::AlignLeft, tr ("%1 g/l").arg (QString ().sprintf ("%.4f", _nature)));
+    p.drawText (r.adjusted (5, 60, -5, 0),     Qt::AlignLeft, tr ("%1 C").arg (QString ().sprintf ("%.4f", _temp)));
 
     // water gate rect
     r.setRect (geometry ().width () / 2, 180, (geometry ().width ()/2)-10, 80);
@@ -58,7 +58,7 @@ void StageControl::paintEvent (QPaintEvent* event)
     p.setFont (QFont ("Arial", 11));
     p.drawText (r.adjusted (5, 55, -5, -5), Qt::AlignHCenter, tr ("Water flow"));
 
-    p.drawText (r.adjusted (r.width ()/3, r.height ()+5, 0, 20), Qt::AlignHCenter, tr ("%1 l/h").arg (_waterFlow));
+    p.drawText (r.adjusted (r.width ()/3, r.height ()+5, 0, 20), Qt::AlignHCenter, tr ("%1 l/h").arg (QString ().sprintf ("%.4f", _waterFlow)));
 
     r = QRect (10, 290, geometry ().width ()-20, 40);
     p.drawRect (r);
@@ -66,6 +66,6 @@ void StageControl::paintEvent (QPaintEvent* event)
     r.translate (0, 35);
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("Given grain humidity"));
     r.adjust (r.width ()/2, 20, 0, 20);
-    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (_targetHumidity));
+    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.4f", _targetHumidity)));
 }
 

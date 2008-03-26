@@ -13,54 +13,60 @@ protected:
 public:
     StageControl (QWidget* parent);
 
+    void setGrain (bool grain)
+        { _grain = grain; update (); };
+    bool grain () const
+        { return _grain; };
+
     void setNumber (int number)
-    { _number = number; update (); };
+        { _number = number; update (); };
     int number () const
-    { return _number; };
+        { return _number; };
     
     void setEnabled (bool enabled)
-    { _enabled = enabled; update (); };
+        { _enabled = enabled; update (); };
     bool enabled () const
-    { return _enabled; };
+        { return _enabled; };
 
-    void setGrainFlow (int flow)
-    { _flow = flow; update (); };
-    int grainFlow () const
-    { return _flow; };
+    void setGrainFlow (double flow)
+        { _flow = flow; update (); };
+    double grainFlow () const
+        { return _flow; };
 
-    void setHumidity (int humidity)
-    { _humidity = humidity; update (); };
-    int humidity () const
-    { return _humidity; };
+    void setHumidity (double humidity)
+        { _humidity = humidity; update (); };
+    double humidity () const
+        { return _humidity; };
 
-    void setNature (int nature)
-    { _nature = nature; update (); };
-    int nature () const
-    { return _nature; };
+    void setNature (double nature)
+        { _nature = nature; update (); };
+    double nature () const
+        { return _nature; };
 
-    void setTemperature (int temp)
-    { _temp = temp; update (); };
-    int temperature () const
-    { return _temp; };
+    void setTemperature (double temp)
+        { _temp = temp; update (); };
+    double temperature () const
+        { return _temp; };
     
-    void setWaterFlow (int waterFlow)
-    { _waterFlow = waterFlow; update (); };
-    int waterFlow () const
-    { return _waterFlow; };
+    void setWaterFlow (double waterFlow)
+        { _waterFlow = waterFlow; update (); };
+    double waterFlow () const
+        { return _waterFlow; };
 
-    void setTargetHumidity (int humidity)
-    { _targetHumidity = humidity; update (); };
-    int targetHumidity () const
-    { return _targetHumidity; };
+    void setTargetHumidity (double humidity)
+        { _targetHumidity = humidity; update (); };
+    double targetHumidity () const
+        { return _targetHumidity; };
 private:
     int _number;
     bool _enabled;
-    int _flow;
-    int _humidity;
-    int _nature;
-    int _temp;
-    int _waterFlow;
-    int _targetHumidity;
+    bool _grain;
+    double _flow;
+    double _humidity;
+    double _nature;
+    double _temp;
+    double _waterFlow;
+    double _targetHumidity;
 };
 
 #endif
