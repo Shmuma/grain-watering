@@ -10,6 +10,11 @@ class StageControl : public QWidget
 protected:
     void paintEvent (QPaintEvent* event);
 
+signals:
+    void startPressed ();
+    void stopPressed ();
+    void pausePressed (bool on);
+
 public:
     StageControl (QWidget* parent);
 
@@ -57,6 +62,16 @@ public:
         { _targetHumidity = humidity; update (); };
     double targetHumidity () const
         { return _targetHumidity; };
+
+    bool isStarted () const
+        { return _started; };
+    void start ();
+    void stop ();
+
+    bool isPaused () const
+        { return _paused; };
+    void pause (bool on);
+
 private:
     int _number;
     bool _enabled;
@@ -67,6 +82,10 @@ private:
     double _temp;
     double _waterFlow;
     double _targetHumidity;
+    bool _started;
+    bool _paused;
+
+    QToolButton *_start, *_pause;
 };
 
 #endif

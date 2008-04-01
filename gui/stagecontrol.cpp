@@ -6,11 +6,32 @@
 // StageControl
 // --------------------------------------------------
 StageControl::StageControl (QWidget* parent)
-    : QWidget (parent)
+    : QWidget (parent),
+      _started (false),
+      _paused (false)
 {
     _number = 0;
     _grain = _enabled = false;
     _flow = _humidity = _nature = _temp = _waterFlow = _targetHumidity = 0;
+
+    // control buttons
+    _start = new QToolButton (this);
+    _pause = new QToolButton (this);
+
+    _start->setText (tr ("Start"));
+    _pause->setText (tr ("Pause"));
+
+    QGridLayout* layout = new QGridLayout (this);
+
+    layout->setRowStretch (0, 1);
+    layout->addWidget (_start, 1, 0);
+    layout->addWidget (_pause, 1, 1);
+
+    _pause->setEnabled (false);
+    _start->setCheckable (true);
+    _pause->setCheckable (true);
+
+    setLayout (layout);
 }
 
 
@@ -69,3 +90,26 @@ void StageControl::paintEvent (QPaintEvent* event)
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.4f", _targetHumidity)));
 }
 
+
+void StageControl::start ()
+{
+    if (_started)
+        return;
+}
+
+
+void StageControl::stop ()
+{
+    if (!_started)
+        return;
+}
+
+
+void StageControl::pause (bool on)
+{
+    if (!_started)
+        return;
+
+    if (_paused == on)
+        return;
+}
