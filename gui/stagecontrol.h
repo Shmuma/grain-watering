@@ -3,17 +3,29 @@
 
 #include <QtGui>
 
+
 class StageControl : public QWidget
 {
     Q_OBJECT
 
+public:
+    enum state_t {
+        S_Stopped,
+        S_Started,
+        S_Paused,
+    };
+
 protected:
     void paintEvent (QPaintEvent* event);
 
+protected slots:
+    void startToggled (bool checked);
+    void pauseToggled (bool checked);
+
 signals:
-    void startPressed ();
-    void stopPressed ();
-    void pausePressed (bool on);
+    void startPressed (int stage);
+    void stopPressed (int stage);
+    void pausePressed (int stage, bool on);
 
 public:
     StageControl (QWidget* parent);
@@ -63,14 +75,11 @@ public:
     double targetHumidity () const
         { return _targetHumidity; };
 
-    bool isStarted () const
-        { return _started; };
-    void start ();
-    void stop ();
-
-    bool isPaused () const
-        { return _paused; };
-    void pause (bool on);
+    StageControl::state_t state () const
+        { return _state; };
+    
+    void setState (state_t state)
+        { _state = state; handleNewState (); update (); };
 
 private:
     int _number;
@@ -82,10 +91,12 @@ private:
     double _temp;
     double _waterFlow;
     double _targetHumidity;
-    bool _started;
-    bool _paused;
+    state_t _state;
 
     QToolButton *_start, *_pause;
+    bool _inHandleState;
+
+    void handleNewState ();
 };
 
 #endif

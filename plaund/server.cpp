@@ -84,9 +84,15 @@ void PlaundServer::handleCommand ()
 void PlaundServer::timerEvent (QTimerEvent* event)
 {
     QString res;
+    bool flag;
 
     if (event->timerId () == _autoTimer) {
-        if (_interp->isAutoMode ())
+        flag = false;
+        for (int i = 0; i < 4; i++)
+            if (flag = (_interp->isStageActive (i) && _interp->isAutoMode (i)))
+                break;
+                
+        if (flag)
             res = _interp->exec ("automodetick\n");
     }
     else 

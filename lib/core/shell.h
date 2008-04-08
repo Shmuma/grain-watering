@@ -21,8 +21,8 @@ private:
     // interpreter state
     // this bit mask initialized by setstages command and read by getstages command.
     int _stages;
-    bool _autoMode;
-    bool _autoModePaused;
+    bool _autoMode[4];
+    bool _autoModePaused[4];
     int _kfs;
     bool _grainSensorsPresent;
 
@@ -31,6 +31,7 @@ private:
     static QString boolToReply (bool res)
         { return res ? "TRUE\n" : "FALSE\n"; };
     static DeviceCommand::stage_t parseStage (const QString& stage) throw (QString);
+    static int parseStageAsInt (const QString& stage) throw (QString);
     static bool parseBool (const QString& stage) throw (QString);
 
     double convertWaterFlow (unsigned int value)
@@ -39,9 +40,6 @@ private:
         { return value * 0.0488 - 2.5; };
     double convertGrainTermperature (unsigned int value)
         { return ((1000 * value * 0.0094 / (2.4 - value * 0.0094)) - 1000) / 3.86; };
-
-    bool isStageActive (int n)
-        { return (_stages & (1 << n)) > 0; };
 
     QString connect (const QStringList& args);
     QString getStateWord (const QStringList& args);
@@ -95,10 +93,12 @@ public:
     QString exec (const QString& line);
     QString getHelp (const QString& cmd = QString ());
 
-    bool isAutoMode () const
-        { return _autoMode; };
-    bool isAutoModePaused () const
-        { return _autoModePaused; };
+    bool isStageActive (int n)
+        { return (_stages & (1 << n)) > 0; };
+    bool isAutoMode (int stage) const
+        { return _autoMode[stage]; };
+    bool isAutoModePaused (int stage) const
+        { return _autoModePaused[stage]; };
 };
 
 

@@ -7,8 +7,8 @@
 // --------------------------------------------------
 StageControl::StageControl (QWidget* parent)
     : QWidget (parent),
-      _started (false),
-      _paused (false)
+      _state (StageControl::S_Stopped),
+      _inHandleState (false)
 {
     _number = 0;
     _grain = _enabled = false;
@@ -24,12 +24,20 @@ StageControl::StageControl (QWidget* parent)
     QGridLayout* layout = new QGridLayout (this);
 
     layout->setRowStretch (0, 1);
+    layout->setSpacing (5);
+    layout->setContentsMargins (0, 0, 0, 0);
     layout->addWidget (_start, 1, 0);
     layout->addWidget (_pause, 1, 1);
+    
+    _start->setSizePolicy (QSizePolicy (QSizePolicy::Minimum, QSizePolicy::Maximum));
+    _pause->setSizePolicy (QSizePolicy (QSizePolicy::Minimum, QSizePolicy::Maximum));
 
     _pause->setEnabled (false);
     _start->setCheckable (true);
     _pause->setCheckable (true);
+
+    connect (_start, SIGNAL (toggled (bool)), this, SLOT (startToggled (bool)));
+    connect (_pause, SIGNAL (toggled (bool)), this, SLOT (pauseToggled (bool)));
 
     setLayout (layout);
 }
@@ -91,25 +99,53 @@ void StageControl::paintEvent (QPaintEvent* event)
 }
 
 
-void StageControl::start ()
+
+void StageControl::handleNewState ()
 {
-    if (_started)
-        return;
+    _inHandleState = true;
+    switch (_state) {
+    case S_Started:
+        _start->setChecked (true);
+        _start->setText (tr ("Stop"));
+        _pause->setChecked (false);
+        _pause->setText (tr ("Pause"));
+        _pause->setDisabled (false);
+        break;
+
+    case S_Stopped:
+        _start->setChecked (false);
+        _start->setText (tr ("Start"));
+        _pause->setChecked (false);
+        _pause->setText (tr ("Pause"));
+        _pause->setDisabled (true);
+        break;
+
+    case S_Paused:
+        _start->setChecked (true);
+        _start->setText (tr ("Stop"));
+        _pause->setChecked (true);
+        _pause->setText (tr ("Unpause"));
+        _pause->setDisabled (false);
+        break;
+    }
+    _inHandleState = false;
 }
 
 
-void StageControl::stop ()
+void StageControl::startToggled (bool checked)
 {
-    if (!_started)
+    if (_inHandleState)
         return;
+
+    if (checked)
+        startPressed (_number);
+    else
+        stopPressed (_number);
 }
 
 
-void StageControl::pause (bool on)
+void StageControl::pauseToggled (bool checked)
 {
-    if (!_started)
-        return;
-
-    if (_paused == on)
-        return;
+    if (!_inHandleState)
+        pausePressed (_number, checked);
 }

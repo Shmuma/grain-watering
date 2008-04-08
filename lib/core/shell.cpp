@@ -11,12 +11,13 @@
 Interpreter::Interpreter (Device* device)
     : _dev (device),
       _stages (0),
-      _autoMode (false),
-      _autoModePaused (false),
       _db ("plaund.db"),
       _kfs (0),
       _grainSensorsPresent (true)
 {
+    for (int i = 0; i < 4; i++)
+        _autoMode[i] = _autoModePaused[i] = false;
+
     // initialize vocabulary
     // hardware commands
     _commands["help"] 		= CommandMeta (1, NULL, "Show help for command", "help [command]", 
@@ -88,17 +89,17 @@ Interpreter::Interpreter (Device* device)
                                                "It returns comma-separated list of active stages number.\n", CommandMeta::c_state);
 
     // meta commands
-    _commands["startautomode"]	= CommandMeta (0, &Interpreter::startAutoMode, "Starts auto mode", "startautomode",
-                                               "Command starts auto mode\n", CommandMeta::c_meta);
+    _commands["startautomode"]	= CommandMeta (1, &Interpreter::startAutoMode, "Starts auto mode", "startautomode stage",
+                                               "Command starts auto mode of specified stage\n", CommandMeta::c_meta);
     _commands["automodetick"]	= CommandMeta (0, &Interpreter::autoModeTick, "Performs auto mode actions", "automodetick",
-                                               "Performs auto mode actions. Should be called every 5 seconds in auto mode.\n", 
+                                               "Performs auto mode actions. Should be called every 5 seconds in auto mode.\n",
                                                CommandMeta::c_meta);
-    _commands["stopautomode"]	= CommandMeta (0, &Interpreter::stopAutoMode, "Stops auto mode", "stopautomode",
-                                               "Command stop auto mode\n", CommandMeta::c_meta);
-    _commands["toggleautomode"]	= CommandMeta (0, &Interpreter::toggleAutoMode, "Pause/unpause auto mode", "toggleautomode",
-                                               "Pause/unpause auto mode\n", CommandMeta::c_meta);
-    _commands["getautomode"]	= CommandMeta (0, &Interpreter::getAutoMode, "Get auto mode state", "getautomode",
-                                               "Get auto mode state. Valid answers: active, inactive and paused\n", CommandMeta::c_meta);
+    _commands["stopautomode"]	= CommandMeta (1, &Interpreter::stopAutoMode, "Stops auto mode", "stopautomode stage",
+                                               "Command stop auto mode on specified stage\n", CommandMeta::c_meta);
+    _commands["toggleautomode"]	= CommandMeta (1, &Interpreter::toggleAutoMode, "Pause/unpause auto mode", "toggleautomode stage",
+                                               "Pause/unpause auto mode of specified stage\n", CommandMeta::c_meta);
+    _commands["getautomode"]	= CommandMeta (1, &Interpreter::getAutoMode, "Get auto mode state", "getautomode stage",
+                                               "Get auto mode state of specified stage. Valid answers: active, inactive and paused\n", CommandMeta::c_meta);
     _commands["getmetastate"]	= CommandMeta (4, &Interpreter::getMetaState, "Get current sensors state of given stages", "getmetastate 0|1 0|1 0|1 0|1",
                                                "Get sensors of given stages.", CommandMeta::c_meta);
     _commands["sleep"]		= CommandMeta (1, &Interpreter::sleep, "Sleep for given amount of seconds", "sleep n",
@@ -215,6 +216,20 @@ DeviceCommand::stage_t Interpreter::parseStage (const QString& stage) throw (QSt
 }
 
 
+int Interpreter::parseStageAsInt (const QString& stage) throw (QString)
+{
+    bool ok;
+    int res;
+
+    res = stage.toInt (&ok);
+    if (!ok)
+	throw QString ("stage is incorrect");
+
+    return res-1;
+}
+
+
+
 bool Interpreter::parseBool (const QString& value) throw (QString)
 {
     int res;
@@ -229,8 +244,6 @@ bool Interpreter::parseBool (const QString& value) throw (QString)
 
     return res == 1;
 }
-
-
 
 
 QString Interpreter::connect (const QStringList& args)
@@ -443,9 +456,10 @@ QString Interpreter::getStages (const QStringList& args)
 
 QString Interpreter::startAutoMode (const QStringList& args)
 {
-    if (!_autoMode) {
-        _autoMode = true;
-        _autoModePaused = false;
+    int stage = parseStageAsInt (args[0]);
+    if (!_autoMode[stage]) {
+        _autoMode[stage] = true;
+        _autoModePaused[stage] = false;
     }
 
     return QString ("OK: auto mode started\n");
@@ -454,15 +468,21 @@ QString Interpreter::startAutoMode (const QStringList& args)
 
 QString Interpreter::autoModeTick (const QStringList& args)
 {
-    if (!_autoMode)
-        return QString ();
+    int i;
+    bool flag = false;
 
-    if (_autoModePaused)
+    for (i = 0; i < 4; i++)
+        if (flag = (_autoMode[i] || _autoModePaused[i]))
+            break;
+
+    if (!flag)
         return QString ();
 
     // get water pressure
     double press = convertWaterPressure (_dev->getWaterPressure ());
     
+    // check for active and enabled stages and perform auto mode tasks
+
     // start water of all enabled stages (TODO: ask about repeated water)
     return QString ("Auto: OK, Pres: %1\n").arg (press);
 }
@@ -470,18 +490,22 @@ QString Interpreter::autoModeTick (const QStringList& args)
 
 QString Interpreter::stopAutoMode (const QStringList& args)
 {
-    _autoModePaused = _autoMode = false;
+    int stage = parseStageAsInt (args[0]);
+    _autoModePaused[stage] = _autoMode[stage] = false;
     return QString ("OK: auto mode stopped\n");
 }
 
 
 QString Interpreter::toggleAutoMode (const QStringList& args)
 {
-    if (!_autoMode)
+    int stage = parseStageAsInt (args[0]);
+
+    if (!_autoMode[stage])
         return QString ("ERROR: auto mode not active\n");
 
-    _autoModePaused = !_autoModePaused;
-    if (!_autoModePaused)
+    _autoModePaused[stage] = !_autoModePaused[stage];
+
+    if (!_autoModePaused[stage])
         return QString ("OK: unpaused\n");
     else
         return QString ("OK: paused\n");
@@ -491,10 +515,11 @@ QString Interpreter::toggleAutoMode (const QStringList& args)
 QString Interpreter::getAutoMode (const QStringList& args)
 {
     QString res;
+    int stage = parseStageAsInt (args[0]);
 
-    res = _autoMode ? "active" : "inactive";
+    res = _autoMode[stage] ? "active" : "inactive";
     res += ",";
-    res += _autoModePaused ? "paused" : "unpaused";
+    res += _autoModePaused[stage] ? "paused" : "unpaused";
     return res + "\n";
 }
 

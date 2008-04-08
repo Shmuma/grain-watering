@@ -24,6 +24,8 @@ protected:
     void refreshScreenClock ();
     StageControl* getStageControl (int stage) const;
 
+    bool haveActiveStages () const;
+
 protected slots:
     void configButtonToggled (bool on);
     void checkButtonToggled (bool on);
@@ -42,9 +44,11 @@ protected slots:
     void switchToStagesView ();
     void switchToHistoryView ();
     void switchToConsoleView ();
-    void startButtonClicked ();
-    void stopButtonClicked ();
-    void pauseButtonClicked ();
+
+    void globalStopButtonClicked ();
+    void startButtonClicked (int stage);
+    void stopButtonClicked (int stage);
+    void pauseButtonClicked (int stage, bool on);
 
     // daemon signals
     void connectedChanged (bool value);
@@ -55,10 +59,10 @@ protected slots:
     void daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4);
     void daemonGrainFlowGot (int stage, int value);
     void daemonAutoModeTickGot (bool state, double press);
-    void daemonAutoModeStarted ();
-    void daemonAutoModeStopped ();
-    void daemonAutoModeToggled (bool paused);
-    void daemonAutoModeGot (bool active, bool paused);
+    void daemonAutoModeStarted (int stage);
+    void daemonAutoModeStopped (int stage);
+    void daemonAutoModeToggled (int stage, bool paused);
+    void daemonAutoModeGot (int stage, bool active, bool paused);
     void daemonMetaStateGot (double water_pres, QMap<int, QList<double> > vals);
     void daemonWaterStarted (int stage);
     void daemonWaterStopped (int stage);

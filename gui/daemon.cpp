@@ -127,24 +127,24 @@ void Daemon::socketReadyRead ()
                     break;
                 case DaemonCommand::c_startautomode:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot start auto mode. Reason: '%1'").arg (msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot start auto mode on stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()), msg));
                     else
-                        autoModeStarted ();
+                        autoModeStarted (cmd.stage ());
                     break;
                 case DaemonCommand::c_stopautomode:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot stop auto mode. Reason: '%1'").arg (msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot stop auto mode on stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()), msg));
                     else
-                        autoModeStopped ();
+                        autoModeStopped (cmd.stage ());
                     break;
                 case DaemonCommand::c_toggleautomode:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot toggle auto mode. Reason: '%1'").arg (msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot toggle auto mode on stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()), msg));
                     else
-                        autoModeToggled (!msg.contains ("unpaused"));
+                        autoModeToggled (cmd.stage (), !msg.contains ("unpaused"));
                     break;
                 case DaemonCommand::c_getautomode:
-                    autoModeGot (reply.split (",")[0] == "active", reply.split (",")[1] == "paused");
+                    autoModeGot (cmd.stage (), reply.split (",")[0] == "active", reply.split (",")[1].startsWith ("paused"));
                     break;
                 case DaemonCommand::c_getmetastate:
                     handleMetaState (reply);
@@ -304,36 +304,36 @@ void Daemon::setStages (bool s1, bool s2, bool s3, bool s4)
 
 void Daemon::getGrainFlow (int stage)
 {
-    sendCommand (QString ("getgrainflow %d\n").arg (QString::number (stage)));
+    sendCommand (QString ("getgrainflow %d\n").arg (QString::number (stage+1)));
     _queue.push_back (DaemonCommand (DaemonCommand::c_getgrainflow, stage));
 }
 
 
-void Daemon::startAutoMode ()
+void Daemon::startAutoMode (int stage)
 {
-    sendCommand ("startautomode\n");
-    _queue.push_back (DaemonCommand (DaemonCommand::c_startautomode));
+    sendCommand (QString ("startautomode %1\n").arg (stage+1));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_startautomode, stage));
 }
 
 
-void Daemon::stopAutoMode ()
+void Daemon::stopAutoMode (int stage)
 {
-    sendCommand ("stopautomode\n");
-    _queue.push_back (DaemonCommand (DaemonCommand::c_stopautomode));
+    sendCommand (QString ("stopautomode %1\n").arg (stage+1));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_stopautomode, stage));
 }
 
 
-void Daemon::toggleAutoMode ()
+void Daemon::toggleAutoMode (int stage)
 {
-    sendCommand ("toggleautomode\n");
-    _queue.push_back (DaemonCommand (DaemonCommand::c_toggleautomode));
+    sendCommand (QString ("toggleautomode %1\n").arg (stage+1));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_toggleautomode, stage));
 }
 
 
-void Daemon::getAutoMode ()
+void Daemon::getAutoMode (int stage)
 {
-    sendCommand ("getautomode\n");
-    _queue.push_back (DaemonCommand (DaemonCommand::c_getautomode));
+    sendCommand (QString ("getautomode %1\n").arg (stage+1));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_getautomode, stage));
 }
 
 
@@ -390,14 +390,14 @@ bool Daemon::handleMetaState (const QString& msg)
 
 void Daemon::startWater (int stage)
 {
-    sendCommand (QString ().sprintf ("startwater %d\n", stage));
+    sendCommand (QString ().sprintf ("startwater %d\n", stage+1));
     _queue.push_back (DaemonCommand (DaemonCommand::c_startwater, stage));
 }
 
 
 void Daemon::stopWater (int stage)
 {
-    sendCommand (QString ().sprintf ("stopwater %d\n", stage));
+    sendCommand (QString ().sprintf ("stopwater %d\n", stage+1));
     _queue.push_back (DaemonCommand (DaemonCommand::c_stopwater, stage));
 }
 
@@ -405,13 +405,13 @@ void Daemon::stopWater (int stage)
 bool Daemon::isStageEnabled (int stage)
 {
     switch (stage) {
-    case 1:
+    case 0:
         return _s1;
-    case 2:
+    case 1:
         return _s2;
-    case 3:
+    case 2:
         return _s3;
-    case 4:
+    case 3:
         return _s4;
     default:
         return false;
@@ -444,7 +444,7 @@ void Daemon::setGrainSensorsEnabled (bool val)
 
 void Daemon::isGrainPresent (int stage)
 {
-    sendCommand (QString ("isgrainpresent %1\n").arg (stage));
+    sendCommand (QString ("isgrainpresent %1\n").arg (stage+1));
     _queue.push_back (DaemonCommand (DaemonCommand::c_isgrainpresent, stage));
 }
 

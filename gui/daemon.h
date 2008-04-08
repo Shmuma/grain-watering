@@ -86,10 +86,10 @@ signals:
     void commandSent (const QString& text);
 
     void autoModeTickGot (bool state, double press);
-    void autoModeStarted ();
-    void autoModeStopped ();
-    void autoModeToggled (bool paused);
-    void autoModeGot (bool active, bool paused);
+    void autoModeStarted (int stage);
+    void autoModeStopped (int stage);
+    void autoModeToggled (int stage, bool paused);
+    void autoModeGot (int stage, bool active, bool paused);
 
     void waterStarted (int stage);
     void waterStopped (int stage);
@@ -118,10 +118,10 @@ public:
     void setStages (bool s1, bool s2, bool s3, bool s4);
     void getGrainFlow (int stage);
 
-    void startAutoMode ();
-    void stopAutoMode ();
-    void toggleAutoMode ();
-    void getAutoMode ();
+    void startAutoMode (int stage);
+    void stopAutoMode (int stage);
+    void toggleAutoMode (int stage);
+    void getAutoMode (int stage);
     void startWater (int stage);
     void stopWater (int stage);
     void getStages ();

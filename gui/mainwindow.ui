@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>932</width>
-    <height>731</height>
+    <height>727</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -172,47 +172,12 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QPushButton" name="startButton" >
+         <widget class="QPushButton" name="globalStopButton" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
           <property name="text" >
-           <string>Start</string>
-          </property>
-          <property name="checkable" >
-           <bool>true</bool>
-          </property>
-          <property name="autoExclusive" >
-           <bool>true</bool>
-          </property>
-          <property name="flat" >
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="stopButton" >
-          <property name="text" >
-           <string>Stop</string>
-          </property>
-          <property name="checkable" >
-           <bool>true</bool>
-          </property>
-          <property name="checked" >
-           <bool>true</bool>
-          </property>
-          <property name="autoExclusive" >
-           <bool>true</bool>
-          </property>
-          <property name="flat" >
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pauseButton" >
-          <property name="text" >
-           <string>Pause</string>
-          </property>
-          <property name="checkable" >
-           <bool>true</bool>
+           <string>Stop all</string>
           </property>
           <property name="flat" >
            <bool>true</bool>
@@ -805,8 +770,8 @@
               <property name="html" >
                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Terminus'; font-size:11pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Plaund interactive console.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Terminus'; font-size:12pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt;">Plaund interactive console.&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
              <widget class="QTextEdit" name="autoLogEditor" >
@@ -819,8 +784,8 @@ p, li { white-space: pre-wrap; }
               <property name="html" >
                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Verdana'; font-size:11pt; font-weight:400; font-style:normal;">
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Terminus';">&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Verdana'; font-size:12pt; font-weight:400; font-style:normal;">
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Terminus'; font-size:11pt;">&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
             </widget>
