@@ -87,7 +87,6 @@ MainWindow::MainWindow ()
     connect (action, SIGNAL (triggered ()), this, SLOT (switchToConsoleView ()));
 
     viewButton->setMenu (connectMenu);
-    //    autoLogEditor->hide ();
 
     // daemon state signals
     connect (&_daemon, SIGNAL (connectedChanged (bool)), this, SLOT (connectedChanged (bool)));
@@ -128,8 +127,6 @@ MainWindow::MainWindow ()
     // console events
     connect (consoleSendButton, SIGNAL (clicked ()), this, SLOT (consoleSendButtonClicked ()));
     connect (sendFileButton, SIGNAL (clicked ()), this, SLOT (sendFileButtonClicked ()));
-
-    autoLogEditor->show ();
 }
 
 

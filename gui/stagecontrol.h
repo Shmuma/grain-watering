@@ -81,6 +81,11 @@ public:
     void setState (state_t state)
         { _state = state; handleNewState (); update (); };
 
+    void setSetting (double setting)
+        { _setting = setting; update (); };
+    double setting () const
+        { return _setting; };
+
 private:
     int _number;
     bool _enabled;
@@ -91,6 +96,7 @@ private:
     double _temp;
     double _waterFlow;
     double _targetHumidity;
+    double _setting;
     state_t _state;
 
     QToolButton *_start, *_pause;

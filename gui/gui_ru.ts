@@ -2,6 +2,24 @@
 <!DOCTYPE TS><TS version="1.1" language="ru">
 <defaultcodec></defaultcodec>
 <context>
+    <name>BSUControl</name>
+    <message>
+        <location filename="" line="0"/>
+        <source>Filter block</source>
+        <translation>Блок фильтра</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Pressure</source>
+        <translation>Давление воды</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>%1 bar</source>
+        <translation>%1 бар</translation>
+    </message>
+</context>
+<context>
     <name>Daemon</name>
     <message>
         <location filename="" line="0"/>
@@ -26,17 +44,17 @@
     <message>
         <location filename="" line="0"/>
         <source>Cannot start auto mode. Reason: &apos;%1&apos;</source>
-        <translation>Ошибка перехода в автоматический режим. Ошибка: &apos;%1&apos;</translation>
+        <translation type="obsolete">Ошибка перехода в автоматический режим. Ошибка: &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>Cannot stop auto mode. Reason: &apos;%1&apos;</source>
-        <translation>Ошибка остановки автоматического режима. Ошибка: &apos;%1&apos;</translation>
+        <translation type="obsolete">Ошибка остановки автоматического режима. Ошибка: &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>Cannot toggle auto mode. Reason: &apos;%1&apos;</source>
-        <translation>Ошибка приостановки автоматического режима. Ошибка: &apos;%1&apos;</translation>
+        <translation type="obsolete">Ошибка приостановки автоматического режима. Ошибка: &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="" line="0"/>
@@ -52,6 +70,31 @@
         <location filename="" line="0"/>
         <source>Expected number, got &apos;%1&apos;</source>
         <translation>Ожидалось число, получено &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Cannot start auto mode on stage %1. Reason: &apos;%2&apos;</source>
+        <translation>Не могу запустить автоматический режим этапа %1. Ошибка: &apos;%2&apos;</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Cannot stop auto mode on stage %1. Reason: &apos;%2&apos;</source>
+        <translation>Не могу остановить автоматический режим этапа %1. Ошибка: &apos;%2&apos;</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Cannot toggle auto mode on stage %1. Reason: &apos;%2&apos;</source>
+        <translation>Не могу приостановить автоматический режим этапа %1. Ошибка: &apos;%2&apos;</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Cannot get active stages. Reason: &apos;%1&apos;</source>
+        <translation>Не могу получить список активных этапов. Ошибка: &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Cannot change grain sensors presence. Reason: &apos;%1&apos;</source>
+        <translation>Не могу установить наличие датчиков зерна. Ошибка: &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -89,17 +132,17 @@
     <message>
         <location filename="" line="0"/>
         <source>Start</source>
-        <translation>Старт</translation>
+        <translation type="obsolete">Старт</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>Stop</source>
-        <translation>Стоп</translation>
+        <translation type="obsolete">Стоп</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>Pause</source>
-        <translation>Пауза</translation>
+        <translation type="obsolete">Пауза</translation>
     </message>
     <message>
         <location filename="" line="0"/>
@@ -187,7 +230,7 @@
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Terminus&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Plaund interactive console.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Terminus&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Интерактивная консоль.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Terminus&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Интерактивная консоль.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="" line="0"/>
@@ -245,7 +288,7 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Verdana&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Terminus&apos;;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Verdana&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Terminus&apos;;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Verdana&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Terminus&apos;;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="" line="0"/>
@@ -311,6 +354,47 @@ p, li { white-space: pre-wrap; }
         <location filename="" line="0"/>
         <source>Cannot open script file &apos;%1&apos; for reading.</source>
         <translation>Не могу открыть файл со скриптом &apos;%1&apos;.</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Stop all</source>
+        <translation>Остановить все</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Set water state</source>
+        <translation>Подача воды</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Check grain</source>
+        <translation>Проверка зерна</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Terminus&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt;&quot;&gt;Plaund interactive console.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Terminus&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt;&quot;&gt;Plaund interactive console.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Verdana&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Terminus&apos;; font-size:11pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Verdana&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Terminus&apos;; font-size:11pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Present</source>
+        <translation>Зерно есть</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Not present</source>
+        <translation>Зерна нет</translation>
     </message>
 </context>
 <context>
@@ -394,7 +478,27 @@ gate</source>
     <message>
         <location filename="" line="0"/>
         <source>Given grain humidity</source>
-        <translation>Заданная влажность зерна</translation>
+        <translation>Влажность зерна</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Start</source>
+        <translation>Старт</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Pause</source>
+        <translation>Пауза</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Stop</source>
+        <translation>Стоп</translation>
+    </message>
+    <message>
+        <location filename="" line="0"/>
+        <source>Unpause</source>
+        <translation>Возобновить</translation>
     </message>
 </context>
 </TS>

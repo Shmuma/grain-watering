@@ -9,7 +9,6 @@ BSUControl::BSUControl (QWidget* parent)
     : QWidget (parent),
       _waterPressure (0)
 {
-    
 }
 
 
@@ -29,10 +28,10 @@ void BSUControl::paintEvent (QPaintEvent* event)
 
     p.setFont (QFont ("Arial", 12));
 
-    r.setRect (30, geometry ().height ()/2, geometry ().width ()/2 - 30, 20);
+    r.setRect (30, geometry ().height ()/2, geometry ().width () - 60, 20);
 
-    p.drawText (r, Qt::AlignLeft, tr ("Pressure"));
-    p.drawText (r.translated (geometry ().width ()/2-30, 0), Qt::AlignLeft, tr ("%1 bar").arg (QString ().sprintf ("%.2f", _waterPressure)));
+    p.drawText (r, Qt::AlignHCenter, tr ("Pressure"));
+    p.drawText (r.translated (0, 25), Qt::AlignHCenter, tr ("%1 bar").arg (QString ().sprintf ("%.2f", _waterPressure)));
 
     pt = QPoint (0, geometry ().height ()/2 - 30);
     p.drawLine (pt, pt + QPoint (20, 0));

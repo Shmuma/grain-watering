@@ -93,9 +93,11 @@ void StageControl::paintEvent (QPaintEvent* event)
     p.drawRect (r);
     p.drawText (r.adjusted (15, 5, -5, -5), Qt::AlignLeft | Qt::AlignVCenter, tr ("BSU"));
     r.translate (0, 35);
-    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("Given grain humidity"));
-    r.adjust (r.width ()/2, 20, 0, 20);
-    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.2f", _targetHumidity)));
+    p.drawText (r, Qt::AlignLeft | Qt::AlignVCenter, tr ("Given grain humidity"));
+    p.drawText (r.adjusted (r.width ()/2, 0, 0, 0), Qt::AlignRight | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.2f", _targetHumidity)));
+    r.translate (0, 35);
+    p.drawText (r, Qt::AlignLeft | Qt::AlignVCenter, tr ("Setting value"));
+    p.drawText (r.adjusted (r.width ()/2, 0, 0, 0), Qt::AlignRight | Qt::AlignVCenter, tr ("%1").arg (QString ().sprintf ("%.2f", _setting)));
 }
 
 
