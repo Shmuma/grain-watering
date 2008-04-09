@@ -796,7 +796,41 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
-     <widget class="QListWidget" name="logListView" />
+     <widget class="QWidget" name="" >
+      <layout class="QHBoxLayout" >
+       <item>
+        <widget class="QFrame" name="bsuControlPanel" >
+         <property name="frameShape" >
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow" >
+          <enum>QFrame::Plain</enum>
+         </property>
+         <layout class="QVBoxLayout" >
+          <item>
+           <widget class="BSUControl" native="1" name="bsuControl" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize" >
+             <size>
+              <width>200</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="logListView" />
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -811,6 +845,12 @@ p, li { white-space: pre-wrap; }
    <class>StageControl</class>
    <extends>QWidget</extends>
    <header>stagecontrol.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BSUControl</class>
+   <extends>QWidget</extends>
+   <header>bsucontrol.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -615,7 +615,7 @@ void MainWindow::daemonGrainPresenceGot (int stage, bool value)
 
 void MainWindow::daemonWaterPressureUpdated (double val)
 {
-    // TODO
+    bsuControl->setWaterPressure (val);
 }
 
 

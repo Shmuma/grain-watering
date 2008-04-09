@@ -193,8 +193,10 @@ void Daemon::socketReadyRead ()
                 if (parseAutoModeTick (reply, &state, &pres))
                     autoModeTickGot (state, pres);
             }
-            else
+            else {
                 handleCheckTick (reply);
+                printf ("Check: %s", reply.toAscii ().constData ());
+            }
         }
 
     }
@@ -484,7 +486,7 @@ void Daemon::handleCheckTick (const QString& msg)
 
         val_str = lst[1];
 
-        stage = lst[0].toInt (&ok);
+        stage = lst[0].toInt (&ok)-1;
         if (!ok)
             continue;
 
