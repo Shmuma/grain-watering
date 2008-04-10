@@ -186,11 +186,11 @@ void Device::updateState () throw (QString)
     
     // parse state word
     switch (cmd.low ()) {
-    case (char)0xF0:
+    case (unsigned char)0xF0:
         _manual = false;
         break;
 
-    case (char)0x01:
+    case (unsigned char)0x01:
         _manual = true;
         break;
 
