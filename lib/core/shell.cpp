@@ -1,6 +1,7 @@
 #include <QtCore>
 #include "shell.h"
 #include "database.h"
+#include "settings.h"
 
 #include <unistd.h>
 
@@ -112,6 +113,10 @@ Interpreter::Interpreter (Device* device)
                                                "Command checks that grain sensors present. This is an internal state flag.\n", CommandMeta::c_meta);
     _commands["checktick"]	= CommandMeta (0, &Interpreter::checkTick, "Performs check loop actions", "checktick",
                                                "Performs check loop actions. Should be called every 10 seconds.\n", CommandMeta::c_meta);
+    _commands["getsettings"]	= CommandMeta (0, &Interpreter::getSettings, "Returns settings for all stages", "getsettings",
+                                               "Returns settings for all stages.\n", CommandMeta::c_meta);
+    _commands["setsettings"]	= CommandMeta (2, &Interpreter::setSettings, "Assign settings for stage", "setsettings stage sett",
+                                               "Assigns settings for stage.\n", CommandMeta::c_meta);
 }
 
 
@@ -674,4 +679,31 @@ QString Interpreter::autoModeTick (const QStringList& args)
         }
 
     return res + "\n";
+}
+
+
+QString Interpreter::getSettings (const QStringList& args)
+{
+    QString res;
+
+    for (int i = 0; i < 4; i++)
+        if (isStageActive (i))
+            res += _settings[i].toString () + " ";
+        else 
+            res += "disabled  ";
+
+    return res + "\n";
+}
+
+
+QString Interpreter::setSettings (const QStringList& args)
+{
+    int stage = parseStageAsInt (args[0]);
+    DaemonSettings sett (args[1]);
+
+    if (!sett.valid ())
+        return "Failed";
+
+    _settings[stage] = sett;
+    return "OK\n";
 }

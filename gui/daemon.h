@@ -4,6 +4,8 @@
 #include <QtCore>
 #include <QtNetwork>
 
+#include "settings.h"
+
 
 class DaemonCommand
 {
@@ -25,6 +27,8 @@ public:
         c_getgrainsensors,
         c_setgrainsensors,
         c_isgrainpresent,
+        c_getsettings,
+        c_setsettings,
     };
     
 private:
@@ -61,6 +65,9 @@ private:
     QList<DaemonCommand> _queue;
     QDateTime _lastCheck;
 
+    // settings, refreshed at initial commit
+    DaemonSettings _sett[4];
+    
 protected:
     bool parseGenericReply (const QString& reply, QString& msg);
     bool parseNumberReply (const QString& reply, QString& msg, double* val);
@@ -69,6 +76,7 @@ protected:
     bool parseAutoModeTick (const QString& reply, bool* state, double* press);
     bool handleMetaState (const QString& msg);
     void handleCheckTick (const QString& msg);
+    void parseSettings (const QString& msg);
 
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
@@ -97,6 +105,7 @@ signals:
     void metaStateGot (double water_pres, QMap<int, QList<double> > vals);
 
     void grainPresenceGot (int stage, bool val);
+    void settingsGot ();
 
     // check loop signals
     void waterPressureUpdated (double val);
@@ -134,6 +143,10 @@ public:
     void refreshState ();
 
     bool isStageEnabled (int stage);
+    void requestSettings ();
+
+    DaemonSettings getSettings (int stage)
+        { return isStageEnabled (stage) ? _sett[stage] : DaemonSettings (); };
 };
 
 

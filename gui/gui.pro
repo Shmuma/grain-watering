@@ -17,5 +17,7 @@ HEADERS += mainwindow.h doubleclickbutton.h stagecontrol.h daemon.h logger.h bsu
 SOURCES += main.cpp mainwindow.cpp doubleclickbutton.cpp stagecontrol.cpp daemon.cpp logger.cpp bsucontrol.cpp
 FORMS += mainwindow.ui
 
+LIBS += -L../lib/core -lcore
+INCLUDEPATH += ../lib/core
 
 TRANSLATIONS = gui_ru.ts

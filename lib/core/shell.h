@@ -4,6 +4,8 @@
 #include <QtCore>
 #include "device.h"
 #include "database.h"
+#include "settings.h"
+
 
 class CommandMeta;
 class Interpreter;
@@ -25,6 +27,7 @@ private:
     bool _autoModePaused[4];
     int _kfs;
     bool _grainSensorsPresent;
+    DaemonSettings _settings[4];
 
     static QString checkBoolReply (bool res)
         { return res ? "OK\n" : "ERROR\n"; };
@@ -86,6 +89,9 @@ private:
     QString getGrainSensors (const QStringList& args);
 
     QString checkTick (const QStringList& args);
+
+    QString getSettings (const QStringList& args);
+    QString setSettings (const QStringList& args);
 
 public:
     Interpreter (Device* device);

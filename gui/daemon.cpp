@@ -2,6 +2,7 @@
 #include <QtNetwork>
 #include "daemon.h"
 #include "logger.h"
+#include "settings.h"
 
 
 // --------------------------------------------------
@@ -180,6 +181,11 @@ void Daemon::socketReadyRead ()
                     break;
                 case DaemonCommand::c_isgrainpresent:
                     grainPresenceGot (cmd.stage (), reply.startsWith ("TRUE"));
+                    break;
+                case DaemonCommand::c_getsettings:
+                    parseSettings (reply);
+                    break;
+                case DaemonCommand::c_setsettings:
                     break;
                 }
             }
@@ -514,3 +520,20 @@ void Daemon::handleCheckTick (const QString& msg)
         }
     }
 }
+
+
+void Daemon::requestSettings ()
+{
+    sendCommand (QString ("getsettings\n"));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_getsettings));
+}
+
+
+void Daemon::parseSettings (const QString& msg)
+{
+    QStringList l = msg.trimmed ().split (" ");
+
+    for (int i = 0; i < 4; i++)
+        _sett[i] = DaemonSettings (l[i]);
+}
+

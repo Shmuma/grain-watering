@@ -90,6 +90,9 @@ protected slots:
     // console
     void sendFileButtonClicked ();
 
+    // settings dialog
+    void settingsStageComboActivated (int item);
+
 public:
     MainWindow ();
 };

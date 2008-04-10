@@ -43,7 +43,7 @@ StageControl::StageControl (QWidget* parent)
 }
 
 
-void StageControl::paintEvent (QPaintEvent* event)
+void StageControl::paintEvent (QPaintEvent*)
 {
     QPainter p (this);
     QRect r;

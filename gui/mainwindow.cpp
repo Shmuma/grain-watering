@@ -660,3 +660,8 @@ bool MainWindow::haveActiveStages () const
     return false;
 }
 
+
+void MainWindow::settingsStageComboActivated (int item)
+{
+    
+}
