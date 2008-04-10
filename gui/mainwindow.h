@@ -77,6 +77,7 @@ protected slots:
     void daemonGrainHumidityUpdated (int stage, double val);
     void daemonGrainTemperatureUpdated (int stage, double val);
     void daemonGrainNatureUpdated (int stage, double val);
+    void daemonSettingsGot ();
 
     // check page
     void checkStateButtonPressed ();
@@ -92,6 +93,7 @@ protected slots:
 
     // settings dialog
     void settingsStageComboActivated (int item);
+    void applySettingsButtonClicked ();
 
 public:
     MainWindow ();

@@ -5,15 +5,13 @@
 
 
 // --------------------------------------------------
-// DaemonSettings
+// StageSettings
 // --------------------------------------------------
-DaemonSettings::DaemonSettings (const QString& str)
+StageSettings::StageSettings (const QString& str)
     : _valid (false)
 {
-    if (str.isEmpty ())
+    if (str.isEmpty () || str == "invalid" || str == "disabled")
         return;
-
-    printf ("Parsing %s\n", str.toAscii ().constData ());
 
     // parse settings data
     QStringList list = str.split (",");
@@ -50,7 +48,7 @@ DaemonSettings::DaemonSettings (const QString& str)
 }
 
 
-QString DaemonSettings::toString () const
+QString StageSettings::toString () const
 {
     if (!_valid)
         return QString ("invalid");

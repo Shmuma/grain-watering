@@ -115,6 +115,7 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (grainHumidityUpdated (int, double)), this, SLOT (daemonGrainHumidityUpdated (int, double)));
     connect (&_daemon, SIGNAL (grainTemperatureUpdated (int, double)), this, SLOT (daemonGrainTemperatureUpdated (int, double)));
     connect (&_daemon, SIGNAL (grainNatureUpdated (int, double)), this, SLOT (daemonGrainNatureUpdated (int, double)));
+    connect (&_daemon, SIGNAL (settingsGot ()), this, SLOT (daemonSettingsGot ()));
 
     connect (checkStateButton, SIGNAL (pressed ()), this, SLOT (checkStateButtonPressed ()));
     connect (checkWaterButton, SIGNAL (pressed ()), this, SLOT (checkWaterButtonPressed ()));
@@ -127,6 +128,10 @@ MainWindow::MainWindow ()
     // console events
     connect (consoleSendButton, SIGNAL (clicked ()), this, SLOT (consoleSendButtonClicked ()));
     connect (sendFileButton, SIGNAL (clicked ()), this, SLOT (sendFileButtonClicked ()));
+
+    // settings
+    connect (settingsStageComboBox, SIGNAL (activated (int)), this, SLOT (settingsStageComboActivated (int)));
+    connect (applySettingsButton, SIGNAL (clicked ()), this, SLOT (applySettingsButtonClicked ()));
 }
 
 
@@ -652,6 +657,11 @@ void MainWindow::daemonGrainNatureUpdated (int stage, double val)
 }
 
 
+void MainWindow::daemonSettingsGot ()
+{
+}
+
+
 bool MainWindow::haveActiveStages () const
 {
     for (int i = 0; i < 4; i++)
@@ -663,5 +673,28 @@ bool MainWindow::haveActiveStages () const
 
 void MainWindow::settingsStageComboActivated (int item)
 {
-    
+    StageSettings sett = _daemon.getSettings (item);
+
+    settingsTargetHumidityEdit->setText (QString::number (sett.targetHumidity ()));
+}
+
+
+void MainWindow::applySettingsButtonClicked ()
+{
+    int stage = settingsStageComboBox->currentIndex ();
+    StageSettings sett = _daemon.getSettings (stage);
+    bool ok;
+    double val;
+
+    val = settingsTargetHumidityEdit->text ().toDouble (&ok);
+
+    if (ok)
+        sett.setTargetHumidity (val);
+    else {
+        QMessageBox::warning (this, tr ("Value error"), tr ("Target himidity have invalid format"));
+        return;
+    }
+
+    sett.setValid (true);
+    _daemon.setSettings (stage, sett);
 }

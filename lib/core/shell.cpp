@@ -699,7 +699,7 @@ QString Interpreter::getSettings (const QStringList& args)
 QString Interpreter::setSettings (const QStringList& args)
 {
     int stage = parseStageAsInt (args[0]);
-    DaemonSettings sett (args[1]);
+    StageSettings sett (args[1]);
 
     if (!sett.valid ())
         return "Failed";

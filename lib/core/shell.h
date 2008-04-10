@@ -27,7 +27,7 @@ private:
     bool _autoModePaused[4];
     int _kfs;
     bool _grainSensorsPresent;
-    DaemonSettings _settings[4];
+    StageSettings _settings[4];
 
     static QString checkBoolReply (bool res)
         { return res ? "OK\n" : "ERROR\n"; };

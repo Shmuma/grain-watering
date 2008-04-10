@@ -2,7 +2,7 @@
 #define __SETTINGS_H__
 
 
-class DaemonSettings
+class StageSettings
 {
 private:
     double _targetHumidity, _humidityCoeff, _minGrainFlow;
@@ -11,13 +11,20 @@ private:
     bool _valid;
 
 public:
-    DaemonSettings ()
-        : _valid (false)
+    StageSettings ()
+        : _targetHumidity (0.0),
+          _humidityCoeff (0.0),
+          _minGrainFlow (0.0),
+          _waterFlowK (0.0),
+          _minWaterFlow (0.0),
+          _maxWaterFlow (0.0),
+          _waterFormula (0),
+          _valid (false)
     {};
 
-    DaemonSettings (const QString& str);
+    StageSettings (const QString& str);
 
-    DaemonSettings (const DaemonSettings& sett)
+    StageSettings (const StageSettings& sett)
         : _targetHumidity (sett._targetHumidity),
           _humidityCoeff (sett._humidityCoeff),
           _minGrainFlow (sett._minGrainFlow),
@@ -28,7 +35,7 @@ public:
           _valid (sett._valid)
     {};
 
-    DaemonSettings (double targetHumidity, double humidityCoeff, double minGrainFlow, 
+    StageSettings (double targetHumidity, double humidityCoeff, double minGrainFlow, 
                     double waterFlowK, double minWaterFlow, double maxWaterFlow, int waterFormula)
         : _targetHumidity (targetHumidity),
           _humidityCoeff (humidityCoeff),
@@ -77,6 +84,8 @@ public:
 
     bool valid () const
         { return _valid; };
+    void setValid (bool valid)
+        { _valid = valid; };
 
     QString toString () const;
 };

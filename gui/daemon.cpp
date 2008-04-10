@@ -23,7 +23,8 @@ Daemon::Daemon (const QString& host, int port)
 
 void Daemon::connect ()
 {
-    Logger::instance ()->log (Logger::Information, QString ("Connecting to daemon at %1:%2").arg (_host, QString::number (_port)));
+    Logger::instance ()->log (Logger::Information, QString ("Connecting to daemon at %1:%2").
+                              arg (_host, QString::number (_port)));
     _sock->connectToHost (_host, _port);
 }
 
@@ -81,7 +82,7 @@ void Daemon::socketReadyRead ()
 
     // split read data using prompt as separator
     replies = reply.split (prompt_prefix, QString::SkipEmptyParts);
-    
+
     for (int i = 0; i < replies.size (); i++) {
         reply = replies[i];
 
@@ -128,19 +129,22 @@ void Daemon::socketReadyRead ()
                     break;
                 case DaemonCommand::c_startautomode:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot start auto mode on stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()), msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot start auto mode on stage %1. Reason: '%2'").
+                                                  arg (QString::number (cmd.stage ())+1, msg));
                     else
                         autoModeStarted (cmd.stage ());
                     break;
                 case DaemonCommand::c_stopautomode:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot stop auto mode on stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()), msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot stop auto mode on stage %1. Reason: '%2'").
+                                                  arg (QString::number (cmd.stage ()+1), msg));
                     else
                         autoModeStopped (cmd.stage ());
                     break;
                 case DaemonCommand::c_toggleautomode:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot toggle auto mode on stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()), msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot toggle auto mode on stage %1. Reason: '%2'").
+                                                  arg (QString::number (cmd.stage ()+1), msg));
                     else
                         autoModeToggled (cmd.stage (), !msg.contains ("unpaused"));
                     break;
@@ -152,13 +156,15 @@ void Daemon::socketReadyRead ()
                     break;
                 case DaemonCommand::c_startwater:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot start water at stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()), msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot start water at stage %1. Reason: '%2'").
+                                                  arg (QString::number (cmd.stage ()+1), msg));
                     else
                         waterStarted (cmd.stage ());
                     break;
                 case DaemonCommand::c_stopwater:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot stop water at stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()), msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot stop water at stage %1. Reason: '%2'").
+                                                  arg (QString::number (cmd.stage ()+1), msg));
                     else
                         waterStopped (cmd.stage ());
                     break;
@@ -534,6 +540,16 @@ void Daemon::parseSettings (const QString& msg)
     QStringList l = msg.trimmed ().split (" ");
 
     for (int i = 0; i < 4; i++)
-        _sett[i] = DaemonSettings (l[i]);
+        _sett[i] = StageSettings (l[i]);
+
+    settingsGot ();
 }
 
+
+void Daemon::setSettings (int stage, const StageSettings& sett)
+{
+    if (sett.valid ()) {
+        _sett[stage] = sett;
+        sendCommand (QString ("setsettings %1 %2\n").arg (QString::number (stage), sett.toString ()));
+    }
+}

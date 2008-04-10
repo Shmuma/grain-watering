@@ -66,7 +66,7 @@ private:
     QDateTime _lastCheck;
 
     // settings, refreshed at initial commit
-    DaemonSettings _sett[4];
+    StageSettings _sett[4];
     
 protected:
     bool parseGenericReply (const QString& reply, QString& msg);
@@ -145,8 +145,9 @@ public:
     bool isStageEnabled (int stage);
     void requestSettings ();
 
-    DaemonSettings getSettings (int stage)
-        { return isStageEnabled (stage) ? _sett[stage] : DaemonSettings (); };
+    StageSettings getSettings (int stage)
+        { return isStageEnabled (stage) ? _sett[stage] : StageSettings (); };
+    void setSettings (int stage, const StageSettings& sett);
 };
 
 
