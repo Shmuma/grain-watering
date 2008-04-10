@@ -465,29 +465,6 @@ QString Interpreter::startAutoMode (const QStringList& args)
     return QString ("OK: auto mode started\n");
 }
 
-
-QString Interpreter::autoModeTick (const QStringList& args)
-{
-    int i;
-    bool flag = false;
-
-    for (i = 0; i < 4; i++)
-        if (flag = (_autoMode[i] || _autoModePaused[i]))
-            break;
-
-    if (!flag)
-        return QString ();
-
-    // get water pressure
-    double press = convertWaterPressure (_dev->getWaterPressure ());
-    
-    // check for active and enabled stages and perform auto mode tasks
-
-    // start water of all enabled stages (TODO: ask about repeated water)
-    return QString ("Auto: OK, Pres: %1\n").arg (press);
-}
-
-
 QString Interpreter::stopAutoMode (const QStringList& args)
 {
     int stage = parseStageAsInt (args[0]);
@@ -672,6 +649,29 @@ QString Interpreter::checkTick (const QStringList& args)
     }
 
     inProgress = false;
+
+    return res + "\n";
+}
+
+
+QString Interpreter::autoModeTick (const QStringList& args)
+{
+    int i;
+    bool flag = false;
+    QString res ("Auto: ");
+
+    for (i = 0; i < 4; i++)
+        if (flag = (_autoMode[i] && !_autoModePaused[i]))
+            break;
+
+    if (!flag)
+        return QString ();
+
+    // calculate setting for active and unpaused stages
+    for (i = 0; i < 4; i++)
+        if (_autoMode[i] && !_autoModePaused[i]) {
+            
+        }
 
     return res + "\n";
 }
