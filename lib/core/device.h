@@ -107,7 +107,7 @@ protected:
     static unsigned char getLow (unsigned int value)
         { return (unsigned char)(value % 256); };
     static unsigned char getHigh (unsigned int value)
-        { return (unsigned char)((value >> 16) % 256); };
+        { return (unsigned char)((value >> 8) % 256); };
 
 public:
     Device (SerialPort* port) throw (QString);
