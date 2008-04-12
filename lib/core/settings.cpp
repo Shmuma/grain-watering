@@ -10,11 +10,11 @@
 StageSettings::StageSettings (const QString& str)
     : _valid (false)
 {
-    if (str.isEmpty () || str == "invalid" || str == "disabled")
+    if (str.isEmpty () || str.toLower () == "invalid" || str.toLower () == "disabled")
         return;
 
     // parse settings data
-    QStringList list = str.split (",");
+    QStringList list = str.toLower ().split (",");
 
     for (int i = 0; i < list.size (); i++) {
         double val;
@@ -53,9 +53,9 @@ QString StageSettings::toString () const
     if (!_valid)
         return QString ("invalid");
 
-    printf ("toString: TH=%f,HC=%f,minGF=%f,WFK=%f,minWF=%f,maxWF=%f,WF=%d\n", 
-            _targetHumidity, _humidityCoeff, _minGrainFlow, _waterFlowK, 
-            _minWaterFlow, _maxWaterFlow, _waterFormula);
+//     printf ("toString: TH=%f,HC=%f,minGF=%f,WFK=%f,minWF=%f,maxWF=%f,WF=%d\n", 
+//             _targetHumidity, _humidityCoeff, _minGrainFlow, _waterFlowK, 
+//             _minWaterFlow, _maxWaterFlow, _waterFormula);
         
     return QString ().sprintf ("TH=%f,HC=%f,minGF=%f,WFK=%f,minWF=%f,maxWF=%f,WF=%d", 
                                _targetHumidity, _humidityCoeff, _minGrainFlow, _waterFlowK, 

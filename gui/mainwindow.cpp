@@ -280,6 +280,7 @@ void MainWindow::daemonHardwareConnected ()
 
     // grain sensors presense
     _daemon.isGrainSensorsPresent ();
+    _daemon.requestSettings ();
 }
 
 
@@ -370,6 +371,18 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
     stage2ActiveCheckBox->setChecked (s2);
     stage3ActiveCheckBox->setChecked (s3);
     stage4ActiveCheckBox->setChecked (s4);
+
+    // settings combo box
+    settingsStageComboBox->clear ();
+    if (s1)
+        settingsStageComboBox->addItem (tr ("Stage 1"));
+    if (s2)
+        settingsStageComboBox->addItem (tr ("Stage 2"));
+    if (s3)
+        settingsStageComboBox->addItem (tr ("Stage 3"));
+    if (s4)
+        settingsStageComboBox->addItem (tr ("Stage 4"));
+    settingsStageComboBox->setCurrentIndex (0);
 }
 
 
@@ -659,6 +672,7 @@ void MainWindow::daemonGrainNatureUpdated (int stage, double val)
 
 void MainWindow::daemonSettingsGot ()
 {
+    settingsStageComboActivated (settingsStageComboBox->currentIndex ());
 }
 
 
@@ -676,6 +690,12 @@ void MainWindow::settingsStageComboActivated (int item)
     StageSettings sett = _daemon.getSettings (item);
 
     settingsTargetHumidityEdit->setText (QString::number (sett.targetHumidity ()));
+    settingsHumidityCoeffEdit->setText (QString::number (sett.humidityCoeff ()));
+    settingsMinGrainFlowEdit->setText (QString::number (sett.minGrainFlow ()));
+    settingsWaterFlowKEdit->setText (QString::number (sett.waterFlowK ()));
+    settingsMaxWaterFlowEdit->setText (QString::number (sett.maxWaterFlow ()));
+    settingsMinWaterFlowEdit->setText (QString::number (sett.minWaterFlow ()));
+    settingsWaterFormulaComboBox->setCurrentIndex (sett.waterFormula ());
 }
 
 
@@ -687,13 +707,54 @@ void MainWindow::applySettingsButtonClicked ()
     double val;
 
     val = settingsTargetHumidityEdit->text ().toDouble (&ok);
-
     if (ok)
         sett.setTargetHumidity (val);
     else {
-        QMessageBox::warning (this, tr ("Value error"), tr ("Target himidity have invalid format"));
+        QMessageBox::warning (this, tr ("Value error"), tr ("Target humidity have invalid format"));
         return;
     }
+
+    val = settingsHumidityCoeffEdit->text ().toDouble (&ok);
+    if (ok)
+        sett.setHumidityCoeff (val);
+    else {
+        QMessageBox::warning (this, tr ("Value error"), tr ("Humidity coefficient have invalid format"));
+        return;
+    }
+
+    val = settingsMinGrainFlowEdit->text ().toDouble (&ok);
+    if (ok)
+        sett.setMinGrainFlow (val);
+    else {
+        QMessageBox::warning (this, tr ("Value error"), tr ("Min grain flow have invalid format"));
+        return;
+    }
+
+    val = settingsWaterFlowKEdit->text ().toDouble (&ok);
+    if (ok)
+        sett.setWaterFlowK (val);
+    else {
+        QMessageBox::warning (this, tr ("Value error"), tr ("Water flow coefficient have invalid format"));
+        return;
+    }
+
+    val = settingsMaxWaterFlowEdit->text ().toDouble (&ok);
+    if (ok)
+        sett.setMaxWaterFlow (val);
+    else {
+        QMessageBox::warning (this, tr ("Value error"), tr ("Max water flow have invalid format"));
+        return;
+    }
+
+    val = settingsMinWaterFlowEdit->text ().toDouble (&ok);
+    if (ok)
+        sett.setMinWaterFlow (val);
+    else {
+        QMessageBox::warning (this, tr ("Value error"), tr ("Min water flow have invalid format"));
+        return;
+    }
+
+    sett.setWaterFormula (settingsWaterFormulaComboBox->currentIndex ());
 
     sett.setValid (true);
     _daemon.setSettings (stage, sett);

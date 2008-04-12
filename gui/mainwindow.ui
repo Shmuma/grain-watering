@@ -716,7 +716,7 @@
                         </widget>
                        </item>
                        <item row="0" column="1" >
-                        <widget class="QLineEdit" name="settingsTargetHumidityEdit_2" />
+                        <widget class="QLineEdit" name="settingsWaterFlowKEdit" />
                        </item>
                        <item row="0" column="2" >
                         <widget class="QLabel" name="label_8" >
@@ -733,7 +733,7 @@
                         </widget>
                        </item>
                        <item row="1" column="1" >
-                        <widget class="QLineEdit" name="settingsTargetHumidityEdit_3" />
+                        <widget class="QLineEdit" name="settingsMaxWaterFlowEdit" />
                        </item>
                        <item row="1" column="2" >
                         <widget class="QLabel" name="label_11" >
@@ -750,7 +750,7 @@
                         </widget>
                        </item>
                        <item row="2" column="1" >
-                        <widget class="QLineEdit" name="settingsTargetHumidityEdit_4" />
+                        <widget class="QLineEdit" name="settingsMinWaterFlowEdit" />
                        </item>
                        <item row="2" column="2" >
                         <widget class="QLabel" name="label_12" >
@@ -762,7 +762,14 @@
                       </layout>
                      </item>
                      <item>
-                      <widget class="QComboBox" name="comboBox_2" >
+                      <widget class="QLabel" name="label_14" >
+                       <property name="text" >
+                        <string>Water flow formula:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QComboBox" name="settingsWaterFormulaComboBox" >
                        <item>
                         <property name="text" >
                          <string>Mgrain*(Wgiv-Wcur)/(100-Wgiv)</string>
