@@ -351,6 +351,7 @@ void MainWindow::applyStagesButtonClicked ()
 {
     _daemon.setStages (stage1ActiveCheckBox->isChecked (), stage2ActiveCheckBox->isChecked (), 
                        stage3ActiveCheckBox->isChecked (), stage4ActiveCheckBox->isChecked ());
+    _daemon.requestSettings ();
 }
 
 

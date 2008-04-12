@@ -8,7 +8,14 @@
 // StageSettings
 // --------------------------------------------------
 StageSettings::StageSettings (const QString& str)
-    : _valid (false)
+    : _targetHumidity (0.0),
+      _humidityCoeff (0.0),
+      _minGrainFlow (0.0),
+      _waterFlowK (0.0),
+      _minWaterFlow (0.0),
+      _maxWaterFlow (0.0),
+      _waterFormula (0),
+      _valid (false)
 {
     if (str.isEmpty () || str.toLower () == "invalid" || str.toLower () == "disabled")
         return;

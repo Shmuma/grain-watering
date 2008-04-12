@@ -4,3 +4,8 @@ create table commands (
        ok       integer,
        cmd_res  text
 );
+
+create table stage_settings (
+       stage integer, 
+       settings text
+);

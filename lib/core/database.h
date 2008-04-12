@@ -16,6 +16,9 @@ public:
     ~Database ();
 
     void appendCommandHistory (const QString& cmd, const QString& res, bool ok);
+
+    QString getStageSettings (int stage);
+    void setStageSettings (int stage, const QString& sett);
 };
 
 

@@ -685,8 +685,11 @@ QString Interpreter::getSettings (const QStringList& args)
     QString res;
 
     for (int i = 0; i < 4; i++)
-        if (isStageActive (i))
-            res += _settings[i].toString () + " ";
+        if (isStageActive (i)) {
+            QString s = _db.getStageSettings (i);
+            res += s + " ";
+            _settings[i] = StageSettings (s);
+        }
         else 
             res += "disabled  ";
 
@@ -707,5 +710,6 @@ QString Interpreter::setSettings (const QStringList& args)
         return "Failed";
 
     _settings[stage] = sett;
+    _db.setStageSettings (stage, args[1]);
     return "OK\n";
 }
