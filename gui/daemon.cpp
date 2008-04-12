@@ -550,6 +550,6 @@ void Daemon::setSettings (int stage, const StageSettings& sett)
 {
     if (sett.valid ()) {
         _sett[stage] = sett;
-        sendCommand (QString ("setsettings %1 %2\n").arg (QString::number (stage), sett.toString ()));
+        sendCommand (QString ("setsettings %1 %2\n").arg (QString::number (stage+1), sett.toString ()));
     }
 }

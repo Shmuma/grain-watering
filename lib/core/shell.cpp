@@ -14,7 +14,7 @@ Interpreter::Interpreter (Device* device)
       _stages (0),
       _db ("plaund.db"),
       _kfs (0),
-      _grainSensorsPresent (true)
+      _grainSensorsPresent (false)
 {
     for (int i = 0; i < 4; i++)
         _autoMode[i] = _autoModePaused[i] = false;
@@ -83,12 +83,10 @@ Interpreter::Interpreter (Device* device)
 					       "Sets output signal on (1) or off (0)\n", CommandMeta::c_hardware);
     _commands["startfilterautomat"]= CommandMeta (0, &Interpreter::startFilterAutomat, "Starts filter automat", "startfilterautomat",
                                                   "Starts filter automat\n", CommandMeta::c_hardware);
-
     // state commands
     _commands["getstages"]	= CommandMeta (0, &Interpreter::getStages, "Get available stages", "getstages",
 					       "Command gets active stages previously set by setstages command.\n"
                                                "It returns comma-separated list of active stages number.\n", CommandMeta::c_state);
-
     // meta commands
     _commands["startautomode"]	= CommandMeta (1, &Interpreter::startAutoMode, "Starts auto mode", "startautomode stage",
                                                "Command starts auto mode of specified stage\n", CommandMeta::c_meta);
@@ -699,6 +697,10 @@ QString Interpreter::getSettings (const QStringList& args)
 QString Interpreter::setSettings (const QStringList& args)
 {
     int stage = parseStageAsInt (args[0]);
+
+    if (stage < 0 || stage >= 4)
+        return "Invalid stage specified\n";
+
     StageSettings sett (args[1]);
 
     if (!sett.valid ())
