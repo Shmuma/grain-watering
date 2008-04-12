@@ -13,7 +13,9 @@
 MainWindow::MainWindow ()
     : QWidget (0),
       _switchingToolButtons (false),
-      _daemon ("localhost", 12345)
+      _settingsChanged (false),
+      _daemon ("localhost", 12345),
+      _currentSettingsStage (0)
 {
     setupUi (this);
 
@@ -132,6 +134,13 @@ MainWindow::MainWindow ()
     // settings
     connect (settingsStageComboBox, SIGNAL (activated (int)), this, SLOT (settingsStageComboActivated (int)));
     connect (applySettingsButton, SIGNAL (clicked ()), this, SLOT (applySettingsButtonClicked ()));
+
+    connect (settingsTargetHumidityEdit, SIGNAL (textEdited (const QString&)), this, SLOT (settingsValueEdited (const QString&)));
+    connect (settingsHumidityCoeffEdit, SIGNAL (textEdited (const QString&)), this, SLOT (settingsValueEdited (const QString&)));
+    connect (settingsMinGrainFlowEdit, SIGNAL (textEdited (const QString&)), this, SLOT (settingsValueEdited (const QString&)));
+    connect (settingsWaterFlowKEdit, SIGNAL (textEdited (const QString&)), this, SLOT (settingsValueEdited (const QString&)));
+    connect (settingsMaxWaterFlowEdit, SIGNAL (textEdited (const QString&)), this, SLOT (settingsValueEdited (const QString&)));
+    connect (settingsMinWaterFlowEdit, SIGNAL (textEdited (const QString&)), this, SLOT (settingsValueEdited (const QString&)));
 }
 
 
@@ -689,6 +698,14 @@ void MainWindow::settingsStageComboActivated (int item)
 {
     StageSettings sett = _daemon.getSettings (item);
 
+    if (_settingsChanged) {
+        if (QMessageBox::question (this, tr ("Settings changed warning"), 
+                                   tr ("Your settings changes have not applied. Do you want to save them?"),
+                                   QMessageBox::Yes | QMessageBox::No) == QMessageBox::Ok)
+            saveSettingsPage (_currentSettingsStage);
+        _settingsChanged = false;
+    }
+
     settingsTargetHumidityEdit->setText (QString::number (sett.targetHumidity ()));
     settingsHumidityCoeffEdit->setText (QString::number (sett.humidityCoeff ()));
     settingsMinGrainFlowEdit->setText (QString::number (sett.minGrainFlow ()));
@@ -696,12 +713,18 @@ void MainWindow::settingsStageComboActivated (int item)
     settingsMaxWaterFlowEdit->setText (QString::number (sett.maxWaterFlow ()));
     settingsMinWaterFlowEdit->setText (QString::number (sett.minWaterFlow ()));
     settingsWaterFormulaComboBox->setCurrentIndex (sett.waterFormula ());
+    _currentSettingsStage = item;
 }
 
 
 void MainWindow::applySettingsButtonClicked ()
 {
-    int stage = settingsStageComboBox->currentIndex ();
+    saveSettingsPage (settingsStageComboBox->currentIndex ());
+}
+
+
+void MainWindow::saveSettingsPage (int stage)
+{
     StageSettings sett = _daemon.getSettings (stage);
     bool ok;
     double val;
@@ -758,4 +781,14 @@ void MainWindow::applySettingsButtonClicked ()
 
     sett.setValid (true);
     _daemon.setSettings (stage, sett);
+    _settingsChanged = false;
 }
+
+
+
+void MainWindow::settingsValueEdited (const QString&)
+{
+    _settingsChanged = true;
+}
+
+

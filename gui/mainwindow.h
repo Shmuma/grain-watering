@@ -15,8 +15,9 @@ class MainWindow : public QWidget, private Ui::MainWindow
     Q_OBJECT
 
 private:
-    bool _switchingToolButtons;
+    bool _switchingToolButtons, _settingsChanged;
     Daemon _daemon;
+    int _currentSettingsStage;
 
 protected:
     virtual void timerEvent (QTimerEvent* event);
@@ -25,6 +26,7 @@ protected:
     StageControl* getStageControl (int stage) const;
 
     bool haveActiveStages () const;
+    void saveSettingsPage (int stage);
 
 protected slots:
     void configButtonToggled (bool on);
@@ -94,6 +96,7 @@ protected slots:
     // settings dialog
     void settingsStageComboActivated (int item);
     void applySettingsButtonClicked ();
+    void settingsValueEdited (const QString&);
 
 public:
     MainWindow ();
