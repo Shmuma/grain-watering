@@ -13,7 +13,6 @@ Interpreter::Interpreter (Device* device)
     : _dev (device),
       _stages (0),
       _db ("plaund.db"),
-      _kfs (0),
       _grainSensorsPresent (false)
 {
     for (int i = 0; i < 4; i++)
@@ -103,8 +102,6 @@ Interpreter::Interpreter (Device* device)
                                                "Get sensors of given stages.", CommandMeta::c_meta);
     _commands["sleep"]		= CommandMeta (1, &Interpreter::sleep, "Sleep for given amount of seconds", "sleep n",
                                                "Command sleeps for given amount of seconds.\n", CommandMeta::c_meta);
-    _commands["setkfs"]		= CommandMeta (1, &Interpreter::setKfs, "Set water pressure coefficient", "setkfs n",
-                                               "Command sets Kfs coefficient, which used when calculating water pressure\n", CommandMeta::c_meta);
     _commands["setgrainsensors"]= CommandMeta (1, &Interpreter::setGrainSensors, "Set grainsensors presence", "setgrainsensors 0|1",
                                                "Command sets grain sensors presense. This is an internal state flag.\n", CommandMeta::c_meta);
     _commands["getgrainsensors"]= CommandMeta (0, &Interpreter::getGrainSensors, "Get grainsensors presence", "getgrainsensors",
@@ -292,7 +289,7 @@ QString Interpreter::getGrainNature (const QStringList& args)
 
 QString Interpreter::getWaterFlow (const QStringList& args)
 {
-    return QString::number (convertWaterFlow (_dev->getWaterFlow (parseStage (args[0]))));
+    return QString::number (convertWaterFlow (_dev->getWaterFlow (parseStage (args[0])), parseStageAsInt (args[0])));
 }
 
 
@@ -513,7 +510,7 @@ QString Interpreter::getMetaState (const QStringList& args)
 
     if (parseBool (args[0])) {
         res += ", 1: ";
-        res += "WF=" + QString::number (convertWaterFlow (_dev->getWaterFlow (DeviceCommand::Stg_First))) + " ";
+        res += "WF=" + QString::number (convertWaterFlow (_dev->getWaterFlow (DeviceCommand::Stg_First), 0)) + " ";
         res += "GF=" + QString::number (_dev->getGrainFlow (DeviceCommand::Stg_First)) + " ";
         res += "GH=" + QString::number (_dev->getGrainHumidity (DeviceCommand::Stg_First)) + " ";
         res += "GT=" + QString::number (convertGrainTermperature (_dev->getGrainTemperature (DeviceCommand::Stg_First))) + " ";
@@ -522,7 +519,7 @@ QString Interpreter::getMetaState (const QStringList& args)
 
     if (parseBool (args[1])) {
         res += ", 2: ";
-        res += "WF=" + QString::number (convertWaterFlow (_dev->getWaterFlow (DeviceCommand::Stg_Second))) + " ";
+        res += "WF=" + QString::number (convertWaterFlow (_dev->getWaterFlow (DeviceCommand::Stg_Second), 1)) + " ";
         res += "GF=" + QString::number (_dev->getGrainFlow (DeviceCommand::Stg_Second)) + " ";
         res += "GH=" + QString::number (_dev->getGrainHumidity (DeviceCommand::Stg_Second)) + " ";
         res += "GT=" + QString::number (convertGrainTermperature (_dev->getGrainTemperature (DeviceCommand::Stg_Second))) + " ";
@@ -531,7 +528,7 @@ QString Interpreter::getMetaState (const QStringList& args)
 
     if (parseBool (args[2])) {
         res += ", 3: ";
-        res += "WF=" + QString::number (convertWaterFlow (_dev->getWaterFlow (DeviceCommand::Stg_Third))) + " ";
+        res += "WF=" + QString::number (convertWaterFlow (_dev->getWaterFlow (DeviceCommand::Stg_Third), 2)) + " ";
         res += "GF=" + QString::number (_dev->getGrainFlow (DeviceCommand::Stg_Third)) + " ";
         res += "GH=" + QString::number (_dev->getGrainHumidity (DeviceCommand::Stg_Third)) + " ";
         res += "GT=" + QString::number (convertGrainTermperature (_dev->getGrainTemperature (DeviceCommand::Stg_Third))) + " ";
@@ -541,7 +538,7 @@ QString Interpreter::getMetaState (const QStringList& args)
 
     if (parseBool (args[3])) {
         res += ", 4: ";
-        res += "WF=" + QString::number (convertWaterFlow (_dev->getWaterFlow (DeviceCommand::Stg_Fourth))) + " ";
+        res += "WF=" + QString::number (convertWaterFlow (_dev->getWaterFlow (DeviceCommand::Stg_Fourth), 3)) + " ";
         res += "GF=" + QString::number (_dev->getGrainFlow (DeviceCommand::Stg_Fourth)) + " ";
         res += "GH=" + QString::number (_dev->getGrainHumidity (DeviceCommand::Stg_Fourth)) + " ";
         res += "GT=" + QString::number (convertGrainTermperature (_dev->getGrainTemperature (DeviceCommand::Stg_Fourth))) + " ";
@@ -563,22 +560,6 @@ QString Interpreter::sleep (const QStringList& args)
         return QString ("ERROR: not an integer value passed\n");
 
     ::sleep (res);
-
-    return QString ("OK\n");
-}
-
-
-QString Interpreter::setKfs (const QStringList& args)
-{
-    bool ok;
-    int res;
-    
-    res = args[0].toUInt (&ok);
-
-    if (!res)
-        return QString ("ERROR: not an integer value passed\n");
-
-    _kfs = res;
 
     return QString ("OK\n");
 }
@@ -644,7 +625,7 @@ QString Interpreter::checkTick (const QStringList& args)
         // 5. get grain nature
         // 6. get grain termperature
 
-        res += ",WF=" + QString::number (convertWaterFlow (_dev->getWaterFlow (DeviceCommand::stageByNum (i))));
+        res += ",WF=" + QString::number (convertWaterFlow (_dev->getWaterFlow (DeviceCommand::stageByNum (i)), i));
         res += ",GF=" + QString::number (_dev->getGrainFlow (DeviceCommand::stageByNum (i)));
         res += ",GH=" + QString::number (_dev->getGrainHumidity (DeviceCommand::stageByNum (i)));
         res += ",GT=" + QString::number (convertGrainTermperature (_dev->getGrainTemperature (DeviceCommand::stageByNum (i))));
@@ -713,3 +694,17 @@ QString Interpreter::setSettings (const QStringList& args)
     _db.setStageSettings (stage, args[1]);
     return "OK\n";
 }
+
+
+double Interpreter::convertWaterFlow (unsigned int value, int stage)
+{ 
+    if (stage < 0 || stage >= 4)
+        return 0.0;
+
+    StageSettings sett (_db.getStageSettings (stage));
+
+    if (sett.valid ())
+        return (value * 3600) / sett.waterFlowK (); 
+    else
+        return 0.0;
+};

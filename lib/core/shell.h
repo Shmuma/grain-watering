@@ -25,7 +25,6 @@ private:
     int _stages;
     bool _autoMode[4];
     bool _autoModePaused[4];
-    int _kfs;
     bool _grainSensorsPresent;
     StageSettings _settings[4];
 
@@ -37,8 +36,7 @@ private:
     static int parseStageAsInt (const QString& stage) throw (QString);
     static bool parseBool (const QString& stage) throw (QString);
 
-    double convertWaterFlow (unsigned int value)
-    { return _kfs ? ((value * 3600) / _kfs) : 0.0; };
+    double convertWaterFlow (unsigned int value, int stage);
     double convertWaterPressure (unsigned int value)
         { return value * 0.0488 - 2.5; };
     double convertGrainTermperature (unsigned int value)
@@ -84,7 +82,6 @@ private:
 
     QString getMetaState (const QStringList& args);
     QString sleep (const QStringList& args);
-    QString setKfs (const QStringList& args);
     QString setGrainSensors (const QStringList& args);
     QString getGrainSensors (const QStringList& args);
 

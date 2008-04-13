@@ -3,6 +3,7 @@
 
 #include <QtSql>
 
+#include "settings.h"
 
 class Database : public QObject
 {
