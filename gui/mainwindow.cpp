@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "stagecontrol.h"
 #include "logger.h"
+#include "tableform.h"
 
 #include <QtCore>
 #include <QtGui>
@@ -141,6 +142,8 @@ MainWindow::MainWindow ()
     connect (settingsWaterFlowKEdit, SIGNAL (textEdited (const QString&)), this, SLOT (settingsValueEdited (const QString&)));
     connect (settingsMaxWaterFlowEdit, SIGNAL (textEdited (const QString&)), this, SLOT (settingsValueEdited (const QString&)));
     connect (settingsMinWaterFlowEdit, SIGNAL (textEdited (const QString&)), this, SLOT (settingsValueEdited (const QString&)));
+
+    connect (settingsHumidityTableButton, SIGNAL (clicked ()), this, SLOT (settingsHumidityTableClicked ()));
 }
 
 
@@ -790,6 +793,14 @@ void MainWindow::saveSettingsPage (int stage)
 void MainWindow::settingsValueEdited (const QString&)
 {
     _settingsChanged = true;
+}
+
+
+void MainWindow::settingsHumidityTableClicked ()
+{
+    TableForm dlg (this, tr ("Humidity table editor"), tr ("Key -> Humidity map"), tr ("Value"), tr ("Humidity"));
+
+    dlg.exec ();
 }
 
 

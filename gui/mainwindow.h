@@ -97,6 +97,7 @@ protected slots:
     void settingsStageComboActivated (int item);
     void applySettingsButtonClicked ();
     void settingsValueEdited (const QString&);
+    void settingsHumidityTableClicked ();
 
 public:
     MainWindow ();

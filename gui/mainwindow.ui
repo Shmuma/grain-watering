@@ -699,7 +699,7 @@
                  <item>
                   <widget class="QTabWidget" name="tabWidget" >
                    <property name="currentIndex" >
-                    <number>0</number>
+                    <number>1</number>
                    </property>
                    <widget class="QWidget" name="tab" >
                     <attribute name="title" >
@@ -803,7 +803,7 @@
                     </attribute>
                     <layout class="QVBoxLayout" >
                      <item>
-                      <widget class="QPushButton" name="pushButton" >
+                      <widget class="QPushButton" name="settingsHumidityTableButton" >
                        <property name="text" >
                         <string>Edit humidity table</string>
                        </property>
