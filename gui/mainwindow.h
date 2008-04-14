@@ -18,6 +18,7 @@ private:
     bool _switchingToolButtons, _settingsChanged;
     Daemon _daemon;
     int _currentSettingsStage;
+    QMap<int, double> _humidityTable;
 
 protected:
     virtual void timerEvent (QTimerEvent* event);

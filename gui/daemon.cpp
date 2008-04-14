@@ -539,9 +539,8 @@ void Daemon::parseSettings (const QString& msg)
 {
     QStringList l = msg.trimmed ().split (" ");
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++)
         _sett[i] = StageSettings (l[i]);
-    }
 
     settingsGot ();
 }

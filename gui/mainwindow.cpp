@@ -717,6 +717,7 @@ void MainWindow::settingsStageComboActivated (int item)
     settingsMaxWaterFlowEdit->setText (QString::number (sett.maxWaterFlow ()));
     settingsMinWaterFlowEdit->setText (QString::number (sett.minWaterFlow ()));
     settingsWaterFormulaComboBox->setCurrentIndex (sett.waterFormula ());
+    _humidityTable = sett.humidityTable ();
     _currentSettingsStage = item;
 }
 
@@ -782,6 +783,7 @@ void MainWindow::saveSettingsPage (int stage)
     }
 
     sett.setWaterFormula (settingsWaterFormulaComboBox->currentIndex ());
+    sett.setHumidityTable (_humidityTable);
 
     sett.setValid (true);
     _daemon.setSettings (stage, sett);
@@ -800,7 +802,13 @@ void MainWindow::settingsHumidityTableClicked ()
 {
     TableForm dlg (this, tr ("Humidity table editor"), tr ("Key -> Humidity map"), tr ("Value"), tr ("Humidity"));
 
-    dlg.exec ();
+    dlg.setData (_humidityTable);
+
+    if (dlg.exec () == QDialog::Rejected)
+        return;
+
+    _settingsChanged = true;
+    _humidityTable = dlg.result ();
 }
 
 

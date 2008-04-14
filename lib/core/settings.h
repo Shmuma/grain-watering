@@ -1,6 +1,7 @@
 #ifndef __SETTINGS_H__
 #define __SETTINGS_H__
 
+#include <QtCore>
 
 class StageSettings
 {
@@ -9,6 +10,12 @@ private:
     double _waterFlowK, _minWaterFlow, _maxWaterFlow;
     int _waterFormula;
     bool _valid;
+
+    QMap<int, double> _humidityTable;
+
+protected:
+    QMap<int, double> parseHash (const QString& str) const;
+    QString hash2string (const QMap<int, double>& hash) const;
 
 public:
     StageSettings ()
@@ -20,7 +27,9 @@ public:
           _maxWaterFlow (0.0),
           _waterFormula (0),
           _valid (false)
-    {};
+    {
+        _humidityTable.clear ();
+    };
 
     StageSettings (const QString& str);
 
@@ -32,8 +41,10 @@ public:
           _minWaterFlow (sett._minWaterFlow),
           _maxWaterFlow (sett._maxWaterFlow),
           _waterFormula (sett._waterFormula),
-          _valid (sett._valid)
-    {};
+          _valid (sett._valid),
+          _humidityTable (sett._humidityTable)
+    {
+    };
 
     StageSettings (double targetHumidity, double humidityCoeff, double minGrainFlow, 
                     double waterFlowK, double minWaterFlow, double maxWaterFlow, int waterFormula)
@@ -45,7 +56,9 @@ public:
           _maxWaterFlow (maxWaterFlow),
           _waterFormula (waterFormula),
           _valid (true)
-    {};
+    {
+        _humidityTable.clear ();
+    };
 
     double targetHumidity () const
         { return _targetHumidity; };
@@ -88,6 +101,11 @@ public:
         { _valid = valid; };
 
     QString toString () const;
+
+    void setHumidityTable (const QMap<int, double>& val)
+        { _humidityTable = val; };
+    QMap<int, double> humidityTable () const
+        { return _humidityTable; };
 };
 
 

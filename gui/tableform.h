@@ -9,8 +9,22 @@ class TableForm : public QDialog, private  Ui::TableForm
 {
     Q_OBJECT
 private:
+    QMap<int, double> _res;
+
 public:
     TableForm (QWidget* parent, const QString& caption, const QString& label, const QString& key, const QString& val);
+
+    QMap<int, double> result () const
+        { return _res; };
+
+    void setData (const QMap<int, double>& data);
+
+protected slots:
+    void okButtonClicked ();
+    void cancelButtonClicked ();
+    void addButtonClicked ();
+    void removeButtonClicked ();
+    void tableItemChanged (QTreeWidgetItem* cur, QTreeWidgetItem* prev);
 };
 
 

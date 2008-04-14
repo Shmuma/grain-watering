@@ -17,6 +17,8 @@ StageSettings::StageSettings (const QString& str)
       _waterFormula (0),
       _valid (false)
 {
+    _humidityTable.clear ();
+
     if (str.isEmpty () || str.toLower () == "invalid" || str.toLower () == "disabled")
         return;
 
@@ -31,24 +33,28 @@ StageSettings::StageSettings (const QString& str)
         if (l.size () != 2)
             continue;
         
-        val = l[1].toDouble (&ok);
-        if (!ok)
-            continue;
+        if (l[0] == "ht") 
+            _humidityTable = parseHash (l[1]);
+        else {
+            val = l[1].toDouble (&ok);
+            if (!ok)
+                continue;
 
-        if (l[0] == "th")
-            _targetHumidity = val;
-        else if (l[0] == "hc")
-            _humidityCoeff = val;
-        else if (l[0] == "mingf")
-            _minGrainFlow = val;
-        else if (l[0] == "wfk")
-            _waterFlowK = val;
-        else if (l[0] == "minwf")
-            _minWaterFlow = val;
-        else if (l[0] == "maxwf")
-            _maxWaterFlow = val;
-        else if (l[0] == "wf")
-            _waterFormula = l[1].toInt ();
+            if (l[0] == "th")
+                _targetHumidity = val;
+            else if (l[0] == "hc")
+                _humidityCoeff = val;
+            else if (l[0] == "mingf")
+                _minGrainFlow = val;
+            else if (l[0] == "wfk")
+                _waterFlowK = val;
+            else if (l[0] == "minwf")
+                _minWaterFlow = val;
+            else if (l[0] == "maxwf")
+                _maxWaterFlow = val;
+            else if (l[0] == "wf")
+                _waterFormula = l[1].toInt ();
+        }
     }
 
     _valid = true;
@@ -64,7 +70,35 @@ QString StageSettings::toString () const
 //             _targetHumidity, _humidityCoeff, _minGrainFlow, _waterFlowK, 
 //             _minWaterFlow, _maxWaterFlow, _waterFormula);
         
-    return QString ().sprintf ("TH=%f,HC=%f,minGF=%f,WFK=%f,minWF=%f,maxWF=%f,WF=%d", 
+    return QString ().sprintf ("TH=%f,HC=%f,minGF=%f,WFK=%f,minWF=%f,maxWF=%f,WF=%d,HT=%s", 
                                _targetHumidity, _humidityCoeff, _minGrainFlow, _waterFlowK, 
-                               _minWaterFlow, _maxWaterFlow, _waterFormula);
+                               _minWaterFlow, _maxWaterFlow, _waterFormula, hash2string (_humidityTable).toAscii ().constData ());
+}
+
+
+QMap<int, double> StageSettings::parseHash (const QString& str) const
+{
+    QStringList l = str.split (":");
+    QMap<int, double> res;
+
+    for (int i = 0; i < l.size (); i += 2)
+        res[l[i].toUInt (NULL, 16)] = l[i+1].toDouble ();
+    return res;
+}
+
+
+QString StageSettings::hash2string (const QMap<int, double>& hash) const
+{
+    QMap<int, double>::const_iterator it = hash.begin ();
+    QString res;
+
+    while (it != hash.end ()) {
+        if (!res.isEmpty ())
+            res += ":";
+        res += QString::number (it.key (), 16)+":";
+        res += QString::number (it.value ());
+        it++;
+    }
+
+    return res;
 }
