@@ -507,14 +507,14 @@ QString Interpreter::getMetaState (const QStringList& args)
 {
     QString res;
 
-    res += "0: ";
+    res += "0:";
     res += "WP=" + QString::number (getWaterPressure ());
 
     for (int i = 0; i < 4; i++) {
         if (!parseBool (args[i]))
             continue;
 
-        res += QString (", %1: ").arg (i+1);
+        res += QString (" %1:").arg (i+1);
         res += getStageState (i);
     }
 
@@ -727,10 +727,10 @@ QString Interpreter::getStageState (int stage)
         return "invalid";
 
     QString res;
-    res += "WF=" + QString::number (getWaterFlow (stage)) + " ";
-    res += "GF=" + QString::number (getGrainFlow (stage)) + " ";
-    res += "GH=" + QString::number (getGrainHumidity (stage)) + " ";
-    res += "GT=" + QString::number (getGrainTemperature (stage)) + " ";
+    res += "WF=" + QString::number (getWaterFlow (stage)) + ",";
+    res += "GF=" + QString::number (getGrainFlow (stage)) + ",";
+    res += "GH=" + QString::number (getGrainHumidity (stage)) + ",";
+    res += "GT=" + QString::number (getGrainTemperature (stage)) + ",";
     res += "GN=" + QString::number (getGrainNature (stage));
     return res;
 }

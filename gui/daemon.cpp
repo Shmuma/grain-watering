@@ -360,11 +360,13 @@ void Daemon::refreshState ()
 
 bool Daemon::handleMetaState (const QString& msg)
 {
-    QStringList l = QString (msg).trimmed ().split (",");
+    QStringList l = QString (msg).trimmed ().split (" ");
     double water_pres = 0;
     QString s;
     QStringList ll;
     QMap<int, QList<double> > vals;
+
+    printf ("%s\n", msg.toAscii ().constData ());
 
     QStringList::iterator it = l.begin ();
 
@@ -375,7 +377,7 @@ bool Daemon::handleMetaState (const QString& msg)
         if (ll.size () == 2) {
             int index = ll[0].toInt ();
             s = ll[1];
-            ll = s.trimmed ().split (" ", QString::SkipEmptyParts);
+            ll = s.trimmed ().split (",", QString::SkipEmptyParts);
         
             QStringList::iterator it2 = ll.begin ();
         
@@ -492,7 +494,8 @@ void Daemon::handleCheckTick (const QString& msg)
         QString key, val;
         
         if (lst.count () != 2) {
-            Logger::instance ()->log (Logger::Debug, QString ("CheckTick: Got invalid stage info at part %1").arg (i));            
+            Logger::instance ()->log (Logger::Debug, QString ("CheckTick: Got invalid stage info at part %1").arg (i));
+            printf ("Data: %s\n", stages[i].toAscii ().constData ());
             continue;
         }
 
