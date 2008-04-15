@@ -12,6 +12,10 @@ private:
     bool _valid;
 
     QMap<int, double> _humidityTable;
+    QMap<int, double> _grainFlowTable;
+    QMap<int, double> _grainNatureTable;
+    QMap<int, double> _grainTempTable;
+    QMap<int, double> _grainNatureCoeffTable;
 
 protected:
     QMap<int, double> parseHash (const QString& str) const;
@@ -29,6 +33,10 @@ public:
           _valid (false)
     {
         _humidityTable.clear ();
+        _grainFlowTable.clear ();
+        _grainNatureTable.clear ();
+        _grainTempTable.clear ();
+        _grainNatureCoeffTable.clear ();
     };
 
     StageSettings (const QString& str);
@@ -42,22 +50,13 @@ public:
           _maxWaterFlow (sett._maxWaterFlow),
           _waterFormula (sett._waterFormula),
           _valid (sett._valid),
-          _humidityTable (sett._humidityTable)
-    {
-    };
+          _humidityTable (sett._humidityTable),
+          _grainFlowTable (sett._grainFlowTable),
+          _grainNatureTable (sett._grainNatureTable),
+          _grainTempTable (sett._grainTempTable),
+          _grainNatureCoeffTable (sett._grainNatureCoeffTable)
 
-    StageSettings (double targetHumidity, double humidityCoeff, double minGrainFlow, 
-                    double waterFlowK, double minWaterFlow, double maxWaterFlow, int waterFormula)
-        : _targetHumidity (targetHumidity),
-          _humidityCoeff (humidityCoeff),
-          _minGrainFlow (minGrainFlow),
-          _waterFlowK (waterFlowK),
-          _minWaterFlow (minWaterFlow),
-          _maxWaterFlow (maxWaterFlow),
-          _waterFormula (waterFormula),
-          _valid (true)
     {
-        _humidityTable.clear ();
     };
 
     double targetHumidity () const
@@ -106,6 +105,26 @@ public:
         { _humidityTable = val; };
     QMap<int, double> humidityTable () const
         { return _humidityTable; };
+
+    void setGrainFlowTable (const QMap<int, double>& val)
+        { _grainFlowTable = val; };
+    QMap<int, double> grainFlowTable () const
+        { return _grainFlowTable; };
+
+    void setGrainNatureTable (const QMap<int, double>& val)
+        { _grainNatureTable = val; };
+    QMap<int, double> grainNatureTable () const
+        { return _grainNatureTable; };
+
+    void setGrainTempTable (const QMap<int, double>& val)
+        { _grainTempTable = val; };
+    QMap<int, double> grainTempTable () const
+        { return _grainTempTable; };
+
+    void setGrainNatureCoeffTable (const QMap<int, double>& val)
+        { _grainNatureCoeffTable = val; };
+    QMap<int, double> grainNatureCoeffTable () const
+        { return _grainNatureCoeffTable; };
 };
 
 

@@ -19,6 +19,10 @@ private:
     Daemon _daemon;
     int _currentSettingsStage;
     QMap<int, double> _humidityTable;
+    QMap<int, double> _grainFlowTable;
+    QMap<int, double> _grainNatureTable;
+    QMap<int, double> _grainTempTable;
+    QMap<int, double> _grainNatureCoeffTable;
 
 protected:
     virtual void timerEvent (QTimerEvent* event);
@@ -99,6 +103,10 @@ protected slots:
     void applySettingsButtonClicked ();
     void settingsValueEdited (const QString&);
     void settingsHumidityTableClicked ();
+    void settingsGrainFlowTableClicked ();
+    void settingsGrainNatureTableClicked ();
+    void settingsGrainTempTableClicked ();
+    void settingsGrainNatureCoeffTableClicked ();
 
 public:
     MainWindow ();

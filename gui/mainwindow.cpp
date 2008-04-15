@@ -144,6 +144,10 @@ MainWindow::MainWindow ()
     connect (settingsMinWaterFlowEdit, SIGNAL (textEdited (const QString&)), this, SLOT (settingsValueEdited (const QString&)));
 
     connect (settingsHumidityTableButton, SIGNAL (clicked ()), this, SLOT (settingsHumidityTableClicked ()));
+    connect (settingsGrainFlowTableButton, SIGNAL (clicked ()), this, SLOT (settingsGrainFlowTableClicked ()));
+    connect (settingsGrainNatureTableButton, SIGNAL (clicked ()), this, SLOT (settingsGrainNatureTableClicked ()));
+    connect (settingsGrainTempTableButton, SIGNAL (clicked ()), this, SLOT (settingsGrainTempTableClicked ()));
+    connect (settingsGrainNatureCoeffTableButton, SIGNAL (clicked ()), this, SLOT (settingsGrainNatureCoeffTableClicked ()));
 }
 
 
@@ -718,6 +722,10 @@ void MainWindow::settingsStageComboActivated (int item)
     settingsMinWaterFlowEdit->setText (QString::number (sett.minWaterFlow ()));
     settingsWaterFormulaComboBox->setCurrentIndex (sett.waterFormula ());
     _humidityTable = sett.humidityTable ();
+    _grainFlowTable = sett.grainFlowTable ();
+    _grainNatureTable = sett.grainNatureTable ();
+    _grainTempTable = sett.grainTempTable ();
+    _grainNatureCoeffTable = sett.grainNatureCoeffTable ();
     _currentSettingsStage = item;
 }
 
@@ -784,6 +792,10 @@ void MainWindow::saveSettingsPage (int stage)
 
     sett.setWaterFormula (settingsWaterFormulaComboBox->currentIndex ());
     sett.setHumidityTable (_humidityTable);
+    sett.setGrainFlowTable (_grainFlowTable);
+    sett.setGrainNatureTable (_grainNatureTable);
+    sett.setGrainTempTable (_grainTempTable);
+    sett.setGrainNatureCoeffTable (_grainNatureCoeffTable);
 
     sett.setValid (true);
     _daemon.setSettings (stage, sett);
@@ -809,6 +821,64 @@ void MainWindow::settingsHumidityTableClicked ()
 
     _settingsChanged = true;
     _humidityTable = dlg.result ();
+}
+
+
+void MainWindow::settingsGrainFlowTableClicked ()
+{
+    TableForm dlg (this, tr ("Grain flow table editor"), tr ("Key -> Grain flow map"), tr ("Value"), tr ("Grain flow"));
+
+    dlg.setData (_grainFlowTable);
+
+    if (dlg.exec () == QDialog::Rejected)
+        return;
+
+    _settingsChanged = true;
+    _grainFlowTable = dlg.result ();
+}
+
+
+void MainWindow::settingsGrainNatureTableClicked ()
+{
+    TableForm dlg (this, tr ("Grain nature table editor"), tr ("Key -> Grain nature map"), tr ("Value"), tr ("Grain nature"));
+
+    dlg.setData (_grainNatureTable);
+
+    if (dlg.exec () == QDialog::Rejected)
+        return;
+
+    _settingsChanged = true;
+    _grainNatureTable = dlg.result ();
+}
+
+
+void MainWindow::settingsGrainTempTableClicked ()
+{
+    TableForm dlg (this, tr ("Grain temperature table editor"), tr ("Temperature -> Grain temperature coeff map"), 
+                   tr ("Temperature"), tr ("Grain temperature coeff"));
+
+    dlg.setData (_grainTempTable);
+
+    if (dlg.exec () == QDialog::Rejected)
+        return;
+
+    _settingsChanged = true;
+    _grainTempTable = dlg.result ();
+}
+
+
+void MainWindow::settingsGrainNatureCoeffTableClicked ()
+{
+    TableForm dlg (this, tr ("Grain nature coeff table editor"), tr ("Temperature -> Grain nature coeff map"), 
+                   tr ("Temperature"), tr ("Grain nature coeff"));
+
+    dlg.setData (_grainNatureCoeffTable);
+
+    if (dlg.exec () == QDialog::Rejected)
+        return;
+
+    _settingsChanged = true;
+    _grainNatureCoeffTable = dlg.result ();
 }
 
 

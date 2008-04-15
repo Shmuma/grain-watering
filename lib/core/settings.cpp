@@ -18,6 +18,10 @@ StageSettings::StageSettings (const QString& str)
       _valid (false)
 {
     _humidityTable.clear ();
+    _grainFlowTable.clear ();
+    _grainNatureTable.clear ();
+    _grainTempTable.clear ();
+    _grainNatureCoeffTable.clear ();
 
     if (str.isEmpty () || str.toLower () == "invalid" || str.toLower () == "disabled")
         return;
@@ -35,6 +39,14 @@ StageSettings::StageSettings (const QString& str)
         
         if (l[0] == "ht") 
             _humidityTable = parseHash (l[1]);
+        else if (l[0] == "gf")
+            _grainFlowTable = parseHash (l[1]);
+        else if (l[0] == "gn")
+            _grainNatureTable = parseHash (l[1]);
+        else if (l[0] == "gt")
+            _grainTempTable = parseHash (l[1]);
+        else if (l[0] == "gnc")
+            _grainNatureCoeffTable = parseHash (l[1]);
         else {
             val = l[1].toDouble (&ok);
             if (!ok)
@@ -70,9 +82,14 @@ QString StageSettings::toString () const
 //             _targetHumidity, _humidityCoeff, _minGrainFlow, _waterFlowK, 
 //             _minWaterFlow, _maxWaterFlow, _waterFormula);
         
-    return QString ().sprintf ("TH=%f,HC=%f,minGF=%f,WFK=%f,minWF=%f,maxWF=%f,WF=%d,HT=%s", 
+    return QString ().sprintf ("TH=%f,HC=%f,minGF=%f,WFK=%f,minWF=%f,maxWF=%f,WF=%d,HT=%s,GF=%s,GN=%s,GT=%s,GNC=%s", 
                                _targetHumidity, _humidityCoeff, _minGrainFlow, _waterFlowK, 
-                               _minWaterFlow, _maxWaterFlow, _waterFormula, hash2string (_humidityTable).toAscii ().constData ());
+                               _minWaterFlow, _maxWaterFlow, _waterFormula, 
+                               hash2string (_humidityTable).toAscii ().constData (),
+                               hash2string (_grainFlowTable).toAscii ().constData (),
+                               hash2string (_grainNatureTable).toAscii ().constData (),
+                               hash2string (_grainTempTable).toAscii ().constData (),
+                               hash2string (_grainNatureCoeffTable).toAscii ().constData ());
 }
 
 
