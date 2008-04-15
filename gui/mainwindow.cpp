@@ -16,7 +16,8 @@ MainWindow::MainWindow ()
       _switchingToolButtons (false),
       _settingsChanged (false),
       _daemon ("localhost", 12345),
-      _currentSettingsStage (0)
+      _currentSettingsStage (0),
+      _access (AL_Default)
 {
     setupUi (this);
 
@@ -148,6 +149,7 @@ MainWindow::MainWindow ()
     connect (settingsGrainNatureTableButton, SIGNAL (clicked ()), this, SLOT (settingsGrainNatureTableClicked ()));
     connect (settingsGrainTempTableButton, SIGNAL (clicked ()), this, SLOT (settingsGrainTempTableClicked ()));
     connect (settingsGrainNatureCoeffTableButton, SIGNAL (clicked ()), this, SLOT (settingsGrainNatureCoeffTableClicked ()));
+    connect (settingsAdvancedGroupBox, SIGNAL (toggled (bool)), this, SLOT (settingsAdvancedGroupBoxChecked (bool)));
 }
 
 
@@ -350,7 +352,8 @@ void MainWindow::switchToHistoryView ()
 
 void MainWindow::switchToConsoleView ()
 {
-    mainStackWidget->setCurrentIndex (2);
+    if (haveAccess (AL_Admin))
+        mainStackWidget->setCurrentIndex (2);
 }
 
 
@@ -882,3 +885,49 @@ void MainWindow::settingsGrainNatureCoeffTableClicked ()
 }
 
 
+bool MainWindow::haveAccess (access_level_t level)
+{
+    if (level <= _access)
+        return true;
+
+    // ask for password
+    QString msg, user;
+    
+    switch (level) {
+    case AL_Config:
+        msg = tr ("Enter configurator password");
+        user = "config";
+        break;
+    case AL_Admin:
+        msg = tr ("Enter administrator password");
+        user = "admin";
+        break;
+    default:
+        return false;
+    }
+
+    bool ok;
+    QString pass = QInputDialog::getText (this, tr ("Password dialog"), msg, QLineEdit::Password, QString (), &ok);
+
+    if (!ok)
+        return false;
+
+    if (!_daemon.checkPass (user, pass)) {
+        QMessageBox::warning (this, tr ("Access denied"), tr ("Invalid password"));
+        return false;
+    }
+    else {
+        _access = level;
+        return true;
+    }
+}
+
+
+void MainWindow::settingsAdvancedGroupBoxChecked (bool on)
+{
+    if (!on)
+        return;
+
+    if (!haveAccess (AL_Config))
+        settingsAdvancedGroupBox->setChecked (false);
+}

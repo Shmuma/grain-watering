@@ -13,6 +13,12 @@
 class MainWindow : public QWidget, private Ui::MainWindow
 {
     Q_OBJECT
+public:
+    enum access_level_t {
+        AL_Default = 0,
+        AL_Config,
+        AL_Admin,
+    };
 
 private:
     bool _switchingToolButtons, _settingsChanged;
@@ -23,6 +29,7 @@ private:
     QMap<int, double> _grainNatureTable;
     QMap<int, double> _grainTempTable;
     QMap<int, double> _grainNatureCoeffTable;
+    access_level_t _access;
 
 protected:
     virtual void timerEvent (QTimerEvent* event);
@@ -32,6 +39,8 @@ protected:
 
     bool haveActiveStages () const;
     void saveSettingsPage (int stage);
+
+    bool haveAccess (access_level_t level);
 
 protected slots:
     void configButtonToggled (bool on);
@@ -107,6 +116,7 @@ protected slots:
     void settingsGrainNatureTableClicked ();
     void settingsGrainTempTableClicked ();
     void settingsGrainNatureCoeffTableClicked ();
+    void settingsAdvancedGroupBoxChecked (bool on);
 
 public:
     MainWindow ();

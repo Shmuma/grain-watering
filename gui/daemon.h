@@ -64,6 +64,7 @@ private:
     bool _s1, _s2, _s3, _s4;
     QList<DaemonCommand> _queue;
     QDateTime _lastCheck;
+    QMap<QString, QString> _pass;
 
     // settings, refreshed at initial commit
     StageSettings _sett[4];
@@ -148,6 +149,8 @@ public:
     StageSettings getSettings (int stage)
         { return isStageEnabled (stage) ? _sett[stage] : StageSettings (); };
     void setSettings (int stage, const StageSettings& sett);
+
+    bool checkPass (const QString& user, const QString& pass);
 };
 
 

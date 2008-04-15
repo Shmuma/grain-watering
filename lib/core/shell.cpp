@@ -112,6 +112,8 @@ Interpreter::Interpreter (Device* device)
                                                "Returns settings for all stages.\n", CommandMeta::c_meta);
     _commands["setsettings"]	= CommandMeta (2, &Interpreter::setSettings, "Assign settings for stage", "setsettings stage sett",
                                                "Assigns settings for stage.\n", CommandMeta::c_meta);
+    _commands["setpass"]	= CommandMeta (2, &Interpreter::setPass, "Changes password for user", "setpass config|admin pass",
+                                               "Changes password for user.\n", CommandMeta::c_meta);
 }
 
 
@@ -674,7 +676,7 @@ QString Interpreter::getSettings (const QStringList& args)
         else 
             res += "disabled  ";
 
-    return res + "\n";
+    return res + " " + _db.getPass () + "\n";
 }
 
 
@@ -708,3 +710,16 @@ double Interpreter::convertWaterFlow (unsigned int value, int stage)
     else
         return 0.0;
 };
+
+
+QString Interpreter::setPass (const QStringList& args)
+{
+    QString user = args[0], pass = args[1];
+    
+    if (user == "admin" || user == "config") {
+        _db.setPass (user, pass);
+        return "OK\n";
+    }
+    else
+        return "ERROR: User unknown\n";
+}

@@ -22,6 +22,11 @@ Database::Database (const QString& file) throw (QString&)
         _db.exec ("create table commands (cmd_date integer, cmd_text text, ok integer, cmd_res text);");
     if (!tables.contains ("stage_settings"))
         _db.exec ("create table stage_settings (stage integer, settings text);");
+    if (!tables.contains ("users")) {
+        _db.exec ("create table users (user text, pass text);");
+        _db.exec ("insert into  users (user, pass) values ('admin', 'admin');");
+        _db.exec ("insert into  users (user, pass) values ('config', 'config');");
+    }
 }
 
 
@@ -70,7 +75,6 @@ void Database::setStageSettings (int stage, const QString& sett)
         return;
     }
 
-
     if (query.value (0).toUInt ()) {
         query.prepare ("update stage_settings set settings = ? where stage = ?");
         query.addBindValue (sett);
@@ -85,4 +89,34 @@ void Database::setStageSettings (int stage, const QString& sett)
         if (!query.exec ())
             printf ("DB error: %s\n", QSqlDatabase::database ().lastError ().text ().toAscii ().constData ());
     }
+}
+
+
+void Database::setPass (const QString& user, const QString& pass)
+{
+    QSqlQuery query (QSqlDatabase::database ());
+
+    query.prepare ("update users set pass = ? where user = ?");
+    query.addBindValue (pass);
+    query.addBindValue (user);
+    query.exec ();
+}
+
+
+QString Database::getPass ()
+{
+    QSqlQuery query (QSqlDatabase::database ());
+    QString res;
+
+    query.prepare ("select user, pass from users");
+    if (!query.exec ())
+        return QString ();
+
+    while (query.next ()) {
+        if (!res.isEmpty ())
+            res += ",";
+        res += query.value (0).toString () + "=" + query.value (1).toString ();
+    }
+
+    return res;
 }

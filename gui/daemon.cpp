@@ -537,10 +537,20 @@ void Daemon::requestSettings ()
 
 void Daemon::parseSettings (const QString& msg)
 {
-    QStringList l = msg.trimmed ().split (" ");
+    QStringList l = msg.trimmed ().split (" ", QString::SkipEmptyParts);
+    int i;
 
-    for (int i = 0; i < 4; i++)
+    for (i = 0; i < 4; i++)
         _sett[i] = StageSettings (l[i]);
+
+    // parse passwords
+    _pass.clear ();
+    QStringList u = l[4].split (",", QString::SkipEmptyParts);
+    
+    for (i = 0; i < u.size (); i++) {
+        QStringList v = u[i].split ("=", QString::SkipEmptyParts);
+        _pass[v[0]] = v[1];
+    }
 
     settingsGot ();
 }
@@ -552,4 +562,12 @@ void Daemon::setSettings (int stage, const StageSettings& sett)
         _sett[stage] = sett;
         sendCommand (QString ("setsettings %1 %2\n").arg (QString::number (stage+1), sett.toString ()));
     }
+}
+
+
+bool Daemon::checkPass (const QString& user, const QString& pass)
+{
+    if (_pass.find (user) == _pass.end ())
+        return false;
+    return _pass[user] == pass;
 }

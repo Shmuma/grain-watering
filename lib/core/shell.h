@@ -90,6 +90,8 @@ private:
     QString getSettings (const QStringList& args);
     QString setSettings (const QStringList& args);
 
+    QString setPass (const QStringList& args);
+
 public:
     Interpreter (Device* device);
 

@@ -20,6 +20,8 @@ public:
 
     QString getStageSettings (int stage);
     void setStageSettings (int stage, const QString& sett);
+    void setPass (const QString& user, const QString& pass);
+    QString getPass ();
 };
 
 
