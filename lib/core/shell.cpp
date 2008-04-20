@@ -463,7 +463,7 @@ QString Interpreter::startAutoMode (const QStringList& args)
         _autoMode[stage] = true;
         _autoModePaused[stage] = false;
     }
-
+    _dev->powerGates (parseStage (args[0]), true);
     return QString ("OK: auto mode started\n");
 }
 
@@ -471,6 +471,7 @@ QString Interpreter::stopAutoMode (const QStringList& args)
 {
     int stage = parseStageAsInt (args[0]);
     _autoModePaused[stage] = _autoMode[stage] = false;
+    _dev->powerGates (parseStage (args[0]), false);
     return QString ("OK: auto mode stopped\n");
 }
 
