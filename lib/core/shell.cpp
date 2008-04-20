@@ -14,6 +14,7 @@ Interpreter::Interpreter (Device* device)
     : _dev (device),
       _stages (0),
       _db ("plaund.db"),
+      _log ("plaund.log"),
       _grainSensorsPresent (false)
 {
     for (int i = 0; i < 4; i++) {
@@ -89,6 +90,8 @@ Interpreter::Interpreter (Device* device)
     _commands["getstages"]	= CommandMeta (0, &Interpreter::getStages, "Get available stages", "getstages",
 					       "Command gets active stages previously set by setstages command.\n"
                                                "It returns comma-separated list of active stages number.\n", CommandMeta::c_state);
+    _commands["setdebug"]	= CommandMeta (1, &Interpreter::setDebug, "Turn debug mode on or off", "setdebug",
+                                               "Turns debug mode on or off,\n", CommandMeta::c_state);
     // meta commands
     _commands["startautomode"]	= CommandMeta (1, &Interpreter::startAutoMode, "Starts auto mode", "startautomode stage",
                                                "Command starts auto mode of specified stage\n", CommandMeta::c_meta);
@@ -775,3 +778,9 @@ QString Interpreter::getStageState (int stage)
     return res;
 }
 
+
+QString Interpreter::setDebug (const QStringList& args)
+{
+    _log.setActive (parseBool (args[0]));
+    return QString ("OK\n");
+}

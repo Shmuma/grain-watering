@@ -5,6 +5,7 @@
 #include "device.h"
 #include "database.h"
 #include "settings.h"
+#include "log.h"
 
 
 class CommandMeta;
@@ -19,6 +20,7 @@ private:
     Device* _dev;
     QMap<QString, CommandMeta> _commands;
     Database _db;
+    Logger _log;
 
     // interpreter state
     // this bit mask initialized by setstages command and read by getstages command.
@@ -96,6 +98,7 @@ private:
     QString setSettings (const QStringList& args);
 
     QString setPass (const QStringList& args);
+    QString setDebug (const QStringList& args);
 
 public:
     Interpreter (Device* device);

@@ -120,3 +120,4 @@ QString Database::getPass ()
 
     return res;
 }
+

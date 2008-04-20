@@ -5,6 +5,7 @@
 
 #include "settings.h"
 
+
 class Database : public QObject
 {
     Q_OBJECT
