@@ -4,6 +4,7 @@
 #include "settings.h"
 
 #include <unistd.h>
+#include <math.h>
 
 
 // --------------------------------------------------
@@ -15,8 +16,10 @@ Interpreter::Interpreter (Device* device)
       _db ("plaund.db"),
       _grainSensorsPresent (false)
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++) {
         _autoMode[i] = _autoModePaused[i] = false;
+        _last_tgt_water_flow[i] = 0.0;
+    }
 
     // initialize vocabulary
     // hardware commands
@@ -728,11 +731,43 @@ QString Interpreter::getStageState (int stage)
         return "invalid";
 
     QString res;
+    double d_temp, d_grain_flow, d_hum_cur, d_hum;
+    int temp;
+    double pk_t, pk_nat;
+
+    d_temp = getGrainTemperature (stage);
+    d_grain_flow = getGrainFlow (stage);
+    d_hum = getGrainHumidity (stage);
+    temp = round (d_temp);
+
     res += "WF=" + QString::number (getWaterFlow (stage)) + ",";
-    res += "GF=" + QString::number (getGrainFlow (stage)) + ",";
-    res += "GH=" + QString::number (getGrainHumidity (stage)) + ",";
-    res += "GT=" + QString::number (getGrainTemperature (stage)) + ",";
-    res += "GN=" + QString::number (getGrainNature (stage));
+    res += "GF=" + QString::number (d_grain_flow) + ",";
+    res += "GH=" + QString::number (d_hum) + ",";
+    res += "GT=" + QString::number (d_temp) + ",";
+    res += "GN=" + QString::number (getGrainNature (stage)) + ",";
+
+    pk_t = _settings[stage].grainTempTable ()[temp];
+    pk_nat = _settings[stage].grainNatureCoeffTable ()[temp];
+    
+    // TODO: unknown last coefficient 
+    d_hum_cur = d_hum + pk_t + pk_nat + 0.0;
+
+    res += "CH=" + QString::number (d_hum_cur) + ",";
+
+    // calculate target water flow
+    switch (_settings[stage].waterFormula ()) {
+    case 0:
+        _last_tgt_water_flow[stage] = d_grain_flow * (_settings[stage].targetHumidity () - d_hum_cur) / (100 - _settings[stage].targetHumidity ());
+        break;
+    case 1:
+        _last_tgt_water_flow[stage] = d_grain_flow * (_settings[stage].targetHumidity () - d_hum_cur) / 100;
+        break;
+    default:
+        _last_tgt_water_flow[stage] = 0.0;
+    }
+
+    res += "TF=" + QString::number (_last_tgt_water_flow[stage]);
+
     return res;
 }
 
