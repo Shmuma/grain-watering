@@ -28,6 +28,7 @@ private:
     bool _grainSensorsPresent;
     StageSettings _settings[4];
     double _last_tgt_water_flow[4];
+    unsigned int _target_sett[4];
 
     static QString checkBoolReply (bool res)
         { return res ? "OK\n" : "ERROR\n"; };
