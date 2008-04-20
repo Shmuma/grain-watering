@@ -30,6 +30,7 @@ private:
     QMap<int, double> _grainTempTable;
     QMap<int, double> _grainNatureCoeffTable;
     access_level_t _access;
+    QAction* _stages_view;
 
 protected:
     virtual void timerEvent (QTimerEvent* event);

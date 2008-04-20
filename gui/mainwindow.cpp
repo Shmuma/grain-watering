@@ -68,7 +68,7 @@ MainWindow::MainWindow ()
     QActionGroup* actionGroup = new QActionGroup (this);
     QAction* action;
 
-    action = new QAction (tr ("Stages"), this);
+    _stages_view = action = new QAction (tr ("Stages"), this);
     action->setCheckable (true);
     action->setChecked (true);
     action->setShortcut (tr ("Ctrl+S"));
@@ -354,6 +354,8 @@ void MainWindow::switchToConsoleView ()
 {
     if (haveAccess (AL_Admin))
         mainStackWidget->setCurrentIndex (2);
+    else
+        _stages_view->setChecked (true);
 }
 
 
