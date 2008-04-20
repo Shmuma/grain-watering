@@ -119,6 +119,9 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (grainHumidityUpdated (int, double)), this, SLOT (daemonGrainHumidityUpdated (int, double)));
     connect (&_daemon, SIGNAL (grainTemperatureUpdated (int, double)), this, SLOT (daemonGrainTemperatureUpdated (int, double)));
     connect (&_daemon, SIGNAL (grainNatureUpdated (int, double)), this, SLOT (daemonGrainNatureUpdated (int, double)));
+    connect (&_daemon, SIGNAL (calculatedHumidityUpdated (int, double)), this, SLOT (daemonCalculatedHumidityUpdated (int, double)));
+    connect (&_daemon, SIGNAL (targetFlowUpdated (int, double)), this, SLOT (daemonTargetFlowUpdated (int, double)));
+    connect (&_daemon, SIGNAL (targetSettingUpdated (int, double)), this, SLOT (daemonTargetSettingUpdated (int, double)));
     connect (&_daemon, SIGNAL (settingsGot ()), this, SLOT (daemonSettingsGot ()));
 
     connect (checkStateButton, SIGNAL (pressed ()), this, SLOT (checkStateButtonPressed ()));
@@ -689,6 +692,22 @@ void MainWindow::daemonGrainTemperatureUpdated (int stage, double val)
 void MainWindow::daemonGrainNatureUpdated (int stage, double val)
 {
     getStageControl (stage)->setNature (val);
+}
+
+
+void MainWindow::daemonCalculatedHumidityUpdated (int stage, double val)
+{
+    getStageControl (stage)->setTargetHumidity (val);
+}
+
+
+void MainWindow::daemonTargetFlowUpdated (int stage, double val)
+{
+}
+
+
+void MainWindow::daemonTargetSettingUpdated (int stage, double val)
+{
 }
 
 

@@ -526,6 +526,12 @@ void Daemon::handleCheckTick (const QString& msg)
                 grainNatureUpdated (stage, val.toDouble ());
             else if (key == "GT")
                 grainTemperatureUpdated (stage, val.toDouble ());
+            else if (key == "CH")
+                calculatedHumidityUpdated (stage, val.toDouble ());
+            else if (key == "TF")
+                targetFlowUpdated (stage, val.toDouble ());
+            else if (key == "TS")
+                targetSettingUpdated (stage, val.toDouble ());
         }
     }
 }

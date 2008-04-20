@@ -116,6 +116,9 @@ signals:
     void grainHumidityUpdated (int stage, double val);
     void grainTemperatureUpdated (int stage, double val);
     void grainNatureUpdated (int stage, double val);
+    void calculatedHumidityUpdated (int stage, double val);
+    void targetFlowUpdated (int stage, double val);
+    void targetSettingUpdated (int stage, double val);
 
 public:
     Daemon (const QString& host, int port);

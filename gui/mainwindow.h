@@ -94,6 +94,9 @@ protected slots:
     void daemonGrainHumidityUpdated (int stage, double val);
     void daemonGrainTemperatureUpdated (int stage, double val);
     void daemonGrainNatureUpdated (int stage, double val);
+    void daemonCalculatedHumidityUpdated (int stage, double val);
+    void daemonTargetFlowUpdated (int stage, double val);
+    void daemonTargetSettingUpdated (int stage, double val);
     void daemonSettingsGot ();
 
     // check page
