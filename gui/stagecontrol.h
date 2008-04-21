@@ -86,6 +86,11 @@ public:
     double setting () const
         { return _setting; };
 
+    void setSensors (bool sensors)
+        { _sensors = sensors; update (); };
+    bool sensors () const
+        { return _sensors; };
+
 private:
     int _number;
     bool _enabled;
@@ -98,6 +103,7 @@ private:
     double _targetHumidity;
     double _setting;
     state_t _state;
+    bool _sensors;
 
     QToolButton *_start, *_pause;
     bool _inHandleState;

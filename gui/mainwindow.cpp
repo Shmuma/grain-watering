@@ -731,6 +731,9 @@ void MainWindow::daemonSettingsGot ()
     stage2SensorsCheckbox->setChecked (_daemon.getSettings (1).sensors ());
     stage3SensorsCheckbox->setChecked (_daemon.getSettings (2).sensors ());
     stage4SensorsCheckbox->setChecked (_daemon.getSettings (3).sensors ());
+
+    for (int i = 0; i < 4; i++)
+        getStageControl (i)->setSensors (_daemon.getSettings (i).sensors ());
 }
 
 
@@ -975,4 +978,9 @@ void MainWindow::stageSensorsApplyButtonClicked ()
 {
     _daemon.setSensors (stage1SensorsCheckbox->isChecked (), stage2SensorsCheckbox->isChecked (), 
                         stage3SensorsCheckbox->isChecked (), stage4SensorsCheckbox->isChecked ());
+
+    getStageControl (0)->setSensors (stage1SensorsCheckbox->isChecked ());
+    getStageControl (1)->setSensors (stage2SensorsCheckbox->isChecked ());
+    getStageControl (2)->setSensors (stage3SensorsCheckbox->isChecked ());
+    getStageControl (3)->setSensors (stage4SensorsCheckbox->isChecked ());
 }
