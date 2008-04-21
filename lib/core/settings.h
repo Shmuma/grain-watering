@@ -9,6 +9,7 @@ private:
     double _targetHumidity, _humidityCoeff, _minGrainFlow;
     double _waterFlowK, _minWaterFlow, _maxWaterFlow;
     int _waterFormula;
+    bool _sensors;
     bool _valid;
 
     QMap<int, double> _humidityTable;
@@ -30,6 +31,7 @@ public:
           _minWaterFlow (0.0),
           _maxWaterFlow (0.0),
           _waterFormula (0),
+          _sensors (true),
           _valid (false)
     {
         _humidityTable.clear ();
@@ -49,13 +51,13 @@ public:
           _minWaterFlow (sett._minWaterFlow),
           _maxWaterFlow (sett._maxWaterFlow),
           _waterFormula (sett._waterFormula),
+          _sensors (sett._sensors),
           _valid (sett._valid),
           _humidityTable (sett._humidityTable),
           _grainFlowTable (sett._grainFlowTable),
           _grainNatureTable (sett._grainNatureTable),
           _grainTempTable (sett._grainTempTable),
           _grainNatureCoeffTable (sett._grainNatureCoeffTable)
-
     {
     };
 
@@ -125,6 +127,11 @@ public:
         { _grainNatureCoeffTable = val; };
     QMap<int, double> grainNatureCoeffTable () const
         { return _grainNatureCoeffTable; };
+
+    void setSensors (bool sensors)
+        { _sensors = sensors; };
+    bool sensors () const
+        { return _sensors; };
 };
 
 

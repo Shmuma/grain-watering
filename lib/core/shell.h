@@ -100,6 +100,9 @@ private:
     QString setPass (const QStringList& args);
     QString setDebug (const QStringList& args);
 
+    QString setSensors (const QStringList& args);
+    QString getSensors (const QStringList& args);
+
 public:
     Interpreter (Device* device);
 

@@ -122,6 +122,8 @@ protected slots:
     void settingsGrainNatureCoeffTableClicked ();
     void settingsAdvancedGroupBoxChecked (bool on);
 
+    void stageSensorsApplyButtonClicked ();
+
 public:
     MainWindow ();
 };

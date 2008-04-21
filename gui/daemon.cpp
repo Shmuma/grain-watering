@@ -580,3 +580,9 @@ bool Daemon::checkPass (const QString& user, const QString& pass)
         return false;
     return _pass[user] == pass;
 }
+
+
+void Daemon::setSensors (bool s1, bool s2, bool s3, bool s4)
+{
+    sendCommand (QString ().sprintf ("setsensors %d %d %d %d\n", s1 ? 1 : 0, s2 ? 1 : 0, s3 ? 1 : 0, s4 ? 1 : 0));
+}

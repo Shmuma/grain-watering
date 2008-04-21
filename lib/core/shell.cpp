@@ -120,6 +120,10 @@ Interpreter::Interpreter (Device* device)
                                                "Assigns settings for stage.\n", CommandMeta::c_meta);
     _commands["setpass"]	= CommandMeta (2, &Interpreter::setPass, "Changes password for user", "setpass config|admin pass",
                                                "Changes password for user.\n", CommandMeta::c_meta);
+    _commands["setsensors"]	= CommandMeta (4, &Interpreter::setSensors, "Enable or disable sensors of each stage", "setsensors 0|1 0|1 0|1 0|1",
+                                               "Enables of disables sensors handling of each stage.\n", CommandMeta::c_meta);
+    _commands["getsensors"]	= CommandMeta (0, &Interpreter::getSensors, "Obtain state of sensors of each stage", "getsensors",
+                                               "Obtain state of sensors of each stage.\n", CommandMeta::c_meta);
 }
 
 
@@ -785,4 +789,26 @@ QString Interpreter::setDebug (const QStringList& args)
 {
     _log.setActive (parseBool (args[0]));
     return QString ("OK\n");
+}
+
+
+QString Interpreter::setSensors (const QStringList& args)
+{
+    for (int i = 0; i < 4; i++) {
+        _settings[i].setSensors (parseBool (args[i]));
+        printf ("Sett %d: %s\n", i, _settings[i].toString ().toAscii ().constData ());
+        _db.setStageSettings (i, _settings[i].toString ());
+    }
+    return "OK\n";
+}
+
+
+QString Interpreter::getSensors (const QStringList& args)
+{
+    QString res;
+
+    for (int i = 0; i < 4; i++)
+        res += _settings[i].sensors () ? "1 " : "0 ";
+    
+    return res + "\n";
 }

@@ -153,6 +153,8 @@ MainWindow::MainWindow ()
     connect (settingsGrainTempTableButton, SIGNAL (clicked ()), this, SLOT (settingsGrainTempTableClicked ()));
     connect (settingsGrainNatureCoeffTableButton, SIGNAL (clicked ()), this, SLOT (settingsGrainNatureCoeffTableClicked ()));
     connect (settingsAdvancedGroupBox, SIGNAL (toggled (bool)), this, SLOT (settingsAdvancedGroupBoxChecked (bool)));
+
+    connect (stageSensorsApplyButton, SIGNAL (clicked ()), this, SLOT (stageSensorsApplyButtonClicked ()));
 }
 
 
@@ -408,6 +410,16 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
     if (s4)
         settingsStageComboBox->addItem (tr ("Stage 4"));
     settingsStageComboBox->setCurrentIndex (0);
+
+    // sensors page
+    stage1SensorsCheckbox->setEnabled (s1);
+    stage1SensorsCheckbox->setChecked (s1);
+    stage2SensorsCheckbox->setEnabled (s2);
+    stage2SensorsCheckbox->setChecked (s2);
+    stage3SensorsCheckbox->setEnabled (s3);
+    stage3SensorsCheckbox->setChecked (s3);
+    stage4SensorsCheckbox->setEnabled (s4);
+    stage4SensorsCheckbox->setChecked (s4);
 }
 
 
@@ -708,12 +720,17 @@ void MainWindow::daemonTargetFlowUpdated (int stage, double val)
 
 void MainWindow::daemonTargetSettingUpdated (int stage, double val)
 {
+    getStageControl (stage)->setSetting (val);
 }
 
 
 void MainWindow::daemonSettingsGot ()
 {
     settingsStageComboActivated (settingsStageComboBox->currentIndex ());
+    stage1SensorsCheckbox->setChecked (_daemon.getSettings (0).sensors ());
+    stage2SensorsCheckbox->setChecked (_daemon.getSettings (1).sensors ());
+    stage3SensorsCheckbox->setChecked (_daemon.getSettings (2).sensors ());
+    stage4SensorsCheckbox->setChecked (_daemon.getSettings (3).sensors ());
 }
 
 
@@ -951,4 +968,11 @@ void MainWindow::settingsAdvancedGroupBoxChecked (bool on)
 
     if (!haveAccess (AL_Config))
         settingsAdvancedGroupBox->setChecked (false);
+}
+
+
+void MainWindow::stageSensorsApplyButtonClicked ()
+{
+    _daemon.setSensors (stage1SensorsCheckbox->isChecked (), stage2SensorsCheckbox->isChecked (), 
+                        stage3SensorsCheckbox->isChecked (), stage4SensorsCheckbox->isChecked ());
 }

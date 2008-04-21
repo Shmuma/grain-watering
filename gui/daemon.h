@@ -143,6 +143,7 @@ public:
     void isGrainPresent (int stage);
 
     void sendRawCommand (const QString& text);
+    void setSensors (bool s1, bool s2, bool s3, bool s4);
 
     void refreshState ();
 
