@@ -286,7 +286,12 @@ bool Daemon::parseStagesReply (const QString& reply, QString& msg, bool& s1, boo
 
 bool Daemon::parseAutoModeTick (const QString& reply, bool* state, double* press)
 {
-    QStringList l = QString (reply).remove (" ").split (",");
+    QStringList l = QString (reply).remove (" ").split (",", QString::SkipEmptyParts);
+
+    if (l.size () < 2)
+        return false;
+
+    printf ("Auto: %d, %s\n", l.size (), reply.toAscii ().constData ());
 
     *state = l[0].split (":")[1] == "OK";
     *press = l[1].split (":")[1].toDouble ();

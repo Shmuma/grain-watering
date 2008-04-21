@@ -27,6 +27,12 @@ Database::Database (const QString& file) throw (QString&)
         _db.exec ("insert into  users (user, pass) values ('admin', 'admin');");
         _db.exec ("insert into  users (user, pass) values ('config', 'config');");
     }
+    if (!tables.contains ("history")) {
+        _db.exec ("create table history (stage integer, hist integer, time integer, val double);");
+        _db.exec ("create index history_1 on history (stage);");
+        _db.exec ("create index history_2 on history (hist);");
+        _db.exec ("create index history_3 on history (time);");
+    }
 }
 
 
@@ -121,3 +127,32 @@ QString Database::getPass ()
     return res;
 }
 
+
+
+QList< QPair <time_t, double> > Database::getHistory (int stage, int param, int from, int to)
+{
+    QList< QPair <time_t, double> > res;
+    QSqlQuery query (QSqlDatabase::database ());
+
+    query.prepare ("select time, val from history where stage = ? and param = ? and time >= from and time <= to");
+    if (!query.exec ())
+        return res;
+
+    while (query.next ())
+        res.push_back (QPair<time_t, double> (query.value (0).toInt (), query.value (1).toDouble ()));
+
+    return res;
+}
+
+
+void Database::addHistory (int stage, int param, int time, double val)
+{
+    QSqlQuery query (QSqlDatabase::database ());
+    query.prepare ("insert into history (stage, hist, time, val) values (:stage, :hist, :time, :val)");
+    query.bindValue (":stage", stage);
+    query.bindValue (":hist", param);
+    query.bindValue (":time", time);
+    query.bindValue (":val", val);
+    if (!query.exec ())
+        printf ("DB error: %s\n", QSqlDatabase::database ().lastError ().text ().toAscii ().constData ());
+}

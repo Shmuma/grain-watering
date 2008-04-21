@@ -23,6 +23,9 @@ public:
     void setStageSettings (int stage, const QString& sett);
     void setPass (const QString& user, const QString& pass);
     QString getPass ();
+
+    QList< QPair <time_t, double> > getHistory (int stage, int param, int from, int to);
+    void addHistory (int stage, int param, int time, double val);
 };
 
 
