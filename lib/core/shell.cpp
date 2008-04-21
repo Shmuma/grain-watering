@@ -177,7 +177,7 @@ QString Interpreter::exec (const QString& line)
 	res = QString ("ERROR: ") + msg + "\n";
     }
 
-    if (line != "checktick\n")
+    if (!line.startsWith ("checktick") && !line.startsWith ("automodetick"))
         _db.appendCommandHistory (line, res, ok);
     return res;
 }
