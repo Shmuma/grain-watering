@@ -3,6 +3,7 @@
 
 #include <QtCore>
 #include <QtGui>
+#include <qwt_plot.h>
 
 #include "ui_mainwindow.h"
 #include "stagecontrol.h"

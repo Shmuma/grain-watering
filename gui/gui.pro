@@ -17,7 +17,7 @@ HEADERS += mainwindow.h doubleclickbutton.h stagecontrol.h daemon.h logger.h bsu
 SOURCES += main.cpp mainwindow.cpp doubleclickbutton.cpp stagecontrol.cpp daemon.cpp logger.cpp bsucontrol.cpp tableform.cpp
 FORMS += mainwindow.ui tableform.ui
 
-LIBS += -L../lib/core -lcore
-INCLUDEPATH += ../lib/core
+LIBS += -L../lib/core -lcore -lqwt-qt4
+INCLUDEPATH += ../lib/core /usr/include/qwt-qt4/
 
 TRANSLATIONS = gui_ru.ts

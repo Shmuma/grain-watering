@@ -935,7 +935,7 @@
        <item>
         <widget class="QStackedWidget" name="mainStackWidget" >
          <property name="currentIndex" >
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page_2" >
           <layout class="QHBoxLayout" >
@@ -1156,7 +1156,7 @@
            <item>
             <widget class="QTabWidget" name="tabWidget_2" >
              <property name="currentIndex" >
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="tab_3" >
               <attribute name="title" >
@@ -1186,6 +1186,11 @@
               <attribute name="title" >
                <string>&amp;Graph</string>
               </attribute>
+              <layout class="QVBoxLayout" >
+               <item>
+                <widget class="QwtPlot" name="plot" />
+               </item>
+              </layout>
              </widget>
             </widget>
            </item>
@@ -1304,6 +1309,11 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QwtPlot</class>
+   <extends>QFrame</extends>
+   <header>qwt_plot.h</header>
+  </customwidget>
   <customwidget>
    <class>DoubleClickButton</class>
    <extends>QPushButton</extends>

@@ -6,6 +6,7 @@
 
 #include <QtCore>
 #include <QtGui>
+#include <qwt_plot.h>
 
 
 // --------------------------------------------------
