@@ -7,6 +7,7 @@
 #include <QtCore>
 #include <QtGui>
 #include <qwt_plot.h>
+#include <qwt_plot_curve.h>
 
 
 // --------------------------------------------------
@@ -174,6 +175,22 @@ MainWindow::MainWindow ()
     connect (calibrateButton, SIGNAL (clicked ()), this, SLOT (calibrateButtonClicked ()));
 
     connect (stageModesApplyButton, SIGNAL (clicked ()), this, SLOT (stageModesApplyButtonClicked ()));
+
+    // history
+    historyKindCombo->clear ();
+    historyKindCombo->addItem (tr ("Measured humidity"), HK_Humidity);
+    historyKindCombo->addItem (tr ("Grain flow"), HK_GrainFlow);
+    historyKindCombo->addItem (tr ("Grain temperature"), HK_GrainTemp);
+    historyKindCombo->addItem (tr ("Grain nature"), HK_GrainNature);
+    historyKindCombo->addItem (tr ("Water pressure"), HK_WaterPress);
+    historyKindCombo->addItem (tr ("Humidity"), HK_TargetHumidity);
+    historyKindCombo->addItem (tr ("Water flow"), HK_WaterFlow);
+    historyKindCombo->addItem (tr ("Setting"), HK_Setting);
+
+    connect (refreshHistoryButton, SIGNAL (clicked ()), this, SLOT (refreshHistoryButtonClicked ()));
+    connect (historyPeriodCombo, SIGNAL (activated (int)), this, SLOT (historyPeriodComboChanged (int)));
+    connect (&_daemon, SIGNAL (historyGot (const QList < QPair <uint, double> >&)), this, SLOT (historyGot (const QList < QPair <uint, double> >&)));
+    historyPeriodComboChanged (0);
 }
 
 
@@ -505,6 +522,21 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
         btns[i]->setEnabled (anyStageActive);
         btns[i]->setChecked (false);
     }
+
+    // history combo box
+    historyStageCombo->clear ();
+    
+    if (s1)
+        historyStageCombo->addItem (tr ("Stage 1"), HS_Stage1);
+    if (s2)
+        historyStageCombo->addItem (tr ("Stage 2"), HS_Stage2);
+    if (s3)
+        historyStageCombo->addItem (tr ("Stage 3"), HS_Stage3);
+    if (s4)
+        historyStageCombo->addItem (tr ("Stage 4"), HS_Stage4);
+
+    historyStageCombo->addItem (tr ("Events"), HS_Events);
+    historyStageCombo->addItem (tr ("Cleanings"), HS_Cleanings);
 }
 
 
@@ -1241,3 +1273,91 @@ void MainWindow::stageModesApplyButtonClicked ()
                               .arg (modes[s4modeCombo->currentIndex ()]));
 }
 
+
+void MainWindow::historyPeriodComboChanged (int index)
+{
+    QDateTime from = QDateTime::currentDateTime ();
+
+    switch (index) {
+    case 0:
+        from = from.addSecs (-60*60);
+        break;
+    case 1:
+        from = from.addDays (-1);
+        break;
+    case 2:
+        from = from.addDays (-7);
+        break;
+    case 3:
+        from = from.addDays (-30);
+        break;
+    case 4:
+        from = from.addYears (-1);
+        break;
+    }
+
+    historyFromDateEdit->setDateTime (from);
+}
+
+
+void MainWindow::refreshHistoryButtonClicked ()
+{
+    history_stage_t stage = (history_stage_t)historyStageCombo->itemData (historyStageCombo->currentIndex ()).toInt ();
+    history_kind_t kind = (history_kind_t)historyKindCombo->itemData (historyKindCombo->currentIndex ()).toInt ();
+    QDateTime from = historyFromDateEdit->dateTime ();
+    QDateTime to;
+    int period = historyPeriodCombo->currentIndex ();
+    
+    switch (period) {
+    case 0:
+        to = from.addSecs (60*60);
+        break;
+    case 1:
+        to = from.addDays (1);
+        break;
+    case 2:
+        to = from.addDays (7);
+        break;
+    case 3:
+        to = from.addDays (30);
+        break;
+    case 4:
+        to = from.addYears (1);
+        break;
+    }
+
+    _daemon.requestHistory (stage, kind, from.toTime_t (), to.toTime_t ());
+}
+
+
+void MainWindow::historyGot (const QList < QPair <uint, double> >& data)
+{
+    QStringList l;
+    double *x, *y;
+
+    x = (double*)malloc (sizeof (double) * data.size ());
+    y = (double*)malloc (sizeof (double) * data.size ());
+
+    historyTable->clear ();
+
+    for (int i = 0; i < data.size (); i++) {
+        l.clear ();
+        l.append (QDateTime::fromTime_t (data[i].first).toString ("dd.MM.yy hh:mm:ss"));
+        l.append (QString::number (data[i].second));
+
+        new QTreeWidgetItem (historyTable, l);
+        x[i] = data[i].first;
+        y[i] = data[i].second;
+    }
+
+    historyTable->resizeColumnToContents (0);
+
+    // plot
+    plot->clear ();
+    QwtPlotCurve* curve = new QwtPlotCurve (tr ("Measured value"));
+    curve->setData (x, y, data.size ());
+    curve->attach (plot);
+    plot->replot ();
+    free (x);
+    free (y);
+}

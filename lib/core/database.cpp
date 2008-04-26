@@ -139,7 +139,11 @@ QList< QPair <time_t, double> > Database::getHistory (int stage, int param, int 
     QList< QPair <time_t, double> > res;
     QSqlQuery query (QSqlDatabase::database ());
 
-    query.prepare ("select time, val from history where stage = ? and param = ? and time >= from and time <= to");
+    query.prepare ("select time, val from history where stage = :stage and hist = :param and time >= :from and time <= :to");
+    query.bindValue (":stage", stage);
+    query.bindValue (":param", param);
+    query.bindValue (":from", from);
+    query.bindValue (":to", to);
     if (!query.exec ())
         return res;
 
@@ -150,12 +154,12 @@ QList< QPair <time_t, double> > Database::getHistory (int stage, int param, int 
 }
 
 
-void Database::addHistory (int stage, int param, int time, double val)
+void Database::addHistory (history_stage_t stage, history_kind_t param, int time, double val)
 {
     QSqlQuery query (QSqlDatabase::database ());
     query.prepare ("insert into history (stage, hist, time, val) values (:stage, :hist, :time, :val)");
-    query.bindValue (":stage", stage);
-    query.bindValue (":hist", param);
+    query.bindValue (":stage", (int)stage);
+    query.bindValue (":hist", (int)param);
     query.bindValue (":time", time);
     query.bindValue (":val", val);
     if (!query.exec ())

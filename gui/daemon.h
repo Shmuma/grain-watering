@@ -5,6 +5,7 @@
 #include <QtNetwork>
 
 #include "settings.h"
+#include "history.h"
 
 
 class DaemonCommand
@@ -30,6 +31,7 @@ public:
         c_setsettings,
         c_gettempcoef,
         c_calibrate,
+        c_gethistory,
     };
     
 private:
@@ -74,13 +76,14 @@ protected:
     bool parseGenericReply (const QString& reply, QString& msg);
     bool parseNumberReply (const QString& reply, QString& msg, double* val);
     bool parseStagesReply (const QString& reply, QString& msg, bool& s1, bool& s2, bool& s3, bool& s4);
-    void sendCommand (const QString& cmd);
+    void sendCommand (const QString& cmd, bool log = true);
     bool parseAutoModeTick (const QString& reply, bool* state, double* press);
     bool handleMetaState (const QString& msg);
     void handleCheckTick (const QString& msg);
     void parseSettings (const QString& msg);
     void parseTempCoef (const QString& reply);
     void parseCalibrateReply (int stage, const QString& reply);
+    void parseHistory (const QString& reply);
 
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
@@ -125,6 +128,8 @@ signals:
     void tempCoefGot (double k, double resist);
     void calibrateReply (int stage, const QString& key, double val);
 
+    void historyGot (const QList< QPair <uint, double> >& res);
+
 public:
     Daemon (const QString& host, int port);
 
@@ -166,6 +171,7 @@ public:
     void calibrate (int stage, const QString& key);
 
     void setStageModes (bool s1, bool s2, bool s3, bool s4);
+    void requestHistory (history_stage_t stage, history_kind_t kind, uint from, uint to);
 };
 
 

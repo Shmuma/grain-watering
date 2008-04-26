@@ -1274,7 +1274,7 @@
        <item>
         <widget class="QStackedWidget" name="mainStackWidget" >
          <property name="currentIndex" >
-          <number>2</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page_2" >
           <layout class="QHBoxLayout" >
@@ -1326,12 +1326,12 @@
                 <string>&amp;Values</string>
                </property>
                <property name="buddy" >
-                <cstring>comboBox</cstring>
+                <cstring>historyStageCombo</cstring>
                </property>
               </widget>
              </item>
              <item row="0" column="1" >
-              <widget class="QComboBox" name="comboBox" >
+              <widget class="QComboBox" name="historyStageCombo" >
                <item>
                 <property name="text" >
                  <string>Stage 1</string>
@@ -1359,7 +1359,7 @@
                </item>
                <item>
                 <property name="text" >
-                 <string>Cleaning</string>
+                 <string>Cleanings</string>
                 </property>
                </item>
               </widget>
@@ -1376,12 +1376,12 @@
                 <string>&amp;History kind</string>
                </property>
                <property name="buddy" >
-                <cstring>comboBox_2</cstring>
+                <cstring>historyKindCombo</cstring>
                </property>
               </widget>
              </item>
              <item row="0" column="3" colspan="2" >
-              <widget class="QComboBox" name="comboBox_2" >
+              <widget class="QComboBox" name="historyKindCombo" >
                <item>
                 <property name="text" >
                  <string>Humidity</string>
@@ -1417,6 +1417,11 @@
                  <string>Water flow</string>
                 </property>
                </item>
+               <item>
+                <property name="text" >
+                 <string>Setting</string>
+                </property>
+               </item>
               </widget>
              </item>
              <item row="1" column="0" >
@@ -1431,12 +1436,12 @@
                 <string>&amp;Start</string>
                </property>
                <property name="buddy" >
-                <cstring>dateTimeEdit</cstring>
+                <cstring>historyFromDateEdit</cstring>
                </property>
               </widget>
              </item>
              <item row="1" column="1" >
-              <widget class="QDateTimeEdit" name="dateTimeEdit" />
+              <widget class="QDateTimeEdit" name="historyFromDateEdit" />
              </item>
              <item row="1" column="2" >
               <widget class="QLabel" name="label_17" >
@@ -1450,12 +1455,12 @@
                 <string>&amp;Period</string>
                </property>
                <property name="buddy" >
-                <cstring>comboBox_3</cstring>
+                <cstring>historyPeriodCombo</cstring>
                </property>
               </widget>
              </item>
              <item row="1" column="3" >
-              <widget class="QComboBox" name="comboBox_3" >
+              <widget class="QComboBox" name="historyPeriodCombo" >
                <item>
                 <property name="text" >
                  <string>Hour</string>
@@ -1484,9 +1489,9 @@
               </widget>
              </item>
              <item row="1" column="4" >
-              <widget class="QPushButton" name="pushButton" >
+              <widget class="QPushButton" name="refreshHistoryButton" >
                <property name="text" >
-                <string>&amp;Next</string>
+                <string>&amp;Refresh</string>
                </property>
               </widget>
              </item>
@@ -1503,7 +1508,7 @@
               </attribute>
               <layout class="QVBoxLayout" >
                <item>
-                <widget class="QTreeWidget" name="treeWidget" >
+                <widget class="QTreeWidget" name="historyTable" >
                  <property name="allColumnsShowFocus" >
                   <bool>true</bool>
                  </property>

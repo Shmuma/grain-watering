@@ -17,19 +17,6 @@ typedef QString (Interpreter::*handler_t) (const QStringList&);
 class Interpreter
 {
 private:
-    enum history_t {
-        h_gh = 0,
-        h_gf,
-        h_gt,
-        h_gn,
-        h_wp,
-        h_th,
-        h_wf,
-        h_msg,
-        h_clean,
-        h_setting,
-    };
-
     Device* _dev;
     QMap<QString, CommandMeta> _commands;
     Database _db;
@@ -53,9 +40,8 @@ private:
     static DeviceCommand::stage_t parseStage (const QString& stage) throw (QString);
     static int parseStageAsInt (const QString& stage) throw (QString);
     static bool parseBool (const QString& stage) throw (QString);
-    int historyToInteger (const QString& history);
 
-    void appendHistory (int stage, history_t param, double val);
+    void appendHistory (history_stage_t stage, history_kind_t param, double val);
 
     double getWaterFlow (int stage);
     double getWaterPressure ();

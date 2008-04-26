@@ -14,5 +14,5 @@ QMAKE_CXXFLAGS_DEBUG += -O0
 QMAKE_LFLAGS_DEBUG += -g
 
 # Input
-HEADERS += serial.h device.h shell.h database.h settings.h log.h
+HEADERS += serial.h device.h shell.h database.h settings.h log.h history.h
 SOURCES += serial.cpp device.cpp shell.cpp database.cpp settings.cpp log.cpp

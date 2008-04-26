@@ -9,6 +9,7 @@
 #include "stagecontrol.h"
 #include "daemon.h"
 #include "logger.h"
+#include "history.h"
 
 
 class MainWindow : public QWidget, private Ui::MainWindow
@@ -137,6 +138,11 @@ protected slots:
 
     void calibrateButtonClicked ();
     void stageModesApplyButtonClicked ();
+
+    // history
+    void refreshHistoryButtonClicked ();
+    void historyPeriodComboChanged (int index);
+    void historyGot (const QList < QPair <uint, double> >& data);
 
 public:
     MainWindow ();

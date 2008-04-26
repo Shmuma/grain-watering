@@ -68,6 +68,7 @@ void Daemon::socketReadyRead ()
     QString reply, msg;
     QString auto_prefix ("Auto: ");
     QString check_prefix ("Check: ");
+    QString hist_prefix ("History: ");
     QString prompt_prefix ("> ");
     QStringList replies;
     bool s1, s2, s3, s4;
@@ -86,7 +87,8 @@ void Daemon::socketReadyRead ()
         reply = replies[i];
 
         if (!reply.startsWith (auto_prefix) && !reply.startsWith (check_prefix)) {
-            textArrived (reply+prompt_prefix);
+            if (!reply.startsWith (hist_prefix))
+                textArrived (reply+prompt_prefix);
 
             if (!_queue.isEmpty ()) {
                 DaemonCommand cmd = _queue.front ();
@@ -191,6 +193,9 @@ void Daemon::socketReadyRead ()
                     break;
                 case DaemonCommand::c_calibrate:
                     parseCalibrateReply (cmd.stage (), reply);
+                    break;
+                case DaemonCommand::c_gethistory:
+                    parseHistory (reply.trimmed ());
                     break;
                 }
             }
@@ -314,9 +319,10 @@ void Daemon::parseTempCoef (const QString& reply)
 }
 
 
-void Daemon::sendCommand (const QString& cmd)
+void Daemon::sendCommand (const QString& cmd, bool log)
 {
-    commandSent (cmd.trimmed () + "\n");
+    if (log)
+        commandSent (cmd.trimmed () + "\n");
     _sock->write (cmd.toAscii ());
 }
 
@@ -642,4 +648,24 @@ void Daemon::setStageModes (bool s1, bool s2, bool s3, bool s4)
                                      s2 ? "auto" : "semi", 
                                      s3 ? "auto" : "semi", 
                                      s4 ? "auto" : "semi"));
+}
+
+
+void Daemon::requestHistory (history_stage_t stage, history_kind_t kind, uint from, uint to)
+{
+    sendCommand (QString ().sprintf ("gethistory %d %d %u %u\n", (int)stage, (int)kind, from, to), false);
+    _queue.push_back (DaemonCommand (DaemonCommand::c_gethistory));
+}
+
+
+void Daemon::parseHistory (const QString& reply)
+{
+    QStringList l = QString (reply).remove ("History:").trimmed ().split (",", QString::SkipEmptyParts);
+    QList< QPair <uint, double> > res;
+
+    for (int i = 0; i < l.size (); i += 2) {
+        res.push_back (QPair<uint, double> (l[i].toUInt (), l[i+1].toDouble ()));
+    }
+
+    historyGot (res);
 }

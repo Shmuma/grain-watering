@@ -363,7 +363,7 @@ QString Interpreter::raw (const QStringList& args)
     for (int i = 0; i < 4; i++) {
         data.append (args[i].toUInt (&ok, 16));
         if (!ok)
-            return "ERROR: Invalid hexadecimal sequence";
+            return "ERROR: Invalid hexadecimal sequence\n";
     }
 
     res = _dev->sendRawCommand (data);
@@ -562,7 +562,7 @@ QString Interpreter::getMetaState (const QStringList& args)
     res += "0:";
     res += "WP=" + QString::number (wp);
 
-    appendHistory (0, h_wp, wp);
+    appendHistory (HS_Stage1, HK_WaterPress, wp);
 
     for (int i = 0; i < 4; i++) {
         if (!parseBool (args[i]))
@@ -793,11 +793,11 @@ QString Interpreter::getStageState (int stage)
         d_wf = getWaterFlow (stage);
         d_gn = getGrainNature (stage);
 
-        appendHistory (stage, h_gh, d_hum);
-        appendHistory (stage, h_gf, d_grain_flow);
-        appendHistory (stage, h_gt, d_temp);
-        appendHistory (stage, h_gn, d_gn);
-        appendHistory (stage, h_wf, d_wf);
+        appendHistory ((history_stage_t)stage, HK_Humidity, d_hum);
+        appendHistory ((history_stage_t)stage, HK_GrainFlow, d_grain_flow);
+        appendHistory ((history_stage_t)stage, HK_GrainTemp, d_temp);
+        appendHistory ((history_stage_t)stage, HK_GrainNature, d_gn);
+        appendHistory ((history_stage_t)stage, HK_WaterFlow, d_wf);
 
         res += "WF=" + QString::number (d_wf) + ",";
         res += "GF=" + QString::number (d_grain_flow) + ",";
@@ -810,7 +810,7 @@ QString Interpreter::getStageState (int stage)
     
         // TODO: unknown last coefficient 
         d_hum_cur = d_hum + pk_t + pk_nat;
-        appendHistory (stage, h_th, d_hum_cur);
+        appendHistory ((history_stage_t)stage, HK_TargetHumidity, d_hum_cur);
 
         res += "CH=" + QString::number (d_hum_cur) + ",";
 
@@ -833,7 +833,7 @@ QString Interpreter::getStageState (int stage)
             (_settings[stage].maxWaterFlow () - _settings[stage].minWaterFlow ());
 
         res += "TS=" + QString::number (_target_sett[stage]);
-        appendHistory (stage, h_setting, _target_sett[stage]);
+        appendHistory ((history_stage_t)stage, HK_Setting, _target_sett[stage]);
     }
     else
         res = "disabled";
@@ -870,87 +870,53 @@ QString Interpreter::getSensors (const QStringList& args)
 }
 
 
-int Interpreter::historyToInteger (const QString& history)
-{
-    QStringList l;
-
-    l.push_back ("gh");
-    l.push_back ("gf");
-    l.push_back ("gt");
-    l.push_back ("gn");
-    l.push_back ("wp");
-    l.push_back ("th");
-    l.push_back ("wf");
-    l.push_back ("msg");
-    l.push_back ("clean");
-
-    return l.indexOf (history.toLower ());
-}
-
-
 QString Interpreter::getHistory (const QStringList& args)
 {
-    int stage = parseStageAsInt (args[0]);
-    int hist = historyToInteger (args[1]);
+    history_stage_t stage = (history_stage_t)args[0].toInt ();
+    history_kind_t hist = (history_kind_t)args[1].toInt ();
     int from, to;
 
-    if (stage >= 4) {
-        return QString ("Not implemented\n");
+    from = args[2].toInt ();
+    to = args[3].toInt ();
+
+    if (from == 0 || to == 0 || from > to)
+        return "Invalid timestamp\n";
+
+    QList<QPair<time_t, double> > res = _db.getHistory (stage, hist, from, to);
+    QString r;
+
+    for (int i = 0; i < res.size (); i++) {
+        if (!r.isEmpty ())
+            r += ",";
+        r += QString::number (res[i].first) + "," + QString::number (res[i].second);
     }
-    else {
-        if (hist < 0)
-            return QString ("Invalid parameter");
 
-        from = args[2].toInt ();
-        to = args[3].toInt ();
-
-        if (from == 0 || to == 0 || from > to)
-            return QString ("Invalid timestamp");
-
-        QList<QPair<time_t, double> > res = _db.getHistory (stage, hist, from, to);
-        QString r;
-
-        for (int i = 0; i < res.size (); i++) {
-            if (!r.isEmpty ())
-                r += ",";
-            r += QString::number (res[i].first) + "," + QString::number (res[i].second);
-        }
-        
-        return r + "\n";
-    }    
+    return "History: " + r + "\n";
 }
 
 
 QString Interpreter::addHistory (const QStringList& args)
 {
-    int stage = parseStageAsInt (args[0]);
-    int hist = historyToInteger (args[1]);
+    history_stage_t stage = (history_stage_t)args[0].toInt ();
+    history_kind_t hist = (history_kind_t)args[1].toInt ();
     int time = args[2].toInt ();
 
-    if (stage >= 4) {
-        return QString ("OK\n");
-    }
-    else {
-        double val;
+    double val;
     
-        if (hist < 0)
-            return QString ("Invalid parameter");
+    if (time == 0)
+        return QString ("Invalid timestamp\n");
 
-        if (time == 0)
-            return QString ("Invalid timestamp");
+    val = args[3].toDouble ();
 
-        val = args[3].toDouble ();
+    _db.addHistory (stage, hist, time, val);
 
-        _db.addHistory (stage, hist, time, val);
-
-        return QString ("OK\n");
-    }
+    return QString ("OK\n");
 }
 
 
-void Interpreter::appendHistory (int stage, history_t param, double val)
+void Interpreter::appendHistory (history_stage_t stage, history_kind_t param, double val)
 {
-    _db.addHistory (stage, (int)param, QDateTime::currentDateTime ().toTime_t (), val);
+    _db.addHistory (stage, param, QDateTime::currentDateTime ().toTime_t (), val);
 }
 
 

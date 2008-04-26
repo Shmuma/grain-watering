@@ -4,6 +4,7 @@
 #include <QtSql>
 
 #include "settings.h"
+#include "history.h"
 
 
 class Database : public QObject
@@ -31,7 +32,7 @@ public:
     QString getPass ();
 
     QList< QPair <time_t, double> > getHistory (int stage, int param, int from, int to);
-    void addHistory (int stage, int param, int time, double val);
+    void addHistory (history_stage_t stage, history_kind_t param, int time, double val);
 
     void setTempCoef (double k, double res);
 
