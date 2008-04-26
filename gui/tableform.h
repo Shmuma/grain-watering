@@ -10,10 +10,9 @@ class TableForm : public QDialog, private  Ui::TableForm
     Q_OBJECT
 private:
     QMap<int, double> _res;
-    bool _hex_key;
 
 public:
-    TableForm (QWidget* parent, const QString& caption, const QString& label, const QString& key, const QString& val, bool hex_key);
+    TableForm (QWidget* parent, const QString& caption, const QString& label, const QString& key, const QString& val);
 
     QMap<int, double> result () const
         { return _res; };

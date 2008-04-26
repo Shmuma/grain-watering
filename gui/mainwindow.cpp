@@ -26,6 +26,8 @@ MainWindow::MainWindow ()
     startTimer (1000);
     refreshScreenClock ();
 
+    mainStackWidget->setCurrentIndex (0);
+
     // logger
     Logger::instance ()->setMinSeverity (Logger::Debug);
     connect (Logger::instance (), SIGNAL (message (Logger::severity_t, const QString&)), 
@@ -546,13 +548,13 @@ void MainWindow::daemonMetaStateGot (double water_pres, QMap<int, QList<double> 
 
 void MainWindow::daemonWaterStarted (int stage)
 {
-    Logger::instance ()->log (Logger::Information, tr ("Water started on %1 stage").arg (stage));
+    Logger::instance ()->log (Logger::Information, tr ("Water started on %1 stage").arg (stage+1));
 }
 
 
 void MainWindow::daemonWaterStopped (int stage)
 {
-    Logger::instance ()->log (Logger::Information, tr ("Water stopped on %1 stage").arg (stage));
+    Logger::instance ()->log (Logger::Information, tr ("Water stopped on %1 stage").arg (stage+1));
 }
 
 
@@ -716,7 +718,7 @@ void MainWindow::daemonCalculatedHumidityUpdated (int stage, double val)
 }
 
 
-void MainWindow::daemonTargetFlowUpdated (int stage, double val)
+void MainWindow::daemonTargetFlowUpdated (int, double)
 {
 }
 
@@ -859,7 +861,7 @@ void MainWindow::settingsValueEdited (const QString&)
 
 void MainWindow::settingsHumidityTableClicked ()
 {
-    TableForm dlg (this, tr ("Humidity table editor"), tr ("Key (hex) -> Humidity map"), tr ("Value (hex)"), tr ("Humidity"), true);
+    TableForm dlg (this, tr ("Humidity table editor"), tr ("Key (0..255) -> Humidity map"), tr ("Value"), tr ("Humidity"));
 
     dlg.setData (_humidityTable);
 
@@ -873,7 +875,7 @@ void MainWindow::settingsHumidityTableClicked ()
 
 void MainWindow::settingsGrainFlowTableClicked ()
 {
-    TableForm dlg (this, tr ("Grain flow table editor"), tr ("Key (hex) -> Grain flow map"), tr ("Value (hex)"), tr ("Grain flow"), true);
+    TableForm dlg (this, tr ("Grain flow table editor"), tr ("Key (0..255) -> Grain flow map"), tr ("Value"), tr ("Grain flow"));
 
     dlg.setData (_grainFlowTable);
 
@@ -887,7 +889,7 @@ void MainWindow::settingsGrainFlowTableClicked ()
 
 void MainWindow::settingsGrainNatureTableClicked ()
 {
-    TableForm dlg (this, tr ("Grain nature table editor"), tr ("Key (hex) -> Grain nature map"), tr ("Value (hex)"), tr ("Grain nature"), true);
+    TableForm dlg (this, tr ("Grain nature table editor"), tr ("Key (0..255) -> Grain nature map"), tr ("Value"), tr ("Grain nature"));
 
     dlg.setData (_grainNatureTable);
 
@@ -901,8 +903,8 @@ void MainWindow::settingsGrainNatureTableClicked ()
 
 void MainWindow::settingsGrainTempTableClicked ()
 {
-    TableForm dlg (this, tr ("Grain temperature table editor"), tr ("Temperature (dec) -> Grain temperature coeff map"), 
-                   tr ("Temperature"), tr ("Grain temperature coeff"), false);
+    TableForm dlg (this, tr ("Grain temperature table editor"), tr ("Temperature -> Grain temperature coeff map"), 
+                   tr ("Temperature"), tr ("Grain temperature coeff"));
 
     dlg.setData (_grainTempTable);
 
@@ -916,8 +918,8 @@ void MainWindow::settingsGrainTempTableClicked ()
 
 void MainWindow::settingsGrainNatureCoeffTableClicked ()
 {
-    TableForm dlg (this, tr ("Grain nature coeff table editor"), tr ("Temperature (dec) -> Grain nature coeff map"), 
-                   tr ("Temperature"), tr ("Grain nature coeff"), false);
+    TableForm dlg (this, tr ("Grain nature coeff table editor"), tr ("Temperature -> Grain nature coeff map"), 
+                   tr ("Temperature"), tr ("Grain nature coeff"));
 
     dlg.setData (_grainNatureCoeffTable);
 

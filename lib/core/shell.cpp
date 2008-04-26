@@ -778,10 +778,10 @@ QString Interpreter::getStageState (int stage)
         res += "GN=" + QString::number (d_gn) + ",";
 
         pk_t = _settings[stage].grainTempTable ()[temp];
-        pk_nat = _settings[stage].grainNatureCoeffTable ()[temp];
+        pk_nat = _settings[stage].grainNatureCoeffTable ()[(int)d_gn];
     
         // TODO: unknown last coefficient 
-        d_hum_cur = d_hum + pk_t + pk_nat + 0.0;
+        d_hum_cur = d_hum + pk_t + pk_nat;
         appendHistory (stage, h_th, d_hum_cur);
 
         res += "CH=" + QString::number (d_hum_cur) + ",";

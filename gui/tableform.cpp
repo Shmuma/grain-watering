@@ -8,9 +8,8 @@
 // TableForm
 // --------------------------------------------------
 TableForm::TableForm (QWidget* parent, const QString& caption, const QString& label, 
-                      const QString& key, const QString& val, bool hex_key)
-    : QDialog (parent),
-      _hex_key (hex_key)
+                      const QString& key, const QString& val)
+    : QDialog (parent)
 {
     QStringList list;
 
@@ -60,7 +59,7 @@ void TableForm::addButtonClicked ()
     bool ok;
 
     // check for value
-    keyEdit->text ().toUInt (&ok, _hex_key ? 16 : 10);
+    keyEdit->text ().toUInt (&ok);
 
     if (!ok) {
         QMessageBox::warning (this, tr ("Key error"), tr ("Key is incorrect"));
@@ -121,7 +120,7 @@ void TableForm::setData (const QMap<int, double>& data)
     while (it != data.end ()) {
         QStringList l;
 
-        l += QString::number (it.key (), _hex_key ? 16 : 10);
+        l += QString::number (it.key ());
         l += QString::number (it.value ());
         new QTreeWidgetItem (tableWidget, l);
         

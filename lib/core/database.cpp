@@ -183,11 +183,16 @@ double Database::getTempK () const
 {
     QSqlQuery query (QSqlDatabase::database ());
     QString res;
+    double def = 0.0097;
 
     query.prepare ("select value from settings where key = :key");
     query.bindValue (":key", S_TempK);
-    query.exec ();
-    
+    if (!query.exec ())
+        return def;
+
+    if (!query.next ())
+        return def;
+
     return query.value (0).toDouble ();
 }
 
@@ -196,10 +201,16 @@ double Database::getTempResist () const
 {
     QSqlQuery query (QSqlDatabase::database ());
     QString res;
+    double def = 997;
 
     query.prepare ("select value from settings where key = :key");
     query.bindValue (":key", S_TempResist);
-    query.exec ();
+
+    if (!query.exec ())
+        return def;
+
+    if (!query.next ())
+        return def;
     
     return query.value (0).toDouble ();
 }
