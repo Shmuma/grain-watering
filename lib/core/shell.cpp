@@ -90,6 +90,8 @@ Interpreter::Interpreter (Device* device)
 					       "Sets output signal on (1) or off (0)\n", CommandMeta::c_hardware);
     _commands["startfilterautomat"]= CommandMeta (0, &Interpreter::startFilterAutomat, "Starts filter automat", "startfilterautomat",
                                                   "Starts filter automat\n", CommandMeta::c_hardware);
+    _commands["raw"]		= CommandMeta (4, &Interpreter::raw, "Sends raw 4 hex bytes to daemon", "raw b1 b2 b3 b4",
+                                                  "Sends raw 4 hex bytes to daemon and outputs raw reply\n", CommandMeta::c_hardware);
     // state commands
     _commands["getstages"]	= CommandMeta (0, &Interpreter::getStages, "Get available stages", "getstages",
 					       "Command gets active stages previously set by setstages command.\n"
@@ -349,6 +351,27 @@ QString Interpreter::getP5State (const QStringList& args)
 QString Interpreter::getCleanResult (const QStringList& args)
 {
     return QString::number (_dev->getCleanResult ()) + "\n";
+}
+
+
+QString Interpreter::raw (const QStringList& args)
+{
+    QByteArray data, res;
+    QString s;
+    bool ok;
+
+    for (int i = 0; i < 4; i++) {
+        data.append (args[i].toUInt (&ok, 16));
+        if (!ok)
+            return "ERROR: Invalid hexadecimal sequence";
+    }
+
+    res = _dev->sendRawCommand (data);
+    
+    for (int i = 0; i < res.size (); i++)
+        s += QString ().sprintf ("%02x ", (unsigned char)res[i]);
+
+    return s + "\n";
 }
 
 

@@ -78,6 +78,7 @@ private:
     QString getP4State (const QStringList& args);
     QString getP5State (const QStringList& args);
     QString getCleanResult (const QStringList& args);
+    QString raw (const QStringList& args);
 
     QString isGrainPresent (const QStringList& args);
     QString isBSUPowered (const QStringList& args);

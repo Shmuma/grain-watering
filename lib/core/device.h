@@ -152,6 +152,8 @@ public:
     bool drainWater (bool s1, bool s2, bool s3, bool s4);
     bool setOutputSignal (bool on);
     bool startFilterAutomat ();
+
+    QByteArray sendRawCommand (const QByteArray& data);
 };
 
 

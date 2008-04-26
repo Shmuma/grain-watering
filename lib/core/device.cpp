@@ -35,19 +35,29 @@ DeviceCommand::DeviceCommand (const QByteArray& data)
 {
     _valid = false;
 
-    // we got invalid sequence
-    if (data[0] != (char)0xAA) {
-        printf ("DeviceCommand: input sequence started with %02x\n", data[0]);
-        return;
-    }
+    if (data.size () == 5) {
+        // assume that this is a reply, analyze it
+        // we got invalid sequence
+        if (data[0] != (char)0xAA) {
+            printf ("DeviceCommand: input sequence started with %02x\n", data[0]);
+            return;
+        }
 
-    _kind = (kind_t)(unsigned char)data[1];
-    _reply_stage = (stage_t)(unsigned char)data[1];
-    _low = data[2];
-    _high = data[3];
-    _valid = calcCRC () == data[4];
-    if (!_valid)
-        printf ("DeviceCommand: invalid CRC %02x (calc) != %02x (got)\n", calcCRC (), data[4]);
+        _kind = (kind_t)(unsigned char)data[1];
+        _reply_stage = (stage_t)(unsigned char)data[1];
+        _low = data[2];
+        _high = data[3];
+        _valid = calcCRC () == data[4];
+        if (!_valid)
+            printf ("DeviceCommand: invalid CRC %02x (calc) != %02x (got)\n", calcCRC (), data[4]);
+    }
+    else if (data.size () == 4) {
+        // this is an incomplete command. Append it with CRC.
+        _kind = (kind_t)(unsigned char)data[1];
+        _low = data[2];
+        _high = data[3];
+        _valid = true;
+    }
 }
 
 
@@ -438,4 +448,15 @@ bool Device::startFilterAutomat ()
     DeviceCommand cmd (DeviceCommand::StartFilterAutomat);
     _port->send (cmd.pack ());
     return DeviceCommand::isOK (_port->receive (cmd.delay ()+1), DeviceCommand::StartFilterAutomat, DeviceCommand::Stg_All);
+}
+
+
+QByteArray Device::sendRawCommand (const QByteArray& data)
+{
+    DeviceCommand cmd (data);
+
+    _port->send (cmd.pack ());
+    QByteArray res = _port->receive (cmd.delay () + 1);
+
+    return res;
 }
