@@ -15,7 +15,6 @@ public:
         c_init,
         c_connect,
         c_setstages,
-        c_getgrainflow,
         c_startautomode,
         c_stopautomode,
         c_toggleautomode,
@@ -30,6 +29,7 @@ public:
         c_getsettings,
         c_setsettings,
         c_gettempcoef,
+        c_calibrate,
     };
     
 private:
@@ -80,6 +80,7 @@ protected:
     void handleCheckTick (const QString& msg);
     void parseSettings (const QString& msg);
     void parseTempCoef (const QString& reply);
+    void parseCalibrateReply (int stage, const QString& reply);
 
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
@@ -122,6 +123,7 @@ signals:
     void targetFlowUpdated (int stage, double val);
     void targetSettingUpdated (int stage, double val);
     void tempCoefGot (double k, double resist);
+    void calibrateReply (int stage, const QString& key, double val);
 
 public:
     Daemon (const QString& host, int port);
@@ -132,7 +134,6 @@ public:
     void connect ();
     void disconnect ();
     void setStages (bool s1, bool s2, bool s3, bool s4);
-    void getGrainFlow (int stage);
 
     void startAutoMode (int stage);
     void stopAutoMode (int stage);
@@ -161,6 +162,8 @@ public:
 
     void requestTempCoef ();
     void setTempCoef (double k, double resist);
+
+    void calibrate (int stage, const QString& key);
 };
 
 

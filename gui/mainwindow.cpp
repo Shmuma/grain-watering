@@ -18,7 +18,8 @@ MainWindow::MainWindow ()
       _settingsChanged (false),
       _daemon ("localhost", 12345),
       _currentSettingsStage (0),
-      _access (AL_Default)
+      _access (AL_Default),
+      _calibrateStage (0)
 {
     setupUi (this);
 
@@ -95,6 +96,8 @@ MainWindow::MainWindow ()
 
     viewButton->setMenu (connectMenu);
 
+    calibrateGroupBox->hide ();
+
     // daemon state signals
     connect (&_daemon, SIGNAL (connectedChanged (bool)), this, SLOT (connectedChanged (bool)));
     connect (&_daemon, SIGNAL (hardwareConnected ()), this, SLOT (daemonHardwareConnected ()));
@@ -126,6 +129,7 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (targetFlowUpdated (int, double)), this, SLOT (daemonTargetFlowUpdated (int, double)));
     connect (&_daemon, SIGNAL (targetSettingUpdated (int, double)), this, SLOT (daemonTargetSettingUpdated (int, double)));
     connect (&_daemon, SIGNAL (settingsGot ()), this, SLOT (daemonSettingsGot ()));
+    connect (&_daemon, SIGNAL (calibrateReply (int, const QString&, double)), this, SLOT (daemonCalibrateReply (int, const QString&, double)));
 
     connect (checkStateButton, SIGNAL (pressed ()), this, SLOT (checkStateButtonPressed ()));
     connect (checkWaterButton, SIGNAL (pressed ()), this, SLOT (checkWaterButtonPressed ()));
@@ -159,6 +163,14 @@ MainWindow::MainWindow ()
 
     connect (stageSensorsApplyButton, SIGNAL (clicked ()), this, SLOT (stageSensorsApplyButtonClicked ()));
     connect (&_daemon, SIGNAL (tempCoefGot (double, double)), this, SLOT (tempCoefGot (double, double)));
+    connect (tempSensorsGroupbox, SIGNAL (toggled (bool)), this, SLOT (tempSensorsGroupboxChecked (bool)));
+
+    connect (calibrateS1Button, SIGNAL (toggled (bool)), this, SLOT (calibrateS1Checked (bool)));
+    connect (calibrateS2Button, SIGNAL (toggled (bool)), this, SLOT (calibrateS2Checked (bool)));
+    connect (calibrateS3Button, SIGNAL (toggled (bool)), this, SLOT (calibrateS3Checked (bool)));
+    connect (calibrateS4Button, SIGNAL (toggled (bool)), this, SLOT (calibrateS4Checked (bool)));
+
+    connect (calibrateButton, SIGNAL (clicked ()), this, SLOT (calibrateButtonClicked ()));
 }
 
 
@@ -425,6 +437,11 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
     stage3SensorsCheckbox->setChecked (s3);
     stage4SensorsCheckbox->setEnabled (s4);
     stage4SensorsCheckbox->setChecked (s4);
+
+    calibrateS1Button->setEnabled (s1);
+    calibrateS2Button->setEnabled (s2);
+    calibrateS3Button->setEnabled (s3);
+    calibrateS4Button->setEnabled (s4);
 }
 
 
@@ -732,10 +749,26 @@ void MainWindow::daemonTargetSettingUpdated (int stage, double val)
 void MainWindow::daemonSettingsGot ()
 {
     settingsStageComboActivated (settingsStageComboBox->currentIndex ());
-    stage1SensorsCheckbox->setChecked (_daemon.getSettings (0).sensors ());
-    stage2SensorsCheckbox->setChecked (_daemon.getSettings (1).sensors ());
-    stage3SensorsCheckbox->setChecked (_daemon.getSettings (2).sensors ());
-    stage4SensorsCheckbox->setChecked (_daemon.getSettings (3).sensors ());
+
+    if (stage1SensorsCheckbox->isEnabled ())
+        stage1SensorsCheckbox->setChecked (_daemon.getSettings (0).sensors ());
+    else
+        stage1SensorsCheckbox->setChecked (false);
+
+    if (stage2SensorsCheckbox->isEnabled ())
+        stage2SensorsCheckbox->setChecked (_daemon.getSettings (1).sensors ());
+    else
+        stage2SensorsCheckbox->setChecked (false);
+
+    if (stage3SensorsCheckbox->isEnabled ())
+        stage3SensorsCheckbox->setChecked (_daemon.getSettings (2).sensors ());
+    else
+        stage3SensorsCheckbox->setChecked (false);
+
+    if (stage4SensorsCheckbox->isEnabled ())
+        stage4SensorsCheckbox->setChecked (_daemon.getSettings (3).sensors ());
+    else
+        stage4SensorsCheckbox->setChecked (false);
 
     for (int i = 0; i < 4; i++) {
         getStageControl (i)->setSensors (_daemon.getSettings (i).sensors ());
@@ -991,6 +1024,17 @@ void MainWindow::settingsAdvancedGroupBoxChecked (bool on)
 }
 
 
+void MainWindow::tempSensorsGroupboxChecked (bool on)
+{
+    if (!on)
+        return;
+
+    if (!haveAccess (AL_Config))
+        tempSensorsGroupbox->setChecked (false);
+}
+
+
+
 void MainWindow::stageSensorsApplyButtonClicked ()
 {
     _daemon.setSensors (stage1SensorsCheckbox->isChecked (), stage2SensorsCheckbox->isChecked (), 
@@ -1020,4 +1064,96 @@ void MainWindow::tempCoefGot (double k, double resist)
 {
     tempKEdit->setText (QString::number (k));
     tempResistorEdit->setText (QString::number (resist));
+}
+
+
+void MainWindow::calibrateS1Checked (bool on)
+{
+    if (!on)
+        calibrateGroupBox->hide ();
+    else {
+        if (haveAccess (AL_Config)) {
+            _calibrateStage = 0;
+            calibrateGroupBox->show ();
+            calibrateGroupBox->setTitle (tr ("Calibrate stage %1").arg (_calibrateStage+1));
+            calibrateAnswerEdit->clear ();
+        }
+    }
+}
+
+
+void MainWindow::calibrateS2Checked (bool on)
+{
+    if (!on)
+        calibrateGroupBox->hide ();
+    else {
+        if (haveAccess (AL_Config)) {
+            _calibrateStage = 1;
+            calibrateGroupBox->show ();
+            calibrateGroupBox->setTitle (tr ("Calibrate stage %1").arg (_calibrateStage+1));
+            calibrateAnswerEdit->clear ();
+        }
+    }
+}
+
+
+void MainWindow::calibrateS3Checked (bool on)
+{
+    if (!on)
+        calibrateGroupBox->hide ();
+    else {
+        if (haveAccess (AL_Config)) {
+            _calibrateStage = 2;
+            calibrateGroupBox->show ();
+            calibrateGroupBox->setTitle (tr ("Calibrate stage %1").arg (_calibrateStage+1));
+            calibrateAnswerEdit->clear ();
+        }
+    }
+}
+
+
+void MainWindow::calibrateS4Checked (bool on)
+{
+    if (!on)
+        calibrateGroupBox->hide ();
+    else {
+        if (haveAccess (AL_Config)) {
+            _calibrateStage = 3;
+            calibrateGroupBox->show ();
+            calibrateGroupBox->setTitle (tr ("Calibrate stage %1").arg (_calibrateStage+1));
+            calibrateAnswerEdit->clear ();
+        }
+    }
+}
+
+
+void MainWindow::calibrateButtonClicked ()
+{
+    QString sensorKey;
+
+    switch (calibrateSensorComboBox->currentIndex ()) {
+    case 0:                     // humidity
+        sensorKey = "hum";
+        break;
+    case 1:                     // grain flow
+        sensorKey = "gf";
+        break;
+    case 2:                     // nature sensor
+        sensorKey = "nat";
+        break;
+    default:
+        return;
+    }
+
+    _daemon.calibrate (_calibrateStage, sensorKey);
+    Logger::instance ()->log (Logger::Information, tr ("Calibration of sensor '%1' on stage %2 started").
+                              arg (calibrateSensorComboBox->currentText (), QString::number (_calibrateStage+1)));
+}
+
+
+void MainWindow::daemonCalibrateReply (int stage, const QString&, double val)
+{
+    Logger::instance ()->log (Logger::Information, tr ("Calibration of sensor '%1' on stage %2 finished. Value = %3").
+                              arg (calibrateSensorComboBox->currentText (), QString::number (stage+1), QString::number (val)));
+    calibrateAnswerEdit->setText (QString::number (val));
 }

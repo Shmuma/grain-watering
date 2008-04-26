@@ -135,6 +135,8 @@ Interpreter::Interpreter (Device* device)
                                                "Saves coefficients for temperature formula ((t*k*n)/(3.3-t*k)-1000)/3.86.\n", CommandMeta::c_meta);
     _commands["gettempcoef"]	= CommandMeta (0, &Interpreter::getTempCoef, "Obtains temperature coefficients", "gettempcoef",
                                                "Gets coefficients for temperature formula ((t*k*n)/(3.3-t*k)-1000)/3.86.\n", CommandMeta::c_meta);
+    _commands["calibrate"]	= CommandMeta (2, &Interpreter::calibrate, "Calibrate sensor at given stage", "calibrate stage sensor",
+                                               "Calibrate sensor of given stage\n", CommandMeta::c_meta);
 }
 
 
@@ -952,4 +954,22 @@ QString Interpreter::setTempCoef (const QStringList& args)
 QString Interpreter::getTempCoef (const QStringList& args)
 {
     return QString ().sprintf ("%f %f\n", _temp_k, _temp_resist);
+}
+
+
+QString Interpreter::calibrate (const QStringList& args)
+{
+    int stage = parseStageAsInt (args[0]);
+    double val;
+
+    if (args[1] == "hum")
+        val = getGrainHumidity (stage);
+    else if (args[1] == "gf")
+        val = getGrainFlow (stage);
+    else if (args[1] == "nat")
+        val = getGrainNature (stage);
+    else
+        return QString ("ERROR: Unknown sensor key passed\n");
+
+    return QString ("%1=%2\n").arg (args[1], QString::number (val));
 }

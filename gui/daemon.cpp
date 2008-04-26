@@ -66,7 +66,6 @@ void Daemon::socketStateChanged (QAbstractSocket::SocketState state)
 void Daemon::socketReadyRead ()
 {
     QString reply, msg;
-    double value;
     QString auto_prefix ("Auto: ");
     QString check_prefix ("Check: ");
     QString prompt_prefix ("> ");
@@ -120,12 +119,6 @@ void Daemon::socketReadyRead ()
                         Logger::instance ()->log (Logger::Error, tr ("Cannot set active stages. Reason: '%1'").arg (msg));
                     else
                         stagesActivityChanged (_s1, _s2, _s3, _s4);
-                    break;
-                case DaemonCommand::c_getgrainflow:
-                    if (!parseNumberReply (reply, msg, &value))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot get grain flow. Reason: '%1'").arg (msg));
-                    else
-                        grainFlowGot (cmd.stage (), value);
                     break;
                 case DaemonCommand::c_startautomode:
                     if (!parseGenericReply (reply, msg))
@@ -195,6 +188,9 @@ void Daemon::socketReadyRead ()
                     break;
                 case DaemonCommand::c_gettempcoef:
                     parseTempCoef (reply);
+                    break;
+                case DaemonCommand::c_calibrate:
+                    parseCalibrateReply (cmd.stage (), reply);
                     break;
                 }
             }
@@ -336,13 +332,6 @@ void Daemon::setStages (bool s1, bool s2, bool s3, bool s4)
     _s1 = s1; _s2 = s2; _s3 = s3; _s4 = s4;
     sendCommand (QString ().sprintf ("setstages %d %d %d %d\n", s1 ? 1 : 0, s2 ? 1 : 0, s3 ? 1 : 0, s4 ? 1 : 0));
     _queue.push_back (DaemonCommand (DaemonCommand::c_setstages));
-}
-
-
-void Daemon::getGrainFlow (int stage)
-{
-    sendCommand (QString ("getgrainflow %d\n").arg (QString::number (stage+1)));
-    _queue.push_back (DaemonCommand (DaemonCommand::c_getgrainflow, stage));
 }
 
 
@@ -621,4 +610,26 @@ void Daemon::requestTempCoef ()
 void Daemon::setTempCoef (double k, double resist)
 {
     sendCommand (QString ().sprintf ("settempcoef %f %f\n", k, resist));
+}
+
+
+void Daemon::calibrate (int stage, const QString& key)
+{
+    sendCommand (QString ("calibrate %1 %2\n").arg (QString::number (stage+1), key));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_calibrate, stage));
+}
+
+
+void Daemon::parseCalibrateReply (int stage, const QString& reply)
+{
+    if (reply.startsWith ("ERROR"))
+        Logger::instance ()->log (Logger::Error, tr ("Calibration failed. Reason: %1").arg (QString (reply).remove ("ERROR: ").trimmed ()));
+    else {
+        QStringList l = reply.trimmed ().split ("=");
+        
+        if (l.size () != 2)
+            Logger::instance ()->log (Logger::Error, tr ("Calibration failed. Unexpected reply: %1").arg (reply.trimmed ()));
+        else
+            calibrateReply (stage, l[0], l[1].toDouble ());
+    }
 }

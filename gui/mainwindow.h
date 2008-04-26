@@ -32,6 +32,7 @@ private:
     QMap<int, double> _grainNatureCoeffTable;
     access_level_t _access;
     QAction* _stages_view;
+    int _calibrateStage;
 
 protected:
     virtual void timerEvent (QTimerEvent* event);
@@ -99,6 +100,7 @@ protected slots:
     void daemonTargetFlowUpdated (int stage, double val);
     void daemonTargetSettingUpdated (int stage, double val);
     void daemonSettingsGot ();
+    void daemonCalibrateReply (int stage, const QString& key, double val);
 
     // check page
     void checkStateButtonPressed ();
@@ -125,6 +127,14 @@ protected slots:
 
     void stageSensorsApplyButtonClicked ();
     void tempCoefGot (double k, double resist);
+    void tempSensorsGroupboxChecked (bool on);
+
+    void calibrateS1Checked (bool on);
+    void calibrateS2Checked (bool on);
+    void calibrateS3Checked (bool on);
+    void calibrateS4Checked (bool on);
+
+    void calibrateButtonClicked ();
 
 public:
     MainWindow ();

@@ -316,7 +316,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex" >
-             <number>2</number>
+             <number>3</number>
             </property>
             <widget class="QWidget" name="config" >
              <layout class="QVBoxLayout" >
@@ -893,34 +893,86 @@
               <item>
                <widget class="QGroupBox" name="groupBox_3" >
                 <property name="title" >
-                 <string>Sensors</string>
+                 <string>Stage sensors</string>
                 </property>
-                <layout class="QVBoxLayout" >
-                 <item>
+                <layout class="QGridLayout" >
+                 <item row="0" column="0" >
                   <widget class="QCheckBox" name="stage1SensorsCheckbox" >
                    <property name="text" >
                     <string>Stage 1</string>
                    </property>
                   </widget>
                  </item>
-                 <item>
+                 <item row="0" column="1" >
+                  <widget class="QPushButton" name="calibrateS1Button" >
+                   <property name="text" >
+                    <string>Calibrate</string>
+                   </property>
+                   <property name="checkable" >
+                    <bool>true</bool>
+                   </property>
+                   <property name="autoExclusive" >
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0" >
                   <widget class="QCheckBox" name="stage2SensorsCheckbox" >
                    <property name="text" >
                     <string>Stage 2</string>
                    </property>
                   </widget>
                  </item>
-                 <item>
+                 <item row="1" column="1" >
+                  <widget class="QPushButton" name="calibrateS2Button" >
+                   <property name="text" >
+                    <string>Calibrate</string>
+                   </property>
+                   <property name="checkable" >
+                    <bool>true</bool>
+                   </property>
+                   <property name="autoExclusive" >
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0" >
                   <widget class="QCheckBox" name="stage3SensorsCheckbox" >
                    <property name="text" >
                     <string>Stage 3</string>
                    </property>
                   </widget>
                  </item>
-                 <item>
+                 <item row="2" column="1" >
+                  <widget class="QPushButton" name="calibrateS3Button" >
+                   <property name="text" >
+                    <string>Calibrate</string>
+                   </property>
+                   <property name="checkable" >
+                    <bool>true</bool>
+                   </property>
+                   <property name="autoExclusive" >
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0" >
                   <widget class="QCheckBox" name="stage4SensorsCheckbox" >
                    <property name="text" >
                     <string>Stage 4</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1" >
+                  <widget class="QPushButton" name="calibrateS4Button" >
+                   <property name="text" >
+                    <string>Calibrate</string>
+                   </property>
+                   <property name="checkable" >
+                    <bool>true</bool>
+                   </property>
+                   <property name="autoExclusive" >
+                    <bool>true</bool>
                    </property>
                   </widget>
                  </item>
@@ -928,9 +980,83 @@
                </widget>
               </item>
               <item>
-               <widget class="QGroupBox" name="groupBox_4" >
+               <widget class="QGroupBox" name="calibrateGroupBox" >
+                <property name="title" >
+                 <string>Calibrate</string>
+                </property>
+                <layout class="QVBoxLayout" >
+                 <property name="leftMargin" >
+                  <number>5</number>
+                 </property>
+                 <property name="topMargin" >
+                  <number>5</number>
+                 </property>
+                 <property name="rightMargin" >
+                  <number>5</number>
+                 </property>
+                 <property name="bottomMargin" >
+                  <number>5</number>
+                 </property>
+                 <item>
+                  <widget class="QComboBox" name="calibrateSensorComboBox" >
+                   <item>
+                    <property name="text" >
+                     <string>Humidity sensor</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text" >
+                     <string>Grain flow</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text" >
+                     <string>Nature sensor</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" >
+                   <item>
+                    <widget class="QPushButton" name="calibrateButton" >
+                     <property name="text" >
+                      <string>Measure</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_21" >
+                     <property name="text" >
+                      <string>Answer</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="calibrateAnswerEdit" >
+                     <property name="enabled" >
+                      <bool>false</bool>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="tempSensorsGroupbox" >
+                <property name="toolTip" >
+                 <string>e</string>
+                </property>
                 <property name="title" >
                  <string>Temperature sensors</string>
+                </property>
+                <property name="checkable" >
+                 <bool>true</bool>
+                </property>
+                <property name="checked" >
+                 <bool>false</bool>
                 </property>
                 <layout class="QGridLayout" >
                  <item row="0" column="0" >
@@ -984,8 +1110,8 @@
                 </property>
                 <property name="sizeHint" >
                  <size>
-                  <width>341</width>
-                  <height>41</height>
+                  <width>20</width>
+                  <height>21</height>
                  </size>
                 </property>
                </spacer>

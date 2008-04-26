@@ -126,6 +126,8 @@ private:
     QString setTempCoef (const QStringList& args);
     QString getTempCoef (const QStringList& args);
 
+    QString calibrate (const QStringList& args);
+
 public:
     Interpreter (Device* device);
 
