@@ -902,14 +902,57 @@
                    </property>
                   </widget>
                  </item>
-                 <item>
-                  <widget class="QPushButton" name="stageSensorsApplyButton" >
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_4" >
+                <property name="title" >
+                 <string>Temperature sensors</string>
+                </property>
+                <layout class="QGridLayout" >
+                 <item row="0" column="0" >
+                  <widget class="QLabel" name="label_18" >
                    <property name="text" >
-                    <string>Apply</string>
+                    <string>Temp &amp;k</string>
+                   </property>
+                   <property name="buddy" >
+                    <cstring>tempKEdit</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1" >
+                  <widget class="QLineEdit" name="tempKEdit" >
+                   <property name="text" >
+                    <string>0.0097</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0" >
+                  <widget class="QLabel" name="label_19" >
+                   <property name="text" >
+                    <string>&amp;Resistor</string>
+                   </property>
+                   <property name="buddy" >
+                    <cstring>tempResistorEdit</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1" >
+                  <widget class="QLineEdit" name="tempResistorEdit" >
+                   <property name="text" >
+                    <string>992</string>
                    </property>
                   </widget>
                  </item>
                 </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="stageSensorsApplyButton" >
+                <property name="text" >
+                 <string>Apply</string>
+                </property>
                </widget>
               </item>
               <item>
@@ -919,8 +962,8 @@
                 </property>
                 <property name="sizeHint" >
                  <size>
-                  <width>20</width>
-                  <height>40</height>
+                  <width>341</width>
+                  <height>41</height>
                  </size>
                 </property>
                </spacer>

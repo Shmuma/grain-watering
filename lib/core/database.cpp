@@ -33,6 +33,11 @@ Database::Database (const QString& file) throw (QString&)
         _db.exec ("create index history_2 on history (hist);");
         _db.exec ("create index history_3 on history (time);");
     }
+    if (!tables.contains ("settings")) {
+        _db.exec ("create table settings (key integer, value text);");
+        _db.exec (QString ().sprintf ("insert into settings (key, value) values ('%d', '0.0097');", S_TempK));
+        _db.exec (QString ().sprintf ("insert into settings (key, value) values ('%d', '992');", S_TempResist));
+    }
 }
 
 
@@ -155,4 +160,46 @@ void Database::addHistory (int stage, int param, int time, double val)
     query.bindValue (":val", val);
     if (!query.exec ())
         printf ("DB error: %s\n", QSqlDatabase::database ().lastError ().text ().toAscii ().constData ());
+}
+
+
+void Database::setTempCoef (double k, double res)
+{
+    QSqlQuery query (QSqlDatabase::database ());
+
+    query.prepare ("update settings set value = :val where key = :key");
+    query.bindValue (":val", QString::number (k));
+    query.bindValue (":key", S_TempK);
+    query.exec ();
+
+    query.prepare ("update settings set value = :val where key = :key");
+    query.bindValue (":val", QString::number (res));
+    query.bindValue (":key", S_TempResist);
+    query.exec ();
+}
+
+
+double Database::getTempK () const
+{
+    QSqlQuery query (QSqlDatabase::database ());
+    QString res;
+
+    query.prepare ("select value from settings where key = :key");
+    query.bindValue (":key", S_TempK);
+    query.exec ();
+    
+    return query.value (0).toDouble ();
+}
+
+
+double Database::getTempResist () const
+{
+    QSqlQuery query (QSqlDatabase::database ());
+    QString res;
+
+    query.prepare ("select value from settings where key = :key");
+    query.bindValue (":key", S_TempResist);
+    query.exec ();
+    
+    return query.value (0).toDouble ();
 }

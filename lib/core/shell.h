@@ -43,6 +43,7 @@ private:
     StageSettings _settings[4];
     double _last_tgt_water_flow[4];
     unsigned int _target_sett[4];
+    double _temp_k, _temp_resist;
 
     static QString checkBoolReply (bool res)
         { return res ? "OK\n" : "ERROR\n"; };
@@ -120,6 +121,9 @@ private:
 
     QString getHistory (const QStringList& args);
     QString addHistory (const QStringList& args);
+
+    QString setTempCoef (const QStringList& args);
+    QString getTempCoef (const QStringList& args);
 
 public:
     Interpreter (Device* device);

@@ -193,6 +193,9 @@ void Daemon::socketReadyRead ()
                     break;
                 case DaemonCommand::c_setsettings:
                     break;
+                case DaemonCommand::c_gettempcoef:
+                    parseTempCoef (reply);
+                    break;
                 }
             }
         }
@@ -297,6 +300,21 @@ bool Daemon::parseAutoModeTick (const QString& reply, bool* state, double* press
     *press = l[1].split (":")[1].toDouble ();
 
     return true;
+}
+
+
+void Daemon::parseTempCoef (const QString& reply)
+{
+    double k, resist;
+    QStringList l = reply.split (" ", QString::SkipEmptyParts);
+    
+    if (l.size () != 2)
+        return;
+
+    k = l[0].toDouble ();
+    resist = l[1].toDouble ();
+
+    tempCoefGot (k, resist);
 }
 
 
@@ -590,4 +608,17 @@ bool Daemon::checkPass (const QString& user, const QString& pass)
 void Daemon::setSensors (bool s1, bool s2, bool s3, bool s4)
 {
     sendCommand (QString ().sprintf ("setsensors %d %d %d %d\n", s1 ? 1 : 0, s2 ? 1 : 0, s3 ? 1 : 0, s4 ? 1 : 0));
+}
+
+
+void Daemon::requestTempCoef ()
+{
+    sendCommand ("gettempcoef\n");
+    _queue.push_back (DaemonCommand (DaemonCommand::c_gettempcoef));
+}
+
+
+void Daemon::setTempCoef (double k, double resist)
+{
+    sendCommand (QString ().sprintf ("settempcoef %f %f\n", k, resist));
 }

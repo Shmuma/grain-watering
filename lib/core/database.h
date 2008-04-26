@@ -10,6 +10,12 @@ class Database : public QObject
 {
     Q_OBJECT
 
+public:
+    enum setting_t {
+        S_TempK = 0,
+        S_TempResist,
+    };
+
 private:
     QSqlDatabase _db;
 
@@ -26,6 +32,11 @@ public:
 
     QList< QPair <time_t, double> > getHistory (int stage, int param, int from, int to);
     void addHistory (int stage, int param, int time, double val);
+
+    void setTempCoef (double k, double res);
+
+    double getTempK () const;
+    double getTempResist () const;
 };
 
 

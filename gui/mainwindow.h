@@ -124,6 +124,7 @@ protected slots:
     void settingsAdvancedGroupBoxChecked (bool on);
 
     void stageSensorsApplyButtonClicked ();
+    void tempCoefGot (double k, double resist);
 
 public:
     MainWindow ();

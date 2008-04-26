@@ -156,6 +156,7 @@ MainWindow::MainWindow ()
     connect (settingsAdvancedGroupBox, SIGNAL (toggled (bool)), this, SLOT (settingsAdvancedGroupBoxChecked (bool)));
 
     connect (stageSensorsApplyButton, SIGNAL (clicked ()), this, SLOT (stageSensorsApplyButtonClicked ()));
+    connect (&_daemon, SIGNAL (tempCoefGot (double, double)), this, SLOT (tempCoefGot (double, double)));
 }
 
 
@@ -305,6 +306,7 @@ void MainWindow::daemonHardwareConnected ()
     // grain sensors presense
     _daemon.isGrainSensorsPresent ();
     _daemon.requestSettings ();
+    _daemon.requestTempCoef ();
 }
 
 
@@ -984,4 +986,24 @@ void MainWindow::stageSensorsApplyButtonClicked ()
     getStageControl (1)->setSensors (stage2SensorsCheckbox->isChecked ());
     getStageControl (2)->setSensors (stage3SensorsCheckbox->isChecked ());
     getStageControl (3)->setSensors (stage4SensorsCheckbox->isChecked ());
+
+    double k, resist;
+    bool ok;
+
+    k = tempKEdit->text ().toDouble (&ok);
+    
+    if (ok)
+        resist = tempResistorEdit->text ().toDouble (&ok);
+
+    if (!ok)
+        QMessageBox::warning (this, tr ("Values error"), tr ("Value you've entered is not valid"));
+    else
+        _daemon.setTempCoef (k, resist);
+}
+
+
+void MainWindow::tempCoefGot (double k, double resist)
+{
+    tempKEdit->setText (QString::number (k));
+    tempResistorEdit->setText (QString::number (resist));
 }

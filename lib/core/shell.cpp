@@ -22,6 +22,9 @@ Interpreter::Interpreter (Device* device)
         _last_tgt_water_flow[i] = 0.0;
     }
 
+    _temp_k = _db.getTempK ();
+    _temp_resist = _db.getTempResist ();
+    
     // initialize vocabulary
     // hardware commands
     _commands["help"] 		= CommandMeta (1, NULL, "Show help for command", "help [command]", 
@@ -128,6 +131,10 @@ Interpreter::Interpreter (Device* device)
                                                "Returns historical data of specified stage, parameter and time interval\n", CommandMeta::c_meta);
     _commands["addhistory"]	= CommandMeta (4, &Interpreter::addHistory, "Appends historical data", "addhistory stage param time val",
                                                "Adds new historical data item.\n", CommandMeta::c_meta);
+    _commands["settempcoef"]	= CommandMeta (2, &Interpreter::setTempCoef, "Assigns temperature coefficients", "settempcoef k resist",
+                                               "Saves coefficients for temperature formula ((t*k*n)/(3.3-t*k)-1000)/3.86.\n", CommandMeta::c_meta);
+    _commands["gettempcoef"]	= CommandMeta (0, &Interpreter::getTempCoef, "Obtains temperature coefficients", "gettempcoef",
+                                               "Gets coefficients for temperature formula ((t*k*n)/(3.3-t*k)-1000)/3.86.\n", CommandMeta::c_meta);
 }
 
 
@@ -709,7 +716,7 @@ double Interpreter::getGrainTemperature (int stage)
     
     unsigned int val = _dev->getGrainTemperature (DeviceCommand::stageByNum (stage));
 
-    return ((1000 * val * 0.0094 / (2.4 - val * 0.0094)) - 1000) / 3.86;
+    return ((_temp_resist * val * _temp_k / (3.3 - val * _temp_k)) - 1000) / 3.86;
 }
 
 
@@ -915,4 +922,33 @@ QString Interpreter::addHistory (const QStringList& args)
 void Interpreter::appendHistory (int stage, history_t param, double val)
 {
     _db.addHistory (stage, (int)param, QDateTime::currentDateTime ().toTime_t (), val);
+}
+
+
+QString Interpreter::setTempCoef (const QStringList& args)
+{
+    double k, res;
+    bool ok;
+
+    k = args[0].toDouble (&ok);
+
+    if (!ok)
+        return QString ("Error: First argument parse error\n");
+
+    res = args[1].toDouble (&ok);
+    
+    if (!ok)
+        return QString ("Error: Second argument parse error\n");
+
+    _db.setTempCoef (k, res);
+    _temp_k = k;
+    _temp_resist = res;
+
+    return QString ("OK\n");
+}
+
+
+QString Interpreter::getTempCoef (const QStringList& args)
+{
+    return QString ().sprintf ("%f %f\n", _temp_k, _temp_resist);
 }

@@ -29,6 +29,7 @@ public:
         c_isgrainpresent,
         c_getsettings,
         c_setsettings,
+        c_gettempcoef,
     };
     
 private:
@@ -78,6 +79,7 @@ protected:
     bool handleMetaState (const QString& msg);
     void handleCheckTick (const QString& msg);
     void parseSettings (const QString& msg);
+    void parseTempCoef (const QString& reply);
 
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
@@ -119,6 +121,7 @@ signals:
     void calculatedHumidityUpdated (int stage, double val);
     void targetFlowUpdated (int stage, double val);
     void targetSettingUpdated (int stage, double val);
+    void tempCoefGot (double k, double resist);
 
 public:
     Daemon (const QString& host, int port);
@@ -155,6 +158,9 @@ public:
     void setSettings (int stage, const StageSettings& sett);
 
     bool checkPass (const QString& user, const QString& pass);
+
+    void requestTempCoef ();
+    void setTempCoef (double k, double resist);
 };
 
 
