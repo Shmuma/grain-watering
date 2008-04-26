@@ -496,6 +496,15 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
     s3modeCombo->setEnabled (s3);
     s4modeLabel->setEnabled (s4);
     s4modeCombo->setEnabled (s4);
+
+    bool anyStageActive = s1 | s2 | s3 | s4;
+
+    QPushButton* btns[] = {checkButton, modeButton, paramsButton, sensorsButton};
+
+    for (uint i = 0; i < sizeof (btns) / sizeof (btns[0]); i++) {
+        btns[i]->setEnabled (anyStageActive);
+        btns[i]->setChecked (false);
+    }
 }
 
 
