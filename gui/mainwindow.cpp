@@ -737,8 +737,10 @@ void MainWindow::daemonSettingsGot ()
     stage3SensorsCheckbox->setChecked (_daemon.getSettings (2).sensors ());
     stage4SensorsCheckbox->setChecked (_daemon.getSettings (3).sensors ());
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++) {
         getStageControl (i)->setSensors (_daemon.getSettings (i).sensors ());
+        getStageControl (i)->setLabel (_daemon.getSettings (i).bsuLabel ());
+    }
 }
 
 
@@ -775,6 +777,7 @@ void MainWindow::settingsStageComboActivated (int item)
     _grainNatureTable = sett.grainNatureTable ();
     _grainTempTable = sett.grainTempTable ();
     _grainNatureCoeffTable = sett.grainNatureCoeffTable ();
+    bsuLabelEdit->setText (sett.bsuLabel ());
     _currentSettingsStage = item;
 }
 
@@ -837,6 +840,15 @@ void MainWindow::saveSettingsPage (int stage)
     else {
         QMessageBox::warning (this, tr ("Value error"), tr ("Min water flow have invalid format"));
         return;
+    }
+
+    if (bsuLabelEdit->text ().contains (',') || bsuLabelEdit->text ().contains ('=') || bsuLabelEdit->text ().contains (' ')) {
+        QMessageBox::warning (this, tr ("Value error"), tr ("BSU label cannot contain spaces, comma and equal sign"));
+        return;
+    }
+    else {
+        sett.setBsuLabel (bsuLabelEdit->text ());
+        getStageControl (stage)->setLabel (sett.bsuLabel ());
     }
 
     sett.setWaterFormula (settingsWaterFormulaComboBox->currentIndex ());

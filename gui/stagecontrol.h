@@ -91,6 +91,11 @@ public:
     bool sensors () const
         { return _sensors; };
 
+    QString label () const
+        { return _label; };
+    void setLabel (const QString& label)
+        { _label = label; };
+
 private:
     int _number;
     bool _enabled;
@@ -104,6 +109,7 @@ private:
     double _setting;
     state_t _state;
     bool _sensors;
+    QString _label;
 
     QToolButton *_start, *_pause;
     bool _inHandleState;

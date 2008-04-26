@@ -16,7 +16,8 @@ StageSettings::StageSettings (const QString& str)
       _maxWaterFlow (0.0),
       _waterFormula (0),
       _sensors (true),
-      _valid (false)
+      _valid (false),
+      _bsu_label (QString ())
 {
     _humidityTable.clear ();
     _grainFlowTable.clear ();
@@ -51,6 +52,8 @@ StageSettings::StageSettings (const QString& str)
             _grainTempTable = parseHash (l[1]);
         else if (l[0] == "gnc")
             _grainNatureCoeffTable = parseHash (l[1]);
+        else if (l[0] == "bsu")
+            _bsu_label = l[1];
         else {
             val = l[1].toDouble (&ok);
             if (!ok)
@@ -88,7 +91,7 @@ QString StageSettings::toString () const
 //             _targetHumidity, _humidityCoeff, _minGrainFlow, _waterFlowK, 
 //             _minWaterFlow, _maxWaterFlow, _waterFormula);
         
-    return QString ().sprintf ("TH=%f,HC=%f,minGF=%f,WFK=%f,minWF=%f,maxWF=%f,WF=%d,HT=%s,GF=%s,GN=%s,GT=%s,GNC=%s,SENS=%d", 
+    return QString ().sprintf ("TH=%f,HC=%f,minGF=%f,WFK=%f,minWF=%f,maxWF=%f,WF=%d,HT=%s,GF=%s,GN=%s,GT=%s,GNC=%s,SENS=%d,BSU=%s", 
                                _targetHumidity, _humidityCoeff, _minGrainFlow, _waterFlowK, 
                                _minWaterFlow, _maxWaterFlow, _waterFormula, 
                                hash2string (_humidityTable).toAscii ().constData (),
@@ -96,7 +99,8 @@ QString StageSettings::toString () const
                                hash2string (_grainNatureTable).toAscii ().constData (),
                                hash2string (_grainTempTable).toAscii ().constData (),
                                hash2string (_grainNatureCoeffTable).toAscii ().constData (),
-                               _sensors ? 1 : 0);
+                               _sensors ? 1 : 0,
+                               _bsu_label.toAscii ().constData ());
 }
 
 

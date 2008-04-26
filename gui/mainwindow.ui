@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>932</width>
-    <height>704</height>
+    <width>967</width>
+    <height>727</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -316,7 +316,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex" >
-             <number>3</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="config" >
              <layout class="QVBoxLayout" >
@@ -682,6 +682,16 @@
                   </property>
                  </widget>
                 </item>
+                <item row="3" column="0" >
+                 <widget class="QLabel" name="label_20" >
+                  <property name="text" >
+                   <string>BSU label</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1" >
+                 <widget class="QLineEdit" name="bsuLabelEdit" />
+                </item>
                </layout>
               </item>
               <item>
@@ -696,6 +706,18 @@
                  <bool>false</bool>
                 </property>
                 <layout class="QVBoxLayout" >
+                 <property name="leftMargin" >
+                  <number>4</number>
+                 </property>
+                 <property name="topMargin" >
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin" >
+                  <number>4</number>
+                 </property>
+                 <property name="bottomMargin" >
+                  <number>4</number>
+                 </property>
                  <item>
                   <widget class="QTabWidget" name="tabWidget" >
                    <property name="currentIndex" >

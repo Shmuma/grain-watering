@@ -27,6 +27,7 @@ private:
         h_wf,
         h_msg,
         h_clean,
+        h_setting,
     };
 
     Device* _dev;

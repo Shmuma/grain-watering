@@ -13,6 +13,7 @@ StageControl::StageControl (QWidget* parent)
     _number = 0;
     _grain = _enabled = false;
     _flow = _humidity = _nature = _temp = _waterFlow = _targetHumidity = 0;
+    _label = QString ();
 
     // control buttons
     _start = new QToolButton (this);

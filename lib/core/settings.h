@@ -11,6 +11,7 @@ private:
     int _waterFormula;
     bool _sensors;
     bool _valid;
+    QString _bsu_label;
 
     QMap<int, double> _humidityTable;
     QMap<int, double> _grainFlowTable;
@@ -32,7 +33,8 @@ public:
           _maxWaterFlow (0.0),
           _waterFormula (0),
           _sensors (true),
-          _valid (false)
+          _valid (false),
+          _bsu_label (QString ())
     {
         _humidityTable.clear ();
         _grainFlowTable.clear ();
@@ -53,6 +55,7 @@ public:
           _waterFormula (sett._waterFormula),
           _sensors (sett._sensors),
           _valid (sett._valid),
+          _bsu_label (sett._bsu_label),
           _humidityTable (sett._humidityTable),
           _grainFlowTable (sett._grainFlowTable),
           _grainNatureTable (sett._grainNatureTable),
@@ -100,6 +103,11 @@ public:
         { return _valid; };
     void setValid (bool valid)
         { _valid = valid; };
+
+    QString bsuLabel () const
+        { return _bsu_label; };
+    void setBsuLabel (const QString& label)
+        { _bsu_label = label; };
 
     QString toString () const;
 

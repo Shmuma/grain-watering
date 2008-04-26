@@ -805,6 +805,7 @@ QString Interpreter::getStageState (int stage)
             (_settings[stage].maxWaterFlow () - _settings[stage].minWaterFlow ());
 
         res += "TS=" + QString::number (_target_sett[stage]);
+        appendHistory (stage, h_setting, _target_sett[stage]);
     }
     else
         res = "disabled";
