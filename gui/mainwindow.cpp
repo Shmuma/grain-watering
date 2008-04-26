@@ -873,7 +873,7 @@ void MainWindow::settingsValueEdited (const QString&)
 
 void MainWindow::settingsHumidityTableClicked ()
 {
-    TableForm dlg (this, tr ("Humidity table editor"), tr ("Key (0..255) -> Humidity map"), tr ("Value"), tr ("Humidity"));
+    TableForm dlg (this, tr ("Humidity table editor"), tr ("Key (0..255) -> Humidity map"), tr ("Value"), tr ("Humidity"), true);
 
     dlg.setData (_humidityTable);
 
@@ -887,7 +887,7 @@ void MainWindow::settingsHumidityTableClicked ()
 
 void MainWindow::settingsGrainFlowTableClicked ()
 {
-    TableForm dlg (this, tr ("Grain flow table editor"), tr ("Key (0..255) -> Grain flow map"), tr ("Value"), tr ("Grain flow"));
+    TableForm dlg (this, tr ("Grain flow table editor"), tr ("Key (0..255) -> Grain flow map"), tr ("Value"), tr ("Grain flow"), true);
 
     dlg.setData (_grainFlowTable);
 
@@ -901,7 +901,7 @@ void MainWindow::settingsGrainFlowTableClicked ()
 
 void MainWindow::settingsGrainNatureTableClicked ()
 {
-    TableForm dlg (this, tr ("Grain nature table editor"), tr ("Key (0..255) -> Grain nature map"), tr ("Value"), tr ("Grain nature"));
+    TableForm dlg (this, tr ("Grain nature table editor"), tr ("Key (0..255) -> Grain nature map"), tr ("Value"), tr ("Grain nature"), true);
 
     dlg.setData (_grainNatureTable);
 
@@ -916,7 +916,7 @@ void MainWindow::settingsGrainNatureTableClicked ()
 void MainWindow::settingsGrainTempTableClicked ()
 {
     TableForm dlg (this, tr ("Grain temperature table editor"), tr ("Temperature -> Grain temperature coeff map"), 
-                   tr ("Temperature"), tr ("Grain temperature coeff"));
+                   tr ("Temperature"), tr ("Grain temperature coeff"), false);
 
     dlg.setData (_grainTempTable);
 
@@ -931,7 +931,7 @@ void MainWindow::settingsGrainTempTableClicked ()
 void MainWindow::settingsGrainNatureCoeffTableClicked ()
 {
     TableForm dlg (this, tr ("Grain nature coeff table editor"), tr ("Temperature -> Grain nature coeff map"), 
-                   tr ("Temperature"), tr ("Grain nature coeff"));
+                   tr ("Temperature"), tr ("Grain nature coeff"), false);
 
     dlg.setData (_grainNatureCoeffTable);
 

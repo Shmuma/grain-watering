@@ -48,6 +48,24 @@
     </layout>
    </item>
    <item>
+    <layout class="QHBoxLayout" >
+     <item>
+      <widget class="QPushButton" name="clearTableButton" >
+       <property name="text" >
+        <string>C&amp;lear table</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="calculateButton" >
+       <property name="text" >
+        <string>&amp;Calculate missing data</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QTreeWidget" name="tableWidget" >
      <property name="rootIsDecorated" >
       <bool>false</bool>

@@ -11,8 +11,10 @@ class TableForm : public QDialog, private  Ui::TableForm
 private:
     QMap<int, double> _res;
 
+    QMap<int, double> dataFromTable () const;
+
 public:
-    TableForm (QWidget* parent, const QString& caption, const QString& label, const QString& key, const QString& val);
+    TableForm (QWidget* parent, const QString& caption, const QString& label, const QString& key, const QString& val, bool calc);
 
     QMap<int, double> result () const
         { return _res; };
@@ -25,6 +27,8 @@ protected slots:
     void addButtonClicked ();
     void removeButtonClicked ();
     void tableItemChanged (QTreeWidgetItem* cur, QTreeWidgetItem* prev);
+    void clearTableButtonClicked ();
+    void calculateButtonClicked ();
 };
 
 

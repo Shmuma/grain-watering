@@ -8,7 +8,7 @@
 // TableForm
 // --------------------------------------------------
 TableForm::TableForm (QWidget* parent, const QString& caption, const QString& label, 
-                      const QString& key, const QString& val)
+                      const QString& key, const QString& val, bool calc)
     : QDialog (parent)
 {
     QStringList list;
@@ -29,20 +29,16 @@ TableForm::TableForm (QWidget* parent, const QString& caption, const QString& la
     connect (removeButton, SIGNAL (clicked ()), this, SLOT (removeButtonClicked ()));
     connect (tableWidget, SIGNAL (currentItemChanged (QTreeWidgetItem*, QTreeWidgetItem*)), 
              this, SLOT (tableItemChanged (QTreeWidgetItem*, QTreeWidgetItem*)));
+    connect (clearTableButton, SIGNAL (clicked ()), this, SLOT (clearTableButtonClicked ()));
+    connect (calculateButton, SIGNAL (clicked ()), this, SLOT (calculateButtonClicked ()));
+
+    calculateButton->setEnabled (calc);
 }
 
 
 void TableForm::okButtonClicked ()
 {
-    _res.clear ();
-
-    // serialize data
-    for (int i = 0; i < tableWidget->topLevelItemCount (); i++) {
-        int k = tableWidget->topLevelItem (i)->data (0, Qt::DisplayRole).toString ().toUInt (NULL, 16);
-        double v = tableWidget->topLevelItem (i)->data (1, Qt::DisplayRole).toString ().toDouble ();
-        _res[k] = v;
-    }
-
+    _res = dataFromTable ();
     accept ();
 }
 
@@ -126,4 +122,52 @@ void TableForm::setData (const QMap<int, double>& data)
         
         it++;
     }
+}
+
+
+void TableForm::clearTableButtonClicked ()
+{
+    tableWidget->clear ();
+}
+
+
+QMap<int, double> TableForm::dataFromTable () const
+{
+    QMap<int, double> res;
+
+    for (int i = 0; i < tableWidget->topLevelItemCount (); i++) {
+        int k = tableWidget->topLevelItem (i)->data (0, Qt::DisplayRole).toString ().toUInt (NULL);
+        double v = tableWidget->topLevelItem (i)->data (1, Qt::DisplayRole).toString ().toDouble ();
+        res[k] = v;
+    }
+
+    return res;
+}
+
+
+
+void TableForm::calculateButtonClicked ()
+{
+    QMap<int, double> data = dataFromTable ();
+    int from, i, j;
+    double a, b;
+
+    from = -1;
+
+    for (i = 0; i <= 255; i++) {
+        if (data.find (i) != data.end ()) {
+            if (from < 0)
+                from = i;
+            else {
+                a = data[from];
+                b = data[i];
+                
+                for (j = from+1; j < i; j++)
+                    data[j] = ((b-a)/(i-from)) * (j-from) + a;
+                from = i;
+            }
+        }
+    }
+    
+    setData (data);
 }
