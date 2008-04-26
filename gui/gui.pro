@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-CONFIG += debug
+CONFIG += debug debian
 QT += network
 TARGET =
 DEPENDPATH += .
@@ -17,7 +17,16 @@ HEADERS += mainwindow.h doubleclickbutton.h stagecontrol.h daemon.h logger.h bsu
 SOURCES += main.cpp mainwindow.cpp doubleclickbutton.cpp stagecontrol.cpp daemon.cpp logger.cpp bsucontrol.cpp tableform.cpp
 FORMS += mainwindow.ui tableform.ui
 
-LIBS += -L../lib/core -lcore -lqwt-qt4
-INCLUDEPATH += ../lib/core /usr/include/qwt-qt4/
+LIBS += -L../lib/core -lcore
+INCLUDEPATH += ../lib/core
+
+debian {
+    LIBS +=  -lqwt-qt4
+    INCLUDEPATH +=  /usr/include/qwt-qt4/
+}
+else {
+    LIBS +=  -lqwt
+    INCLUDEPATH +=  /usr/include/qwt/
+}
 
 TRANSLATIONS = gui_ru.ts
