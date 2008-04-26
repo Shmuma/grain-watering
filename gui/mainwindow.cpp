@@ -279,9 +279,28 @@ void MainWindow::sensorsButtonToggled (bool on)
 }
 
 
-void MainWindow::loggerMessage (Logger::severity_t, const QString& msg)
+void MainWindow::loggerMessage (Logger::severity_t severity, const QString& msg)
 {
-    logListView->addItem (msg);
+    QListWidgetItem* item = new QListWidgetItem (QDateTime::currentDateTime ().toString ("hh:mm:ss ") + msg);
+    QBrush br = item->foreground ();
+
+    switch (severity) {
+    case Logger::Debug:
+        br.setColor (Qt::gray);
+        break;
+    case Logger::Information:
+        br.setColor (Qt::black);
+        break;
+    case Logger::Warning:
+        br.setColor (Qt::blue);
+        break;
+    case Logger::Error:
+        br.setColor (Qt::red);
+        break;
+    }
+
+    item->setForeground (br);
+    logListView->insertItem (0, item);
 }
 
 
