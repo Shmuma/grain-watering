@@ -94,7 +94,12 @@ public:
     QString label () const
         { return _label; };
     void setLabel (const QString& label)
-        { _label = label; };
+        { _label = label; update (); };
+
+    bool autoMode () const
+        { return _autoMode; };
+    void setAutoMode (bool mode)
+        { _autoMode = mode; update (); };
 
 private:
     int _number;
@@ -110,6 +115,7 @@ private:
     state_t _state;
     bool _sensors;
     QString _label;
+    bool _autoMode;
 
     QToolButton *_start, *_pause;
     bool _inHandleState;

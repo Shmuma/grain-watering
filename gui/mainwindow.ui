@@ -6,14 +6,29 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>967</width>
-    <height>727</height>
+    <width>865</width>
+    <height>640</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Plaun Controller</string>
   </property>
   <layout class="QVBoxLayout" >
+   <property name="spacing" >
+    <number>0</number>
+   </property>
+   <property name="leftMargin" >
+    <number>0</number>
+   </property>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" >
      <property name="spacing" >
@@ -90,6 +105,22 @@
           </property>
           <property name="text" >
            <string>Config</string>
+          </property>
+          <property name="checkable" >
+           <bool>true</bool>
+          </property>
+          <property name="flat" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="modeButton" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+          <property name="text" >
+           <string>Mode</string>
           </property>
           <property name="checkable" >
            <bool>true</bool>
@@ -316,7 +347,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex" >
-             <number>3</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="config" >
              <layout class="QVBoxLayout" >
@@ -354,28 +385,145 @@
                    </property>
                   </widget>
                  </item>
-                 <item>
-                  <widget class="QPushButton" name="applyStagesButton" >
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="applyStagesButton" >
+                <property name="text" >
+                 <string>Apply</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
+                  <width>321</width>
+                  <height>71</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="mode" >
+             <layout class="QVBoxLayout" >
+              <item>
+               <widget class="QGroupBox" name="groupBox_4" >
+                <property name="title" >
+                 <string>Stage modes</string>
+                </property>
+                <layout class="QGridLayout" >
+                 <item row="0" column="0" >
+                  <widget class="QLabel" name="s1modeLabel" >
                    <property name="text" >
-                    <string>Apply</string>
+                    <string>Stage 1 mode</string>
                    </property>
                   </widget>
                  </item>
-                 <item>
-                  <spacer>
-                   <property name="orientation" >
-                    <enum>Qt::Vertical</enum>
+                 <item row="0" column="1" >
+                  <widget class="QComboBox" name="s1modeCombo" >
+                   <item>
+                    <property name="text" >
+                     <string>Auto</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text" >
+                     <string>Semi-auto</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item row="1" column="0" >
+                  <widget class="QLabel" name="s2modeLabel" >
+                   <property name="text" >
+                    <string>Stage 2 mode</string>
                    </property>
-                   <property name="sizeHint" >
-                    <size>
-                     <width>20</width>
-                     <height>20</height>
-                    </size>
+                  </widget>
+                 </item>
+                 <item row="1" column="1" >
+                  <widget class="QComboBox" name="s2modeCombo" >
+                   <item>
+                    <property name="text" >
+                     <string>Auto</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text" >
+                     <string>Semi-auto</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item row="2" column="0" >
+                  <widget class="QLabel" name="s3modeLabel" >
+                   <property name="text" >
+                    <string>Stage 3 mode</string>
                    </property>
-                  </spacer>
+                  </widget>
+                 </item>
+                 <item row="2" column="1" >
+                  <widget class="QComboBox" name="s3modeCombo" >
+                   <item>
+                    <property name="text" >
+                     <string>Auto</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text" >
+                     <string>Semi-auto</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item row="3" column="0" >
+                  <widget class="QLabel" name="s4modeLabel" >
+                   <property name="text" >
+                    <string>Stage 4 mode</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1" >
+                  <widget class="QComboBox" name="s4modeCombo" >
+                   <item>
+                    <property name="text" >
+                     <string>Auto</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text" >
+                     <string>Semi-auto</string>
+                    </property>
+                   </item>
+                  </widget>
                  </item>
                 </layout>
                </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="stageModesApplyButton" >
+                <property name="text" >
+                 <string>&amp;Apply</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
              </layout>
             </widget>
@@ -603,7 +751,7 @@
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="sensors" >
+            <widget class="QWidget" name="params" >
              <layout class="QVBoxLayout" >
               <item>
                <widget class="QComboBox" name="settingsStageComboBox" >
@@ -888,7 +1036,7 @@
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="params" >
+            <widget class="QWidget" name="sensors" >
              <layout class="QVBoxLayout" >
               <item>
                <widget class="QGroupBox" name="groupBox_3" >

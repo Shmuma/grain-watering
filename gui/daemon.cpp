@@ -633,3 +633,13 @@ void Daemon::parseCalibrateReply (int stage, const QString& reply)
             calibrateReply (stage, l[0], l[1].toDouble ());
     }
 }
+
+
+void Daemon::setStageModes (bool s1, bool s2, bool s3, bool s4)
+{
+    sendCommand (QString ().sprintf ("setstagemodes %s %s %s %s\n", 
+                                     s1 ? "auto" : "semi", 
+                                     s2 ? "auto" : "semi", 
+                                     s3 ? "auto" : "semi", 
+                                     s4 ? "auto" : "semi"));
+}

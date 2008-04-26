@@ -20,6 +20,7 @@ Interpreter::Interpreter (Device* device)
     for (int i = 0; i < 4; i++) {
         _autoMode[i] = _autoModePaused[i] = false;
         _last_tgt_water_flow[i] = 0.0;
+        _settings[i] = StageSettings (_db.getStageSettings (i));
     }
 
     _temp_k = _db.getTempK ();
@@ -137,6 +138,8 @@ Interpreter::Interpreter (Device* device)
                                                "Gets coefficients for temperature formula ((t*k*n)/(3.3-t*k)-1000)/3.86.\n", CommandMeta::c_meta);
     _commands["calibrate"]	= CommandMeta (2, &Interpreter::calibrate, "Calibrate sensor at given stage", "calibrate stage sensor",
                                                "Calibrate sensor of given stage\n", CommandMeta::c_meta);
+    _commands["setstagemodes"]	= CommandMeta (4, &Interpreter::setStageModes, "Assign modes (auto or semi-auto) to stages", "setstagemodes s1 s2 s3 s4",
+                                               "Assign modes (auto or semi) to stages\n", CommandMeta::c_meta);
 }
 
 
@@ -972,4 +975,17 @@ QString Interpreter::calibrate (const QStringList& args)
         return QString ("ERROR: Unknown sensor key passed\n");
 
     return QString ("%1=%2\n").arg (args[1], QString::number (val));
+}
+
+
+QString Interpreter::setStageModes (const QStringList& args)
+{
+    bool modes[4];
+
+    for (int i = 0; i < 4; i++) {
+        _settings[i].setAutoMode (args[i] == "auto");
+        _db.setStageSettings (i, _settings[i].toString ());
+    }
+
+    return QString ("OK\n");
 }

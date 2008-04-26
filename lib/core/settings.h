@@ -12,6 +12,7 @@ private:
     bool _sensors;
     bool _valid;
     QString _bsu_label;
+    bool _auto_mode;
 
     QMap<int, double> _humidityTable;
     QMap<int, double> _grainFlowTable;
@@ -34,7 +35,8 @@ public:
           _waterFormula (0),
           _sensors (true),
           _valid (false),
-          _bsu_label (QString ())
+          _bsu_label (QString ()),
+          _auto_mode (true)
     {
         _humidityTable.clear ();
         _grainFlowTable.clear ();
@@ -56,6 +58,7 @@ public:
           _sensors (sett._sensors),
           _valid (sett._valid),
           _bsu_label (sett._bsu_label),
+          _auto_mode (sett._auto_mode),
           _humidityTable (sett._humidityTable),
           _grainFlowTable (sett._grainFlowTable),
           _grainNatureTable (sett._grainNatureTable),
@@ -140,6 +143,11 @@ public:
         { _sensors = sensors; };
     bool sensors () const
         { return _sensors; };
+
+    void setAutoMode (bool mode)
+        { _auto_mode = mode; };
+    bool autoMode () const
+        { return _auto_mode; };
 };
 
 

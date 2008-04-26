@@ -164,6 +164,8 @@ public:
     void setTempCoef (double k, double resist);
 
     void calibrate (int stage, const QString& key);
+
+    void setStageModes (bool s1, bool s2, bool s3, bool s4);
 };
 
 

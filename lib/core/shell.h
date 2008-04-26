@@ -128,6 +128,8 @@ private:
 
     QString calibrate (const QStringList& args);
 
+    QString setStageModes (const QStringList& args);
+
 public:
     Interpreter (Device* device);
 

@@ -36,6 +36,7 @@ MainWindow::MainWindow ()
 
     // connect tool buttons
     connect (configButton, SIGNAL(toggled(bool)), this, SLOT(configButtonToggled(bool)));
+    connect (modeButton, SIGNAL(toggled(bool)), this, SLOT(modeButtonToggled(bool)));
     connect (checkButton, SIGNAL(toggled(bool)), this, SLOT(checkButtonToggled(bool)));
     connect (paramsButton, SIGNAL(toggled(bool)), this, SLOT(paramsButtonToggled(bool)));
     connect (sensorsButton, SIGNAL(toggled(bool)), this, SLOT(sensorsButtonToggled(bool)));
@@ -171,6 +172,8 @@ MainWindow::MainWindow ()
     connect (calibrateS4Button, SIGNAL (toggled (bool)), this, SLOT (calibrateS4Checked (bool)));
 
     connect (calibrateButton, SIGNAL (clicked ()), this, SLOT (calibrateButtonClicked ()));
+
+    connect (stageModesApplyButton, SIGNAL (clicked ()), this, SLOT (stageModesApplyButtonClicked ()));
 }
 
 
@@ -190,6 +193,7 @@ void MainWindow::configButtonToggled (bool on)
 {
     if (on) {
         _switchingToolButtons = true;
+        modeButton->setChecked (false);
         checkButton->setChecked (false);
         paramsButton->setChecked (false);
         sensorsButton->setChecked (false);
@@ -203,15 +207,34 @@ void MainWindow::configButtonToggled (bool on)
 }
 
 
+void MainWindow::modeButtonToggled (bool on)
+{
+    if (on) {
+        _switchingToolButtons = true;
+        configButton->setChecked (false);
+        checkButton->setChecked (false);
+        paramsButton->setChecked (false);
+        sensorsButton->setChecked (false);
+        _switchingToolButtons = false;
+	stackedWidget->setCurrentIndex (1);
+	settingsPanel->show ();
+    }
+    else
+        if (!_switchingToolButtons)
+            settingsPanel->hide ();
+}
+
+
 void MainWindow::checkButtonToggled (bool on)
 {
     if (on) {
         _switchingToolButtons = true;
         configButton->setChecked (false);
+        modeButton->setChecked (false);
         paramsButton->setChecked (false);
         sensorsButton->setChecked (false);
         _switchingToolButtons = false;
-	stackedWidget->setCurrentIndex (1);
+	stackedWidget->setCurrentIndex (2);
 	settingsPanel->show ();
     }
     else
@@ -226,9 +249,10 @@ void MainWindow::paramsButtonToggled (bool on)
         _switchingToolButtons = true;
         configButton->setChecked (false);
         checkButton->setChecked (false);
+        modeButton->setChecked (false);
         sensorsButton->setChecked (false);
         _switchingToolButtons = false;
-	stackedWidget->setCurrentIndex (2);
+	stackedWidget->setCurrentIndex (3);
 	settingsPanel->show ();
     }
     else
@@ -242,10 +266,11 @@ void MainWindow::sensorsButtonToggled (bool on)
     if (on) {
         _switchingToolButtons = true;
         configButton->setChecked (false);
+        modeButton->setChecked (false);
         checkButton->setChecked (false);
         paramsButton->setChecked (false);
         _switchingToolButtons = false;
-	stackedWidget->setCurrentIndex (3);
+	stackedWidget->setCurrentIndex (4);
 	settingsPanel->show ();
     }
     else
@@ -295,7 +320,7 @@ void MainWindow::connectedChanged (bool value)
     // toggle connect button
     connectButton->setChecked (value);
 
-    QPushButton* btns[] = {configButton, checkButton, paramsButton, sensorsButton};
+    QPushButton* btns[] = {configButton, checkButton, modeButton, paramsButton, sensorsButton};
 
     for (uint i = 0; i < sizeof (btns) / sizeof (btns[0]); i++) {
         btns[i]->setEnabled (value);
@@ -442,6 +467,16 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
     calibrateS2Button->setEnabled (s2);
     calibrateS3Button->setEnabled (s3);
     calibrateS4Button->setEnabled (s4);
+
+    // stage modes
+    s1modeLabel->setEnabled (s1);
+    s1modeCombo->setEnabled (s1);
+    s2modeLabel->setEnabled (s2);
+    s2modeCombo->setEnabled (s2);
+    s3modeLabel->setEnabled (s3);
+    s3modeCombo->setEnabled (s3);
+    s4modeLabel->setEnabled (s4);
+    s4modeCombo->setEnabled (s4);
 }
 
 
@@ -770,9 +805,15 @@ void MainWindow::daemonSettingsGot ()
     else
         stage4SensorsCheckbox->setChecked (false);
 
+    s1modeCombo->setCurrentIndex (_daemon.getSettings (0).autoMode () ? 0 : 1);
+    s2modeCombo->setCurrentIndex (_daemon.getSettings (1).autoMode () ? 0 : 1);
+    s3modeCombo->setCurrentIndex (_daemon.getSettings (2).autoMode () ? 0 : 1);
+    s4modeCombo->setCurrentIndex (_daemon.getSettings (3).autoMode () ? 0 : 1);
+
     for (int i = 0; i < 4; i++) {
         getStageControl (i)->setSensors (_daemon.getSettings (i).sensors ());
         getStageControl (i)->setLabel (_daemon.getSettings (i).bsuLabel ());
+        getStageControl (i)->setAutoMode (_daemon.getSettings (i).autoMode ());
     }
 }
 
@@ -1157,3 +1198,18 @@ void MainWindow::daemonCalibrateReply (int stage, const QString&, double val)
                               arg (calibrateSensorComboBox->currentText (), QString::number (stage+1), QString::number (val)));
     calibrateAnswerEdit->setText (QString::number (val));
 }
+
+
+void MainWindow::stageModesApplyButtonClicked ()
+{
+    QString modes[] = { tr ("Auto"), tr ("Semi-auto") };
+
+    _daemon.setStageModes (s1modeCombo->currentIndex () == 0, s2modeCombo->currentIndex () == 0, 
+                           s3modeCombo->currentIndex () == 0, s4modeCombo->currentIndex () == 0);
+    Logger::instance ()->log (Logger::Information, tr ("Request new stages modes: %1, %1, %1, %1")
+                              .arg (modes[s1modeCombo->currentIndex ()])
+                              .arg (modes[s2modeCombo->currentIndex ()])
+                              .arg (modes[s3modeCombo->currentIndex ()])
+                              .arg (modes[s4modeCombo->currentIndex ()]));
+}
+

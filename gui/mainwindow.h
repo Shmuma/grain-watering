@@ -47,6 +47,7 @@ protected:
 
 protected slots:
     void configButtonToggled (bool on);
+    void modeButtonToggled (bool on);
     void checkButtonToggled (bool on);
     void paramsButtonToggled (bool on);
     void sensorsButtonToggled (bool on);
@@ -135,6 +136,7 @@ protected slots:
     void calibrateS4Checked (bool on);
 
     void calibrateButtonClicked ();
+    void stageModesApplyButtonClicked ();
 
 public:
     MainWindow ();
