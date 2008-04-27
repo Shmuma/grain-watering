@@ -793,7 +793,6 @@ QString Interpreter::getStageState (int stage)
         d_wf = getWaterFlow (stage);
         d_gn = getGrainNature (stage);
 
-        appendHistory ((history_stage_t)stage, HK_Humidity, d_hum);
         appendHistory ((history_stage_t)stage, HK_GrainFlow, d_grain_flow);
         appendHistory ((history_stage_t)stage, HK_GrainTemp, d_temp);
         appendHistory ((history_stage_t)stage, HK_GrainNature, d_gn);
