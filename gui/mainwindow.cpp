@@ -199,6 +199,13 @@ MainWindow::MainWindow ()
     historyPeriodComboChanged (0);
 
     plot->setAxisScaleDraw (QwtPlot::xBottom, new PlotScaleDraw (false));
+
+    // cleaning
+    connect (cleanFilterButton, SIGNAL (clicked ()), this, SLOT (cleanFilterButtonClicked ()));
+    connect (cleanStagesButton, SIGNAL (clicked ()), this, SLOT (cleanStagesButtonClicked ()));
+    connect (&_daemon, SIGNAL (cleanFinished ()), this, SLOT (daemonCleanFinished ()));
+    connect (drainWaterButton, SIGNAL (clicked ()), this, SLOT (drainWaterButtonClicked ()));
+    connect (&_daemon, SIGNAL (drainFinished ()), this, SLOT (daemonDrainFinished ()));
 }
 
 
@@ -569,6 +576,17 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
 
     historyStageCombo->addItem (tr ("Events"), HS_Events);
     historyStageCombo->addItem (tr ("Cleanings"), HS_Cleanings);
+
+    // clean
+    cleanS1Check->setEnabled (s1);
+    cleanS2Check->setEnabled (s2);
+    cleanS3Check->setEnabled (s3);
+    cleanS4Check->setEnabled (s4);
+
+    drainS1Check->setEnabled (s1);
+    drainS2Check->setEnabled (s2);
+    drainS3Check->setEnabled (s3);
+    drainS4Check->setEnabled (s4);
 }
 
 
@@ -1488,6 +1506,40 @@ void MainWindow::daemonAutoModeError (bool timeout, bool manual)
 }
 
 
+void MainWindow::cleanFilterButtonClicked ()
+{
+    _daemon.cleanFilter ();
+    Logger::instance ()->log (Logger::Information, tr ("Filter cleaning started"));
+}
+
+
+void MainWindow::cleanStagesButtonClicked ()
+{
+    _daemon.cleanStages (cleanS1Check->isChecked (), cleanS2Check->isChecked (), cleanS3Check->isChecked (), cleanS4Check->isChecked ());
+    Logger::instance ()->log (Logger::Information, tr ("Clean of specified stages started"));
+}
+
+
+void MainWindow::daemonCleanFinished ()
+{
+    Logger::instance ()->log (Logger::Information, tr ("Clean finished"));
+}
+
+
+void MainWindow::drainWaterButtonClicked ()
+{
+    _daemon.drainWater (drainS1Check->isChecked (), drainS2Check->isChecked (), drainS3Check->isChecked (), drainS4Check->isChecked ());
+    Logger::instance ()->log (Logger::Information, tr ("Drain water of specified stages started"));
+}
+
+
+void MainWindow::daemonDrainFinished ()
+{
+    Logger::instance ()->log (Logger::Information, tr ("Drain finished"));
+}
+
+
+
 // --------------------------------------------------
 // PlotScaleDraw
 // --------------------------------------------------
@@ -1495,5 +1547,3 @@ QwtText PlotScaleDraw::label (double v) const
 {
     return QDateTime::fromTime_t ((uint)v).toString (_show_date ? "dd.MM hh:mm" : "hh:mm:ss");
 }
-
-

@@ -1272,7 +1272,7 @@
             <widget class="QWidget" name="page" >
              <layout class="QVBoxLayout" >
               <item>
-               <widget class="QPushButton" name="cleanFIlterButton" >
+               <widget class="QPushButton" name="cleanFilterButton" >
                 <property name="text" >
                  <string>Clean filter</string>
                 </property>
@@ -1329,28 +1329,28 @@
                 </property>
                 <layout class="QVBoxLayout" >
                  <item>
-                  <widget class="QCheckBox" name="checkBox_6" >
+                  <widget class="QCheckBox" name="drainS1Check" >
                    <property name="text" >
                     <string>Stage 1</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="checkBox_8" >
+                  <widget class="QCheckBox" name="drainS2Check" >
                    <property name="text" >
                     <string>Stage 2</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="checkBox_5" >
+                  <widget class="QCheckBox" name="drainS3Check" >
                    <property name="text" >
                     <string>Stage 3</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="checkBox_7" >
+                  <widget class="QCheckBox" name="drainS4Check" >
                    <property name="text" >
                     <string>Stage 4</string>
                    </property>

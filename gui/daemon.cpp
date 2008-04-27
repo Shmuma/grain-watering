@@ -197,6 +197,18 @@ void Daemon::socketReadyRead ()
                 case DaemonCommand::c_gethistory:
                     parseHistory (reply.trimmed (), cmd.historyStage (), cmd.historyKind ());
                     break;
+                case DaemonCommand::c_clean:
+                    if (parseGenericReply (reply, msg))
+                        Logger::instance ()->log (Logger::Error, tr ("Clean finished with error. Reason: '%1'").arg (msg));
+                    else
+                        cleanFinished ();
+                    break;
+                case DaemonCommand::c_drain:
+                    if (parseGenericReply (reply, msg))
+                        Logger::instance ()->log (Logger::Error, tr ("Drain finished with error. Reason: '%1'").arg (msg));
+                    else
+                        drainFinished ();
+                    break;
                 }
             }
         }
@@ -684,4 +696,24 @@ void Daemon::parseHistory (const QString& reply, history_stage_t stage, history_
     }
 
     historyGot (res, stage, kind);
+}
+
+
+void Daemon::cleanFilter ()
+{
+    sendCommand ("startfilterautomat\n");
+}
+
+
+void Daemon::cleanStages (bool s1, bool s2, bool s3, bool s4)
+{
+    sendCommand (QString ().sprintf ("clean %d %d %d %d\n", s1 ? 1 : 0, s2 ? 1 : 0, s3 ? 1 : 0, s4 ? 1 : 0));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_clean));
+}
+
+
+void Daemon::drainWater (bool s1, bool s2, bool s3, bool s4)
+{
+    sendCommand (QString ().sprintf ("drainwater %d %d %d %d\n", s1 ? 1 : 0, s2 ? 1 : 0, s3 ? 1 : 0, s4 ? 1 : 0));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_drain));
 }

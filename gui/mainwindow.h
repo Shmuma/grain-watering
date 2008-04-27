@@ -109,6 +109,8 @@ protected slots:
     void daemonWaterPresentUpdated (int stage, bool on);
     void daemonGrainLowUpdated (int stage, bool on);
     void daemonAutoModeError (bool timeout, bool manual);
+    void daemonCleanFinished ();
+    void daemonDrainFinished ();
 
     // check page
     void checkStateButtonPressed ();
@@ -149,6 +151,11 @@ protected slots:
     void refreshHistoryButtonClicked ();
     void historyPeriodComboChanged (int index);
     void historyGot (const QList < QPair <uint, double> >& data, history_stage_t stage, history_kind_t kind);
+
+    // cleaning
+    void cleanFilterButtonClicked ();
+    void cleanStagesButtonClicked ();
+    void drainWaterButtonClicked ();
 
 public:
     MainWindow ();

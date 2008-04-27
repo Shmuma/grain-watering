@@ -32,6 +32,8 @@ public:
         c_gettempcoef,
         c_calibrate,
         c_gethistory,
+        c_clean,
+        c_drain,
     };
     
 private:
@@ -145,6 +147,9 @@ signals:
     void autoModeError (bool timeout, bool manual);
 
     void historyGot (const QList< QPair <uint, double> >& res, history_stage_t stage, history_kind_t kind);
+    
+    void cleanFinished ();
+    void drainFinished ();
 
 public:
     Daemon (const QString& host, int port);
@@ -188,6 +193,10 @@ public:
 
     void setStageModes (bool s1, bool s2, bool s3, bool s4);
     void requestHistory (history_stage_t stage, history_kind_t kind, uint from, uint to);
+
+    void cleanFilter ();
+    void cleanStages (bool s1, bool s2, bool s3, bool s4);
+    void drainWater (bool s1, bool s2, bool s3, bool s4);
 };
 
 
