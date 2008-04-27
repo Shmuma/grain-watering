@@ -630,7 +630,11 @@ QString Interpreter::checkTick (const QStringList& args)
 
     // get water pressure
     QString res;
-    res = "Check: WP=" + QString::number (getWaterPressure ());
+    double wp = getWaterPressure ();
+    
+    appendHistory (HS_Stage1, HK_WaterPress, wp);
+
+    res = "Check: WP=" + QString::number (wp);
 
     for (int i = 0; i < 4; i++) {
         _stageOperational[i] = false;
@@ -935,6 +939,8 @@ QString Interpreter::getHistory (const QStringList& args)
     if (from == 0 || to == 0 || from > to)
         return "Invalid timestamp\n";
 
+    if (hist == HK_WaterPress)
+        stage = HS_Stage1;
     QList<QPair<time_t, double> > res = _db.getHistory (stage, hist, from, to);
     QString r;
 
