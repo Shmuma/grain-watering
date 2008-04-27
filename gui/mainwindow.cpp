@@ -42,6 +42,7 @@ MainWindow::MainWindow ()
     connect (checkButton, SIGNAL(toggled(bool)), this, SLOT(checkButtonToggled(bool)));
     connect (paramsButton, SIGNAL(toggled(bool)), this, SLOT(paramsButtonToggled(bool)));
     connect (sensorsButton, SIGNAL(toggled(bool)), this, SLOT(sensorsButtonToggled(bool)));
+    connect (cleanButton, SIGNAL(toggled(bool)), this, SLOT(cleanButtonToggled(bool)));
 
     connect (globalStopButton,  SIGNAL (clicked ()), this, SLOT (globalStopButtonClicked ()));
 
@@ -221,6 +222,7 @@ void MainWindow::configButtonToggled (bool on)
         checkButton->setChecked (false);
         paramsButton->setChecked (false);
         sensorsButton->setChecked (false);
+        cleanButton->setChecked (false);
         _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (0);
 	settingsPanel->show ();
@@ -239,6 +241,7 @@ void MainWindow::modeButtonToggled (bool on)
         checkButton->setChecked (false);
         paramsButton->setChecked (false);
         sensorsButton->setChecked (false);
+        cleanButton->setChecked (false);
         _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (1);
 	settingsPanel->show ();
@@ -257,6 +260,7 @@ void MainWindow::checkButtonToggled (bool on)
         modeButton->setChecked (false);
         paramsButton->setChecked (false);
         sensorsButton->setChecked (false);
+        cleanButton->setChecked (false);
         _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (2);
 	settingsPanel->show ();
@@ -275,6 +279,7 @@ void MainWindow::paramsButtonToggled (bool on)
         checkButton->setChecked (false);
         modeButton->setChecked (false);
         sensorsButton->setChecked (false);
+        cleanButton->setChecked (false);
         _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (3);
 	settingsPanel->show ();
@@ -293,8 +298,28 @@ void MainWindow::sensorsButtonToggled (bool on)
         modeButton->setChecked (false);
         checkButton->setChecked (false);
         paramsButton->setChecked (false);
+        cleanButton->setChecked (false);
         _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (4);
+	settingsPanel->show ();
+    }
+    else
+        if (!_switchingToolButtons)
+            settingsPanel->hide ();
+}
+
+
+void MainWindow::cleanButtonToggled (bool on)
+{
+    if (on) {
+        _switchingToolButtons = true;
+        configButton->setChecked (false);
+        modeButton->setChecked (false);
+        checkButton->setChecked (false);
+        paramsButton->setChecked (false);
+        sensorsButton->setChecked (false);
+        _switchingToolButtons = false;
+	stackedWidget->setCurrentIndex (5);
 	settingsPanel->show ();
     }
     else
@@ -363,7 +388,7 @@ void MainWindow::connectedChanged (bool value)
     // toggle connect button
     connectButton->setChecked (value);
 
-    QPushButton* btns[] = {configButton, checkButton, modeButton, paramsButton, sensorsButton};
+    QPushButton* btns[] = {configButton, checkButton, modeButton, paramsButton, sensorsButton, cleanButton};
 
     for (uint i = 0; i < sizeof (btns) / sizeof (btns[0]); i++) {
         btns[i]->setEnabled (value);

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>865</width>
-    <height>640</height>
+    <height>663</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -244,6 +244,9 @@
         </property>
         <item>
          <widget class="QPushButton" name="cleanButton" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
           <property name="text" >
            <string>Clean</string>
           </property>
@@ -347,7 +350,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex" >
-             <number>1</number>
+             <number>5</number>
             </property>
             <widget class="QWidget" name="config" >
              <layout class="QVBoxLayout" >
@@ -1260,6 +1263,118 @@
                  <size>
                   <width>20</width>
                   <height>21</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page" >
+             <layout class="QVBoxLayout" >
+              <item>
+               <widget class="QPushButton" name="cleanFIlterButton" >
+                <property name="text" >
+                 <string>Clean filter</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_5" >
+                <property name="title" >
+                 <string>Auto clean</string>
+                </property>
+                <layout class="QVBoxLayout" >
+                 <item>
+                  <widget class="QCheckBox" name="cleanS1Check" >
+                   <property name="text" >
+                    <string>Stage 1</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="cleanS2Check" >
+                   <property name="text" >
+                    <string>Stage 2</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="cleanS3Check" >
+                   <property name="text" >
+                    <string>Stage 3</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="cleanS4Check" >
+                   <property name="text" >
+                    <string>Stage 4</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="cleanStagesButton" >
+                   <property name="text" >
+                    <string>Start cleaning</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_6" >
+                <property name="title" >
+                 <string>Drain water</string>
+                </property>
+                <layout class="QVBoxLayout" >
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_6" >
+                   <property name="text" >
+                    <string>Stage 1</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_8" >
+                   <property name="text" >
+                    <string>Stage 2</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_5" >
+                   <property name="text" >
+                    <string>Stage 3</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_7" >
+                   <property name="text" >
+                    <string>Stage 4</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="drainWaterButton" >
+                   <property name="text" >
+                    <string>Drain water</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
                  </size>
                 </property>
                </spacer>

@@ -53,6 +53,7 @@ protected slots:
     void checkButtonToggled (bool on);
     void paramsButtonToggled (bool on);
     void sensorsButtonToggled (bool on);
+    void cleanButtonToggled (bool on);
 
     // active state checkbox 
     void applyStagesButtonClicked ();
