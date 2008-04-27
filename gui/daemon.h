@@ -37,17 +37,29 @@ public:
 private:
     kind_t _kind;
     int _stage;
+    history_stage_t _hist_stage;
+    history_kind_t _hist_kind;
 
 public:
     DaemonCommand (kind_t kind, int stage = 0)
         : _kind (kind),
           _stage (stage) {};
 
+    DaemonCommand (kind_t kind, history_stage_t hist_stage, history_kind_t hist_kind)
+        : _kind (kind),
+          _hist_stage (hist_stage),
+          _hist_kind (hist_kind) {};
+
     kind_t kind () const
         { return _kind; };
 
     int stage () const
         { return _stage; };
+
+    history_stage_t historyStage () const
+        { return _hist_stage; }
+    history_kind_t historyKind () const
+        { return _hist_kind; };
 };
 
 
@@ -83,7 +95,7 @@ protected:
     void parseSettings (const QString& msg);
     void parseTempCoef (const QString& reply);
     void parseCalibrateReply (int stage, const QString& reply);
-    void parseHistory (const QString& reply);
+    void parseHistory (const QString& reply, history_stage_t stage, history_kind_t kind);
 
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
@@ -128,7 +140,7 @@ signals:
     void tempCoefGot (double k, double resist);
     void calibrateReply (int stage, const QString& key, double val);
 
-    void historyGot (const QList< QPair <uint, double> >& res);
+    void historyGot (const QList< QPair <uint, double> >& res, history_stage_t stage, history_kind_t kind);
 
 public:
     Daemon (const QString& host, int port);

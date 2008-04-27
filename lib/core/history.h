@@ -13,7 +13,6 @@ enum history_stage_t {
 
 
 enum history_kind_t {
-    HK_Humidity,
     HK_GrainFlow,
     HK_GrainTemp,
     HK_GrainNature,

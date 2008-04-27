@@ -4,6 +4,7 @@
 #include <QtCore>
 #include <QtGui>
 #include <qwt_plot.h>
+#include <qwt_scale_draw.h>
 
 #include "ui_mainwindow.h"
 #include "stagecontrol.h"
@@ -142,10 +143,29 @@ protected slots:
     // history
     void refreshHistoryButtonClicked ();
     void historyPeriodComboChanged (int index);
-    void historyGot (const QList < QPair <uint, double> >& data);
+    void historyGot (const QList < QPair <uint, double> >& data, history_stage_t stage, history_kind_t kind);
 
 public:
     MainWindow ();
+};
+
+
+class PlotScaleDraw : public QwtScaleDraw
+{
+private:
+    bool _show_date;
+
+public:
+    PlotScaleDraw (bool show_date)
+        : QwtScaleDraw (),
+          _show_date (show_date) {};
+
+    virtual QwtText label (double v) const;
+
+    bool showDate () const
+        { return _show_date; };
+    void setShowDate (bool show_date)
+        { _show_date = show_date; };
 };
 
 

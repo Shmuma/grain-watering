@@ -237,7 +237,8 @@ QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
     case DeviceCommand::GetGrainHumidity:
     case DeviceCommand::GetGrainTemperature:
     case DeviceCommand::GetGrainNature:
-        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0, 10).pack ();
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), QDateTime::currentDateTime ().toTime_t () % 30, 
+                             QDateTime::currentDateTime ().toTime_t () % 30).pack ();
         break;
     case DeviceCommand::GetWaterFlow:
         res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 10+_last->low ()*10, _last->low ()).pack ();

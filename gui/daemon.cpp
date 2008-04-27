@@ -195,7 +195,7 @@ void Daemon::socketReadyRead ()
                     parseCalibrateReply (cmd.stage (), reply);
                     break;
                 case DaemonCommand::c_gethistory:
-                    parseHistory (reply.trimmed ());
+                    parseHistory (reply.trimmed (), cmd.historyStage (), cmd.historyKind ());
                     break;
                 }
             }
@@ -654,11 +654,11 @@ void Daemon::setStageModes (bool s1, bool s2, bool s3, bool s4)
 void Daemon::requestHistory (history_stage_t stage, history_kind_t kind, uint from, uint to)
 {
     sendCommand (QString ().sprintf ("gethistory %d %d %u %u\n", (int)stage, (int)kind, from, to), false);
-    _queue.push_back (DaemonCommand (DaemonCommand::c_gethistory));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_gethistory, stage, kind));
 }
 
 
-void Daemon::parseHistory (const QString& reply)
+void Daemon::parseHistory (const QString& reply, history_stage_t stage, history_kind_t kind)
 {
     QStringList l = QString (reply).remove ("History:").trimmed ().split (",", QString::SkipEmptyParts);
     QList< QPair <uint, double> > res;
@@ -667,5 +667,5 @@ void Daemon::parseHistory (const QString& reply)
         res.push_back (QPair<uint, double> (l[i].toUInt (), l[i+1].toDouble ()));
     }
 
-    historyGot (res);
+    historyGot (res, stage, kind);
 }

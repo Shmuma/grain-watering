@@ -8,6 +8,7 @@
 #include <QtGui>
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
+#include <qwt_scale_draw.h>
 
 
 // --------------------------------------------------
@@ -178,7 +179,6 @@ MainWindow::MainWindow ()
 
     // history
     historyKindCombo->clear ();
-    historyKindCombo->addItem (tr ("Measured humidity"), HK_Humidity);
     historyKindCombo->addItem (tr ("Grain flow"), HK_GrainFlow);
     historyKindCombo->addItem (tr ("Grain temperature"), HK_GrainTemp);
     historyKindCombo->addItem (tr ("Grain nature"), HK_GrainNature);
@@ -189,8 +189,11 @@ MainWindow::MainWindow ()
 
     connect (refreshHistoryButton, SIGNAL (clicked ()), this, SLOT (refreshHistoryButtonClicked ()));
     connect (historyPeriodCombo, SIGNAL (activated (int)), this, SLOT (historyPeriodComboChanged (int)));
-    connect (&_daemon, SIGNAL (historyGot (const QList < QPair <uint, double> >&)), this, SLOT (historyGot (const QList < QPair <uint, double> >&)));
+    connect (&_daemon, SIGNAL (historyGot (const QList < QPair <uint, double> >&, history_stage_t, history_kind_t)), 
+             this, SLOT (historyGot (const QList < QPair <uint, double> >&, history_stage_t, history_kind_t)));
     historyPeriodComboChanged (0);
+
+    plot->setAxisScaleDraw (QwtPlot::xBottom, new PlotScaleDraw (false));
 }
 
 
@@ -1307,6 +1310,7 @@ void MainWindow::refreshHistoryButtonClicked ()
     QDateTime from = historyFromDateEdit->dateTime ();
     QDateTime to;
     int period = historyPeriodCombo->currentIndex ();
+    bool need_date = false;
     
     switch (period) {
     case 0:
@@ -1317,20 +1321,28 @@ void MainWindow::refreshHistoryButtonClicked ()
         break;
     case 2:
         to = from.addDays (7);
+        need_date = true;
         break;
     case 3:
         to = from.addDays (30);
+        need_date = true;
         break;
     case 4:
         to = from.addYears (1);
+        need_date = true;
         break;
     }
+
+    PlotScaleDraw* sd = static_cast<PlotScaleDraw*> (plot->axisScaleDraw (QwtPlot::xBottom));
+
+    if (sd)
+        sd->setShowDate (need_date);
 
     _daemon.requestHistory (stage, kind, from.toTime_t (), to.toTime_t ());
 }
 
 
-void MainWindow::historyGot (const QList < QPair <uint, double> >& data)
+void MainWindow::historyGot (const QList < QPair <uint, double> >& data, history_stage_t stage, history_kind_t kind)
 {
     QStringList l;
     double *x, *y;
@@ -1352,12 +1364,74 @@ void MainWindow::historyGot (const QList < QPair <uint, double> >& data)
 
     historyTable->resizeColumnToContents (0);
 
+    QString title;
+
+    switch (stage) {
+    case HS_Stage1:
+        title = tr ("Stage 1");
+        break;
+    case HS_Stage2:
+        title = tr ("Stage 2");
+        break;
+    case HS_Stage3:
+        title = tr ("Stage 3");
+        break;
+    case HS_Stage4:
+        title = tr ("Stage 4");
+        break;
+    case HS_Events:
+        title = tr ("Events");
+        break;
+    case HS_Cleanings:
+        title = tr ("Clearnings");
+        break;
+    }
+
+    title += ", ";
+
+    switch (kind) {
+    case HK_GrainFlow:
+        title += tr ("Grain flow history");
+        break;
+    case HK_GrainTemp:
+        title += tr ("Grain temperature history");
+        break;
+    case HK_GrainNature:
+        title += tr ("Grain nature history");
+        break;
+    case HK_WaterPress:
+        title += tr ("Water pressure history");
+        break;
+    case HK_TargetHumidity:
+        title += tr ("Target humidity history");
+        break;
+    case HK_WaterFlow:
+        title += tr ("Water flow history");
+        break;
+    case HK_Setting:
+        title += tr ("Setting history");
+        break;
+    }
+
     // plot
     plot->clear ();
-    QwtPlotCurve* curve = new QwtPlotCurve (tr ("Measured value"));
+    plot->setTitle (title);
+    QwtPlotCurve* curve = new QwtPlotCurve ();
+    QPen pen (Qt::blue, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+
     curve->setData (x, y, data.size ());
+    curve->setPen (pen);
     curve->attach (plot);
     plot->replot ();
     free (x);
     free (y);
+}
+
+
+// --------------------------------------------------
+// PlotScaleDraw
+// --------------------------------------------------
+QwtText PlotScaleDraw::label (double v) const
+{
+    return QDateTime::fromTime_t ((uint)v).toString (_show_date ? "dd.MM hh:mm" : "hh:mm:ss");
 }
