@@ -104,6 +104,10 @@ protected slots:
     void daemonTargetSettingUpdated (int stage, double val);
     void daemonSettingsGot ();
     void daemonCalibrateReply (int stage, const QString& key, double val);
+    void daemonBsuPoweredUpdated (int stage, bool on);
+    void daemonWaterPresentUpdated (int stage, bool on);
+    void daemonGrainLowUpdated (int stage, bool on);
+    void daemonAutoModeError (bool timeout, bool manual);
 
     // check page
     void checkStateButtonPressed ();

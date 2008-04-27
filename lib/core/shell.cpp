@@ -21,6 +21,7 @@ Interpreter::Interpreter (Device* device)
         _autoMode[i] = _autoModePaused[i] = false;
         _last_tgt_water_flow[i] = 0.0;
         _settings[i] = StageSettings (_db.getStageSettings (i));
+        _stageOperational[i] = false;
     }
 
     _temp_k = _db.getTempK ();
@@ -614,9 +615,17 @@ QString Interpreter::checkTick (const QStringList& args)
 
     if (!_dev->isConnected ())
         return QString ("Check: not connected\n");
-    if (!_dev->isManualMode ())
-        return QString ("Check: manual mode\n");
 
+    // perform additional checks
+    // 1. trying to sync with device
+    if (!_dev->syncWithDevice ())
+        return QString ("Check: no answer\n");
+
+    // 2. check operation mode
+    _dev->updateState ();
+    if (_dev->isManualMode ())
+        return QString ("Check: manual mode\n");
+    
     inProgress = true;
 
     // get water pressure
@@ -624,10 +633,27 @@ QString Interpreter::checkTick (const QStringList& args)
     res = "Check: WP=" + QString::number (getWaterPressure ());
 
     for (int i = 0; i < 4; i++) {
+        _stageOperational[i] = false;
         if (!isStageActive (i))
             continue;
 
         res += QString (" %1:").arg (i+1);
+
+        // 3. check BSU power
+        if (!_dev->getBSUPowered (DeviceCommand::stageByNum (i))) {
+            res += "BSU=0";
+            continue;
+        }
+        else
+            res += "BSU=1,";
+
+        // 4. check for water present
+        if (getWaterFlow (i) < _settings[i].minWaterFlow ()) {
+            res += "W=0";
+            continue;
+        }
+        else
+            res += "W=1,";
 
         bool grain;
 
@@ -642,7 +668,18 @@ QString Interpreter::checkTick (const QStringList& args)
 
         if (!grain)
             continue;
+        res += ",";
+
+        // check for grain amount
+        if (getGrainFlow (i) < _settings[i].minGrainFlow ()) {
+            res += "GL=1";
+            continue;
+        }
+        else
+            res += "GL=0,";
+
         res += "," + getStageState (i);
+        _stageOperational[i] = true;
     }
 
     inProgress = false;
@@ -666,8 +703,25 @@ QString Interpreter::autoModeTick (const QStringList& args)
 
     // calculate setting for active and unpaused stages
     for (i = 0; i < 4; i++)
-        if (_autoMode[i] && !_autoModePaused[i]) {
-            
+        if (_autoMode[i] && !_autoModePaused[i] && _stageOperational[i]) {
+            // assign setting
+            res += QString (" %1:").arg (i+1);
+            res += QString::number (_target_sett[i]);
+
+            switch (i) {
+            case 0:
+                _dev->setWaterGateS1 (_target_sett[i]);
+                break;
+            case 1:
+                _dev->setWaterGateS2 (_target_sett[i]);
+                break;
+            case 2:
+                _dev->setWaterGateS3 (_target_sett[i]);
+                break;
+            case 3:
+                _dev->setWaterGateS4 (_target_sett[i]);
+                break;
+            }
         }
 
     return res + "\n";

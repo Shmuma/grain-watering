@@ -31,6 +31,7 @@ private:
     StageSettings _settings[4];
     double _last_tgt_water_flow[4];
     unsigned int _target_sett[4];
+    bool _stageOperational[4];
     double _temp_k, _temp_resist;
 
     static QString checkBoolReply (bool res)

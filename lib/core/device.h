@@ -154,6 +154,8 @@ public:
     bool startFilterAutomat ();
 
     QByteArray sendRawCommand (const QByteArray& data);
+
+    bool syncWithDevice ();
 };
 
 

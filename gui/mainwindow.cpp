@@ -133,6 +133,10 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (targetSettingUpdated (int, double)), this, SLOT (daemonTargetSettingUpdated (int, double)));
     connect (&_daemon, SIGNAL (settingsGot ()), this, SLOT (daemonSettingsGot ()));
     connect (&_daemon, SIGNAL (calibrateReply (int, const QString&, double)), this, SLOT (daemonCalibrateReply (int, const QString&, double)));
+    connect (&_daemon, SIGNAL (bsuPoweredUpdated (int, bool)), this, SLOT (daemonBsuPoweredUpdated (int, bool)));
+    connect (&_daemon, SIGNAL (waterPresentUpdated (int, bool)), this, SLOT (daemonWaterPresentUpdated (int, bool)));
+    connect (&_daemon, SIGNAL (grainLowUpdated (int, bool)), this, SLOT (daemonGrainLowUpdated (int, bool)));
+    connect (&_daemon, SIGNAL (autoModeError (bool, bool)), this, SLOT (daemonAutoModeError (bool, bool)));
 
     connect (checkStateButton, SIGNAL (pressed ()), this, SLOT (checkStateButtonPressed ()));
     connect (checkWaterButton, SIGNAL (pressed ()), this, SLOT (checkWaterButtonPressed ()));
@@ -1428,6 +1432,37 @@ void MainWindow::historyGot (const QList < QPair <uint, double> >& data, history
 }
 
 
+void MainWindow::daemonBsuPoweredUpdated (int stage, bool on)
+{
+    if (!on)
+        Logger::instance ()->log (Logger::Warning, tr ("BSU in stage %1 not powered").arg (stage+1));
+}
+
+
+void MainWindow::daemonWaterPresentUpdated (int stage, bool on)
+{
+    if (!on)
+        Logger::instance ()->log (Logger::Warning, tr ("Water not present in stage %1").arg (stage+1));
+}
+
+
+void MainWindow::daemonGrainLowUpdated (int stage, bool on)
+{
+    if (on)
+        Logger::instance ()->log (Logger::Warning, tr ("Grain not present in stage %1").arg (stage+1));
+}
+
+
+void MainWindow::daemonAutoModeError (bool timeout, bool manual)
+{
+    if (timeout)
+        Logger::instance ()->log (Logger::Warning, tr ("Cannot communicate with controller"));
+    if (manual)
+        Logger::instance ()->log (Logger::Warning, tr ("System in manual mode"));
+
+}
+
+
 // --------------------------------------------------
 // PlotScaleDraw
 // --------------------------------------------------
@@ -1435,3 +1470,5 @@ QwtText PlotScaleDraw::label (double v) const
 {
     return QDateTime::fromTime_t ((uint)v).toString (_show_date ? "dd.MM hh:mm" : "hh:mm:ss");
 }
+
+

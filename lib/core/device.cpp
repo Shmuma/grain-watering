@@ -460,3 +460,20 @@ QByteArray Device::sendRawCommand (const QByteArray& data)
 
     return res;
 }
+
+
+bool Device::syncWithDevice ()
+{
+    DeviceCommand _cmd (DeviceCommand::Init);
+
+    // send to port initial sequence
+    _port->send (_cmd.pack ());
+
+    // wait for the same sequence from device
+    DeviceCommand cmd (_port->receive (_cmd.delay ()+1));
+
+    if (!cmd.valid ())
+        return false;
+
+    return cmd == DeviceCommand (DeviceCommand::Init);
+}

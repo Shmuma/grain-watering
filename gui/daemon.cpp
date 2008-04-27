@@ -490,6 +490,16 @@ void Daemon::handleCheckTick (const QString& msg)
 
     autoTextArrived (msg);
 
+    if (msg.startsWith ("Check: no answer")) {
+        autoModeError (true, false);
+        return;
+    }
+
+    if (msg.startsWith ("Check: manual mode")) {
+        autoModeError (false, true);
+        return;
+    }
+
     if (stages.count () < 2)
         return;
     
@@ -534,6 +544,12 @@ void Daemon::handleCheckTick (const QString& msg)
             
             if (key == "G")
                 grainPresentUpdated (stage, val == "1");
+            else if (key == "BSU")
+                bsuPoweredUpdated (stage, val == "1");
+            else if (key == "W")
+                waterPresentUpdated (stage, val == "1");
+            else if (key == "GL")
+                grainLowUpdated (stage, val == "1");
             else if (key == "WF")
                 waterFlowUpdated (stage, val.toDouble ());
             else if (key == "GF")
