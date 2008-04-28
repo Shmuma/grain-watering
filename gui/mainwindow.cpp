@@ -382,10 +382,14 @@ void MainWindow::connectButtonClicked ()
 {
     // Try to connect/disconnect. Don't care about GUI update, daemon
     // sends signal about state change.
-    if (_daemon.connected ())
+    if (_daemon.connected ()) {
         _daemon.disconnect ();
-    else
+        Logger::instance ()->log (Logger::Information, tr ("Disconnecting from daemon"));
+    }
+    else {
         _daemon.connect ();
+        Logger::instance ()->log (Logger::Information, tr ("Connecting to daemon"));
+    }
 }
 
 
@@ -404,6 +408,7 @@ void MainWindow::connectedChanged (bool value)
 
     if (!value)
         daemonStagesActivityChanged (false, false, false, false);
+    Logger::instance ()->log (Logger::Information, value ? tr ("Connected to daemon, obtaining state") : tr ("Disconnected from daemon"));
 }
 
 
@@ -421,6 +426,7 @@ void MainWindow::daemonHardwareConnected ()
     _daemon.isGrainSensorsPresent ();
     _daemon.requestSettings ();
     _daemon.requestTempCoef ();
+    Logger::instance ()->log (Logger::Information, tr ("Connection to controller established"));
 }
 
 
@@ -486,6 +492,18 @@ void MainWindow::applyStagesButtonClicked ()
     _daemon.setStages (stage1ActiveCheckBox->isChecked (), stage2ActiveCheckBox->isChecked (), 
                        stage3ActiveCheckBox->isChecked (), stage4ActiveCheckBox->isChecked ());
     _daemon.requestSettings ();
+
+    QString stg = tr ("stage"), msg, en = tr ("enabled", "stage"), dis = tr ("disabled", "stage");
+    
+    msg = tr ("Changing stages activity: ");
+
+    msg += stg + QString (" 1 ") + (stage1ActiveCheckBox->isChecked () ? en : dis) + QString (", ");
+    msg += stg + QString (" 2 ") + (stage2ActiveCheckBox->isChecked () ? en : dis) + QString (", ");
+    msg += stg + QString (" 3 ") + (stage3ActiveCheckBox->isChecked () ? en : dis) + QString (", ");
+    msg += stg + QString (" 4 ") + (stage4ActiveCheckBox->isChecked () ? en : dis);
+
+    Logger::instance ()->log (Logger::Information, msg);
+
 }
 
 
@@ -599,18 +617,21 @@ void MainWindow::daemonGrainFlowGot (int stage, int value)
 void MainWindow::startButtonClicked (int stage)
 {
     _daemon.startAutoMode (stage);
+    Logger::instance ()->log (Logger::Information, tr ("Auto mode started at stage %1").arg (stage+1));
 }
 
 
 void MainWindow::stopButtonClicked (int stage)
 {
     _daemon.stopAutoMode (stage);
+    Logger::instance ()->log (Logger::Information, tr ("Auto mode stopped at stage %1").arg (stage+1));
 }
 
 
-void MainWindow::pauseButtonClicked (int stage, bool)
+void MainWindow::pauseButtonClicked (int stage, bool on)
 {
     _daemon.toggleAutoMode (stage);
+    Logger::instance ()->log (Logger::Information, tr ("Auto mode %1 at stage %2").arg (on ? tr ("paused") : tr ("unpaused"), stage+1));
 }
 
 
@@ -618,6 +639,7 @@ void MainWindow::globalStopButtonClicked ()
 {
     for (int i = 0; i < 4; i++)
         _daemon.stopAutoMode (i);
+    Logger::instance ()->log (Logger::Information, tr ("Stopping all active stages"));
 }
 
 
@@ -723,6 +745,7 @@ void MainWindow::daemonWaterStopped (int stage)
 void MainWindow::stateRefreshButtonClicked ()
 {
     _daemon.refreshState ();
+    Logger::instance ()->log (Logger::Information, tr ("Fetching state for active stages"));
 }
 
 
@@ -750,8 +773,9 @@ void MainWindow::applyCheckWaterButtonClicked ()
 
     for (int i = 0; i < 4; i++)
         if (_daemon.isStageEnabled (i))
-            if (boxes[i]->isChecked ())
+            if (boxes[i]->isChecked ()) {
                 _daemon.startWater (i);
+            }
             else
                 _daemon.stopWater (i);
 }
@@ -790,6 +814,7 @@ void MainWindow::daemonGrainSensorsPresenceGot (bool value)
 void MainWindow::grainSensorsEnabledChecked (bool val)
 {
     _daemon.setGrainSensorsEnabled (val);
+    Logger::instance ()->log (Logger::Information, tr ("%1 grain sensors").arg (val ? tr ("Enabling", "grain sensors") : tr ("Disabling", "grain sensors")));   
 }
 
 
@@ -808,12 +833,15 @@ void MainWindow::checkGrainStageApplyClicked ()
     checkGrainStage2Label->setText (QString ());
     checkGrainStage3Label->setText (QString ());
     checkGrainStage4Label->setText (QString ());
+    Logger::instance ()->log (Logger::Information, tr ("Checking grain presense in selected stages"));   
 }
 
 
 void MainWindow::daemonGrainPresenceGot (int stage, bool value)
 {
     QString text (value ? tr ("Present") : tr ("Not present"));
+
+    Logger::instance ()->log (Logger::Information, value ? tr ("There are grain in stage %1").arg (stage+1) : tr ("There are no grain in stage %1").arg (stage+1));    
 
     switch (stage) {
     case 0:
@@ -1045,6 +1073,7 @@ void MainWindow::saveSettingsPage (int stage)
     sett.setValid (true);
     _daemon.setSettings (stage, sett);
     _settingsChanged = false;
+    Logger::instance ()->log (Logger::Information, tr ("Your setting for stage %1 saved and now active").arg (stage+1));
 }
 
 
@@ -1156,10 +1185,12 @@ bool MainWindow::haveAccess (access_level_t level)
 
     if (!_daemon.checkPass (user, pass)) {
         QMessageBox::warning (this, tr ("Access denied"), tr ("Invalid password"));
+        Logger::instance ()->log (Logger::Information, tr ("Access to %1 account not granted").arg (user));
         return false;
     }
     else {
         _access = level;
+        Logger::instance ()->log (Logger::Information, tr ("Access to %1 account have granted").arg (user));
         return true;
     }
 }
@@ -1208,6 +1239,7 @@ void MainWindow::stageSensorsApplyButtonClicked ()
         QMessageBox::warning (this, tr ("Values error"), tr ("Value you've entered is not valid"));
     else
         _daemon.setTempCoef (k, resist);
+    Logger::instance ()->log (Logger::Information, tr ("Sensors settings saved and now active"));
 }
 
 
