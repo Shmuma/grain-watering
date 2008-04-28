@@ -151,6 +151,7 @@ protected slots:
     void refreshHistoryButtonClicked ();
     void historyPeriodComboChanged (int index);
     void historyGot (const QList < QPair <uint, double> >& data, history_stage_t stage, history_kind_t kind);
+    void graphResetButtonClicked ();
 
     // cleaning
     void cleanFilterButtonClicked ();

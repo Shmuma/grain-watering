@@ -1324,29 +1324,9 @@ void MainWindow::stageModesApplyButtonClicked ()
 }
 
 
-void MainWindow::historyPeriodComboChanged (int index)
+void MainWindow::historyPeriodComboChanged (int)
 {
-    QDateTime from = QDateTime::currentDateTime ();
-
-    switch (index) {
-    case 0:
-        from = from.addSecs (-60*60);
-        break;
-    case 1:
-        from = from.addDays (-1);
-        break;
-    case 2:
-        from = from.addDays (-7);
-        break;
-    case 3:
-        from = from.addDays (-30);
-        break;
-    case 4:
-        from = from.addYears (-1);
-        break;
-    }
-
-    historyFromDateEdit->setDateTime (from);
+    graphResetButtonClicked ();
 }
 
 
@@ -1387,6 +1367,33 @@ void MainWindow::refreshHistoryButtonClicked ()
 
     _daemon.requestHistory (stage, kind, from.toTime_t (), to.toTime_t ());
 }
+
+
+void MainWindow::graphResetButtonClicked ()
+{
+    QDateTime from = QDateTime::currentDateTime ();
+
+    switch (historyPeriodCombo->currentIndex ()) {
+    case 0:
+        from = from.addSecs (-60*60);
+        break;
+    case 1:
+        from = from.addDays (-1);
+        break;
+    case 2:
+        from = from.addDays (-7);
+        break;
+    case 3:
+        from = from.addDays (-30);
+        break;
+    case 4:
+        from = from.addYears (-1);
+        break;
+    }
+
+    historyFromDateEdit->setDateTime (from);
+}
+
 
 
 void MainWindow::historyGot (const QList < QPair <uint, double> >& data, history_stage_t stage, history_kind_t kind)
