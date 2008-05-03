@@ -18,10 +18,6 @@ public:
         c_setstages,
         c_startstage,
         c_stopstage,
-//         c_startautomode,
-//         c_stopautomode,
-//         c_toggleautomode,
-//         c_getautomode,
         c_getmetastate,
         c_startwater,
         c_stopwater,
@@ -115,12 +111,6 @@ signals:
     void textArrived (const QString& text);
     void autoTextArrived (const QString& text);
     void commandSent (const QString& text);
-
-//     void autoModeTickGot (bool state, double press);
-//     void autoModeStarted (int stage);
-//     void autoModeStopped (int stage);
-//     void autoModeToggled (int stage, bool paused);
-//     void autoModeGot (int stage, bool active, bool paused);
 
     void stageStarted (int stage);
     void stageStopped (int stage);

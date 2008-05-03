@@ -107,11 +107,6 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (grainFlowGot (int, int)), this, SLOT (daemonGrainFlowGot (int, int)));
     connect (&_daemon, SIGNAL (stageStarted (int)), this, SLOT (daemonStageStarted (int)));
     connect (&_daemon, SIGNAL (stageStopped (int)), this, SLOT (daemonStageStopped (int)));
-    //    connect (&_daemon, SIGNAL (autoModeTickGot (bool, double)), this, SLOT (daemonAutoModeTickGot (bool, double)));
-//     connect (&_daemon, SIGNAL (autoModeGot (int, bool, bool)), this, SLOT (daemonAutoModeGot (int, bool, bool)));
-//     connect (&_daemon, SIGNAL (autoModeStarted (int)), this, SLOT (daemonAutoModeStarted (int)));
-//     connect (&_daemon, SIGNAL (autoModeStopped (int)), this, SLOT (daemonAutoModeStopped (int)));
-//     connect (&_daemon, SIGNAL (autoModeToggled (int, bool)), this, SLOT (daemonAutoModeToggled (int, bool)));
     connect (&_daemon, SIGNAL (metaStateGot (double, QMap<int, QList<double> >)), this, SLOT (daemonMetaStateGot (double, QMap<int, QList<double> >)));
     connect (&_daemon, SIGNAL (waterStarted (int)), this, SLOT (daemonWaterStarted (int)));
     connect (&_daemon, SIGNAL (waterStopped (int)), this, SLOT (daemonWaterStopped (int)));
@@ -430,10 +425,6 @@ void MainWindow::daemonHardwareConnected ()
 {
     // enabled stages
     _daemon.getStages ();
-
-//     // auto mode
-//     for (int i = 0; i < 4; i++)
-//         _daemon.getAutoMode (i);
 
     // grain sensors presense
     _daemon.isGrainSensorsPresent ();

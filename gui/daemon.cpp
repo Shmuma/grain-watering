@@ -200,19 +200,8 @@ void Daemon::socketReadyRead ()
                 }
             }
         }
-        else {
-//             if (reply.startsWith (auto_prefix)) {
-//                 bool state;
-//                 double pres;
-
-//                 autoTextArrived (QString (reply).remove (auto_prefix).trimmed ());
-//                 if (parseAutoModeTick (reply, &state, &pres))
-//                     autoModeTickGot (state, pres);
-//             }
-//             else
-                handleCheckTick (reply);
-        }
-
+        else 
+            handleCheckTick (reply);
     }
 }
 
@@ -337,34 +326,6 @@ void Daemon::setStages (bool s1, bool s2, bool s3, bool s4)
     sendCommand (QString ().sprintf ("setstages %d %d %d %d\n", s1 ? 1 : 0, s2 ? 1 : 0, s3 ? 1 : 0, s4 ? 1 : 0));
     _queue.push_back (DaemonCommand (DaemonCommand::c_setstages));
 }
-
-
-// void Daemon::startAutoMode (int stage)
-// {
-//     sendCommand (QString ("startautomode %1\n").arg (stage+1));
-//     _queue.push_back (DaemonCommand (DaemonCommand::c_startautomode, stage));
-// }
-
-
-// void Daemon::stopAutoMode (int stage)
-// {
-//     sendCommand (QString ("stopautomode %1\n").arg (stage+1));
-//     _queue.push_back (DaemonCommand (DaemonCommand::c_stopautomode, stage));
-// }
-
-
-// void Daemon::toggleAutoMode (int stage)
-// {
-//     sendCommand (QString ("toggleautomode %1\n").arg (stage+1));
-//     _queue.push_back (DaemonCommand (DaemonCommand::c_toggleautomode, stage));
-// }
-
-
-// void Daemon::getAutoMode (int stage)
-// {
-//     sendCommand (QString ("getautomode %1\n").arg (stage+1));
-//     _queue.push_back (DaemonCommand (DaemonCommand::c_getautomode, stage));
-// }
 
 
 void Daemon::refreshState ()
