@@ -82,6 +82,8 @@ class SerialDeviceModel : public SerialPort
 {
 private:
     DeviceCommand* _last;
+    unsigned int _waterGate[4];
+    bool _waterRunning[4];
 
 public:
     SerialDeviceModel ();

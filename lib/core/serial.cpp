@@ -199,6 +199,10 @@ SerialDeviceModel::SerialDeviceModel ()
     : SerialPort (),
       _last (NULL)
 {
+    for (int i = 0; i < 4; i++) {
+        _waterGate[i] = 0xFFFF >> 1;
+        _waterRunning[i] = false;
+    }
 }
 
 
@@ -234,36 +238,80 @@ QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
         res = DeviceCommand (DeviceCommand::Stg_All, 0xf0, 0x0).pack ();
         break;
     case DeviceCommand::GetGrainFlow:
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0, 10).pack ();
+        break;
+
     case DeviceCommand::GetGrainHumidity:
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0, 10).pack ();
+        break;
+
     case DeviceCommand::GetGrainTemperature:
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0, 200).pack ();
+        break;
+
     case DeviceCommand::GetGrainNature:
-        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), QDateTime::currentDateTime ().toTime_t () % 30, 
-                             QDateTime::currentDateTime ().toTime_t () % 30).pack ();
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0, 10).pack ();
         break;
+
     case DeviceCommand::GetWaterFlow:
-        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 10+_last->low ()*10, _last->low ()).pack ();
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), _waterRunning[_last->low ()-1] ? 10 : 0, 0).pack ();
         break;
+
     case DeviceCommand::GetGrainPresent:
-        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), _last->low () == 1 ? 0xF0 : 0x0F, 0).pack ();
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0xF0, 0).pack ();
         break;
+
     case DeviceCommand::GetBSUPowered:
         res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0xF0, 0).pack ();
         break;
+
     case DeviceCommand::GetControllerID:
         res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0x12, 0x34).pack ();
         break;
+
     case DeviceCommand::GetP4State:
-        res = DeviceCommand (DeviceCommand::Stg_All, 0x1, 0x0).pack ();
+        res = DeviceCommand (DeviceCommand::Stg_All, 0xFF, 1).pack ();
         break;
+
     case DeviceCommand::GetP5State:
-        res = DeviceCommand (DeviceCommand::Stg_All, 0x2, 0x0).pack ();
+        res = DeviceCommand (DeviceCommand::Stg_All, 0xFF, 2).pack ();
         break;
+
     case DeviceCommand::GetWaterPressure:
         res = DeviceCommand (DeviceCommand::Stg_All, 0, 123).pack ();
         break;
+
     case DeviceCommand::SetStages:
         res = DeviceCommand (kind, DeviceCommand::Stg_All).pack ();
         break;
+
+    case DeviceCommand::SetWaterGateS1:
+        _waterGate[0] = _last->value ();
+        res = DeviceCommand (kind, DeviceCommand::Stg_First).pack ();
+        break;
+    case DeviceCommand::SetWaterGateS2:
+        _waterGate[1] = _last->value ();
+        res = DeviceCommand (kind, DeviceCommand::Stg_Second).pack ();
+        break;
+    case DeviceCommand::SetWaterGateS3:
+        _waterGate[2] = _last->value ();
+        res = DeviceCommand (kind, DeviceCommand::Stg_Third).pack ();
+        break;
+    case DeviceCommand::SetWaterGateS4:
+        _waterGate[3] = _last->value ();
+        res = DeviceCommand (kind, DeviceCommand::Stg_Fourth).pack ();
+        break;
+
+    case DeviceCommand::StartWater:
+        res = DeviceCommand (kind, (DeviceCommand::stage_t)_last->low ()).pack ();
+        _waterRunning[_last->low () - 1] = true;
+        break;
+
+    case DeviceCommand::StopWater:
+        res = DeviceCommand (kind, (DeviceCommand::stage_t)_last->low ()).pack ();
+        _waterRunning[_last->low () - 1] = false;
+        break;
+
     default:
         delete _last;
         _last = NULL;

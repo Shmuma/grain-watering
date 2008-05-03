@@ -614,6 +614,7 @@ QString Interpreter::setGrainSensors (const QStringList& args)
 QString Interpreter::checkTick (const QStringList& args)
 {
     static bool inProgress = false;
+    bool valid;
 
     if (inProgress)
         return QString ("Check: busy\n");
@@ -643,6 +644,7 @@ QString Interpreter::checkTick (const QStringList& args)
 
     for (int i = 0; i < 4; i++) {
         _stageOperational[i] = false;
+        valid = true;
         if (!isStageActive (i))
             continue;
 
@@ -651,7 +653,8 @@ QString Interpreter::checkTick (const QStringList& args)
         // 3. check BSU power
         if (!_dev->getBSUPowered (DeviceCommand::stageByNum (i))) {
             res += "BSU=0";
-            continue;
+            //            continue;
+            valid = false;
         }
         else
             res += "BSU=1,";
@@ -659,7 +662,8 @@ QString Interpreter::checkTick (const QStringList& args)
         // 4. check for water present
         if (getWaterFlow (i) < _settings[i].minWaterFlow ()) {
             res += "W=0";
-            continue;
+            //            continue;
+            valid = false;
         }
         else
             res += "W=1,";
@@ -688,7 +692,7 @@ QString Interpreter::checkTick (const QStringList& args)
             res += "GL=0";
 
         res += "," + getStageState (i);
-        _stageOperational[i] = true;
+        _stageOperational[i] = valid;
     }
 
     inProgress = false;
@@ -1049,11 +1053,18 @@ QString Interpreter::startStage (const QStringList& args)
     int stage = parseStageAsInt (args[0]);
     bool res = true;
 
+    printf ("Starting stage %1\n", stage);
+
     // start water if needed
     if (!_waterRunning[stage]) {
+        printf ("Water not running, starting\n");
         res = _dev->startWater (parseStage (args[0]));
-        if (res)
+        if (res) {
             _waterRunning[stage] = true;
+            printf ("Started\n");
+        }
+        else
+            printf ("Not started\n");
     }
 
     if (res)

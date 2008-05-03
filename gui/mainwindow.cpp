@@ -1474,7 +1474,7 @@ void MainWindow::daemonBsuPoweredUpdated (int stage, bool on)
 
 void MainWindow::daemonWaterPresentUpdated (int stage, bool on)
 {
-    if (!on)
+    if (!on && getStageControl (stage)->running ())
         Logger::instance ()->log (Logger::Warning, tr ("Water not present in stage %1").arg (stage+1));
     getStageControl (stage)->setWaterPresent (on);
 }

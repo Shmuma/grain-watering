@@ -678,14 +678,14 @@ void Daemon::checkTick ()
 
 void Daemon::startStage (int stage)
 {
-    sendCommand (QString ().sprintf ("startstage %d\n", stage));
+    sendCommand (QString ().sprintf ("startstage %d\n", stage+1));
     _queue.push_back (DaemonCommand (DaemonCommand::c_startstage, stage));
 }
 
 
 void Daemon::stopStage (int stage)
 {
-    sendCommand (QString ().sprintf ("stopstage %d\n", stage));
+    sendCommand (QString ().sprintf ("stopstage %d\n", stage+1));
     _queue.push_back (DaemonCommand (DaemonCommand::c_stopstage, stage));
 }
 
