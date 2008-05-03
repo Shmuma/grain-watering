@@ -895,8 +895,11 @@ QString Interpreter::getStageState (int stage)
         res += "TF=" + QString::number (_last_tgt_water_flow[stage]) + ",";
 
         // calculate target setting (ustavka)
-        _target_sett[stage] = ((_last_tgt_water_flow[stage] - _settings[stage].minWaterFlow ()) * 65535) / 
-            (_settings[stage].maxWaterFlow () - _settings[stage].minWaterFlow ());
+        if (_last_tgt_water_flow[stage] < _settings[stage].minWaterFlow ())
+            _target_sett[stage] = 0;
+        else
+            _target_sett[stage] = ((_last_tgt_water_flow[stage] - _settings[stage].minWaterFlow ()) * 65535) / 
+                (_settings[stage].maxWaterFlow () - _settings[stage].minWaterFlow ());
 
         res += "TS=" + QString::number (_target_sett[stage]);
         appendHistory ((history_stage_t)stage, HK_Setting, _target_sett[stage]);
