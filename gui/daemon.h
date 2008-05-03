@@ -16,10 +16,12 @@ public:
         c_init,
         c_connect,
         c_setstages,
-        c_startautomode,
-        c_stopautomode,
-        c_toggleautomode,
-        c_getautomode,
+        c_startstage,
+        c_stopstage,
+//         c_startautomode,
+//         c_stopautomode,
+//         c_toggleautomode,
+//         c_getautomode,
         c_getmetastate,
         c_startwater,
         c_stopwater,
@@ -114,11 +116,14 @@ signals:
     void autoTextArrived (const QString& text);
     void commandSent (const QString& text);
 
-    void autoModeTickGot (bool state, double press);
-    void autoModeStarted (int stage);
-    void autoModeStopped (int stage);
-    void autoModeToggled (int stage, bool paused);
-    void autoModeGot (int stage, bool active, bool paused);
+//     void autoModeTickGot (bool state, double press);
+//     void autoModeStarted (int stage);
+//     void autoModeStopped (int stage);
+//     void autoModeToggled (int stage, bool paused);
+//     void autoModeGot (int stage, bool active, bool paused);
+
+    void stageStarted (int stage);
+    void stageStopped (int stage);
 
     void waterStarted (int stage);
     void waterStopped (int stage);
@@ -129,6 +134,7 @@ signals:
     void settingsGot ();
 
     // check loop signals
+    void stageRunningUpdated (int stage, bool runnning);
     void waterPressureUpdated (double val);
     void grainPresentUpdated (int stage, bool present);
     void waterFlowUpdated (int stage, double val);
@@ -161,10 +167,9 @@ public:
     void disconnect ();
     void setStages (bool s1, bool s2, bool s3, bool s4);
 
-    void startAutoMode (int stage);
-    void stopAutoMode (int stage);
-    void toggleAutoMode (int stage);
-    void getAutoMode (int stage);
+    void startStage (int stage);
+    void stopStage (int stage);
+
     void startWater (int stage);
     void stopWater (int stage);
     void getStages ();

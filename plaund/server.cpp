@@ -89,7 +89,7 @@ void PlaundServer::timerEvent (QTimerEvent* event)
     if (event->timerId () == _autoTimer) {
         flag = false;
         for (int i = 0; i < 4; i++)
-            if (flag = (_interp->isStageActive (i) && _interp->isAutoMode (i)))
+            if (flag = (_interp->isStageActive (i) && _interp->isRunning (i)))
                 break;
                 
         if (flag)

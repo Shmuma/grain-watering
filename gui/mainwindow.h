@@ -72,7 +72,6 @@ protected slots:
     void globalStopButtonClicked ();
     void startButtonClicked (int stage);
     void stopButtonClicked (int stage);
-    void pauseButtonClicked (int stage, bool on);
 
     // daemon signals
     void connectedChanged (bool value);
@@ -82,11 +81,9 @@ protected slots:
     void daemonCommandSent (const QString& msg);
     void daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4);
     void daemonGrainFlowGot (int stage, int value);
-    void daemonAutoModeTickGot (bool state, double press);
-    void daemonAutoModeStarted (int stage);
-    void daemonAutoModeStopped (int stage);
-    void daemonAutoModeToggled (int stage, bool paused);
-    void daemonAutoModeGot (int stage, bool active, bool paused);
+    void daemonStageStarted (int stage);
+    void daemonStageStopped (int stage);
+    
     void daemonMetaStateGot (double water_pres, QMap<int, QList<double> > vals);
     void daemonWaterStarted (int stage);
     void daemonWaterStopped (int stage);
@@ -94,6 +91,7 @@ protected slots:
     void daemonGrainPresenceGot (int stage, bool value);
 
     // daemon check loop
+    void daemonStageRunningUpdated (int stage, bool running);
     void daemonWaterPressureUpdated (double val);
     void daemonGrainPresentUpdated (int stage, bool present);
     void daemonWaterFlowUpdated (int stage, double val);

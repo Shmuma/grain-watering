@@ -10,12 +10,6 @@ class StageControl : public QWidget
     Q_OBJECT
 
 public:
-    enum state_t {
-        S_Stopped,
-        S_Started,
-        S_Paused,
-    };
-
     enum grainstate_t {
         GS_GrainLow,
         GS_GrainMissing,
@@ -26,13 +20,12 @@ protected:
     void paintEvent (QPaintEvent* event);
 
 protected slots:
-    void startToggled (bool checked);
-    void pauseToggled (bool checked);
+    void startClicked ();
+    void stopClicked ();
 
 signals:
     void startPressed (int stage);
     void stopPressed (int stage);
-    void pausePressed (int stage, bool on);
 
 public:
     StageControl (QWidget* parent);
@@ -77,11 +70,9 @@ public:
     double targetHumidity () const
         { return _targetHumidity; };
 
-    StageControl::state_t state () const
-        { return _state; };
-    
-    void setState (state_t state)
-        { _state = state; handleNewState (); update (); };
+    bool running () const 
+        { return _running; };
+    void setRunning (bool running);
 
     void setSetting (double setting)
         { _setting = setting; update (); };
@@ -115,7 +106,7 @@ public:
 
 private:
     int _number;
-    bool _enabled;
+    bool _enabled, _running;
     double _flow;
     double _humidity;
     double _nature;
@@ -123,14 +114,13 @@ private:
     double _waterFlow;
     double _targetHumidity;
     double _setting;
-    state_t _state;
     bool _sensors;
     QString _label;
     bool _autoMode;
     bool _waterPresent;
     grainstate_t _grainState;
 
-    //    QToolButton *_start, *_pause;
+    QToolButton *_start, *_stop;
     bool _inHandleState;
 
     // pixmaps
@@ -138,8 +128,6 @@ private:
     
     // SVG helpers
     QSvgRenderer _svgWithSensors;
-
-    void handleNewState ();
 };
 
 #endif

@@ -66,7 +66,7 @@ void Daemon::socketStateChanged (QAbstractSocket::SocketState state)
 void Daemon::socketReadyRead ()
 {
     QString reply, msg;
-    QString auto_prefix ("Auto: ");
+    //    QString auto_prefix ("Auto: ");
     QString check_prefix ("Check: ");
     QString hist_prefix ("History: ");
     QString prompt_prefix ("> ");
@@ -86,7 +86,7 @@ void Daemon::socketReadyRead ()
     for (int i = 0; i < replies.size (); i++) {
         reply = replies[i];
 
-        if (!reply.startsWith (auto_prefix) && !reply.startsWith (check_prefix)) {
+        if (!reply.startsWith (check_prefix)) {
             if (!reply.startsWith (hist_prefix))
                 textArrived (reply+prompt_prefix);
 
@@ -122,29 +122,17 @@ void Daemon::socketReadyRead ()
                     else
                         stagesActivityChanged (_s1, _s2, _s3, _s4);
                     break;
-                case DaemonCommand::c_startautomode:
+                case DaemonCommand::c_startstage:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot start auto mode on stage %1. Reason: '%2'").
-                                                  arg (QString::number (cmd.stage ())+1, msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot start stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()+1), msg));
                     else
-                        autoModeStarted (cmd.stage ());
+                        stageStarted (cmd.stage ());
                     break;
-                case DaemonCommand::c_stopautomode:
+                case DaemonCommand::c_stopstage:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot stop auto mode on stage %1. Reason: '%2'").
-                                                  arg (QString::number (cmd.stage ()+1), msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot stop stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()+1), msg));
                     else
-                        autoModeStopped (cmd.stage ());
-                    break;
-                case DaemonCommand::c_toggleautomode:
-                    if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot toggle auto mode on stage %1. Reason: '%2'").
-                                                  arg (QString::number (cmd.stage ()+1), msg));
-                    else
-                        autoModeToggled (cmd.stage (), !msg.contains ("unpaused"));
-                    break;
-                case DaemonCommand::c_getautomode:
-                    autoModeGot (cmd.stage (), reply.split (",")[0] == "active", reply.split (",")[1].startsWith ("paused"));
+                        stageStopped (cmd.stage ());
                     break;
                 case DaemonCommand::c_getmetastate:
                     handleMetaState (reply);
@@ -213,15 +201,15 @@ void Daemon::socketReadyRead ()
             }
         }
         else {
-            if (reply.startsWith (auto_prefix)) {
-                bool state;
-                double pres;
+//             if (reply.startsWith (auto_prefix)) {
+//                 bool state;
+//                 double pres;
 
-                autoTextArrived (QString (reply).remove (auto_prefix).trimmed ());
-                if (parseAutoModeTick (reply, &state, &pres))
-                    autoModeTickGot (state, pres);
-            }
-            else
+//                 autoTextArrived (QString (reply).remove (auto_prefix).trimmed ());
+//                 if (parseAutoModeTick (reply, &state, &pres))
+//                     autoModeTickGot (state, pres);
+//             }
+//             else
                 handleCheckTick (reply);
         }
 
@@ -351,32 +339,32 @@ void Daemon::setStages (bool s1, bool s2, bool s3, bool s4)
 }
 
 
-void Daemon::startAutoMode (int stage)
-{
-    sendCommand (QString ("startautomode %1\n").arg (stage+1));
-    _queue.push_back (DaemonCommand (DaemonCommand::c_startautomode, stage));
-}
+// void Daemon::startAutoMode (int stage)
+// {
+//     sendCommand (QString ("startautomode %1\n").arg (stage+1));
+//     _queue.push_back (DaemonCommand (DaemonCommand::c_startautomode, stage));
+// }
 
 
-void Daemon::stopAutoMode (int stage)
-{
-    sendCommand (QString ("stopautomode %1\n").arg (stage+1));
-    _queue.push_back (DaemonCommand (DaemonCommand::c_stopautomode, stage));
-}
+// void Daemon::stopAutoMode (int stage)
+// {
+//     sendCommand (QString ("stopautomode %1\n").arg (stage+1));
+//     _queue.push_back (DaemonCommand (DaemonCommand::c_stopautomode, stage));
+// }
 
 
-void Daemon::toggleAutoMode (int stage)
-{
-    sendCommand (QString ("toggleautomode %1\n").arg (stage+1));
-    _queue.push_back (DaemonCommand (DaemonCommand::c_toggleautomode, stage));
-}
+// void Daemon::toggleAutoMode (int stage)
+// {
+//     sendCommand (QString ("toggleautomode %1\n").arg (stage+1));
+//     _queue.push_back (DaemonCommand (DaemonCommand::c_toggleautomode, stage));
+// }
 
 
-void Daemon::getAutoMode (int stage)
-{
-    sendCommand (QString ("getautomode %1\n").arg (stage+1));
-    _queue.push_back (DaemonCommand (DaemonCommand::c_getautomode, stage));
-}
+// void Daemon::getAutoMode (int stage)
+// {
+//     sendCommand (QString ("getautomode %1\n").arg (stage+1));
+//     _queue.push_back (DaemonCommand (DaemonCommand::c_getautomode, stage));
+// }
 
 
 void Daemon::refreshState ()
@@ -554,6 +542,8 @@ void Daemon::handleCheckTick (const QString& msg)
             key = l[0];
             val = l[1];
             
+            if (key == "R")
+                stageRunningUpdated (stage, val == "1");
             if (key == "G")
                 grainPresentUpdated (stage, val == "1");
             else if (key == "BSU")
@@ -723,3 +713,19 @@ void Daemon::checkTick ()
 {
     sendCommand ("checktick\n");   
 }
+
+
+void Daemon::startStage (int stage)
+{
+    sendCommand (QString ().sprintf ("startstage %d\n", stage));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_startstage, stage));
+}
+
+
+void Daemon::stopStage (int stage)
+{
+    sendCommand (QString ().sprintf ("stopstage %d\n", stage));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_stopstage, stage));
+}
+
+

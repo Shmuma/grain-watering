@@ -49,7 +49,6 @@ MainWindow::MainWindow ()
     for (int i = 0; i < 4; i++) {
         connect (getStageControl (i), SIGNAL (startPressed (int)), this, SLOT (startButtonClicked (int)));
         connect (getStageControl (i), SIGNAL (stopPressed (int)), this, SLOT (stopButtonClicked (int)));
-        connect (getStageControl (i), SIGNAL (pausePressed (int, bool)), this, SLOT (pauseButtonClicked (int, bool)));
     }
 
     // connect active stages checkboxes
@@ -63,10 +62,6 @@ MainWindow::MainWindow ()
     stageControl2->setNumber (1);
     stageControl3->setNumber (2);
     stageControl4->setNumber (3);
-//     stageControl1->hide ();
-//     stageControl2->hide ();
-//     stageControl3->hide ();
-//     stageControl4->hide ();
 
     // connect button
     connect (connectButton, SIGNAL (doubleClicked ()), this, SLOT (connectButtonClicked ()));
@@ -110,11 +105,13 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (commandSent (const QString&)), this, SLOT (daemonCommandSent (const QString&)));
     connect (&_daemon, SIGNAL (stagesActivityChanged (bool,bool,bool,bool)), this, SLOT (daemonStagesActivityChanged (bool,bool,bool,bool)));
     connect (&_daemon, SIGNAL (grainFlowGot (int, int)), this, SLOT (daemonGrainFlowGot (int, int)));
-    connect (&_daemon, SIGNAL (autoModeTickGot (bool, double)), this, SLOT (daemonAutoModeTickGot (bool, double)));
-    connect (&_daemon, SIGNAL (autoModeGot (int, bool, bool)), this, SLOT (daemonAutoModeGot (int, bool, bool)));
-    connect (&_daemon, SIGNAL (autoModeStarted (int)), this, SLOT (daemonAutoModeStarted (int)));
-    connect (&_daemon, SIGNAL (autoModeStopped (int)), this, SLOT (daemonAutoModeStopped (int)));
-    connect (&_daemon, SIGNAL (autoModeToggled (int, bool)), this, SLOT (daemonAutoModeToggled (int, bool)));
+    connect (&_daemon, SIGNAL (stageStarted (int)), this, SLOT (daemonStageStarted (int)));
+    connect (&_daemon, SIGNAL (stageStopped (int)), this, SLOT (daemonStageStopped (int)));
+    //    connect (&_daemon, SIGNAL (autoModeTickGot (bool, double)), this, SLOT (daemonAutoModeTickGot (bool, double)));
+//     connect (&_daemon, SIGNAL (autoModeGot (int, bool, bool)), this, SLOT (daemonAutoModeGot (int, bool, bool)));
+//     connect (&_daemon, SIGNAL (autoModeStarted (int)), this, SLOT (daemonAutoModeStarted (int)));
+//     connect (&_daemon, SIGNAL (autoModeStopped (int)), this, SLOT (daemonAutoModeStopped (int)));
+//     connect (&_daemon, SIGNAL (autoModeToggled (int, bool)), this, SLOT (daemonAutoModeToggled (int, bool)));
     connect (&_daemon, SIGNAL (metaStateGot (double, QMap<int, QList<double> >)), this, SLOT (daemonMetaStateGot (double, QMap<int, QList<double> >)));
     connect (&_daemon, SIGNAL (waterStarted (int)), this, SLOT (daemonWaterStarted (int)));
     connect (&_daemon, SIGNAL (waterStopped (int)), this, SLOT (daemonWaterStopped (int)));
@@ -122,6 +119,7 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (grainPresenceGot (int, bool)), this, SLOT (daemonGrainPresenceGot (int, bool)));
 
     // daemon check loop events
+    connect (&_daemon, SIGNAL (stageRunningUpdated (int, bool)), this, SLOT (daemonStageRunningUpdated (int, bool)));
     connect (&_daemon, SIGNAL (waterPressureUpdated (double)), this, SLOT (daemonWaterPressureUpdated (double)));
     connect (&_daemon, SIGNAL (grainPresentUpdated (int, bool)), this, SLOT (daemonGrainPresentUpdated (int, bool)));
     connect (&_daemon, SIGNAL (waterFlowUpdated (int, double)), this, SLOT (daemonWaterFlowUpdated (int, double)));
@@ -433,9 +431,9 @@ void MainWindow::daemonHardwareConnected ()
     // enabled stages
     _daemon.getStages ();
 
-    // auto mode
-    for (int i = 0; i < 4; i++)
-        _daemon.getAutoMode (i);
+//     // auto mode
+//     for (int i = 0; i < 4; i++)
+//         _daemon.getAutoMode (i);
 
     // grain sensors presense
     _daemon.isGrainSensorsPresent ();
@@ -529,11 +527,6 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
     stageControl2->setEnabled (s2);
     stageControl3->setEnabled (s3);
     stageControl4->setEnabled (s4);
-
-//     stageControl1->setVisible (s1);
-//     stageControl2->setVisible (s2);
-//     stageControl3->setVisible (s3);
-//     stageControl4->setVisible (s4);
 
     checkWaterStage1Check->setEnabled (s1);
     checkWaterStage2Check->setEnabled (s2);
@@ -632,76 +625,23 @@ void MainWindow::daemonGrainFlowGot (int stage, int value)
 
 void MainWindow::startButtonClicked (int stage)
 {
-    _daemon.startAutoMode (stage);
-    Logger::instance ()->log (Logger::Information, tr ("Auto mode started at stage %1").arg (stage+1));
+    _daemon.startStage (stage);
+    Logger::instance ()->log (Logger::Information, tr ("Request start of stage %1").arg (stage+1));
 }
 
 
 void MainWindow::stopButtonClicked (int stage)
 {
-    _daemon.stopAutoMode (stage);
-    Logger::instance ()->log (Logger::Information, tr ("Auto mode stopped at stage %1").arg (stage+1));
-}
-
-
-void MainWindow::pauseButtonClicked (int stage, bool on)
-{
-    _daemon.toggleAutoMode (stage);
-    Logger::instance ()->log (Logger::Information, tr ("Auto mode %1 at stage %2").arg (on ? tr ("paused") : tr ("unpaused"), stage+1));
+    _daemon.stopStage (stage);
+    Logger::instance ()->log (Logger::Information, tr ("Request stop of stage %1").arg (stage+1));
 }
 
 
 void MainWindow::globalStopButtonClicked ()
 {
     for (int i = 0; i < 4; i++)
-        _daemon.stopAutoMode (i);
+        _daemon.stopStage (i);
     Logger::instance ()->log (Logger::Information, tr ("Stopping all active stages"));
-}
-
-
-void MainWindow::daemonAutoModeTickGot (bool state, double press)
-{
-    Logger::instance ()->log (Logger::Debug, QString ("Auto mode tick. State: %1, Press: %2").arg (state ? "OK" : "ERROR", QString::number (press)));
-}
-
-
-void MainWindow::daemonAutoModeStarted (int stage)
-{
-    getStageControl (stage)->setState (StageControl::S_Started);
-    autoLogEditor->setVisible (haveActiveStages ());
-    globalStopButton->setEnabled (haveActiveStages ());
-}
-
-
-void MainWindow::daemonAutoModeStopped (int stage)
-{
-    getStageControl (stage)->setState (StageControl::S_Stopped);
-    autoLogEditor->setVisible (haveActiveStages ());
-    globalStopButton->setEnabled (haveActiveStages ());
-}
-
-
-void MainWindow::daemonAutoModeToggled (int stage, bool paused)
-{
-    getStageControl (stage)->setState (paused ? StageControl::S_Paused : StageControl::S_Started);
-}
-
-
-void MainWindow::daemonAutoModeGot (int stage, bool active, bool paused)
-{
-    if (!_daemon.isStageEnabled (stage))
-        return;
-
-    if (active && paused)
-        getStageControl (stage)->setState (StageControl::S_Paused);
-    else
-        if (active)
-            getStageControl (stage)->setState (StageControl::S_Started);
-        else
-            getStageControl (stage)->setState (StageControl::S_Stopped);
-
-    autoLogEditor->setVisible (haveActiveStages ());
-    globalStopButton->setEnabled (haveActiveStages ());
 }
 
 
@@ -975,7 +915,7 @@ void MainWindow::daemonSettingsGot ()
 bool MainWindow::haveActiveStages () const
 {
     for (int i = 0; i < 4; i++)
-        if (getStageControl (i)->state () == StageControl::S_Started)
+        if (getStageControl (i)->running ())
             return true;
     return false;
 }
@@ -1600,6 +1540,32 @@ void MainWindow::daemonDrainFinished ()
 }
 
 
+void MainWindow::daemonStageStarted (int stage)
+{
+    getStageControl (stage)->setRunning (true);
+    Logger::instance ()->log (Logger::Information, tr ("Stage %1 started").arg (stage+1));
+}
+
+
+void MainWindow::daemonStageStopped (int stage)
+{
+    getStageControl (stage)->setRunning (false);
+    Logger::instance ()->log (Logger::Information, tr ("Stage %1 stopped").arg (stage+1));
+}
+
+
+void MainWindow::daemonStageRunningUpdated (int stage, bool running)
+{
+    if (getStageControl (stage)->running () != running) {
+        if (running)
+            Logger::instance ()->log (Logger::Information, tr ("Stage %1 currently at running state").arg (stage+1));
+        else
+            Logger::instance ()->log (Logger::Information, tr ("Stage %1 currently at stopped state").arg (stage+1));
+        getStageControl (stage)->setRunning (running);
+    }
+}
+
+
 
 // --------------------------------------------------
 // PlotScaleDraw
@@ -1608,3 +1574,6 @@ QwtText PlotScaleDraw::label (double v) const
 {
     return QDateTime::fromTime_t ((uint)v).toString (_show_date ? "dd.MM hh:mm" : "hh:mm:ss");
 }
+
+
+

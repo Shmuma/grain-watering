@@ -25,14 +25,14 @@ private:
     // interpreter state
     // this bit mask initialized by setstages command and read by getstages command.
     int _stages;
-    bool _autoMode[4];
-    bool _autoModePaused[4];
     bool _grainSensorsPresent;
     StageSettings _settings[4];
     double _last_tgt_water_flow[4];
     unsigned int _target_sett[4];
     bool _stageOperational[4];
     double _temp_k, _temp_resist;
+    bool _stageRunning[4];
+    bool _waterRunning[4];
 
     static QString checkBoolReply (bool res)
         { return res ? "OK\n" : "ERROR\n"; };
@@ -86,11 +86,9 @@ private:
 
     QString getStages (const QStringList& args);
 
-    QString startAutoMode (const QStringList& args);
+    QString startStage (const QStringList& args);
+    QString stopStage (const QStringList& args);
     QString autoModeTick (const QStringList& args);
-    QString stopAutoMode (const QStringList& args);
-    QString toggleAutoMode (const QStringList& args);
-    QString getAutoMode (const QStringList& args);
 
     QString getMetaState (const QStringList& args);
     QString sleep (const QStringList& args);
@@ -126,10 +124,8 @@ public:
 
     bool isStageActive (int n)
         { return (_stages & (1 << n)) > 0; };
-    bool isAutoMode (int stage) const
-        { return _autoMode[stage]; };
-    bool isAutoModePaused (int stage) const
-        { return _autoModePaused[stage]; };
+    bool isRunning (int stage) const
+        { return _stageRunning[stage]; };
 };
 
 
