@@ -46,6 +46,7 @@ protected:
     void saveSettingsPage (int stage);
 
     bool haveAccess (access_level_t level);
+    void setSettingsPanelVisible (bool visible);
 
 protected slots:
     void configButtonToggled (bool on);

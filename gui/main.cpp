@@ -13,7 +13,7 @@ int main (int argc, char** argv)
     app.installTranslator (&translator);
 
     MainWindow win;
-    win.setGeometry (0, 0, 1024, 768);
+    win.setFixedSize (QSize (1024, 768));
     win.show ();
 
     return app.exec ();

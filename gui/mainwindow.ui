@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>849</width>
-    <height>688</height>
+    <width>882</width>
+    <height>732</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -329,7 +329,7 @@
        <item>
         <widget class="QFrame" name="settingsPanel" >
          <property name="sizePolicy" >
-          <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -1389,36 +1389,89 @@
        <item>
         <widget class="QStackedWidget" name="mainStackWidget" >
          <property name="currentIndex" >
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page_2" >
           <layout class="QHBoxLayout" >
            <item>
             <widget class="QFrame" name="outlinePanel" >
              <layout class="QHBoxLayout" >
-              <property name="leftMargin" >
-               <number>0</number>
-              </property>
-              <property name="topMargin" >
-               <number>0</number>
-              </property>
-              <property name="rightMargin" >
-               <number>0</number>
-              </property>
-              <property name="bottomMargin" >
-               <number>0</number>
-              </property>
+              <item>
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
+                  <width>21</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
               <item>
                <widget class="StageControl" native="1" name="stageControl1" />
+              </item>
+              <item>
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
+                  <width>21</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
               <item>
                <widget class="StageControl" native="1" name="stageControl2" />
               </item>
               <item>
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
+                  <width>21</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
                <widget class="StageControl" native="1" name="stageControl3" />
               </item>
               <item>
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
+                  <width>16</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
                <widget class="StageControl" native="1" name="stageControl4" />
+              </item>
+              <item>
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
+                  <width>16</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
              </layout>
             </widget>
@@ -1806,7 +1859,9 @@ p, li { white-space: pre-wrap; }
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="gui.qrc" />
+ </resources>
  <connections>
   <connection>
    <sender>consoleCommandInput</sender>

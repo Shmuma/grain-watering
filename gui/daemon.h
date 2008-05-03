@@ -197,6 +197,7 @@ public:
     void cleanFilter ();
     void cleanStages (bool s1, bool s2, bool s3, bool s4);
     void drainWater (bool s1, bool s2, bool s3, bool s4);
+    void checkTick ();
 };
 
 

@@ -2,6 +2,7 @@
 #define __STAGECONTROL_H__
 
 #include <QtGui>
+#include <QtSvg>
 
 
 class StageControl : public QWidget
@@ -30,18 +31,13 @@ signals:
 public:
     StageControl (QWidget* parent);
 
-    void setGrain (bool grain)
-        { _grain = grain; update (); };
-    bool grain () const
-        { return _grain; };
-
     void setNumber (int number)
         { _number = number; update (); };
     int number () const
         { return _number; };
     
     void setEnabled (bool enabled)
-        { _enabled = enabled; update (); };
+        { _enabled = enabled; setFixedSize (_enabled ? QSize (250, 500) : QSize (0, 0)); update (); };
     bool enabled () const
         { return _enabled; };
 
@@ -101,10 +97,19 @@ public:
     void setAutoMode (bool mode)
         { _autoMode = mode; update (); };
 
+    bool waterPresent () const 
+        { return _waterPresent; };
+    void setWaterPresent (bool present)
+        { _waterPresent = present; update (); };
+
+    bool grainPresent () const
+        { return _grainPresent; };
+    void setGrainPresent (bool present)
+        { _grainPresent = present; update (); };
+
 private:
     int _number;
     bool _enabled;
-    bool _grain;
     double _flow;
     double _humidity;
     double _nature;
@@ -116,9 +121,17 @@ private:
     bool _sensors;
     QString _label;
     bool _autoMode;
+    bool _waterPresent;
+    bool _grainPresent;
 
-    QToolButton *_start, *_pause;
+    //    QToolButton *_start, *_pause;
     bool _inHandleState;
+
+    // pixmaps
+    QPixmap _imgWithSensors;
+    
+    // SVG helpers
+    QSvgRenderer _svgWithSensors;
 
     void handleNewState ();
 };

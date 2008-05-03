@@ -6,13 +6,77 @@
  <g transform="translate(200, 200) rotate(-180)" style="fill:none; stroke:#000000; stroke-width:1; stroke-linecap:butt; stroke-linejoin:miter; stroke-dasharray:none;" >
   <path d="M 0 0 L 60.0082 0" />
  </g>
- <g transform="translate(140, 200) rotate(-90)" style="fill:none; stroke:#000000; stroke-width:1; stroke-linecap:butt; stroke-linejoin:miter; stroke-dasharray:none;" >
+ <g transform="translate(140, 200) rotate(-90)" style="fill:none; stroke:#000000; stroke-width:1; stroke-linecap:butt; stroke-linejoin:round; stroke-dasharray:none;" >
   <path d="M 0 0 L 80 0" />
  </g>
- <g transform="translate(140, 120) rotate(-26.5651)" style="fill:none; stroke:#000000; stroke-width:1; stroke-linecap:butt; stroke-linejoin:miter; stroke-dasharray:none;" >
-  <path d="M 0 0 L 44.7214 0" />
+ <g transform="translate(140, 120) rotate(-30.4656)" style="fill:none; stroke:#000000; stroke-width:1; stroke-linecap:butt; stroke-linejoin:round; stroke-dasharray:none;" >
+  <path d="M 0 0 L 39.4462 0" />
  </g>
- <g transform="translate(180, 100)" style="fill:none; stroke:#000000; stroke-width:1; stroke-linecap:butt; stroke-linejoin:miter; stroke-dasharray:none;" >
-  <path d="M 0 0 L 20.025 0" />
+ <g transform="translate(174, 100)" style="fill:none; stroke:#000000; stroke-width:1; stroke-linecap:butt; stroke-linejoin:miter; stroke-dasharray:none;" >
+  <path d="M 0 0 L 26.025 0" />
+ </g>
+ <g transform="translate(175.375, 88.625)" style="fill:none; stroke:#000000; stroke-width:1; stroke-linecap:butt; stroke-linejoin:miter; stroke-dasharray:none;" >
+  <path d="M0 0 C0 0 22.625 0 22.625 0 C22.625 0 22.625 11.375 22.625 11.375 C22.625 11.375 0 11.375 0 11.375 C0 11.375 0 0 0 0 Z" />
+ </g>
+ <g transform="translate(182, 66.25)" style="fill:none; stroke:#000000; stroke-width:1; stroke-linecap:butt; stroke-linejoin:miter; stroke-dasharray:none;" >
+  <path d="M0 7.875 C0 7.875 2.25 7.875 2.25 7.875 C2.25 7.875 2.25 0 2.25 0 C2.25 0 6.75 0 6.75 0 C6.75 0 6.75 7.875 6.75 7.875 C6.75 7.875 9 7.875 9 7.875 C9 7.875 4.5 15.75 4.5 15.75 C4.5 15.75 0 7.875 0 7.875 Z" />
+ </g>
+ <g transform="translate(165, 121)" style="fill:none; stroke:#000000; stroke-width:1; stroke-linecap:butt; stroke-linejoin:miter; stroke-dasharray:none;" >
+  <path d="M0 0 C0 0 30 0 30 0 C30 0 30 13 30 13 C30 13 0 13 0 13 C0 13 0 0 0 0 Z" />
+ </g>
+ <g transform="translate(169, 109)" >
+  <text>
+   <tspan x="2.11523" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >И</tspan>
+   <tspan x="5.11719" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >с</tspan>
+   <tspan x="7.25391" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >х</tspan>
+   <tspan x="9.62109" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >о</tspan>
+   <tspan x="12.0488" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >д</tspan>
+   <tspan x="14.5352" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >н</tspan>
+   <tspan x="17.084" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >а</tspan>
+   <tspan x="19.4863" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >я</tspan>
+   <tspan x="21.8848" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" > </tspan>
+   <tspan x="1.08203" y="8.7082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >в</tspan>
+   <tspan x="3.46094" y="8.7082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >л</tspan>
+   <tspan x="5.94336" y="8.7082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >а</tspan>
+   <tspan x="8.3457" y="8.7082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >ж</tspan>
+   <tspan x="11.5371" y="8.7082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >н</tspan>
+   <tspan x="14.0859" y="8.7082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >о</tspan>
+   <tspan x="16.5137" y="8.7082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >с</tspan>
+   <tspan x="18.6504" y="8.7082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >т</tspan>
+   <tspan x="20.6348" y="8.7082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >ь</tspan>
+  </text>
+  <path style="fill:none; stroke:none; stroke-width:1; stroke-linecap:butt; stroke-linejoin:miter; stroke-dasharray:none;" d="M0 0 C0 0 24 0 24 0 C24 0 24 10.875 24 10.875 C24 10.875 0 10.875 0 10.875 C0 10.875 0 0 0 0 Z" />
+ </g>
+ <g transform="translate(174, 146)" style="fill:none; stroke:#000000; stroke-width:1; stroke-linecap:butt; stroke-linejoin:miter; stroke-dasharray:none;" >
+  <path d="M0 0 C0 0 21 0 21 0 C21 0 21 9 21 9 C21 9 0 9 0 9 C0 9 0 0 0 0 Z" />
+ </g>
+ <g transform="translate(174, 155)" style="fill:none; stroke:#000000; stroke-width:1; stroke-linecap:butt; stroke-linejoin:miter; stroke-dasharray:none;" >
+  <path d="M0 0 C0 0 21 0 21 0 C21 0 21 9 21 9 C21 9 0 9 0 9 C0 9 0 0 0 0 Z" />
+ </g>
+ <g transform="translate(165, 180)" style="fill:none; stroke:#000000; stroke-width:1; stroke-linecap:butt; stroke-linejoin:miter; stroke-dasharray:none;" >
+  <path d="M0 0 C0 0 30 0 30 0 C30 0 30 13 30 13 C30 13 0 13 0 13 C0 13 0 0 0 0 Z" />
+ </g>
+ <g transform="translate(145.25, 172)" >
+  <text>
+   <tspan x="7.04883" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >П</tspan>
+   <tspan x="10.0547" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >р</tspan>
+   <tspan x="12.5469" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >о</tspan>
+   <tspan x="14.9746" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >и</tspan>
+   <tspan x="17.5352" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >з</tspan>
+   <tspan x="19.6328" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >в</tspan>
+   <tspan x="22.0117" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >о</tspan>
+   <tspan x="24.4395" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >д</tspan>
+   <tspan x="26.9258" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >и</tspan>
+   <tspan x="29.4863" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >т</tspan>
+   <tspan x="31.4707" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >е</tspan>
+   <tspan x="33.8535" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >л</tspan>
+   <tspan x="36.3359" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >ь</tspan>
+   <tspan x="38.6191" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >н</tspan>
+   <tspan x="41.168" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >о</tspan>
+   <tspan x="43.5957" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >с</tspan>
+   <tspan x="45.7324" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >т</tspan>
+   <tspan x="47.7168" y="3.9082" fill="#000000" stroke="none" font-family="Verdana" font-size="4" >ь</tspan>
+  </text>
+  <path style="fill:none; stroke:none; stroke-width:1; stroke-linecap:butt; stroke-linejoin:miter; stroke-dasharray:none;" d="M0 0 C0 0 49.75 0 49.75 0 C49.75 0 49.75 6.875 49.75 6.875 C49.75 6.875 0 6.875 0 6.875 C0 6.875 0 0 0 0 Z" />
  </g>
 </svg>

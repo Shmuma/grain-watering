@@ -4,7 +4,7 @@
 
 TEMPLATE = app
 CONFIG += debug debian
-QT += network
+QT += network svg
 TARGET =
 DEPENDPATH += .
 INCLUDEPATH += .
@@ -30,3 +30,4 @@ else {
 }
 
 TRANSLATIONS = gui_ru.ts
+RESOURCES = gui.qrc

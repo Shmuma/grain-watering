@@ -717,3 +717,9 @@ void Daemon::drainWater (bool s1, bool s2, bool s3, bool s4)
     sendCommand (QString ().sprintf ("drainwater %d %d %d %d\n", s1 ? 1 : 0, s2 ? 1 : 0, s3 ? 1 : 0, s4 ? 1 : 0));
     _queue.push_back (DaemonCommand (DaemonCommand::c_drain));
 }
+
+
+void Daemon::checkTick ()
+{
+    sendCommand ("checktick\n");   
+}

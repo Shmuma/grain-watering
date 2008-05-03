@@ -56,17 +56,17 @@ MainWindow::MainWindow ()
     connect (applyStagesButton, SIGNAL (clicked ()), this, SLOT (applyStagesButtonClicked ()));
 
     // hide settings panel
-    settingsPanel->hide ();
+    setSettingsPanelVisible (false);
 
     // tune stage controls
     stageControl1->setNumber (0);
     stageControl2->setNumber (1);
     stageControl3->setNumber (2);
     stageControl4->setNumber (3);
-    stageControl1->hide ();
-    stageControl2->hide ();
-    stageControl3->hide ();
-    stageControl4->hide ();
+//     stageControl1->hide ();
+//     stageControl2->hide ();
+//     stageControl3->hide ();
+//     stageControl4->hide ();
 
     // connect button
     connect (connectButton, SIGNAL (doubleClicked ()), this, SLOT (connectButtonClicked ()));
@@ -209,6 +209,21 @@ MainWindow::MainWindow ()
 }
 
 
+void MainWindow::setSettingsPanelVisible (bool visible)
+{
+    if (visible) {
+        settingsPanel->show ();
+        stageControl3->hide ();
+        stageControl4->hide ();
+    }
+    else {
+        settingsPanel->hide ();
+        stageControl3->show ();
+        stageControl4->show ();
+    }
+}
+
+
 void MainWindow::timerEvent (QTimerEvent*)
 {
     refreshScreenClock ();
@@ -232,11 +247,11 @@ void MainWindow::configButtonToggled (bool on)
         cleanButton->setChecked (false);
         _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (0);
-	settingsPanel->show ();
+        setSettingsPanelVisible (true);
     }
     else
         if (!_switchingToolButtons)
-            settingsPanel->hide ();
+            setSettingsPanelVisible (false);
 }
 
 
@@ -251,11 +266,11 @@ void MainWindow::modeButtonToggled (bool on)
         cleanButton->setChecked (false);
         _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (1);
-	settingsPanel->show ();
+        setSettingsPanelVisible (true);
     }
     else
         if (!_switchingToolButtons)
-            settingsPanel->hide ();
+            setSettingsPanelVisible (false);
 }
 
 
@@ -270,11 +285,11 @@ void MainWindow::checkButtonToggled (bool on)
         cleanButton->setChecked (false);
         _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (2);
-	settingsPanel->show ();
+        setSettingsPanelVisible (true);
     }
     else
         if (!_switchingToolButtons)
-            settingsPanel->hide ();
+            setSettingsPanelVisible (false);
 }
 
 
@@ -289,11 +304,11 @@ void MainWindow::paramsButtonToggled (bool on)
         cleanButton->setChecked (false);
         _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (3);
-	settingsPanel->show ();
+        setSettingsPanelVisible (true);
     }
     else
         if (!_switchingToolButtons)
-            settingsPanel->hide ();
+            setSettingsPanelVisible (false);
 }
 
 
@@ -308,11 +323,11 @@ void MainWindow::sensorsButtonToggled (bool on)
         cleanButton->setChecked (false);
         _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (4);
-	settingsPanel->show ();
+        setSettingsPanelVisible (true);
     }
     else
         if (!_switchingToolButtons)
-            settingsPanel->hide ();
+            setSettingsPanelVisible (false);
 }
 
 
@@ -327,11 +342,11 @@ void MainWindow::cleanButtonToggled (bool on)
         sensorsButton->setChecked (false);
         _switchingToolButtons = false;
 	stackedWidget->setCurrentIndex (5);
-	settingsPanel->show ();
+        setSettingsPanelVisible (true);
     }
     else
         if (!_switchingToolButtons)
-            settingsPanel->hide ();
+            setSettingsPanelVisible (false);
 }
 
 
@@ -426,6 +441,7 @@ void MainWindow::daemonHardwareConnected ()
     _daemon.isGrainSensorsPresent ();
     _daemon.requestSettings ();
     _daemon.requestTempCoef ();
+    _daemon.checkTick ();
     Logger::instance ()->log (Logger::Information, tr ("Connection to controller established"));
 }
 
@@ -514,10 +530,10 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
     stageControl3->setEnabled (s3);
     stageControl4->setEnabled (s4);
 
-    stageControl1->setVisible (s1);
-    stageControl2->setVisible (s2);
-    stageControl3->setVisible (s3);
-    stageControl4->setVisible (s4);
+//     stageControl1->setVisible (s1);
+//     stageControl2->setVisible (s2);
+//     stageControl3->setVisible (s3);
+//     stageControl4->setVisible (s4);
 
     checkWaterStage1Check->setEnabled (s1);
     checkWaterStage2Check->setEnabled (s2);
@@ -868,7 +884,7 @@ void MainWindow::daemonWaterPressureUpdated (double val)
 
 void MainWindow::daemonGrainPresentUpdated (int stage, bool present)
 {
-    getStageControl (stage)->setGrain (present);
+    //    getStageControl (stage)->setGrainPresent (present);
 }
 
 
@@ -1525,6 +1541,7 @@ void MainWindow::daemonWaterPresentUpdated (int stage, bool on)
 {
     if (!on)
         Logger::instance ()->log (Logger::Warning, tr ("Water not present in stage %1").arg (stage+1));
+    getStageControl (stage)->setWaterPresent (on);
 }
 
 
@@ -1532,6 +1549,7 @@ void MainWindow::daemonGrainLowUpdated (int stage, bool on)
 {
     if (on)
         Logger::instance ()->log (Logger::Warning, tr ("Grain not present in stage %1").arg (stage+1));
+    getStageControl (stage)->setGrainPresent (!on);
 }
 
 
