@@ -73,7 +73,7 @@ void Daemon::socketReadyRead ()
     QStringList replies;
     bool s1, s2, s3, s4;
 
-    reply = _data_buf + _sock->readAll ();
+    reply = _data_buf + QString::fromUtf8 (_sock->readAll ());
 
     if (!reply.contains (prompt_prefix)) {
         _data_buf = reply;
@@ -333,7 +333,7 @@ void Daemon::sendCommand (const QString& cmd, bool log)
 {
     if (log)
         commandSent (cmd.trimmed () + "\n");
-    _sock->write (cmd.toAscii ());
+    _sock->write (cmd.toUtf8 ());
 }
 
 
@@ -394,7 +394,7 @@ bool Daemon::handleMetaState (const QString& msg)
     QStringList ll;
     QMap<int, QList<double> > vals;
 
-    printf ("%s\n", msg.toAscii ().constData ());
+//     printf ("%s\n", msg.toAscii ().constData ());
 
     QStringList::iterator it = l.begin ();
 

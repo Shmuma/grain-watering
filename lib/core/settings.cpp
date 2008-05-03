@@ -103,7 +103,7 @@ QString StageSettings::toString () const
                                hash2string (_grainTempTable).toAscii ().constData (),
                                hash2string (_grainNatureCoeffTable).toAscii ().constData (),
                                _sensors ? 1 : 0,
-                               _bsu_label.toAscii ().constData (),
+                               _bsu_label.toUtf8 ().constData (),
                                _auto_mode ? "auto" : "semi");
 }
 

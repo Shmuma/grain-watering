@@ -63,6 +63,10 @@ void StageControl::paintEvent (QPaintEvent*)
 //     p.drawRect (QRect (0, 0, geometry ().width ()-1, geometry ().height ()-1));
 
     p.setFont (QFont ("Arial", 16));
+    r = _svgWithSensors.boundsOnElement ("StageTitle").adjusted (2, 2, -2, -2);
+    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("Stage %1: %2").arg (_number+1).arg (_label));
+
+    p.setFont (QFont ("Arial", 16));
     r = _svgWithSensors.boundsOnElement ("GrainHumidity").adjusted (2, 2, -2, -2);
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.2f", _humidity)));
 

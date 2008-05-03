@@ -66,7 +66,7 @@ void PlaundServer::handleCommand ()
         return;
 
     while (sock->canReadLine ()) {
-        QString l = sock->readLine ().trimmed ().toLower ();
+        QString l = QString::fromUtf8 (sock->readLine ()).trimmed ().toLower ();
 
         if (l == "halt") {
             QCoreApplication::quit ();
