@@ -14,7 +14,8 @@ StageControl::StageControl (QWidget* parent)
       _svgWithSensors (QString (":/stages/svg/stage1-full.svg"), this)
 {
     _number = 0;
-    _grainPresent = _waterPresent = false;
+    _grainState = GS_GrainMissing;
+    _waterPresent = false;
     _flow = _humidity = _nature = _temp = _waterFlow = _targetHumidity = 0;
     _label = QString ();
     setEnabled (false);
@@ -83,11 +84,28 @@ void StageControl::paintEvent (QPaintEvent*)
 
     // fill grain area if grain present
     r = _svgWithSensors.boundsOnElement ("GrainArea").adjusted (2, 2, -1, -1);
-    p.fillRect (r, QBrush (_grainPresent ? Qt::yellow : Qt::lightGray));
+
+    switch (_grainState) {
+    case GS_GrainPresent:
+        p.fillRect (r, QBrush (Qt::yellow));
+        break;
+    case GS_GrainMissing:
+        p.fillRect (r, QBrush (Qt::lightGray));
+        break;
+    case GS_GrainLow:
+        p.fillRect (r.adjusted (0, 0, 0, -r.height ()/2), QBrush (Qt::lightGray));
+        p.fillRect (r.adjusted (0, r.height ()/2, 0, 0), QBrush (Qt::yellow));
+        break;
+    }
 
     // fill water area
     r = _svgWithSensors.boundsOnElement ("WaterArea").adjusted (2, 2, -1, -1);
     p.fillRect (r, QBrush (_waterPresent ? Qt::cyan : Qt::lightGray));
+
+    // stage mode
+    p.setFont (QFont ("Arial", 14));
+    r = _svgWithSensors.boundsOnElement ("StageMode").adjusted (2, 2, -2, -2);
+    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, _autoMode ? tr ("Auto", "Auto mode") : tr ("S/A", "Semiauto mode"));
 
 
 //     if (_sensors) {

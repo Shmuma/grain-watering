@@ -884,7 +884,7 @@ void MainWindow::daemonWaterPressureUpdated (double val)
 
 void MainWindow::daemonGrainPresentUpdated (int stage, bool present)
 {
-    //    getStageControl (stage)->setGrainPresent (present);
+    getStageControl (stage)->setGrainState (present ? StageControl::GS_GrainPresent : StageControl::GS_GrainMissing);
 }
 
 
@@ -1364,11 +1364,15 @@ void MainWindow::stageModesApplyButtonClicked ()
 
     _daemon.setStageModes (s1modeCombo->currentIndex () == 0, s2modeCombo->currentIndex () == 0, 
                            s3modeCombo->currentIndex () == 0, s4modeCombo->currentIndex () == 0);
-    Logger::instance ()->log (Logger::Information, tr ("Request new stages modes: %1, %1, %1, %1")
+    Logger::instance ()->log (Logger::Information, tr ("Request new stages modes: %1, %2, %3, %4")
                               .arg (modes[s1modeCombo->currentIndex ()])
                               .arg (modes[s2modeCombo->currentIndex ()])
                               .arg (modes[s3modeCombo->currentIndex ()])
                               .arg (modes[s4modeCombo->currentIndex ()]));
+    stageControl1->setAutoMode (s1modeCombo->currentIndex () == 0);
+    stageControl2->setAutoMode (s2modeCombo->currentIndex () == 0);
+    stageControl3->setAutoMode (s3modeCombo->currentIndex () == 0);
+    stageControl4->setAutoMode (s4modeCombo->currentIndex () == 0);
 }
 
 
@@ -1548,8 +1552,8 @@ void MainWindow::daemonWaterPresentUpdated (int stage, bool on)
 void MainWindow::daemonGrainLowUpdated (int stage, bool on)
 {
     if (on)
-        Logger::instance ()->log (Logger::Warning, tr ("Grain not present in stage %1").arg (stage+1));
-    getStageControl (stage)->setGrainPresent (!on);
+        Logger::instance ()->log (Logger::Warning, tr ("Grain is low in stage %1").arg (stage+1));
+    getStageControl (stage)->setGrainState (on ? StageControl::GS_GrainLow : StageControl::GS_GrainPresent);
 }
 
 

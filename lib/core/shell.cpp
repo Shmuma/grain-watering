@@ -680,7 +680,7 @@ QString Interpreter::checkTick (const QStringList& args)
             continue;
         }
         else
-            res += "GL=0,";
+            res += "GL=0";
 
         res += "," + getStageState (i);
         _stageOperational[i] = true;

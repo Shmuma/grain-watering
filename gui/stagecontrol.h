@@ -16,6 +16,12 @@ public:
         S_Paused,
     };
 
+    enum grainstate_t {
+        GS_GrainLow,
+        GS_GrainMissing,
+        GS_GrainPresent,
+    };
+
 protected:
     void paintEvent (QPaintEvent* event);
 
@@ -102,10 +108,10 @@ public:
     void setWaterPresent (bool present)
         { _waterPresent = present; update (); };
 
-    bool grainPresent () const
-        { return _grainPresent; };
-    void setGrainPresent (bool present)
-        { _grainPresent = present; update (); };
+    grainstate_t grainState () const
+        { return _grainState; };
+    void setGrainState (grainstate_t state)
+        { _grainState = state; update (); };
 
 private:
     int _number;
@@ -122,7 +128,7 @@ private:
     QString _label;
     bool _autoMode;
     bool _waterPresent;
-    bool _grainPresent;
+    grainstate_t _grainState;
 
     //    QToolButton *_start, *_pause;
     bool _inHandleState;
