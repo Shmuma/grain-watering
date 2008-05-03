@@ -2,12 +2,17 @@
 #define __BSUCONTROL_H__
 
 #include <QtGui>
+#include <QtSvg>
 
 class BSUControl : public QWidget
 {
     Q_OBJECT
 private:
     double _waterPressure;
+    bool _cleaning;
+
+    QPixmap _img;
+    QSvgRenderer _svg;
 
 protected:
     void paintEvent (QPaintEvent* event);
@@ -19,6 +24,11 @@ public:
         { _waterPressure = press; update (); };
     double waterPressure () const
         { return _waterPressure; };
+
+    void setCleaning (bool cleaning)
+        { _cleaning = cleaning; update (); };
+    bool cleaning () const
+        { return _cleaning; };
 };
 
 

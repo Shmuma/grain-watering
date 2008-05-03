@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/stages" >
+        <file>svg/filter-full.svg</file>
+        <file>svg/filter.png</file>
         <file>svg/stage1-full.svg</file>
         <file>svg/stage1.png</file>
     </qresource>

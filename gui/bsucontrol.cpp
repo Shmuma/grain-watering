@@ -7,7 +7,10 @@
 // --------------------------------------------------
 BSUControl::BSUControl (QWidget* parent)
     : QWidget (parent),
-      _waterPressure (0)
+      _waterPressure (0),
+      _cleaning (false),
+      _img (QString (":/stages/svg/filter.png"), "PNG"),
+      _svg (QString (":/stages/svg/filter-full.svg"), this)
 {
 }
 
@@ -15,29 +18,20 @@ BSUControl::BSUControl (QWidget* parent)
 void BSUControl::paintEvent (QPaintEvent* event)
 {
     QPainter p (this);
-    QRect r;
-    QPoint pt;
+    QRectF r;
+
+    p.drawPixmap (QPoint (0, 0), _img);
 
     p.setFont (QFont ("Arial", 15));
-    p.setPen (Qt::black);
-    
-    p.drawText (QRect (0, 30, geometry ().width (), 20), Qt::AlignHCenter, tr ("Filter block"));
+    r = _svg.boundsOnElement ("StateArea").adjusted (2, 2, -2, -2);
 
-    r.setRect (20, 20, geometry ().width ()-40, geometry ().height ()-40);
-    p.drawRect (r);
+    if (_cleaning) {
+        QPen pen (p.pen ());
+        pen.setColor (Qt::red);
+        p.setPen (pen);
+        p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("Cleaning"));
+    }
+    else
+        p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 bar").arg (QString ().sprintf ("%.2f", _waterPressure)));
 
-    p.setFont (QFont ("Arial", 12));
-
-    r.setRect (30, geometry ().height ()/2, geometry ().width () - 60, 20);
-
-    p.drawText (r, Qt::AlignHCenter, tr ("Pressure"));
-    p.drawText (r.translated (0, 25), Qt::AlignHCenter, tr ("%1 bar").arg (QString ().sprintf ("%.2f", _waterPressure)));
-
-    pt = QPoint (0, geometry ().height ()/2 - 30);
-    p.drawLine (pt, pt + QPoint (20, 0));
-    p.drawLine (pt + QPoint (0, 60), pt + QPoint (20, 60));
-
-    pt = QPoint (geometry ().width ()-20, geometry ().height ()/2 - 30);
-    p.drawLine (pt, pt + QPoint (20, 0));
-    p.drawLine (pt + QPoint (0, 60), pt + QPoint (20, 60));
 }

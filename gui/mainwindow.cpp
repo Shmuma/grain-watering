@@ -1505,6 +1505,7 @@ void MainWindow::cleanFilterButtonClicked ()
 {
     _daemon.cleanFilter ();
     Logger::instance ()->log (Logger::Information, tr ("Filter cleaning started"));
+    bsuControl->setCleaning (true);
 }
 
 
