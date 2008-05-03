@@ -868,7 +868,7 @@ QString Interpreter::getStageState (int stage)
         res += "R="  + QString::number (_stageRunning[stage] ? 1 : 0) + ",";
         res += "WF=" + QString::number (d_wf) + ",";
         res += "GF=" + QString::number (d_grain_flow) + ",";
-        res += "GH=" + QString::number (d_hum) + ",";
+        //        res += "GH=" + QString::number (d_hum) + ",";
         res += "GT=" + QString::number (d_temp) + ",";
         res += "GN=" + QString::number (d_gn) + ",";
 
@@ -876,9 +876,9 @@ QString Interpreter::getStageState (int stage)
         pk_nat = _settings[stage].grainNatureCoeffTable ()[(int)d_gn];
     
         d_hum_cur = d_hum + pk_t + pk_nat;
-        appendHistory ((history_stage_t)stage, HK_TargetHumidity, d_hum_cur);
+        appendHistory ((history_stage_t)stage, HK_GrainHumidity, d_hum_cur);
 
-        res += "CH=" + QString::number (d_hum_cur) + ",";
+        res += "GH=" + QString::number (d_hum_cur) + ",";
 
         // calculate target water flow
         switch (_settings[stage].waterFormula ()) {

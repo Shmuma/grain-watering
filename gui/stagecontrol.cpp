@@ -77,6 +77,10 @@ void StageControl::paintEvent (QPaintEvent*)
     r = _svgWithSensors.boundsOnElement ("WaterFlow").adjusted (2, 2, -2, -2);
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1\nl/h").arg (QString ().sprintf ("%.0f", _waterFlow)));
 
+    p.setFont (QFont ("Verdana", 9));
+    r = _svgWithSensors.boundsOnElement ("TargetHumidity").adjusted (2, 2, -2, -2);
+    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.2f", _targetHumidity)));
+
     // fill grain area if grain present
     r = _svgWithSensors.boundsOnElement ("GrainArea").adjusted (2, 2, -1, -1);
 

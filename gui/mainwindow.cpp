@@ -181,7 +181,7 @@ MainWindow::MainWindow ()
     historyKindCombo->addItem (tr ("Grain temperature"), HK_GrainTemp);
     historyKindCombo->addItem (tr ("Grain nature"), HK_GrainNature);
     historyKindCombo->addItem (tr ("Water pressure"), HK_WaterPress);
-    historyKindCombo->addItem (tr ("Humidity"), HK_TargetHumidity);
+    historyKindCombo->addItem (tr ("Grain humidity"), HK_GrainHumidity);
     historyKindCombo->addItem (tr ("Water flow"), HK_WaterFlow);
     historyKindCombo->addItem (tr ("Setting"), HK_Setting);
 
@@ -899,6 +899,7 @@ void MainWindow::daemonSettingsGot ()
         getStageControl (i)->setSensors (_daemon.getSettings (i).sensors ());
         getStageControl (i)->setLabel (_daemon.getSettings (i).bsuLabel ());
         getStageControl (i)->setAutoMode (_daemon.getSettings (i).autoMode ());
+        getStageControl (i)->setTargetHumidity (_daemon.getSettings (i).targetHumidity ());
     }
 }
 
@@ -954,8 +955,10 @@ void MainWindow::saveSettingsPage (int stage)
     double val;
 
     val = settingsTargetHumidityEdit->text ().toDouble (&ok);
-    if (ok)
+    if (ok) {
         sett.setTargetHumidity (val);
+        getStageControl (stage)->setTargetHumidity (val);
+    }
     else {
         QMessageBox::warning (this, tr ("Value error"), tr ("Target humidity have invalid format"));
         return;
@@ -1439,8 +1442,8 @@ void MainWindow::historyGot (const QList < QPair <uint, double> >& data, history
     case HK_WaterPress:
         title += tr ("Water pressure history");
         break;
-    case HK_TargetHumidity:
-        title += tr ("Target humidity history");
+    case HK_GrainHumidity:
+        title += tr ("Grain humidity history");
         break;
     case HK_WaterFlow:
         title += tr ("Water flow history");

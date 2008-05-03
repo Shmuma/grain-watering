@@ -17,7 +17,7 @@ enum history_kind_t {
     HK_GrainTemp,
     HK_GrainNature,
     HK_WaterPress,
-    HK_TargetHumidity,
+    HK_GrainHumidity,
     HK_WaterFlow,
     HK_Setting,
 };
