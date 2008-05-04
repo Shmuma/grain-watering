@@ -512,54 +512,6 @@ QString Interpreter::getStages (const QStringList& args)
 }
 
 
-// QString Interpreter::startAutoMode (const QStringList& args)
-// {
-//     int stage = parseStageAsInt (args[0]);
-//     if (!_autoMode[stage]) {
-//         _autoMode[stage] = true;
-//         _autoModePaused[stage] = false;
-//     }
-//     _dev->powerGates (parseStage (args[0]), true);
-//     return QString ("OK: auto mode started\n");
-// }
-
-// QString Interpreter::stopAutoMode (const QStringList& args)
-// {
-//     int stage = parseStageAsInt (args[0]);
-//     _autoModePaused[stage] = _autoMode[stage] = false;
-//     _dev->powerGates (parseStage (args[0]), false);
-//     return QString ("OK: auto mode stopped\n");
-// }
-
-
-// QString Interpreter::toggleAutoMode (const QStringList& args)
-// {
-//     int stage = parseStageAsInt (args[0]);
-
-//     if (!_autoMode[stage])
-//         return QString ("ERROR: auto mode not active\n");
-
-//     _autoModePaused[stage] = !_autoModePaused[stage];
-
-//     if (!_autoModePaused[stage])
-//         return QString ("OK: unpaused\n");
-//     else
-//         return QString ("OK: paused\n");
-// }
-
-
-// QString Interpreter::getAutoMode (const QStringList& args)
-// {
-//     QString res;
-//     int stage = parseStageAsInt (args[0]);
-
-//     res = _autoMode[stage] ? "active" : "inactive";
-//     res += ",";
-//     res += _autoModePaused[stage] ? "paused" : "unpaused";
-//     return res + "\n";
-// }
-
-
 QString Interpreter::getMetaState (const QStringList& args)
 {
     QString res;

@@ -282,8 +282,6 @@ bool Daemon::parseAutoModeTick (const QString& reply, bool* state, double* press
     if (l.size () < 2)
         return false;
 
-    printf ("Auto: %d, %s\n", l.size (), reply.toAscii ().constData ());
-
     *state = l[0].split (":")[1] == "OK";
     *press = l[1].split (":")[1].toDouble ();
 
@@ -337,13 +335,11 @@ void Daemon::refreshState ()
 
 bool Daemon::handleMetaState (const QString& msg)
 {
-    QStringList l = QString (msg).trimmed ().split (" ");
+    QStringList l = QString (msg).trimmed ().split (" ", QString::SkipEmptyParts);
     double water_pres = 0;
     QString s;
     QStringList ll;
     QMap<int, QList<double> > vals;
-
-//     printf ("%s\n", msg.toAscii ().constData ());
 
     QStringList::iterator it = l.begin ();
 
@@ -360,12 +356,16 @@ bool Daemon::handleMetaState (const QString& msg)
         
             while (it2 != ll.end ()) {
                 if (it2->contains ("=")) {
-                    double val = (*it2).split ("=")[1].toDouble ();
+                    QStringList lll = (*it2).split ("=", QString::SkipEmptyParts);
+
+                    if (lll.size () == 2) {
+                        double val = lll[1].toDouble ();
             
-                    if (index == 0)
-                        water_pres = val;
-                    else
-                        vals[index].push_back (val);
+                        if (index == 0)
+                            water_pres = val;
+                        else
+                            vals[index].push_back (val);
+                    }
                 }
 
                 it2++;
@@ -445,7 +445,7 @@ void Daemon::isGrainPresent (int stage)
 void Daemon::handleCheckTick (const QString& msg)
 {
     // parse values
-    QStringList stages = msg.split (" ");
+    QStringList stages = msg.split (" ", QString::SkipEmptyParts);
     double val;
     bool ok;
 
@@ -478,7 +478,7 @@ void Daemon::handleCheckTick (const QString& msg)
     
     for (int i = 2; i < stages.count (); i++) {
         QString val_str;
-        QStringList lst = stages[i].split (":"), l;
+        QStringList lst = stages[i].split (":", QString::SkipEmptyParts), l;
         int stage;
         QString key, val;
         
@@ -497,7 +497,7 @@ void Daemon::handleCheckTick (const QString& msg)
         lst = val_str.split (",");
         
         for (int j = 0; j < lst.count (); j++) {
-            l = lst[j].split ('=');
+            l = lst[j].split ('=', QString::SkipEmptyParts);
             if (l.count () != 2)
                 continue;
             key = l[0];
@@ -546,6 +546,9 @@ void Daemon::parseSettings (const QString& msg)
     QStringList l = msg.trimmed ().split (" ", QString::SkipEmptyParts);
     int i;
 
+    if (l.size () != 5)
+        return;
+
     for (i = 0; i < 4; i++)
         _sett[i] = StageSettings (l[i]);
 
@@ -555,6 +558,8 @@ void Daemon::parseSettings (const QString& msg)
     
     for (i = 0; i < u.size (); i++) {
         QStringList v = u[i].split ("=", QString::SkipEmptyParts);
+        if (v.size () != 2)
+            continue;
         _pass[v[0]] = v[1];
     }
 
@@ -610,7 +615,7 @@ void Daemon::parseCalibrateReply (int stage, const QString& reply)
     if (reply.startsWith ("ERROR"))
         Logger::instance ()->log (Logger::Error, tr ("Calibration failed. Reason: %1").arg (QString (reply).remove ("ERROR: ").trimmed ()));
     else {
-        QStringList l = reply.trimmed ().split ("=");
+        QStringList l = reply.trimmed ().split ("=", QString::SkipEmptyParts);
         
         if (l.size () != 2)
             Logger::instance ()->log (Logger::Error, tr ("Calibration failed. Unexpected reply: %1").arg (reply.trimmed ()));
@@ -642,9 +647,8 @@ void Daemon::parseHistory (const QString& reply, history_stage_t stage, history_
     QStringList l = QString (reply).remove ("History:").trimmed ().split (",", QString::SkipEmptyParts);
     QList< QPair <uint, double> > res;
 
-    for (int i = 0; i < l.size (); i += 2) {
+    for (int i = 0; i < l.size (); i += 2)
         res.push_back (QPair<uint, double> (l[i].toUInt (), l[i+1].toDouble ()));
-    }
 
     historyGot (res, stage, kind);
 }

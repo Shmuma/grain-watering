@@ -30,12 +30,12 @@ StageSettings::StageSettings (const QString& str)
         return;
 
     // parse settings data
-    QStringList list = str.toLower ().split (",");
+    QStringList list = str.toLower ().split (",", QString::SkipEmptyParts);
 
     for (int i = 0; i < list.size (); i++) {
         double val;
         bool ok;
-        QStringList l = list[i].split ("=");
+        QStringList l = list[i].split ("=", QString::SkipEmptyParts);
 
         if (l.size () != 2)
             continue;
@@ -110,7 +110,7 @@ QString StageSettings::toString () const
 
 QMap<int, double> StageSettings::parseHash (const QString& str) const
 {
-    QStringList l = str.split (":");
+    QStringList l = str.split (":", QString::SkipEmptyParts);
     QMap<int, double> res;
 
     for (int i = 0; i < l.size (); i += 2)
