@@ -23,9 +23,13 @@ protected slots:
     void startClicked ();
     void stopClicked ();
 
+    void humidityUpClicked ();
+    void humidityDownClicked ();
+
 signals:
     void startPressed (int stage);
     void stopPressed (int stage);
+    void targetHumidityUpdated (int stage, double value);
 
 public:
     StageControl (QWidget* parent);
@@ -122,6 +126,8 @@ private:
 
     QToolButton *_start, *_stop;
     bool _inHandleState;
+    QToolButton *_humidityUp, *_humidityDown;
+    QToolButton *_waterUp, *_waterDown;
 
     // pixmaps
     QPixmap _imgWithSensors;

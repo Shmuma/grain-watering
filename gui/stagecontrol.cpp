@@ -37,6 +37,17 @@ StageControl::StageControl (QWidget* parent)
     _stop->setGeometry (r);
 
     setRunning (false);
+
+    _humidityUp = new QToolButton (this);
+    _humidityDown = new QToolButton (this);
+    _humidityUp->setText ("+");
+    _humidityDown->setText ("-");
+    r = _svgWithSensors.boundsOnElement ("HumiditySpin").toRect ();
+    _humidityUp->setGeometry (r.adjusted (0, 0, 0, -r.height () / 2));
+    _humidityDown->setGeometry (r.adjusted (0, r.height () / 2, 0, 0));
+
+    connect (_humidityUp, SIGNAL (clicked ()), this, SLOT (humidityUpClicked ()));
+    connect (_humidityDown, SIGNAL (clicked ()), this, SLOT (humidityDownClicked ()));
 }
 
 
@@ -139,4 +150,22 @@ void StageControl::stopClicked ()
         return;
 
     stopPressed (_number);
+}
+
+
+void StageControl::humidityUpClicked ()
+{
+    _targetHumidity += 0.05;
+    targetHumidityUpdated (_number, _targetHumidity);
+    update ();
+}
+
+
+void StageControl::humidityDownClicked ()
+{
+    _targetHumidity -= 0.05;
+    if (_targetHumidity < 0)
+        _targetHumidity = 0;
+    targetHumidityUpdated (_number, _targetHumidity);
+    update ();
 }

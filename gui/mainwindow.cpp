@@ -49,6 +49,7 @@ MainWindow::MainWindow ()
     for (int i = 0; i < 4; i++) {
         connect (getStageControl (i), SIGNAL (startPressed (int)), this, SLOT (startButtonClicked (int)));
         connect (getStageControl (i), SIGNAL (stopPressed (int)), this, SLOT (stopButtonClicked (int)));
+        connect (getStageControl (i), SIGNAL (targetHumidityUpdated (int, double)), this, SLOT (stageTargetHumidityUpdated (int, double)));
     }
 
     // connect active stages checkboxes
@@ -1560,6 +1561,16 @@ void MainWindow::daemonStageRunningUpdated (int stage, bool running)
     }
 }
 
+
+void MainWindow::stageTargetHumidityUpdated (int stage, double value)
+{
+    StageSettings sett = _daemon.getSettings (stage);
+    sett.setTargetHumidity (value);
+    _daemon.setSettings (stage, sett);
+
+    if (stage == settingsStageComboBox->currentIndex ())
+        settingsTargetHumidityEdit->setText (QString::number (value));
+}
 
 
 // --------------------------------------------------

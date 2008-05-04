@@ -32,14 +32,14 @@
      inkscape:pageshadow="2"
      inkscape:zoom="2.8284271"
      inkscape:cx="170.80756"
-     inkscape:cy="27.694191"
+     inkscape:cy="126.68914"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      width="250px"
      height="500px"
-     showgrid="false"
-     inkscape:window-width="1278"
-     inkscape:window-height="994"
+     showgrid="true"
+     inkscape:window-width="1598"
+     inkscape:window-height="1172"
      inkscape:window-x="0"
      inkscape:window-y="0" />
   <metadata
@@ -57,12 +57,12 @@
      inkscape:label="pixmap"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:none"
+     style="display:inline"
      sodipodi:insensitive="true">
     <image
-       y="-0.31580526"
-       x="0.15790081"
-       id="image6731"
+       y="0"
+       x="0"
+       id="image2651"
        height="500"
        width="250"
        sodipodi:absref="/home/shmuma/work/grain-watering/gui/svg/stage1.png"
@@ -99,18 +99,19 @@
        id="GrainArea"
        inkscape:label="#path7078" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.55898011;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 165.28526,423.35936 L 234.3026,423.35936 L 234.3026,468.43407 L 165.28526,468.43407 L 165.28526,423.35936 z "
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.71056223;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 150.85528,423.43515 L 234.22681,423.43515 L 234.22681,468.35828 L 150.85528,468.35828 L 150.85528,423.43515 z "
        id="path7082" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.60802925;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 164.95739,468.67747 L 164.95739,491.19594 L 224.10689,491.19594 L 224.10689,468.67747 L 164.95739,468.67747 z "
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.99450529;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 150.99725,468.8707 L 150.99725,499.00275 L 219.00275,499.00275 L 219.00275,468.8707 L 150.99725,468.8707 z "
        id="TargetHumidity"
        inkscape:label="#path7084" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 224.2425,491.32931 L 234.41027,491.32931 L 234.41027,468.54412 L 224.2425,468.54412 L 224.2425,491.32931 z "
-       id="path7086" />
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.77138472;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 220.88569,499.11431 L 234.19527,499.11431 L 234.19527,468.75912 L 220.88569,468.75912 L 220.88569,499.11431 z "
+       id="HumiditySpin"
+       inkscape:label="#path7086" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 142.88111,377.95827 L 142.88111,411.92749 L 173.39121,411.92749 L 173.39121,377.95827 L 142.88111,377.95827 z "
@@ -128,7 +129,8 @@
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 224.24137,377.95827 L 234.4114,377.95827 L 234.4114,411.92749 L 224.24137,411.92749 L 224.24137,377.95827 z "
-       id="path7098" />
+       id="FlowSpin"
+       inkscape:label="#path7098" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.26191843;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 184.59263,129.89886 L 184.59263,149.90221 L 225.35223,149.90221 L 225.35223,129.89886 L 184.59263,129.89886 z "

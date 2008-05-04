@@ -72,6 +72,7 @@ protected slots:
     void globalStopButtonClicked ();
     void startButtonClicked (int stage);
     void stopButtonClicked (int stage);
+    void stageTargetHumidityUpdated (int stage, double value);
 
     // daemon signals
     void connectedChanged (bool value);

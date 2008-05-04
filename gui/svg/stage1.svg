@@ -34,13 +34,13 @@
      inkscape:pageshadow="2"
      inkscape:zoom="2"
      inkscape:cx="251.39875"
-     inkscape:cy="162.12732"
+     inkscape:cy="142.12732"
      inkscape:document-units="pt"
      inkscape:current-layer="layer1"
-     showgrid="true"
+     showgrid="false"
      showguides="true"
-     inkscape:window-width="1278"
-     inkscape:window-height="994"
+     inkscape:window-width="1598"
+     inkscape:window-height="1172"
      inkscape:window-x="0"
      inkscape:window-y="0"
      showborder="true"
@@ -108,22 +108,23 @@
        id="GrainArea"
        inkscape:label="#path7078" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.2570163;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 120.34417,445.32012 L 254.05899,445.32012 L 254.05899,490.83701 L 120.34417,490.83701 L 120.34417,445.32012 z "
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.19059002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 120.31096,445.28691 L 240.0922,445.28691 L 240.0922,490.87022 L 120.31096,490.87022 L 120.31096,445.28691 z "
        id="path7080" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.56009448;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 254.55929,445.47099 L 323.67705,445.47099 L 323.67705,490.5446 L 254.55929,490.5446 L 254.55929,445.47099 z "
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.70652819;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 240.63251,445.54421 L 323.60383,445.54421 L 323.60383,490.47138 L 240.63251,490.47138 L 240.63251,445.54421 z "
        id="path7082" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.60553467;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 254.52355,490.7873 L 254.52355,513.30827 L 313.48314,513.30827 L 313.48314,490.7873 L 254.52355,490.7873 z "
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.01819253;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 240.72987,490.99362 L 240.72987,521.60195 L 309.27682,521.60195 L 309.27682,490.99362 L 240.72987,490.99362 z "
        id="TargetHumidity"
        inkscape:label="#path7084" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 313.6175,513.44039 L 323.78527,513.44039 L 323.78527,490.6552 L 313.6175,490.6552 L 313.6175,513.44039 z "
-       id="path7086" />
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.82686579;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 309.36024,521.19765 L 323.54253,521.19765 L 323.54253,490.89794 L 309.36024,490.89794 L 309.36024,521.19765 z "
+       id="HumiditySpin"
+       inkscape:label="#path7086" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 201.74601,411.39242 L 232.25611,411.39242 L 232.25611,422.7155 L 201.74601,422.7155 L 201.74601,411.39242 z "
@@ -148,7 +149,8 @@
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 313.61637,400.06935 L 323.7864,400.06935 L 323.7864,434.03857 L 313.61637,434.03857 L 313.61637,400.06935 z "
-       id="path7098" />
+       id="FlowSpin"
+       inkscape:label="#path7098" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 272.93671,400.21037 L 272.93671,343.45449 L 323.78593,343.45449 L 323.78593,400.21037 L 272.93671,400.21037 z "
@@ -227,12 +229,12 @@
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="144.02832"
-       y="505.66785"
+       x="130.02832"
+       y="508.66785"
        id="text6244"><tspan
          sodipodi:role="line"
          id="tspan6246"
-         x="144.02832"
-         y="505.66785">Заданая влажность</tspan></text>
+         x="130.02832"
+         y="508.66785">Заданая влажность</tspan></text>
   </g>
 </svg>
