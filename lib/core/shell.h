@@ -107,6 +107,7 @@ private:
     QString getSensors (const QStringList& args);
 
     QString getHistory (const QStringList& args);
+    QString getEvents (const QStringList& args);
     QString addHistory (const QStringList& args);
 
     QString setTempCoef (const QStringList& args);
@@ -115,6 +116,8 @@ private:
     QString calibrate (const QStringList& args);
 
     QString setStageModes (const QStringList& args);
+
+    QString logMessage (const QStringList& args);
 
 public:
     Interpreter (Device* device);

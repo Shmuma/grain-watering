@@ -38,6 +38,9 @@ Database::Database (const QString& file) throw (QString&)
         _db.exec (QString ().sprintf ("insert into settings (key, value) values ('%d', '0.0097');", S_TempK));
         _db.exec (QString ().sprintf ("insert into settings (key, value) values ('%d', '992');", S_TempResist));
     }
+    if (!tables.contains ("messages")) {
+        _db.exec ("create table messages (date integer, msg text);");
+    }
 }
 
 
@@ -217,4 +220,36 @@ double Database::getTempResist () const
         return def;
     
     return query.value (0).toDouble ();
+}
+
+
+void Database::logMessage (const QString& msg)
+{
+    QSqlQuery query (QSqlDatabase::database ());
+    query.prepare ("insert into messages (date, msg) values (:date, :msg)");
+    query.bindValue (":date", QDateTime::currentDateTime ().toTime_t ());
+    query.bindValue (":msg", msg);
+    if (!query.exec ())
+        printf ("DB error: %s\n", QSqlDatabase::database ().lastError ().text ().toAscii ().constData ());   
+}
+
+
+QList< QPair <time_t, QString> > Database::getEvents (int from, int to)
+{
+    QList< QPair <time_t, QString> > res;
+    QSqlQuery query (QSqlDatabase::database ());
+
+    query.prepare ("select date, msg from messages where date >= :from and date <= :to");
+    query.bindValue (":from", from);
+    query.bindValue (":to", to);
+    if (!query.exec ()) {
+        printf ("DB error: %s\n", QSqlDatabase::database ().lastError ().text ().toAscii ().constData ());
+        return res;
+    }
+
+
+    while (query.next ())
+        res.push_back (QPair<time_t, QString> (query.value (0).toInt (), query.value (1).toString ()));
+
+    return res;
 }

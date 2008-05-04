@@ -129,6 +129,8 @@ Interpreter::Interpreter (Device* device)
                                                "Obtain state of sensors of each stage.\n", CommandMeta::c_meta);
     _commands["gethistory"]	= CommandMeta (4, &Interpreter::getHistory, "Returns history data", "gethistory stage param from to",
                                                "Returns historical data of specified stage, parameter and time interval\n", CommandMeta::c_meta);
+    _commands["getevents"]	= CommandMeta (2, &Interpreter::getEvents, "Returns events data", "getevents from to",
+                                               "Returns events log  of specified time interval\n", CommandMeta::c_meta);
     _commands["addhistory"]	= CommandMeta (4, &Interpreter::addHistory, "Appends historical data", "addhistory stage param time val",
                                                "Adds new historical data item.\n", CommandMeta::c_meta);
     _commands["settempcoef"]	= CommandMeta (2, &Interpreter::setTempCoef, "Assigns temperature coefficients", "settempcoef k resist",
@@ -139,6 +141,8 @@ Interpreter::Interpreter (Device* device)
                                                "Calibrate sensor of given stage\n", CommandMeta::c_meta);
     _commands["setstagemodes"]	= CommandMeta (4, &Interpreter::setStageModes, "Assign modes (auto or semi-auto) to stages", "setstagemodes s1 s2 s3 s4",
                                                "Assign modes (auto or semi) to stages\n", CommandMeta::c_meta);
+    _commands["log"]		= CommandMeta (2, &Interpreter::logMessage, "Save message in history", "log message",
+                                               "Saves message to history.\n", CommandMeta::c_meta);
 }
 
 
@@ -166,7 +170,7 @@ QString Interpreter::exec (const QString& line)
     CommandMeta meta = _commands[items[0]];
 
     // too many arguments for command
-    if (meta.args () != items.size ()-1)
+    if (items[0] != "log" && meta.args () != items.size ()-1)
 	return QString ("Error: command %1 requires exactly %2 arguments\n").arg (items[0]).arg (meta.args ());
 
     // handle commands
@@ -1045,4 +1049,35 @@ QString Interpreter::stopStage (const QStringList& args)
         _stageRunning[stage] = false;
     
     return checkBoolReply (res);
+}
+
+
+QString Interpreter::logMessage (const QStringList& args)
+{
+    QString res = args.join (" ");
+    _db.logMessage (res);
+    return QString ();
+}
+
+
+QString Interpreter::getEvents (const QStringList& args)
+{
+    int from, to;
+
+    from = args[0].toInt ();
+    to = args[1].toInt ();
+
+    if (from == 0 || to == 0 || from > to)
+        return "Invalid timestamp\n";
+    
+    QList<QPair <time_t, QString> > events = _db.getEvents (from, to);
+    QString res;
+
+    for (int i = 0; i < events.size (); i++) {
+        if (!events.isEmpty ())
+            res += ",";
+        res += QString::number (events[i].first) + "," + events[i].second.remove (',');
+    }
+
+    return "Events: " + res + "\n";
 }

@@ -350,7 +350,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex" >
-             <number>0</number>
+             <number>3</number>
             </property>
             <widget class="QWidget" name="config" >
              <layout class="QVBoxLayout" >
@@ -1389,7 +1389,7 @@
        <item>
         <widget class="QStackedWidget" name="mainStackWidget" >
          <property name="currentIndex" >
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page_2" >
           <layout class="QHBoxLayout" >
@@ -1681,7 +1681,7 @@
             </layout>
            </item>
            <item>
-            <widget class="QTabWidget" name="tabWidget_2" >
+            <widget class="QTabWidget" name="historyTabWidget" >
              <property name="currentIndex" >
               <number>1</number>
              </property>
@@ -1709,7 +1709,7 @@
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="tab_4" >
+             <widget class="QWidget" name="plotWidget" >
               <attribute name="title" >
                <string>&amp;Graph</string>
               </attribute>

@@ -186,10 +186,13 @@ MainWindow::MainWindow ()
     historyKindCombo->addItem (tr ("Water flow"), HK_WaterFlow);
     historyKindCombo->addItem (tr ("Setting"), HK_Setting);
 
+    connect (historyStageCombo, SIGNAL (activated (int)), this, SLOT (historyItemChanged (int)));
     connect (refreshHistoryButton, SIGNAL (clicked ()), this, SLOT (refreshHistoryButtonClicked ()));
     connect (historyPeriodCombo, SIGNAL (activated (int)), this, SLOT (historyPeriodComboChanged (int)));
     connect (&_daemon, SIGNAL (historyGot (const QList < QPair <uint, double> >&, history_stage_t, history_kind_t)), 
              this, SLOT (historyGot (const QList < QPair <uint, double> >&, history_stage_t, history_kind_t)));
+    connect (&_daemon, SIGNAL (eventsGot (const QList < QPair <uint, QString> >&)), 
+             this, SLOT (eventsGot (const QList < QPair <uint, QString> >&)));
     historyPeriodComboChanged (0);
 
     plot->setAxisScaleDraw (QwtPlot::xBottom, new PlotScaleDraw (false));
@@ -366,6 +369,7 @@ void MainWindow::loggerMessage (Logger::severity_t severity, const QString& msg)
 
     item->setForeground (br);
     logListView->insertItem (0, item);
+    _daemon.logMessage (msg);
 }
 
 
@@ -1352,7 +1356,14 @@ void MainWindow::refreshHistoryButtonClicked ()
     if (sd)
         sd->setShowDate (need_date);
 
-    _daemon.requestHistory (stage, kind, from.toTime_t (), to.toTime_t ());
+    switch (stage) {
+    case HS_Events:
+        _daemon.requestEvents (from.toTime_t (), to.toTime_t ());
+        break;
+    default:
+        _daemon.requestHistory (stage, kind, from.toTime_t (), to.toTime_t ());
+        break;
+    }
 }
 
 
@@ -1573,6 +1584,34 @@ void MainWindow::stageTargetHumidityUpdated (int stage, double value)
 }
 
 
+void MainWindow::historyItemChanged (int item)
+{
+    history_stage_t stage = (history_stage_t)historyStageCombo->itemData (item).toInt ();
+
+    historyKindCombo->setEnabled (stage != HS_Events);
+    historyTabWidget->setTabEnabled (1, stage != HS_Events);
+}
+
+
+void MainWindow::eventsGot (const QList < QPair <uint, QString> >& data)
+{
+    QStringList l;
+
+    historyTable->clear ();
+
+    for (int i = 0; i < data.size (); i++) {
+        l.clear ();
+        l.append (QDateTime::fromTime_t (data[i].first).toString ("dd.MM.yy hh:mm:ss"));
+        l.append (data[i].second);
+
+        new QTreeWidgetItem (historyTable, l);
+    }
+
+    historyTable->resizeColumnToContents (0);
+}
+
+
+
 // --------------------------------------------------
 // PlotScaleDraw
 // --------------------------------------------------
@@ -1580,6 +1619,3 @@ QwtText PlotScaleDraw::label (double v) const
 {
     return QDateTime::fromTime_t ((uint)v).toString (_show_date ? "dd.MM hh:mm" : "hh:mm:ss");
 }
-
-
-

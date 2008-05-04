@@ -30,6 +30,7 @@ public:
         c_gettempcoef,
         c_calibrate,
         c_gethistory,
+        c_getevents,
         c_clean,
         c_drain,
     };
@@ -96,6 +97,7 @@ protected:
     void parseTempCoef (const QString& reply);
     void parseCalibrateReply (int stage, const QString& reply);
     void parseHistory (const QString& reply, history_stage_t stage, history_kind_t kind);
+    void parseEvents (const QString& reply);
 
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
@@ -143,6 +145,7 @@ signals:
     void autoModeError (bool timeout, bool manual);
 
     void historyGot (const QList< QPair <uint, double> >& res, history_stage_t stage, history_kind_t kind);
+    void eventsGot (const QList< QPair <uint, QString> >& res);
     
     void cleanFinished ();
     void drainFinished ();
@@ -188,11 +191,14 @@ public:
 
     void setStageModes (bool s1, bool s2, bool s3, bool s4);
     void requestHistory (history_stage_t stage, history_kind_t kind, uint from, uint to);
+    void requestEvents (uint from, uint to);
 
     void cleanFilter ();
     void cleanStages (bool s1, bool s2, bool s3, bool s4);
     void drainWater (bool s1, bool s2, bool s3, bool s4);
     void checkTick ();
+
+    void logMessage (const QString& msg);
 };
 
 

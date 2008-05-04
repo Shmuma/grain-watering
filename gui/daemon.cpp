@@ -185,6 +185,9 @@ void Daemon::socketReadyRead ()
                 case DaemonCommand::c_gethistory:
                     parseHistory (reply.trimmed (), cmd.historyStage (), cmd.historyKind ());
                     break;
+                case DaemonCommand::c_getevents:
+                    parseEvents (reply.trimmed ());
+                    break;
                 case DaemonCommand::c_clean:
                     if (parseGenericReply (reply, msg))
                         Logger::instance ()->log (Logger::Error, tr ("Clean finished with error. Reason: '%1'").arg (msg));
@@ -642,6 +645,13 @@ void Daemon::requestHistory (history_stage_t stage, history_kind_t kind, uint fr
 }
 
 
+void Daemon::requestEvents (uint from, uint to)
+{
+    sendCommand (QString ().sprintf ("getevents %u %u\n", from, to), false);
+    _queue.push_back (DaemonCommand (DaemonCommand::c_getevents));
+}
+
+
 void Daemon::parseHistory (const QString& reply, history_stage_t stage, history_kind_t kind)
 {
     QStringList l = QString (reply).remove ("History:").trimmed ().split (",", QString::SkipEmptyParts);
@@ -691,6 +701,24 @@ void Daemon::stopStage (int stage)
 {
     sendCommand (QString ().sprintf ("stopstage %d\n", stage+1));
     _queue.push_back (DaemonCommand (DaemonCommand::c_stopstage, stage));
+}
+
+
+void Daemon::logMessage (const QString& msg)
+{
+    sendCommand (QString ("log ") + msg + "\n");
+}
+
+
+void Daemon::parseEvents (const QString& reply)
+{
+    QStringList l = QString (reply).remove ("Events:").trimmed ().split (",", QString::SkipEmptyParts);
+    QList< QPair <uint, QString> > res;
+
+    for (int i = 0; i < l.size (); i += 2)
+        res.push_back (QPair<uint, QString> (l[i].toUInt (), l[i+1]));
+
+    eventsGot (res);
 }
 
 
