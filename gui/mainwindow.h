@@ -24,6 +24,7 @@ public:
     };
 
 private:
+    int _clockTimer;
     bool _switchingToolButtons, _settingsChanged;
     Daemon _daemon;
     int _currentSettingsStage;
@@ -35,6 +36,9 @@ private:
     access_level_t _access;
     QAction* _stages_view;
     int _calibrateStage;
+    int _cleaningWatchdogTimer;
+    bool _filterCleaning;
+    bool _stageCleaning[4];
 
 protected:
     virtual void timerEvent (QTimerEvent* event);
@@ -109,8 +113,11 @@ protected slots:
     void daemonWaterPresentUpdated (int stage, bool on);
     void daemonGrainLowUpdated (int stage, bool on);
     void daemonAutoModeError (bool timeout, bool manual);
+    void daemonCleanRequested ();
+    void daemonCleanStarted ();
     void daemonCleanFinished ();
     void daemonDrainFinished ();
+    void daemonGotCleanState (bool filter, bool s1, bool s2, bool s3, bool s4);
 
     // check page
     void checkStateButtonPressed ();

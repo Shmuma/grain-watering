@@ -414,7 +414,12 @@ bool Device::cleanSystem (bool s1, bool s2, bool s3, bool s4)
 
     DeviceCommand cmd (DeviceCommand::CleanSystem, bitmask);
     _port->send (cmd.pack ());
-    return DeviceCommand::isOK (_port->receive (cmd.delay ()+1), DeviceCommand::CleanSystem, DeviceCommand::Stg_All);
+
+    // wait for 'wait for clean' reply
+    QByteArray res = _port->receive (cmd.delay ()+1);
+
+    // check it
+    return (unsigned char)res[2] == 0x0A;
 }
 
 
@@ -476,4 +481,11 @@ bool Device::syncWithDevice ()
         return false;
 
     return cmd == DeviceCommand (DeviceCommand::Init);
+}
+
+
+bool Device::cleaningStarted ()
+{
+    QByteArray res = _port->receive (1);
+    return (unsigned char)res[2] == 0xF0;
 }

@@ -33,6 +33,8 @@ public:
         c_getevents,
         c_clean,
         c_drain,
+        c_getcleanstate,
+        c_startfilterautomat,
     };
     
 private:
@@ -98,6 +100,7 @@ protected:
     void parseCalibrateReply (int stage, const QString& reply);
     void parseHistory (const QString& reply, history_stage_t stage, history_kind_t kind);
     void parseEvents (const QString& reply);
+    void parseCleanState (const QString& reply);
 
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
@@ -124,6 +127,7 @@ signals:
 
     void grainPresenceGot (int stage, bool val);
     void settingsGot ();
+    void gotCleanState (bool filter, bool s1, bool s2, bool s3, bool s4);
 
     // check loop signals
     void stageRunningUpdated (int stage, bool runnning);
@@ -147,8 +151,11 @@ signals:
     void historyGot (const QList< QPair <uint, double> >& res, history_stage_t stage, history_kind_t kind);
     void eventsGot (const QList< QPair <uint, QString> >& res);
     
-    void cleanFinished ();
     void drainFinished ();
+
+    void cleanRequested ();
+    void cleanStarted ();
+    void cleanFinished ();
 
 public:
     Daemon (const QString& host, int port);
@@ -199,6 +206,7 @@ public:
     void checkTick ();
 
     void logMessage (const QString& msg);
+    void getCleanState ();
 };
 
 

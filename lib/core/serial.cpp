@@ -197,7 +197,9 @@ QByteArray SerialRecorder::receive (int timeout) throw (QString)
 // --------------------------------------------------
 SerialDeviceModel::SerialDeviceModel ()
     : SerialPort (),
-      _last (NULL)
+      _last (NULL),
+      _cleaningWait (false),
+      _cleaning (false)
 {
     for (int i = 0; i < 4; i++) {
         _waterGate[i] = 0xFFFF >> 1;
@@ -224,6 +226,37 @@ QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
 {
     QByteArray res;
     DeviceCommand::kind_t kind;
+    DeviceCommand::stage_t cleanStages;
+
+    static int counter = 0;
+
+    // special handling for cleaning command
+    if (_cleaningWait) {
+        counter++;
+        sleep (1);
+        
+        if (counter != 10)
+            throw QString ("Timeout reading serial port");
+
+        // clean started
+        res = DeviceCommand (cleanStages, 0xF0, 0x00).pack (); 
+        _cleaningWait = false;
+        _cleaning = true;
+        counter = 0;
+        return res;
+    }
+
+    if (_cleaning) {
+        counter++;
+        sleep (1);
+
+        if (counter == 20) {
+            _cleaning = false;
+            counter = 0;
+        }
+
+        throw QString ("Timeout reading serial port");
+    }
 
     if (!_last)
         throw QString ("There is no command to wait reply");
@@ -310,6 +343,18 @@ QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
     case DeviceCommand::StopWater:
         res = DeviceCommand (kind, (DeviceCommand::stage_t)_last->low ()).pack ();
         _waterRunning[_last->low () - 1] = false;
+        break;
+
+    case DeviceCommand::StartFilterAutomat:
+        res = DeviceCommand (kind, DeviceCommand::Stg_All).pack ();
+        break;
+
+    case DeviceCommand::CleanSystem:
+        // wait for clean
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0x0A, 0x00).pack ();
+        cleanStages = (DeviceCommand::stage_t)_last->low ();
+        _cleaning = false;
+        _cleaningWait = true;
         break;
 
     default:

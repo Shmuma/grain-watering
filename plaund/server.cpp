@@ -26,7 +26,7 @@ PlaundServer::PlaundServer (int tcp_port)
     //    _port = new FileSerialPort ("input.dat", "output.dat");
     _port = new SerialDeviceModel ();
     _device = new Device (_port);
-    _interp = new Interpreter (_device);
+    _interp = new Interpreter (this, _device);
 
     connect (this, SIGNAL (newConnection ()), this, SLOT (newConnection ()));
 
@@ -99,12 +99,18 @@ void PlaundServer::timerEvent (QTimerEvent* event)
         if (event->timerId () == _checkTimer)
             res = _interp->exec ("checktick\n");
 
-    if (!res.isEmpty ()) {
+    broadcastMessage (res);
+}
+
+
+void PlaundServer::broadcastMessage (const QString& msg)
+{
+    if (!msg.isEmpty ()) {
         // broadcast result of auto and check mode tick to all connected clients
         QList<QTcpSocket*>::iterator it = _socks.begin ();
 
         while (it != _socks.end ()) {
-            (*it)->write (res.toAscii ());
+            (*it)->write (msg.toAscii ());
             (*it)->write ("> ");
             (*it)->flush ();
             it++;

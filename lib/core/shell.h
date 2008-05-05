@@ -14,9 +14,20 @@ class Interpreter;
 typedef QString (Interpreter::*handler_t) (const QStringList&);
 
 
-class Interpreter
+// abstract interface which allows interpreter to broadcast messages to all clients
+class Broadcaster 
 {
+public:
+    virtual void broadcastMessage (const QString& msg) = 0;
+};
+
+
+class Interpreter : public QObject
+{
+    Q_OBJECT
+
 private:
+    Broadcaster* _broadcaster;
     Device* _dev;
     QMap<QString, CommandMeta> _commands;
     Database _db;
@@ -33,6 +44,11 @@ private:
     double _temp_k, _temp_resist;
     bool _stageRunning[4];
     bool _waterRunning[4];
+    bool _filterCleaning;
+    bool _stageCleaning[4];
+    int _filterCleanTimer;
+    int _stagesCleanTimer;
+    bool _waitForCleanStart;
 
     static QString checkBoolReply (bool res)
         { return res ? "OK\n" : "ERROR\n"; };
@@ -43,6 +59,8 @@ private:
     static bool parseBool (const QString& stage) throw (QString);
 
     void appendHistory (history_stage_t stage, history_kind_t param, double val);
+
+    bool isCleaningInProgress () const;
 
     double getWaterFlow (int stage);
     double getWaterPressure ();
@@ -118,9 +136,13 @@ private:
     QString setStageModes (const QStringList& args);
 
     QString logMessage (const QStringList& args);
+    QString getCleanState (const QStringList& args);
+
+protected:
+    void timerEvent (QTimerEvent*);
 
 public:
-    Interpreter (Device* device);
+    Interpreter (Broadcaster* broadcaster, Device* device);
 
     QString exec (const QString& line);
     QString getHelp (const QString& cmd = QString ());

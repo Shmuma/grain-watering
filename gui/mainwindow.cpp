@@ -21,12 +21,13 @@ MainWindow::MainWindow ()
       _daemon ("localhost", 12345),
       _currentSettingsStage (0),
       _access (AL_Default),
-      _calibrateStage (0)
+      _calibrateStage (0),
+      _cleaningWatchdogTimer (0)
 {
     setupUi (this);
 
     // fire timer every second to update display's clocks
-    startTimer (1000);
+    _clockTimer = startTimer (1000);
     refreshScreenClock ();
 
     mainStackWidget->setCurrentIndex (0);
@@ -46,10 +47,13 @@ MainWindow::MainWindow ()
 
     connect (globalStopButton,  SIGNAL (clicked ()), this, SLOT (globalStopButtonClicked ()));
 
+    _filterCleaning = false;
+
     for (int i = 0; i < 4; i++) {
         connect (getStageControl (i), SIGNAL (startPressed (int)), this, SLOT (startButtonClicked (int)));
         connect (getStageControl (i), SIGNAL (stopPressed (int)), this, SLOT (stopButtonClicked (int)));
         connect (getStageControl (i), SIGNAL (targetHumidityUpdated (int, double)), this, SLOT (stageTargetHumidityUpdated (int, double)));
+        _stageCleaning[i] = false;
     }
 
     // connect active stages checkboxes
@@ -113,6 +117,9 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (waterStopped (int)), this, SLOT (daemonWaterStopped (int)));
     connect (&_daemon, SIGNAL (grainSensorsPresenceGot (bool)), this, SLOT (daemonGrainSensorsPresenceGot (bool)));
     connect (&_daemon, SIGNAL (grainPresenceGot (int, bool)), this, SLOT (daemonGrainPresenceGot (int, bool)));
+    connect (&_daemon, SIGNAL (cleanRequested ()), this, SLOT (daemonCleanRequested ()));
+    connect (&_daemon, SIGNAL (cleanStarted ()), this, SLOT (daemonCleanStarted ()));
+    connect (&_daemon, SIGNAL (cleanFinished ()), this, SLOT (daemonCleanFinished ()));
 
     // daemon check loop events
     connect (&_daemon, SIGNAL (stageRunningUpdated (int, bool)), this, SLOT (daemonStageRunningUpdated (int, bool)));
@@ -132,6 +139,7 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (waterPresentUpdated (int, bool)), this, SLOT (daemonWaterPresentUpdated (int, bool)));
     connect (&_daemon, SIGNAL (grainLowUpdated (int, bool)), this, SLOT (daemonGrainLowUpdated (int, bool)));
     connect (&_daemon, SIGNAL (autoModeError (bool, bool)), this, SLOT (daemonAutoModeError (bool, bool)));
+    connect (&_daemon, SIGNAL (gotCleanState (bool, bool, bool, bool, bool)), this, SLOT (daemonGotCleanState (bool, bool, bool, bool, bool)));
 
     connect (checkStateButton, SIGNAL (pressed ()), this, SLOT (checkStateButtonPressed ()));
     connect (checkWaterButton, SIGNAL (pressed ()), this, SLOT (checkWaterButtonPressed ()));
@@ -221,9 +229,14 @@ void MainWindow::setSettingsPanelVisible (bool visible)
 }
 
 
-void MainWindow::timerEvent (QTimerEvent*)
+void MainWindow::timerEvent (QTimerEvent* e)
 {
-    refreshScreenClock ();
+    if (e->timerId () == _clockTimer)
+        refreshScreenClock ();
+
+    // request cleaning state
+    if (e->timerId () == _cleaningWatchdogTimer)
+        _daemon.getCleanState ();
 }
 
 
@@ -1522,8 +1535,8 @@ void MainWindow::cleanFilterButtonClicked ()
     }
 
     _daemon.cleanFilter ();
-    Logger::instance ()->log (Logger::Information, tr ("Filter cleaning started"));
-    bsuControl->setCleaning (true);
+    _daemon.getCleanState ();
+    Logger::instance ()->log (Logger::Information, tr ("Filter cleaning requested"));
 }
 
 
@@ -1537,18 +1550,18 @@ void MainWindow::cleanStagesButtonClicked ()
     };
     QString res;
 
+    if (haveActiveStages ()) {
+        Logger::instance ()->log (Logger::Warning, tr ("Cannot clean stages, because there are active stages"));
+        return;
+    }
+
     for (int i = 0; i < 4; i++) {
         if (s[i]) {
-            if (getStageControl (i)->running ()) {
-                Logger::instance ()->log (Logger::Warning, tr ("Cannot clean stage %1, because it is active").arg (i+1));
-                s[i] = false;
+            if (getStageControl (i)->enabled ()) {
+                if (!res.isEmpty ())
+                    res += ", ";
+                res += tr ("stage %1").arg (i+1);
             }
-            else 
-                if (getStageControl (i)->enabled ()) {
-                    if (!res.isEmpty ())
-                        res += ", ";
-                    res += tr ("stage %1").arg (i+1);
-                }
         }
     }
 
@@ -1556,7 +1569,19 @@ void MainWindow::cleanStagesButtonClicked ()
         return;
 
     _daemon.cleanStages (s[0], s[1], s[2], s[3]);
-    Logger::instance ()->log (Logger::Information, tr ("Clean of %1 started").arg (res));
+    Logger::instance ()->log (Logger::Information, tr ("Clean of %1 requested").arg (res));
+    _daemon.getCleanState ();
+}
+
+void MainWindow::daemonCleanRequested ()
+{
+    Logger::instance ()->log (Logger::Information, tr ("Clean initiated. Wait for button."));
+}
+
+
+void MainWindow::daemonCleanStarted ()
+{
+    Logger::instance ()->log (Logger::Information, tr ("Clean started"));
 }
 
 
@@ -1642,6 +1667,50 @@ void MainWindow::eventsGot (const QList < QPair <uint, QString> >& data)
     historyTable->resizeColumnToContents (0);
 }
 
+
+void MainWindow::daemonGotCleanState (bool filter, bool s1, bool s2, bool s3, bool s4)
+{
+    bsuControl->setCleaning (filter);
+
+    if (filter || s1 || s2 || s3 || s4 ) {
+        if (!_cleaningWatchdogTimer)
+            _cleaningWatchdogTimer = startTimer (1000);
+    }
+    else {
+        if (_cleaningWatchdogTimer)
+            killTimer (_cleaningWatchdogTimer);
+    }
+
+    // check for initiated cleaning
+    if (filter && !_filterCleaning)
+        Logger::instance ()->log (Logger::Information, tr ("Filter cleaning started"));
+    if (s1 && !_stageCleaning[0])
+        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 1 started"));
+    if (s2 && !_stageCleaning[1])
+        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 2 started"));
+    if (s3 && !_stageCleaning[2])
+        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 3 started"));
+    if (s4 && !_stageCleaning[3])
+        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 4 started"));
+    
+    // check for finished cleaning
+    if (!filter && _filterCleaning)
+        Logger::instance ()->log (Logger::Information, tr ("Filter cleaning finished"));
+    if (!s1 && _stageCleaning[0])
+        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 1 finished"));
+    if (!s2 && _stageCleaning[1])
+        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 2 finished"));
+    if (!s3 && _stageCleaning[2])
+        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 3 finished"));
+    if (!s4 && _stageCleaning[3])
+        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 4 finished"));
+        
+    _filterCleaning = filter;
+    _stageCleaning[0] = s1;
+    _stageCleaning[1] = s2;
+    _stageCleaning[2] = s3;
+    _stageCleaning[3] = s4;
+}
 
 
 // --------------------------------------------------

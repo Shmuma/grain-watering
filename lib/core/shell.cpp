@@ -10,8 +10,9 @@
 // --------------------------------------------------
 // Interpreter
 // --------------------------------------------------
-Interpreter::Interpreter (Device* device)
-    : _dev (device),
+Interpreter::Interpreter (Broadcaster* broadcaster, Device* device)
+    : _broadcaster (broadcaster),
+      _dev (device),
       _stages (0),
       _db ("plaund.db"),
       _log ("plaund.log"),
@@ -21,16 +22,18 @@ Interpreter::Interpreter (Device* device)
         _waterRunning[i] = _stageRunning[i] = false;
         _last_tgt_water_flow[i] = 0.0;
         _settings[i] = StageSettings (_db.getStageSettings (i));
-        _stageOperational[i] = false;
+        _stageCleaning[i] = _stageOperational[i] = false;
     }
 
+    _filterCleanTimer = _stagesCleanTimer = 0;
+    _waitForCleanStart = _filterCleaning = false;
     _temp_k = _db.getTempK ();
     _temp_resist = _db.getTempResist ();
     
     // initialize vocabulary
     // hardware commands
     _commands["help"] 		= CommandMeta (1, NULL, "Show help for command", "help [command]", 
-					       "Show help for command\n", CommandMeta::c_hardware);
+					       "Show help for command\n", CommandMeta::c_meta);
     _commands["connect"] 	= CommandMeta (0, &Interpreter::connect, "Connect to device", "connect",
 					       "Send initialization sequence to device\n", CommandMeta::c_hardware);
     _commands["getstate"]	= CommandMeta (0, &Interpreter::getStateWord, "Get status word", "getstate",
@@ -99,24 +102,26 @@ Interpreter::Interpreter (Device* device)
                                                "It returns comma-separated list of active stages number.\n", CommandMeta::c_state);
     _commands["setdebug"]	= CommandMeta (1, &Interpreter::setDebug, "Turn debug mode on or off", "setdebug",
                                                "Turns debug mode on or off,\n", CommandMeta::c_state);
+    _commands["getcleanstate"]	= CommandMeta (0, &Interpreter::getCleanState, "Obtains clean state of filter and stages", "getcleanstate",
+                                               "Obtains clean state of filter and stages\n", CommandMeta::c_state);
     // meta commands
     _commands["automodetick"]	= CommandMeta (0, &Interpreter::autoModeTick, "Performs auto mode actions", "automodetick",
                                                "Performs auto mode actions. Should be called every 10 seconds in auto mode.\n",
-                                               CommandMeta::c_meta);
+                                               CommandMeta::c_hardware);
     _commands["startstage"]	= CommandMeta (1, &Interpreter::startStage, "Starts stage", "startstage stage",
-                                               "Command starts specified stage control\n", CommandMeta::c_meta);
+                                               "Command starts specified stage control\n", CommandMeta::c_hardware);
     _commands["stopstage"]	= CommandMeta (1, &Interpreter::stopStage, "Stops stage", "stopstage stage",
                                                "Command stops specified stage (stops water and disables ustavka calculations)\n", CommandMeta::c_meta);
     _commands["getmetastate"]	= CommandMeta (4, &Interpreter::getMetaState, "Get current sensors state of given stages", "getmetastate 0|1 0|1 0|1 0|1",
-                                               "Get sensors of given stages.", CommandMeta::c_meta);
+                                               "Get sensors of given stages.", CommandMeta::c_hardware);
     _commands["sleep"]		= CommandMeta (1, &Interpreter::sleep, "Sleep for given amount of seconds", "sleep n",
                                                "Command sleeps for given amount of seconds.\n", CommandMeta::c_meta);
     _commands["setgrainsensors"]= CommandMeta (1, &Interpreter::setGrainSensors, "Set grainsensors presence", "setgrainsensors 0|1",
-                                               "Command sets grain sensors presense. This is an internal state flag.\n", CommandMeta::c_meta);
+                                               "Command sets grain sensors presense. This is an internal state flag.\n", CommandMeta::c_hardware);
     _commands["getgrainsensors"]= CommandMeta (0, &Interpreter::getGrainSensors, "Get grainsensors presence", "getgrainsensors",
-                                               "Command checks that grain sensors present. This is an internal state flag.\n", CommandMeta::c_meta);
+                                               "Command checks that grain sensors present. This is an internal state flag.\n", CommandMeta::c_hardware);
     _commands["checktick"]	= CommandMeta (0, &Interpreter::checkTick, "Performs check loop actions", "checktick",
-                                               "Performs check loop actions. Should be called every 5 seconds.\n", CommandMeta::c_meta);
+                                               "Performs check loop actions. Should be called every 5 seconds.\n", CommandMeta::c_hardware);
     _commands["getsettings"]	= CommandMeta (0, &Interpreter::getSettings, "Returns settings for all stages", "getsettings",
                                                "Returns settings for all stages.\n", CommandMeta::c_meta);
     _commands["setsettings"]	= CommandMeta (2, &Interpreter::setSettings, "Assign settings for stage", "setsettings stage sett",
@@ -124,7 +129,7 @@ Interpreter::Interpreter (Device* device)
     _commands["setpass"]	= CommandMeta (2, &Interpreter::setPass, "Changes password for user", "setpass config|admin pass",
                                                "Changes password for user.\n", CommandMeta::c_meta);
     _commands["setsensors"]	= CommandMeta (4, &Interpreter::setSensors, "Enable or disable sensors of each stage", "setsensors 0|1 0|1 0|1 0|1",
-                                               "Enables of disables sensors handling of each stage.\n", CommandMeta::c_meta);
+                                               "Enables of disables sensors handling of each stage.\n", CommandMeta::c_hardware);
     _commands["getsensors"]	= CommandMeta (0, &Interpreter::getSensors, "Obtain state of sensors of each stage", "getsensors",
                                                "Obtain state of sensors of each stage.\n", CommandMeta::c_meta);
     _commands["gethistory"]	= CommandMeta (4, &Interpreter::getHistory, "Returns history data", "gethistory stage param from to",
@@ -138,7 +143,7 @@ Interpreter::Interpreter (Device* device)
     _commands["gettempcoef"]	= CommandMeta (0, &Interpreter::getTempCoef, "Obtains temperature coefficients", "gettempcoef",
                                                "Gets coefficients for temperature formula ((t*k*n)/(3.3-t*k)-1000)/3.86.\n", CommandMeta::c_meta);
     _commands["calibrate"]	= CommandMeta (2, &Interpreter::calibrate, "Calibrate sensor at given stage", "calibrate stage sensor",
-                                               "Calibrate sensor of given stage\n", CommandMeta::c_meta);
+                                               "Calibrate sensor of given stage\n", CommandMeta::c_hardware);
     _commands["setstagemodes"]	= CommandMeta (4, &Interpreter::setStageModes, "Assign modes (auto or semi-auto) to stages", "setstagemodes s1 s2 s3 s4",
                                                "Assign modes (auto or semi) to stages\n", CommandMeta::c_meta);
     _commands["log"]		= CommandMeta (2, &Interpreter::logMessage, "Save message in history", "log message",
@@ -182,6 +187,13 @@ QString Interpreter::exec (const QString& line)
     bool ok;
 
     try {
+        if (meta.kind () == CommandMeta::c_hardware) {
+            if (_filterCleaning)
+                throw QString ("Filter cleaning in progress");
+            if (isCleaningInProgress ())
+                throw QString ("Cleaning in progress");
+        }
+
 	// throw away first argument (command)
 	items.erase (items.begin ());
 
@@ -400,12 +412,20 @@ QString Interpreter::setWaterGate (const QStringList& args)
 
     switch (stage) {
     case DeviceCommand::Stg_First:
+        if (_stageCleaning[0])
+            throw QString ("Stage 1 is cleaning\n");
         return checkBoolReply (_dev->setWaterGateS1 (value));
     case DeviceCommand::Stg_Second:
+        if (_stageCleaning[1])
+            throw QString ("Stage 2 is cleaning\n");
         return checkBoolReply (_dev->setWaterGateS2 (value));
     case DeviceCommand::Stg_Third:
+        if (_stageCleaning[2])
+            throw QString ("Stage 3 is cleaning\n");
         return checkBoolReply (_dev->setWaterGateS3 (value));
     case DeviceCommand::Stg_Fourth:
+        if (_stageCleaning[3])
+            throw QString ("Stage 4 is cleaning\n");
         return checkBoolReply (_dev->setWaterGateS4 (value));
     default:
         throw QString ("unexpected stage");
@@ -450,9 +470,14 @@ QString Interpreter::setStages (const QStringList& args)
 
 QString Interpreter::startWater (const QStringList& args)
 {
+    int stage = parseStageAsInt (args[0]);
+
+    if (_stageCleaning[stage])
+        throw QString ("Stage %1 is cleaning\n").arg (stage+1);
+
     bool res = _dev->startWater (parseStage (args[0]));
 
-    _waterRunning[parseStageAsInt (args[0])] = res;
+    _waterRunning[stage] = res;
 
     return checkBoolReply (res);
 }
@@ -460,10 +485,15 @@ QString Interpreter::startWater (const QStringList& args)
 
 QString Interpreter::stopWater (const QStringList& args)
 {
+    int stage = parseStageAsInt (args[0]);
+
+    if (_stageCleaning[stage])
+        throw QString ("Stage %1 is cleaning\n").arg (stage+1);
+
     bool res = _dev->stopWater (parseStage (args[0]));
 
     if (res)
-        _waterRunning[parseStageAsInt (args[0])] = false;
+        _waterRunning[stage] = false;
 
     return checkBoolReply (res);
 }
@@ -477,13 +507,38 @@ QString Interpreter::powerGate (const QStringList& args)
 
 QString Interpreter::cleanSystem (const QStringList& args)
 {
-    return checkBoolReply (_dev->cleanSystem (parseBool (args[0]), parseBool (args[1]), parseBool (args[2]), parseBool (args[3])));
+    bool s[4];
+    int i;
+
+    for (i = 0; i < 4; i++) {
+        s[i] = parseBool (args[i]);
+        s[i] = s[i] && !_stageCleaning[i];
+    }
+
+    bool res = _dev->cleanSystem (s[0], s[1], s[2], s[3]);
+
+    if (res) {
+        _waitForCleanStart = true;
+        for (i = 0; i < 4; i++)
+            _stageCleaning[i] = s[i];
+        _stagesCleanTimer = startTimer (1000);
+    }
+
+    return checkBoolReply (res);
 }
 
 
 QString Interpreter::drainWater (const QStringList& args)
 {
-    return checkBoolReply (_dev->drainWater (parseBool (args[0]), parseBool (args[1]), parseBool (args[2]), parseBool (args[3])));
+    bool s[4];
+
+    for (int i = 0; i < 4; i++) {
+        s[i] = parseBool (args[i]);
+        if (_stageCleaning[i])
+            throw QString ("Cannot drain water in stage %1, it is cleaning at the moment\n").arg (i+1);
+    }
+
+    return checkBoolReply (_dev->drainWater (s[0], s[1], s[2], s[3]));
 }
 
 
@@ -496,7 +551,15 @@ QString Interpreter::setOutputSignal (const QStringList& args)
 
 QString Interpreter::startFilterAutomat (const QStringList& args)
 {
-    return checkBoolReply (_dev->startFilterAutomat ());
+    bool res = _dev->startFilterAutomat ();
+
+    if (res) {
+        _filterCleaning = true;
+        // start delay timer to 30 seconds
+        _filterCleanTimer = startTimer (30000);
+    }
+
+    return checkBoolReply (res);
 }
 
 
@@ -518,6 +581,9 @@ QString Interpreter::getStages (const QStringList& args)
 
 QString Interpreter::getMetaState (const QStringList& args)
 {
+    if (_filterCleaning)
+        throw QString ("Filter cleaning in progress");
+
     QString res;
     double wp = getWaterPressure ();
 
@@ -569,6 +635,9 @@ QString Interpreter::setGrainSensors (const QStringList& args)
 
 QString Interpreter::checkTick (const QStringList& args)
 {
+    if (_filterCleaning)
+        return QString ();
+
     static bool inProgress = false;
     bool valid;
 
@@ -605,6 +674,14 @@ QString Interpreter::checkTick (const QStringList& args)
             continue;
 
         res += QString (" %1:").arg (i+1);
+
+        // check cleaning of this stage
+        if (_stageCleaning[i]) {
+            res += "C=1";
+            continue;
+        }
+        else
+            res += "C=0,";
 
         // 3. check BSU power
         if (!_dev->getBSUPowered (DeviceCommand::stageByNum (i))) {
@@ -659,6 +736,9 @@ QString Interpreter::checkTick (const QStringList& args)
 
 QString Interpreter::autoModeTick (const QStringList& args)
 {
+    if (_filterCleaning)
+        return QString ();
+
     int i;
     bool flag = false;
     QString res ("Auto: ");
@@ -672,7 +752,7 @@ QString Interpreter::autoModeTick (const QStringList& args)
 
     // calculate setting for active and unpaused stages
     for (i = 0; i < 4; i++)
-        if (_stageRunning[i] && _stageOperational[i]) {
+        if (_stageRunning[i] && _stageOperational[i] && !_stageCleaning[i]) {
             // assign setting
             res += QString (" %1:").arg (i+1);
             res += QString::number (_target_sett[i]);
@@ -807,6 +887,9 @@ QString Interpreter::getStageState (int stage)
     double d_temp, d_grain_flow, d_hum_cur, d_hum, d_wf, d_gn;
     int temp;
     double pk_t, pk_nat;
+
+    if (_stageCleaning[stage])
+        return "cleaning";
 
     if (_settings[stage].sensors ()) {
         d_temp = getGrainTemperature (stage);
@@ -1012,18 +1095,17 @@ QString Interpreter::startStage (const QStringList& args)
     int stage = parseStageAsInt (args[0]);
     bool res = true;
 
-    printf ("Starting stage %1\n", stage);
+    if (_filterCleaning)
+        throw QString ("Filter cleaning in progress");  
+
+    if (_stageCleaning[stage])
+        throw QString ("Canot start stage %1, it is cleaning at the moment").arg (stage);
 
     // start water if needed
     if (!_waterRunning[stage]) {
-        printf ("Water not running, starting\n");
         res = _dev->startWater (parseStage (args[0]));
-        if (res) {
+        if (res)
             _waterRunning[stage] = true;
-            printf ("Started\n");
-        }
-        else
-            printf ("Not started\n");
     }
 
     if (res)
@@ -1037,6 +1119,12 @@ QString Interpreter::stopStage (const QStringList& args)
 {
     int stage = parseStageAsInt (args[0]);
     bool res = true;
+
+    if (_filterCleaning)
+        throw QString ("Filter cleaning in progress");  
+
+    if (_stageCleaning[stage])
+        throw QString ("Canot start stage %1, it is cleaning at the moment").arg (stage);
 
     // start water if needed
     if (_waterRunning[stage]) {
@@ -1080,4 +1168,62 @@ QString Interpreter::getEvents (const QStringList& args)
     }
 
     return "Events: " + res + "\n";
+}
+
+
+void Interpreter::timerEvent (QTimerEvent* e)
+{
+    if (e->timerId () == _filterCleanTimer) {
+        // turning off filter cleaning state
+        _filterCleaning = false;
+        killTimer (e->timerId ());
+        _filterCleanTimer = 0;
+    }
+
+    if (e->timerId () == _stagesCleanTimer) { 
+        try {
+            printf ("clean timer\n");
+            if (_waitForCleanStart) {
+                printf ("wait for clean\n");
+                // check that cleaning started, if it is, broadcast message to all connected clients
+                if (_dev->cleaningStarted ()) {
+                    _broadcaster->broadcastMessage ("Cleaning started\n");
+                    _waitForCleanStart = false;
+                    printf ("started\n");
+                }
+                else
+                    printf ("not started\n");
+            } 
+            else {
+                // trying to connect to daemon to check that cleaning finished
+                if (_dev->syncWithDevice ()) {
+                    _broadcaster->broadcastMessage ("Cleaning finished\n");
+                    killTimer (e->timerId ());
+                    for (int i = 0; i < 4; i++)
+                        _stageCleaning[i] = false;
+                }
+            }
+        }
+        catch (const QString& e) {
+            // _dev methods can throw error message
+        }
+    }
+}
+
+
+QString Interpreter::getCleanState (const QStringList&)
+{
+    QString res;
+
+    res += _filterCleaning ? "1 " : "0 ";
+    for (int i = 0; i < 4; i++)
+        res += _stageCleaning[i] ? "1 " : "0 ";
+
+    return res + "\n";
+}
+
+
+bool Interpreter::isCleaningInProgress () const
+{
+    return _filterCleaning || _stageCleaning[0] || _stageCleaning[1] || _stageCleaning[2] || _stageCleaning[3];
 }

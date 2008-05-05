@@ -67,6 +67,8 @@ void Daemon::socketReadyRead ()
 {
     QString reply, msg;
     //    QString auto_prefix ("Auto: ");
+    QString cleanStarted_prefix ("Cleaning started");
+    QString cleanFinished_prefix ("Cleaning finished");
     QString check_prefix ("Check: ");
     QString hist_prefix ("History: ");
     QString prompt_prefix ("> ");
@@ -85,6 +87,16 @@ void Daemon::socketReadyRead ()
 
     for (int i = 0; i < replies.size (); i++) {
         reply = replies[i];
+
+        if (reply.startsWith (cleanStarted_prefix)) {
+            cleanStarted ();
+            continue;
+        }
+
+        if (reply.startsWith (cleanFinished_prefix)) {
+            cleanFinished ();
+            continue;
+        }
 
         if (!reply.startsWith (check_prefix)) {
             if (!reply.startsWith (hist_prefix))
@@ -189,16 +201,25 @@ void Daemon::socketReadyRead ()
                     parseEvents (reply.trimmed ());
                     break;
                 case DaemonCommand::c_clean:
-                    if (parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Clean finished with error. Reason: '%1'").arg (msg));
+                    if (!parseGenericReply (reply, msg))
+                        Logger::instance ()->log (Logger::Error, tr ("Clean request finished with error. Reason: '%1'").arg (msg));
                     else
-                        cleanFinished ();
+                        cleanRequested ();
                     break;
                 case DaemonCommand::c_drain:
-                    if (parseGenericReply (reply, msg))
+                    if (!parseGenericReply (reply.trimmed (), msg))
                         Logger::instance ()->log (Logger::Error, tr ("Drain finished with error. Reason: '%1'").arg (msg));
                     else
                         drainFinished ();
+                    break;
+                case DaemonCommand::c_getcleanstate:
+                    parseCleanState (reply.trimmed ());
+                    break;
+                case DaemonCommand::c_startfilterautomat:
+                    if (!parseGenericReply (reply.trimmed (), msg))
+                        Logger::instance ()->log (Logger::Error, tr ("Filter clean error. Reason: '%1'").arg (msg));
+                    break;
+                default:
                     break;
                 }
             }
@@ -304,6 +325,19 @@ void Daemon::parseTempCoef (const QString& reply)
     resist = l[1].toDouble ();
 
     tempCoefGot (k, resist);
+}
+
+
+void Daemon::parseCleanState (const QString& reply)
+{
+    QStringList l = reply.split (" ", QString::SkipEmptyParts);
+
+    if (l.size () != 5) {
+        Logger::instance ()->log (Logger::Error, tr ("Cannot get clean state. Reason: '%1'").arg (reply));
+        return;
+    }
+
+    gotCleanState (l[0] == "1", l[1] == "1", l[2] == "1", l[3] == "1", l[4] == "1");
 }
 
 
@@ -667,6 +701,7 @@ void Daemon::parseHistory (const QString& reply, history_stage_t stage, history_
 void Daemon::cleanFilter ()
 {
     sendCommand ("startfilterautomat\n");
+    _queue.push_back (DaemonCommand (DaemonCommand::c_startfilterautomat));
 }
 
 
@@ -722,3 +757,8 @@ void Daemon::parseEvents (const QString& reply)
 }
 
 
+void Daemon::getCleanState ()
+{
+    sendCommand (QString ("getcleanstate\n"));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_getcleanstate));
+}

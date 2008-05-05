@@ -8,7 +8,7 @@
 #include "shell.h"
 
 
-class PlaundServer : public QTcpServer
+class PlaundServer : public QTcpServer, public Broadcaster
 {
     Q_OBJECT
 private:
@@ -30,6 +30,7 @@ protected:
 public:
     PlaundServer (int tcp_port);
     ~PlaundServer ();
+    void broadcastMessage (const QString& msg);
 };
 
 
