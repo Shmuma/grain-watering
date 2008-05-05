@@ -357,6 +357,10 @@ QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
         _cleaningWait = true;
         break;
 
+    case DeviceCommand::GetCleanResult:
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0xFF, 0).pack ();
+        break;
+
     default:
         delete _last;
         _last = NULL;

@@ -140,6 +140,7 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (grainLowUpdated (int, bool)), this, SLOT (daemonGrainLowUpdated (int, bool)));
     connect (&_daemon, SIGNAL (autoModeError (bool, bool)), this, SLOT (daemonAutoModeError (bool, bool)));
     connect (&_daemon, SIGNAL (gotCleanState (bool, bool, bool, bool, bool)), this, SLOT (daemonGotCleanState (bool, bool, bool, bool, bool)));
+    connect (&_daemon, SIGNAL (gotCleanResult (bool[4], bool[4])), this, SLOT (daemonGotCleanResult (bool[4], bool[4])));
 
     connect (checkStateButton, SIGNAL (pressed ()), this, SLOT (checkStateButtonPressed ()));
     connect (checkWaterButton, SIGNAL (pressed ()), this, SLOT (checkWaterButtonPressed ()));
@@ -208,7 +209,6 @@ MainWindow::MainWindow ()
     // cleaning
     connect (cleanFilterButton, SIGNAL (clicked ()), this, SLOT (cleanFilterButtonClicked ()));
     connect (cleanStagesButton, SIGNAL (clicked ()), this, SLOT (cleanStagesButtonClicked ()));
-    connect (&_daemon, SIGNAL (cleanFinished ()), this, SLOT (daemonCleanFinished ()));
     connect (drainWaterButton, SIGNAL (clicked ()), this, SLOT (drainWaterButtonClicked ()));
     connect (&_daemon, SIGNAL (drainFinished ()), this, SLOT (daemonDrainFinished ()));
 }
@@ -1372,7 +1372,10 @@ void MainWindow::refreshHistoryButtonClicked ()
 
     switch (stage) {
     case HS_Events:
-        _daemon.requestEvents (from.toTime_t (), to.toTime_t ());
+        _daemon.requestEvents (from.toTime_t (), to.toTime_t (), false);
+        break;
+    case HS_Cleanings:
+        _daemon.requestEvents (from.toTime_t (), to.toTime_t (), true);
         break;
     default:
         _daemon.requestHistory (stage, kind, from.toTime_t (), to.toTime_t ());
@@ -1574,6 +1577,7 @@ void MainWindow::cleanStagesButtonClicked ()
     _daemon.getCleanState ();
 }
 
+
 void MainWindow::daemonCleanRequested ()
 {
     Logger::instance ()->log (Logger::Information, tr ("Clean initiated. Wait for button."));
@@ -1588,8 +1592,9 @@ void MainWindow::daemonCleanStarted ()
 
 void MainWindow::daemonCleanFinished ()
 {
-    Logger::instance ()->log (Logger::Information, tr ("Clean finished"));
+    Logger::instance ()->log (Logger::Information, tr ("Clean finished, requesting clean result"));
     _daemon.getCleanState ();
+    _daemon.getCleanResult ();
 }
 
 
@@ -1647,8 +1652,8 @@ void MainWindow::historyItemChanged (int item)
 {
     history_stage_t stage = (history_stage_t)historyStageCombo->itemData (item).toInt ();
 
-    historyKindCombo->setEnabled (stage != HS_Events);
-    historyTabWidget->setTabEnabled (1, stage != HS_Events);
+    historyKindCombo->setEnabled (stage != HS_Events && stage != HS_Cleanings);
+    historyTabWidget->setTabEnabled (1, stage != HS_Events && stage != HS_Cleanings);
 }
 
 
@@ -1702,6 +1707,33 @@ void MainWindow::daemonGotCleanState (bool filter, bool s1, bool s2, bool s3, bo
 }
 
 
+void MainWindow::daemonGotCleanResult (bool s_w[4], bool s_r[4])
+{
+    int i;
+    QString msg;
+
+    for (i = 0; i < 4; i++)
+        if (getStageControl (i)->enabled ()) {
+            if (s_w[i])
+                msg = tr ("Stage %1 cleaning with water performed").arg (i+1);
+            else
+                msg = tr ("Stage %1 cleaning with water not performed").arg (i+1);
+            Logger::instance ()->log (Logger::Information, msg);
+            _daemon.logCleanResult (msg);
+        }
+
+    for (i = 0; i < 4; i++)
+        if (getStageControl (i)->enabled ()) {
+            if (s_r[i])
+                msg = tr ("Stage %1 cleaning from Rottenberg performed").arg (i+1);
+            else
+                msg = tr ("Stage %1 cleaning from Rottenberg not performed").arg (i+1);
+            Logger::instance ()->log (Logger::Information, msg);
+            _daemon.logCleanResult (msg);
+        }
+}
+
+
 // --------------------------------------------------
 // PlotScaleDraw
 // --------------------------------------------------
@@ -1709,3 +1741,4 @@ QwtText PlotScaleDraw::label (double v) const
 {
     return QDateTime::fromTime_t ((uint)v).toString (_show_date ? "dd.MM hh:mm" : "hh:mm:ss");
 }
+

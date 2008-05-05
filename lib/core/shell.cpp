@@ -134,8 +134,9 @@ Interpreter::Interpreter (Broadcaster* broadcaster, Device* device)
                                                "Obtain state of sensors of each stage.\n", CommandMeta::c_meta);
     _commands["gethistory"]	= CommandMeta (4, &Interpreter::getHistory, "Returns history data", "gethistory stage param from to",
                                                "Returns historical data of specified stage, parameter and time interval\n", CommandMeta::c_meta);
-    _commands["getevents"]	= CommandMeta (2, &Interpreter::getEvents, "Returns events data", "getevents from to",
-                                               "Returns events log  of specified time interval\n", CommandMeta::c_meta);
+    _commands["getevents"]	= CommandMeta (3, &Interpreter::getEvents, "Returns events data", "getevents 0|1 from to",
+                                               "Returns events log  of specified time interval. First argument, if 1 shows only clean results\n", 
+                                               CommandMeta::c_meta);
     _commands["addhistory"]	= CommandMeta (4, &Interpreter::addHistory, "Appends historical data", "addhistory stage param time val",
                                                "Adds new historical data item.\n", CommandMeta::c_meta);
     _commands["settempcoef"]	= CommandMeta (2, &Interpreter::setTempCoef, "Assigns temperature coefficients", "settempcoef k resist",
@@ -146,8 +147,10 @@ Interpreter::Interpreter (Broadcaster* broadcaster, Device* device)
                                                "Calibrate sensor of given stage\n", CommandMeta::c_hardware);
     _commands["setstagemodes"]	= CommandMeta (4, &Interpreter::setStageModes, "Assign modes (auto or semi-auto) to stages", "setstagemodes s1 s2 s3 s4",
                                                "Assign modes (auto or semi) to stages\n", CommandMeta::c_meta);
-    _commands["log"]		= CommandMeta (2, &Interpreter::logMessage, "Save message in history", "log message",
+    _commands["log"]		= CommandMeta (1, &Interpreter::logMessage, "Save message in history", "log message",
                                                "Saves message to history.\n", CommandMeta::c_meta);
+    _commands["log_clean"] 	= CommandMeta (1, &Interpreter::logCleanMessage, "Save clean message in history", "log_clean message",
+                                               "Saves clean message to history.\n", CommandMeta::c_meta);
 }
 
 
@@ -175,7 +178,7 @@ QString Interpreter::exec (const QString& line)
     CommandMeta meta = _commands[items[0]];
 
     // too many arguments for command
-    if (items[0] != "log" && meta.args () != items.size ()-1)
+    if (items[0] != "log" && items[0] != "log_clean" && meta.args () != items.size ()-1)
 	return QString ("Error: command %1 requires exactly %2 arguments\n").arg (items[0]).arg (meta.args ());
 
     // handle commands
@@ -186,8 +189,9 @@ QString Interpreter::exec (const QString& line)
     QString res;
     bool ok;
 
-    if (items[0] == "checktick" || items[0] == "automodetick")
-        return QString ();
+    if (_filterCleaning || isCleaningInProgress ())
+        if (items[0] == "checktick" || items[0] == "automodetick")
+            return QString ();
 
     try {
         if (meta.kind () == CommandMeta::c_hardware) {
@@ -1151,17 +1155,27 @@ QString Interpreter::logMessage (const QStringList& args)
 }
 
 
+QString Interpreter::logCleanMessage (const QStringList& args)
+{
+    QString res = args.join (" ");
+    _db.logCleanMessage (res);
+    return QString ();
+}
+
+
 QString Interpreter::getEvents (const QStringList& args)
 {
     int from, to;
+    bool clean;
 
-    from = args[0].toInt ();
-    to = args[1].toInt ();
+    clean = args[0].toInt () == 1;
+    from = args[1].toInt ();
+    to = args[2].toInt ();
 
     if (from == 0 || to == 0 || from > to)
         return "Invalid timestamp\n";
     
-    QList<QPair <time_t, QString> > events = _db.getEvents (from, to);
+    QList<QPair <time_t, QString> > events = _db.getEvents (clean, from, to);
     QString res;
 
     for (int i = 0; i < events.size (); i++) {
@@ -1225,3 +1239,5 @@ bool Interpreter::isCleaningInProgress () const
 {
     return _filterCleaning || _stageCleaning[0] || _stageCleaning[1] || _stageCleaning[2] || _stageCleaning[3];
 }
+
+

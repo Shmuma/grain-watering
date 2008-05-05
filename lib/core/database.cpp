@@ -41,6 +41,9 @@ Database::Database (const QString& file) throw (QString&)
     if (!tables.contains ("messages")) {
         _db.exec ("create table messages (date integer, msg text);");
     }
+    if (!tables.contains ("clean_messages")) {
+        _db.exec ("create table clean_messages (date integer, msg text);");
+    }
 }
 
 
@@ -234,12 +237,15 @@ void Database::logMessage (const QString& msg)
 }
 
 
-QList< QPair <time_t, QString> > Database::getEvents (int from, int to)
+QList< QPair <time_t, QString> > Database::getEvents (bool clean, int from, int to)
 {
     QList< QPair <time_t, QString> > res;
     QSqlQuery query (QSqlDatabase::database ());
 
-    query.prepare ("select date, msg from messages where date >= :from and date <= :to");
+    if (clean)
+        query.prepare ("select date, msg from clean_messages where date >= :from and date <= :to");
+    else
+        query.prepare ("select date, msg from messages where date >= :from and date <= :to");
     query.bindValue (":from", from);
     query.bindValue (":to", to);
     if (!query.exec ()) {
@@ -247,9 +253,19 @@ QList< QPair <time_t, QString> > Database::getEvents (int from, int to)
         return res;
     }
 
-
     while (query.next ())
-        res.push_back (QPair<time_t, QString> (query.value (0).toInt (), query.value (1).toString ()));
+        res.push_back (QPair<time_t, QString> (query.value (0).toInt (), query.value (1).toString ().replace (',', ';')));
 
     return res;
+}
+
+
+void Database::logCleanMessage (const QString& msg)
+{
+    QSqlQuery query (QSqlDatabase::database ());
+    query.prepare ("insert into clean_messages (date, msg) values (:date, :msg)");
+    query.bindValue (":date", QDateTime::currentDateTime ().toTime_t ());
+    query.bindValue (":msg", msg);
+    if (!query.exec ())
+        printf ("DB error: %s\n", QSqlDatabase::database ().lastError ().text ().toAscii ().constData ());   
 }

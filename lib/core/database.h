@@ -34,7 +34,7 @@ public:
     QList< QPair <time_t, double> > getHistory (int stage, int param, int from, int to);
     void addHistory (history_stage_t stage, history_kind_t param, int time, double val);
 
-    QList< QPair <time_t, QString> > getEvents (int from, int to);
+    QList< QPair <time_t, QString> > getEvents (bool clean, int from, int to);
 
     void setTempCoef (double k, double res);
 
@@ -42,6 +42,7 @@ public:
     double getTempResist () const;
 
     void logMessage (const QString& msg);
+    void logCleanMessage (const QString& msg);
 };
 
 

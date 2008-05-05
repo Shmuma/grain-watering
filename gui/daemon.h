@@ -38,6 +38,7 @@ public:
         c_setsensors,
         c_settempcoef,
         c_setstagemodes,
+        c_getcleanresult,
     };
     
 private:
@@ -104,6 +105,7 @@ protected:
     void parseHistory (const QString& reply, history_stage_t stage, history_kind_t kind);
     void parseEvents (const QString& reply);
     void parseCleanState (const QString& reply);
+    void parseCleanResultReply (const QString& reply);
 
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
@@ -131,6 +133,7 @@ signals:
     void grainPresenceGot (int stage, bool val);
     void settingsGot ();
     void gotCleanState (bool filter, bool s1, bool s2, bool s3, bool s4);
+    void gotCleanResult (bool s_w[4], bool s_r[4]);
 
     // check loop signals
     void stageRunningUpdated (int stage, bool runnning);
@@ -201,7 +204,7 @@ public:
 
     void setStageModes (bool s1, bool s2, bool s3, bool s4);
     void requestHistory (history_stage_t stage, history_kind_t kind, uint from, uint to);
-    void requestEvents (uint from, uint to);
+    void requestEvents (uint from, uint to, bool clean);
 
     void cleanFilter ();
     void cleanStages (bool s1, bool s2, bool s3, bool s4);
@@ -209,8 +212,11 @@ public:
     void checkTick ();
 
     void logMessage (const QString& msg);
+    void logCleanResult (const QString& msg);
     void getCleanState ();
+    void getCleanResult ();
 };
+
 
 
 #endif

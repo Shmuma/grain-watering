@@ -118,6 +118,7 @@ protected slots:
     void daemonCleanFinished ();
     void daemonDrainFinished ();
     void daemonGotCleanState (bool filter, bool s1, bool s2, bool s3, bool s4);
+    void daemonGotCleanResult (bool s_w[4], bool s_r[4]);
 
     // check page
     void checkStateButtonPressed ();

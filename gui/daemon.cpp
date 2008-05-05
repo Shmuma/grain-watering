@@ -225,6 +225,9 @@ void Daemon::socketReadyRead ()
                     break;
                 case DaemonCommand::c_setstagemodes:
                     break;
+                case DaemonCommand::c_getcleanresult:
+                    parseCleanResultReply (reply.trimmed ());
+                    break;
                 default:
                     break;
                 }
@@ -264,6 +267,36 @@ bool Daemon::parseNumberReply (const QString& reply, QString& msg, double* val)
         msg = tr ("Expected number, got '%1'").arg (reply);
 
     return ok;
+}
+
+
+void Daemon::parseCleanResultReply (const QString& reply)
+{
+    QString msg = QString (reply).remove ("ERROR:").remove ('>').trimmed ();
+
+    if (reply.startsWith ("ERROR:")) {
+        Logger::instance ()->log (Logger::Error, tr ("Cannot get clean result. Reason: '%1'").arg (msg));
+        return;
+    }
+        
+    bool ok;
+    unsigned int val;
+    QString str = QString (reply).remove (">").trimmed ();
+    val = str.toUInt (&ok);
+
+    if (!ok)
+        msg = tr ("Expected number, got '%1'").arg (reply);
+
+    bool s_w[4], s_r[4];
+    
+    for (int i = 0; i < 4; i++) {
+        s_w[i] = val & (1 << (i*2));
+        s_r[i] = val & (2 << (i*2));
+    }
+
+    gotCleanResult (s_w, s_r);
+
+    return;
 }
 
 
@@ -689,9 +722,9 @@ void Daemon::requestHistory (history_stage_t stage, history_kind_t kind, uint fr
 }
 
 
-void Daemon::requestEvents (uint from, uint to)
+void Daemon::requestEvents (uint from, uint to, bool clean)
 {
-    sendCommand (QString ().sprintf ("getevents %u %u\n", from, to), false);
+    sendCommand (QString ().sprintf ("getevents %d %u %u\n", clean ? 1 : 0, from, to), false);
     _queue.push_back (DaemonCommand (DaemonCommand::c_getevents));
 }
 
@@ -755,13 +788,25 @@ void Daemon::logMessage (const QString& msg)
 }
 
 
+void Daemon::logCleanResult (const QString& msg)
+{
+    sendCommand (QString ("log_clean ") + msg + "\n");
+}
+
+
 void Daemon::parseEvents (const QString& reply)
 {
     QStringList l = QString (reply).remove ("Events:").trimmed ().split (",", QString::SkipEmptyParts);
     QList< QPair <uint, QString> > res;
 
-    for (int i = 0; i < l.size (); i += 2)
+    if (l.size () < 2)
+        return;
+
+    for (int i = 0; i < l.size (); i += 2) {
+        if (i+1 == l.size ())
+            break;
         res.push_back (QPair<uint, QString> (l[i].toUInt (), l[i+1]));
+    }
 
     eventsGot (res);
 }
@@ -771,4 +816,11 @@ void Daemon::getCleanState ()
 {
     sendCommand (QString ("getcleanstate\n"));
     _queue.push_back (DaemonCommand (DaemonCommand::c_getcleanstate));
+}
+
+
+void Daemon::getCleanResult ()
+{
+    sendCommand (QString ("getcleanresult\n"));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_getcleanresult));
 }

@@ -136,6 +136,7 @@ private:
     QString setStageModes (const QStringList& args);
 
     QString logMessage (const QStringList& args);
+    QString logCleanMessage (const QStringList& args);
     QString getCleanState (const QStringList& args);
 
 protected:
