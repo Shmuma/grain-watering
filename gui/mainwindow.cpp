@@ -448,6 +448,7 @@ void MainWindow::daemonHardwareConnected ()
     _daemon.isGrainSensorsPresent ();
     _daemon.requestSettings ();
     _daemon.requestTempCoef ();
+    _daemon.getCleanState ();
     _daemon.checkTick ();
     Logger::instance ()->log (Logger::Information, tr ("Connection to controller established"));
 }
