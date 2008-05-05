@@ -219,6 +219,12 @@ void Daemon::socketReadyRead ()
                     if (!parseGenericReply (reply.trimmed (), msg))
                         Logger::instance ()->log (Logger::Error, tr ("Filter clean error. Reason: '%1'").arg (msg));
                     break;
+                case DaemonCommand::c_setsensors:
+                    break;
+                case DaemonCommand::c_settempcoef:
+                    break;
+                case DaemonCommand::c_setstagemodes:
+                    break;
                 default:
                     break;
                 }
@@ -609,6 +615,7 @@ void Daemon::setSettings (int stage, const StageSettings& sett)
     if (sett.valid ()) {
         _sett[stage] = sett;
         sendCommand (QString ("setsettings %1 %2\n").arg (QString::number (stage+1), sett.toString ()));
+        _queue.push_back (DaemonCommand (DaemonCommand::c_setsettings, stage));
     }
 }
 
@@ -624,6 +631,7 @@ bool Daemon::checkPass (const QString& user, const QString& pass)
 void Daemon::setSensors (bool s1, bool s2, bool s3, bool s4)
 {
     sendCommand (QString ().sprintf ("setsensors %d %d %d %d\n", s1 ? 1 : 0, s2 ? 1 : 0, s3 ? 1 : 0, s4 ? 1 : 0));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_setsensors));
 }
 
 
@@ -637,6 +645,7 @@ void Daemon::requestTempCoef ()
 void Daemon::setTempCoef (double k, double resist)
 {
     sendCommand (QString ().sprintf ("settempcoef %f %f\n", k, resist));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_settempcoef));
 }
 
 
@@ -669,6 +678,7 @@ void Daemon::setStageModes (bool s1, bool s2, bool s3, bool s4)
                                      s2 ? "auto" : "semi", 
                                      s3 ? "auto" : "semi", 
                                      s4 ? "auto" : "semi"));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_setstagemodes));
 }
 
 
@@ -721,7 +731,7 @@ void Daemon::drainWater (bool s1, bool s2, bool s3, bool s4)
 
 void Daemon::checkTick ()
 {
-    sendCommand ("checktick\n");   
+    sendCommand ("checktick\n");
 }
 
 

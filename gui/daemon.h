@@ -35,6 +35,9 @@ public:
         c_drain,
         c_getcleanstate,
         c_startfilterautomat,
+        c_setsensors,
+        c_settempcoef,
+        c_setstagemodes,
     };
     
 private:
