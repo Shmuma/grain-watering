@@ -1515,6 +1515,12 @@ void MainWindow::daemonAutoModeError (bool timeout, bool manual)
 
 void MainWindow::cleanFilterButtonClicked ()
 {
+    // check for working stages
+    if (haveActiveStages ()) {
+        Logger::instance ()->log (Logger::Warning, tr ("Filter cleaning cannot be started, because there are active stages"));
+        return;
+    }
+
     _daemon.cleanFilter ();
     Logger::instance ()->log (Logger::Information, tr ("Filter cleaning started"));
     bsuControl->setCleaning (true);
@@ -1523,8 +1529,34 @@ void MainWindow::cleanFilterButtonClicked ()
 
 void MainWindow::cleanStagesButtonClicked ()
 {
-    _daemon.cleanStages (cleanS1Check->isChecked (), cleanS2Check->isChecked (), cleanS3Check->isChecked (), cleanS4Check->isChecked ());
-    Logger::instance ()->log (Logger::Information, tr ("Clean of specified stages started"));
+    bool s[] = {
+        cleanS1Check->isChecked (),
+        cleanS2Check->isChecked (),
+        cleanS3Check->isChecked (),
+        cleanS4Check->isChecked (),
+    };
+    QString res;
+
+    for (int i = 0; i < 4; i++) {
+        if (s[i]) {
+            if (getStageControl (i)->running ()) {
+                Logger::instance ()->log (Logger::Warning, tr ("Cannot clean stage %1, because it is active").arg (i+1));
+                s[i] = false;
+            }
+            else 
+                if (getStageControl (i)->enabled ()) {
+                    if (!res.isEmpty ())
+                        res += ", ";
+                    res += tr ("stage %1").arg (i+1);
+                }
+        }
+    }
+
+    if (! (s[0] || s[1] || s[2] || s[3]))
+        return;
+
+    _daemon.cleanStages (s[0], s[1], s[2], s[3]);
+    Logger::instance ()->log (Logger::Information, tr ("Clean of %1 started").arg (res));
 }
 
 
