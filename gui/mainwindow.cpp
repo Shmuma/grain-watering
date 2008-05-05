@@ -1588,6 +1588,7 @@ void MainWindow::daemonCleanStarted ()
 void MainWindow::daemonCleanFinished ()
 {
     Logger::instance ()->log (Logger::Information, tr ("Clean finished"));
+    _daemon.getCleanState ();
 }
 
 
@@ -1684,32 +1685,19 @@ void MainWindow::daemonGotCleanState (bool filter, bool s1, bool s2, bool s3, bo
     // check for initiated cleaning
     if (filter && !_filterCleaning)
         Logger::instance ()->log (Logger::Information, tr ("Filter cleaning started"));
-    if (s1 && !_stageCleaning[0])
-        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 1 started"));
-    if (s2 && !_stageCleaning[1])
-        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 2 started"));
-    if (s3 && !_stageCleaning[2])
-        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 3 started"));
-    if (s4 && !_stageCleaning[3])
-        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 4 started"));
     
     // check for finished cleaning
     if (!filter && _filterCleaning)
         Logger::instance ()->log (Logger::Information, tr ("Filter cleaning finished"));
-    if (!s1 && _stageCleaning[0])
-        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 1 finished"));
-    if (!s2 && _stageCleaning[1])
-        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 2 finished"));
-    if (!s3 && _stageCleaning[2])
-        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 3 finished"));
-    if (!s4 && _stageCleaning[3])
-        Logger::instance ()->log (Logger::Information, tr ("Cleaning of stage 4 finished"));
         
     _filterCleaning = filter;
     _stageCleaning[0] = s1;
     _stageCleaning[1] = s2;
     _stageCleaning[2] = s3;
     _stageCleaning[3] = s4;
+
+    for (int i = 0; i < 4; i++)
+        getStageControl (i)->setCleaning (_stageCleaning[i]);
 }
 
 

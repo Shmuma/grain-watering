@@ -108,6 +108,11 @@ public:
     void setGrainState (grainstate_t state)
         { _grainState = state; update (); };
 
+    bool cleaning () const
+        { return _cleaning; };
+    void setCleaning (bool cleaning)
+        { _cleaning = cleaning; update (); };
+
 private:
     int _number;
     bool _enabled, _running;
@@ -123,6 +128,7 @@ private:
     bool _autoMode;
     bool _waterPresent;
     grainstate_t _grainState;
+    bool _cleaning;
 
     QToolButton *_start, *_stop;
     bool _inHandleState;

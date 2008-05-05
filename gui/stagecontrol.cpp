@@ -18,6 +18,7 @@ StageControl::StageControl (QWidget* parent)
     _flow = _humidity = _nature = _temp = _waterFlow = _targetHumidity = 0;
     _label = QString ();
     setEnabled (false);
+    _cleaning = false;
 
     // control buttons
     _start = new QToolButton (this);
@@ -63,10 +64,6 @@ void StageControl::paintEvent (QPaintEvent*)
     p.drawPixmap (QPoint (0, 0), _imgWithSensors);
 
 //     p.drawRect (QRect (0, 0, geometry ().width ()-1, geometry ().height ()-1));
-
-    p.setFont (QFont ("Arial", 16));
-    r = _svgWithSensors.boundsOnElement ("StageTitle").adjusted (2, 2, -2, -2);
-    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("Stage %1: %2").arg (_number+1).arg (_label));
 
     p.setFont (QFont ("Arial", 16));
     r = _svgWithSensors.boundsOnElement ("GrainHumidity").adjusted (2, 2, -2, -2);
@@ -116,6 +113,15 @@ void StageControl::paintEvent (QPaintEvent*)
     p.setFont (QFont ("Arial", 13));
     r = _svgWithSensors.boundsOnElement ("StageMode").adjusted (2, 2, -2, -2);
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, _autoMode ? tr ("Auto", "Auto mode") : tr ("S/A", "Semiauto mode"));
+
+    p.setFont (QFont ("Arial", 16));
+    r = _svgWithSensors.boundsOnElement ("StageTitle").adjusted (2, 2, -2, -2);
+    if (_cleaning) {
+        QPen pen (p.pen ());
+        pen.setColor (Qt::red);
+        p.setPen (pen);
+    }      
+    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("Stage %1: %2").arg (_number+1).arg (_cleaning ? tr ("Cleaning") : _label));
 }
 
 

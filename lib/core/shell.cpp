@@ -186,6 +186,9 @@ QString Interpreter::exec (const QString& line)
     QString res;
     bool ok;
 
+    if (items[0] == "checktick" || items[0] == "automodetick")
+        return QString ();
+
     try {
         if (meta.kind () == CommandMeta::c_hardware) {
             if (_filterCleaning)
@@ -1182,17 +1185,12 @@ void Interpreter::timerEvent (QTimerEvent* e)
 
     if (e->timerId () == _stagesCleanTimer) { 
         try {
-            printf ("clean timer\n");
             if (_waitForCleanStart) {
-                printf ("wait for clean\n");
                 // check that cleaning started, if it is, broadcast message to all connected clients
                 if (_dev->cleaningStarted ()) {
                     _broadcaster->broadcastMessage ("Cleaning started\n");
                     _waitForCleanStart = false;
-                    printf ("started\n");
                 }
-                else
-                    printf ("not started\n");
             } 
             else {
                 // trying to connect to daemon to check that cleaning finished
