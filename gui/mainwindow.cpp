@@ -139,7 +139,7 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (bsuPoweredUpdated (int, bool)), this, SLOT (daemonBsuPoweredUpdated (int, bool)));
     connect (&_daemon, SIGNAL (waterPresentUpdated (int, bool)), this, SLOT (daemonWaterPresentUpdated (int, bool)));
     connect (&_daemon, SIGNAL (grainLowUpdated (int, bool)), this, SLOT (daemonGrainLowUpdated (int, bool)));
-    connect (&_daemon, SIGNAL (autoModeError (bool, bool)), this, SLOT (daemonAutoModeError (bool, bool)));
+    connect (&_daemon, SIGNAL (autoModeError (error_kind_t, const QString& )), this, SLOT (daemonAutoModeError (error_kind_t, const QString& )));
     connect (&_daemon, SIGNAL (gotCleanState (bool, bool, bool, bool, bool)), this, SLOT (daemonGotCleanState (bool, bool, bool, bool, bool)));
     connect (&_daemon, SIGNAL (gotCleanResult (bool[4], bool[4])), this, SLOT (daemonGotCleanResult (bool[4], bool[4])));
     connect (&_daemon, SIGNAL (minPressureGot (double)), this, SLOT (daemonMinPressureGot (double)));
@@ -1537,13 +1537,22 @@ void MainWindow::daemonGrainLowUpdated (int stage, bool on)
 }
 
 
-void MainWindow::daemonAutoModeError (bool timeout, bool manual)
+void MainWindow::daemonAutoModeError (error_kind_t error, const QString& msg)
 {
-    if (timeout)
+    switch (error) {
+    case Err_NoAnswer:
         Logger::instance ()->log (Logger::Warning, tr ("Cannot communicate with controller"));
-    if (manual)
+        break;
+    case Err_NotConnected:
+        Logger::instance ()->log (Logger::Warning, tr ("Daemon not connected with controller"));
+        break;
+    case Err_ManualMode:
         Logger::instance ()->log (Logger::Warning, tr ("System in manual mode"));
-
+        break;
+    case Err_WaterPress:
+        Logger::instance ()->log (Logger::Error, tr ("Water pressure is below it's minimum. All stages are stopped."));
+        break;
+    }
 }
 
 

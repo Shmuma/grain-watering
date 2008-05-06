@@ -148,6 +148,8 @@ private:
 protected:
     void timerEvent (QTimerEvent*);
 
+    void stopAllStages ();
+
 public:
     Interpreter (Broadcaster* broadcaster, Device* device);
 

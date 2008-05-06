@@ -156,7 +156,7 @@ signals:
     void bsuPoweredUpdated (int stage, bool on);
     void waterPresentUpdated (int stage, bool on);
     void grainLowUpdated (int stage, bool on);
-    void autoModeError (bool timeout, bool manual);
+    void autoModeError (error_kind_t err, const QString& msg);
 
     void historyGot (const QList< QPair <uint, double> >& res, history_stage_t stage, history_kind_t kind);
     void eventsGot (const QList< QPair <uint, QString> >& res);

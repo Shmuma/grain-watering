@@ -547,38 +547,41 @@ void Daemon::isGrainPresent (int stage)
 void Daemon::handleCheckTick (const QString& msg)
 {
     // parse values
-    QStringList stages = msg.split (" ", QString::SkipEmptyParts);
-    double val;
-    bool ok;
+    QStringList results = msg.split (": ", QString::SkipEmptyParts);
 
     autoTextArrived (msg);
 
-    if (msg.startsWith ("Check: no answer")) {
-        autoModeError (true, false);
+    // it's invalid check value
+    if (results.size () < 3)
         return;
+
+    QString res = results[1];
+
+    // critical event - show large banner
+    if (res.startsWith ("CRIT")) {
+        autoModeError ((error_kind_t)res.remove ("CRIT").toInt (), QString ());
     }
 
-    if (msg.startsWith ("Check: manual mode")) {
-        autoModeError (false, true);
-        return;
-    }
+    QStringList stages = results[2].split (" ", QString::SkipEmptyParts);
+    double val;
+    bool ok;
 
     if (stages.count () < 2)
         return;
     
-    if (!stages[1].startsWith ("WP="))
+    if (!stages[0].startsWith ("WP="))
         return;
 
     _lastCheck = QDateTime::currentDateTime ();
 
-    val = stages[1].remove ("WP=").toDouble (&ok);
+    val = stages[0].remove ("WP=").toDouble (&ok);
 
     if (!ok)
         return;
 
     waterPressureUpdated (val);
     
-    for (int i = 2; i < stages.count (); i++) {
+    for (int i = 1; i < stages.count (); i++) {
         QString val_str;
         QStringList lst = stages[i].split (":", QString::SkipEmptyParts), l;
         int stage;

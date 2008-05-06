@@ -114,7 +114,7 @@ protected slots:
     void daemonBsuPoweredUpdated (int stage, bool on);
     void daemonWaterPresentUpdated (int stage, bool on);
     void daemonGrainLowUpdated (int stage, bool on);
-    void daemonAutoModeError (bool timeout, bool manual);
+    void daemonAutoModeError (error_kind_t error, const QString& msg);
     void daemonCleanRequested ();
     void daemonCleanStarted ();
     void daemonCleanFinished ();

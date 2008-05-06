@@ -23,4 +23,11 @@ enum history_kind_t {
 };
 
 
+enum error_kind_t {
+    Err_NoAnswer,
+    Err_NotConnected,
+    Err_ManualMode,
+    Err_WaterPress,
+};
+
 #endif

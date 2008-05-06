@@ -2,6 +2,7 @@
 #include "shell.h"
 #include "database.h"
 #include "settings.h"
+#include "history.h"
 
 #include <unistd.h>
 #include <math.h>
@@ -659,32 +660,40 @@ QString Interpreter::checkTick (const QStringList& args)
 
     static bool inProgress = false;
     bool valid;
+    QString res ("Check: ");
 
     if (inProgress)
-        return QString ("Check: busy\n");
+        return QString ().sprintf ("Check: %1 %2").arg ("WARN").arg ("busy");
 
     if (!_dev->isConnected ())
-        return QString ("Check: not connected\n");
+        return QString ().sprintf ("Check: %1 %2").arg ("CRIT").arg (Err_NotConnected);
 
     // perform additional checks
     // 1. trying to sync with device
     if (!_dev->syncWithDevice ())
-        return QString ("Check: no answer\n");
+        return QString ().sprintf ("Check: %1 %2").arg ("CRIT").arg (Err_NoAnswer);
 
     // 2. check operation mode
     _dev->updateState ();
     if (_dev->isManualMode ())
-        return QString ("Check: manual mode\n");
+        return QString ().sprintf ("Check: %1 %2").arg ("CRIT").arg (Err_ManualMode);
     
     inProgress = true;
 
     // get water pressure
-    QString res;
     double wp = getWaterPressure ();
     
     appendHistory (HS_Stage1, HK_WaterPress, wp);
 
-    res = "Check: WP=" + QString::number (wp);
+    if (wp < _db.getMinPressure ()) {
+        // critical -- minimum water pressure. Turn off stages
+        stopAllStages ();
+        res += QString ().sprintf ("%1 %2: ").arg ("CRIT").arg (Err_WaterPress);
+    }
+    else
+        res += "OK: ";
+
+    res += "WP=" + QString::number (wp);
 
     for (int i = 0; i < 4; i++) {
         _stageOperational[i] = false;
@@ -1145,7 +1154,7 @@ QString Interpreter::stopStage (const QStringList& args)
     if (_stageCleaning[stage])
         throw tr ("Canot start stage %1, it is cleaning at the moment").arg (stage);
 
-    // start water if needed
+    // stop water if needed
     if (_waterRunning[stage]) {
         res = _dev->stopWater (parseStage (args[0]));
         if (res)
@@ -1292,4 +1301,12 @@ QString Interpreter::setMinPressure (const QStringList& args)
 QString Interpreter::getMinPressure (const QStringList&)
 {
     return QString::number (_db.getMinPressure ()) + "\n";
+}
+
+
+void Interpreter::stopAllStages ()
+{
+    for (int i = 0; i < 4; i++) 
+        if (_stageRunning[i])
+            stopStage (QStringList (QString::number (i+1)));
 }
