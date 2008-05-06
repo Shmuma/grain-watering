@@ -39,6 +39,7 @@ public:
         c_settempcoef,
         c_setstagemodes,
         c_getcleanresult,
+        c_settargetwaterflow,
     };
     
 private:
@@ -215,6 +216,7 @@ public:
     void logCleanResult (const QString& msg);
     void getCleanState ();
     void getCleanResult ();
+    void setTargetWaterFlow (int stage, double val);
 };
 
 

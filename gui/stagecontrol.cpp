@@ -15,7 +15,7 @@ StageControl::StageControl (QWidget* parent)
     _number = 0;
     _grainState = GS_GrainMissing;
     _waterPresent = false;
-    _flow = _humidity = _nature = _temp = _waterFlow = _targetHumidity = 0;
+    _targetWaterFlow = _flow = _humidity = _nature = _temp = _waterFlow = _targetHumidity = 0;
     _label = QString ();
     setEnabled (false);
     _cleaning = false;
@@ -39,6 +39,7 @@ StageControl::StageControl (QWidget* parent)
 
     setRunning (false);
 
+    // humidity buttons
     _humidityUp = new QToolButton (this);
     _humidityDown = new QToolButton (this);
     _humidityUp->setText ("+");
@@ -49,6 +50,25 @@ StageControl::StageControl (QWidget* parent)
 
     connect (_humidityUp, SIGNAL (clicked ()), this, SLOT (humidityUpClicked ()));
     connect (_humidityDown, SIGNAL (clicked ()), this, SLOT (humidityDownClicked ()));
+
+    // water flow buttons
+    _waterUp = new QToolButton (this);
+    _waterDown = new QToolButton (this);
+    _waterUp->setText ("+");
+    _waterDown->setText ("-");
+    r = _svgWithSensors.boundsOnElement ("FlowSpin").toRect ();
+    _waterUp->setGeometry (r.adjusted (0, 0, 0, -r.height () / 2));
+    _waterDown->setGeometry (r.adjusted (0, r.height () / 2, 0, 0));
+
+    connect (_waterUp, SIGNAL (clicked ()), this, SLOT (waterUpClicked ()));
+    connect (_waterDown, SIGNAL (clicked ()), this, SLOT (waterDownClicked ()));
+
+    // water flow editor
+    _humidityEdit = new QLineEdit (this);
+    r = _svgWithSensors.boundsOnElement ("WaterFlow").toRect ();
+    _humidityEdit->setGeometry (r);
+
+    connect (_humidityEdit, SIGNAL (returnPressed ()), this, SLOT (humidityEditorReturnPressed ()));
 }
 
 
@@ -63,23 +83,25 @@ void StageControl::paintEvent (QPaintEvent*)
     // draw underlying pixmap
     p.drawPixmap (QPoint (0, 0), _imgWithSensors);
 
-//     p.drawRect (QRect (0, 0, geometry ().width ()-1, geometry ().height ()-1));
+    //     p.drawRect (QRect (0, 0, geometry ().width ()-1, geometry ().height ()-1));
 
-    p.setFont (QFont ("Arial", 16));
-    r = _svgWithSensors.boundsOnElement ("GrainHumidity").adjusted (2, 2, -2, -2);
-    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.2f", _humidity)));
+    if (_autoMode) {
+        p.setFont (QFont ("Arial", 16));
+        r = _svgWithSensors.boundsOnElement ("GrainHumidity").adjusted (2, 2, -2, -2);
+        p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.2f", _humidity)));
 
-    p.setFont (QFont ("Arial", 15));
-    r = _svgWithSensors.boundsOnElement ("GrainTemperature").adjusted (2, 2, -2, -2);
-    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 C").arg (QString ().sprintf ("%.0f", _temp)));
+        p.setFont (QFont ("Arial", 15));
+        r = _svgWithSensors.boundsOnElement ("GrainTemperature").adjusted (2, 2, -2, -2);
+        p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 C").arg (QString ().sprintf ("%.0f", _temp)));
 
-    p.setFont (QFont ("Arial", 15));
-    r = _svgWithSensors.boundsOnElement ("GrainNature").adjusted (2, 2, -2, -2);
-    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 g/l").arg (QString ().sprintf ("%.2f", _nature)));
+        p.setFont (QFont ("Arial", 15));
+        r = _svgWithSensors.boundsOnElement ("GrainNature").adjusted (2, 2, -2, -2);
+        p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 g/l").arg (QString ().sprintf ("%.2f", _nature)));
     
-    p.setFont (QFont ("Arial", 16));
-    r = _svgWithSensors.boundsOnElement ("GrainFlow").adjusted (2, 2, -2, -2);
-    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 t/h").arg (QString ().sprintf ("%.2f", _flow)));
+        p.setFont (QFont ("Arial", 16));
+        r = _svgWithSensors.boundsOnElement ("GrainFlow").adjusted (2, 2, -2, -2);
+        p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 t/h").arg (QString ().sprintf ("%.2f", _flow)));
+    }
 
     p.setFont (QFont ("Verdana", 9));
     r = _svgWithSensors.boundsOnElement ("WaterFlow").adjusted (2, 2, -2, -2);
@@ -174,4 +196,62 @@ void StageControl::humidityDownClicked ()
         _targetHumidity = 0;
     targetHumidityUpdated (_number, _targetHumidity);
     update ();
+}
+
+
+void StageControl::waterUpClicked ()
+{
+    double val = _targetWaterFlow + 0.05;
+    targetWaterFlowUpdated (_number, val);
+}
+
+
+void StageControl::waterDownClicked ()
+{
+    double val = _targetWaterFlow - 0.05;
+    if (val > 0)
+        targetWaterFlowUpdated (_number, val);   
+}
+
+
+void StageControl::humidityEditorReturnPressed ()
+{
+    bool ok;
+    double val;
+
+    val = _humidityEdit->text ().toDouble (&ok);
+
+    if (!ok || val < 0) {
+        QMessageBox::warning (this, tr ("Invalid water flow value"), tr ("You've entered nvalid water flow value."));
+        return;
+    }
+
+    targetWaterFlowUpdated (_number, val);
+}
+
+
+void StageControl::setTargetWaterFlow (double val)
+{
+    _targetWaterFlow = val;
+    update ();
+
+    if (!_autoMode)
+        _humidityEdit->setText (QString::number (val, 'g', 2));
+}
+
+
+void StageControl::setAutoMode (bool mode)
+{
+    _autoMode = mode; update ();
+
+    if (_autoMode) {
+        _humidityEdit->hide ();
+        _waterUp->hide ();
+        _waterDown->hide ();
+    }
+    else {
+        _humidityEdit->show ();
+        _waterUp->show ();
+        _waterDown->show ();
+    }
 }

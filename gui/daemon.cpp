@@ -228,6 +228,11 @@ void Daemon::socketReadyRead ()
                 case DaemonCommand::c_getcleanresult:
                     parseCleanResultReply (reply.trimmed ());
                     break;
+                case DaemonCommand::c_settargetwaterflow:
+                    if (!parseGenericReply (reply.trimmed (), msg))
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot assign target water flow on stage %1. Reason: '%2'")
+                                                  .arg (cmd.stage ()+1).arg (msg));                    
+                    break;
                 default:
                     break;
                 }
@@ -824,3 +829,11 @@ void Daemon::getCleanResult ()
     sendCommand (QString ("getcleanresult\n"));
     _queue.push_back (DaemonCommand (DaemonCommand::c_getcleanresult));
 }
+
+
+void Daemon::setTargetWaterFlow (int stage, double val)
+{
+    sendCommand (QString ("settgtflow %1 %2\n").arg (stage).arg (val));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_settargetwaterflow, stage));
+}
+

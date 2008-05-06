@@ -139,6 +139,9 @@ private:
     QString logCleanMessage (const QStringList& args);
     QString getCleanState (const QStringList& args);
 
+    QString setTargetFlow (const QStringList& args);
+    QString getTargetFlow (const QStringList& args);
+
 protected:
     void timerEvent (QTimerEvent*);
 

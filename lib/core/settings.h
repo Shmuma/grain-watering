@@ -13,6 +13,7 @@ private:
     bool _valid;
     QString _bsu_label;
     bool _auto_mode;
+    double _target_flow;
 
     QMap<int, double> _humidityTable;
     QMap<int, double> _grainFlowTable;
@@ -148,6 +149,11 @@ public:
         { _auto_mode = mode; };
     bool autoMode () const
         { return _auto_mode; };
+
+    void setTargetFlow (double val)
+        { _target_flow = _auto_mode ? 0.0 : val; };
+    double targetFlow () const
+        { return _target_flow; };
 };
 
 

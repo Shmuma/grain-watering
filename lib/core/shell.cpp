@@ -151,6 +151,10 @@ Interpreter::Interpreter (Broadcaster* broadcaster, Device* device)
                                                "Saves message to history.\n", CommandMeta::c_meta);
     _commands["log_clean"] 	= CommandMeta (1, &Interpreter::logCleanMessage, "Save clean message in history", "log_clean message",
                                                "Saves clean message to history.\n", CommandMeta::c_meta);
+    _commands["gettgtflow"] 	= CommandMeta (0, &Interpreter::getTargetFlow, "Get current target water flows for stages", "gettgtflow",
+                                               "Get current target water flows for stages.\n", CommandMeta::c_meta);
+    _commands["settgtflow"] 	= CommandMeta (2, &Interpreter::setTargetFlow, "Assigns target water flow stage", "gettgtflow stage flow",
+                                               "Assigns target water flow stage.\n", CommandMeta::c_meta);
 }
 
 
@@ -748,7 +752,6 @@ QString Interpreter::autoModeTick (const QStringList& args)
 
     int i;
     bool flag = false;
-    QString res ("Auto: ");
 
     for (i = 0; i < 4; i++)
         if (flag = _stageRunning[i])
@@ -761,9 +764,6 @@ QString Interpreter::autoModeTick (const QStringList& args)
     for (i = 0; i < 4; i++)
         if (_stageRunning[i] && _stageOperational[i] && !_stageCleaning[i]) {
             // assign setting
-            res += QString (" %1:").arg (i+1);
-            res += QString::number (_target_sett[i]);
-
             switch (i) {
             case 0:
                 _dev->setWaterGateS1 (_target_sett[i]);
@@ -780,7 +780,7 @@ QString Interpreter::autoModeTick (const QStringList& args)
             }
         }
 
-    return res + "\n";
+    return QString ();
 }
 
 
@@ -899,44 +899,48 @@ QString Interpreter::getStageState (int stage)
         return "cleaning";
 
     if (_settings[stage].sensors ()) {
-        d_temp = getGrainTemperature (stage);
-        d_grain_flow = getGrainFlow (stage);
-        d_hum = getGrainHumidity (stage);
-        temp = round (d_temp);
-        d_wf = getWaterFlow (stage);
-        d_gn = getGrainNature (stage);
+        if (_settings[stage].autoMode ()) {
+            d_temp = getGrainTemperature (stage);
+            d_grain_flow = getGrainFlow (stage);
+            d_hum = getGrainHumidity (stage);
+            temp = round (d_temp);
+            d_wf = getWaterFlow (stage);
+            d_gn = getGrainNature (stage);
 
-        appendHistory ((history_stage_t)stage, HK_GrainFlow, d_grain_flow);
-        appendHistory ((history_stage_t)stage, HK_GrainTemp, d_temp);
-        appendHistory ((history_stage_t)stage, HK_GrainNature, d_gn);
-        appendHistory ((history_stage_t)stage, HK_WaterFlow, d_wf);
+            appendHistory ((history_stage_t)stage, HK_GrainFlow, d_grain_flow);
+            appendHistory ((history_stage_t)stage, HK_GrainTemp, d_temp);
+            appendHistory ((history_stage_t)stage, HK_GrainNature, d_gn);
+            appendHistory ((history_stage_t)stage, HK_WaterFlow, d_wf);
 
-        res += "R="  + QString::number (_stageRunning[stage] ? 1 : 0) + ",";
-        res += "WF=" + QString::number (d_wf) + ",";
-        res += "GF=" + QString::number (d_grain_flow) + ",";
-        //        res += "GH=" + QString::number (d_hum) + ",";
-        res += "GT=" + QString::number (d_temp) + ",";
-        res += "GN=" + QString::number (d_gn) + ",";
+            res += "R="  + QString::number (_stageRunning[stage] ? 1 : 0) + ",";
+            res += "WF=" + QString::number (d_wf) + ",";
+            res += "GF=" + QString::number (d_grain_flow) + ",";
+            //        res += "GH=" + QString::number (d_hum) + ",";
+            res += "GT=" + QString::number (d_temp) + ",";
+            res += "GN=" + QString::number (d_gn) + ",";
 
-        pk_t = _settings[stage].grainTempTable ()[temp];
-        pk_nat = _settings[stage].grainNatureCoeffTable ()[(int)d_gn];
+            pk_t = _settings[stage].grainTempTable ()[temp];
+            pk_nat = _settings[stage].grainNatureCoeffTable ()[(int)d_gn];
     
-        d_hum_cur = d_hum + pk_t + pk_nat;
-        appendHistory ((history_stage_t)stage, HK_GrainHumidity, d_hum_cur);
+            d_hum_cur = d_hum + pk_t + pk_nat;
+            appendHistory ((history_stage_t)stage, HK_GrainHumidity, d_hum_cur);
 
-        res += "GH=" + QString::number (d_hum_cur) + ",";
+            res += "GH=" + QString::number (d_hum_cur) + ",";
 
-        // calculate target water flow
-        switch (_settings[stage].waterFormula ()) {
-        case 0:
-            _last_tgt_water_flow[stage] = d_grain_flow * (_settings[stage].targetHumidity () - d_hum_cur) / (100 - _settings[stage].targetHumidity ());
-            break;
-        case 1:
-            _last_tgt_water_flow[stage] = d_grain_flow * (_settings[stage].targetHumidity () - d_hum_cur) / 100;
-            break;
-        default:
-            _last_tgt_water_flow[stage] = 0.0;
+            // calculate target water flow
+            switch (_settings[stage].waterFormula ()) {
+            case 0:
+                _last_tgt_water_flow[stage] = d_grain_flow * (_settings[stage].targetHumidity () - d_hum_cur) / (100 - _settings[stage].targetHumidity ());
+                break;
+            case 1:
+                _last_tgt_water_flow[stage] = d_grain_flow * (_settings[stage].targetHumidity () - d_hum_cur) / 100;
+                break;
+            default:
+                _last_tgt_water_flow[stage] = 0.0;
+            }
         }
+        else
+            _last_tgt_water_flow[stage] = _settings[stage].targetFlow ();
 
         res += "TF=" + QString::number (_last_tgt_water_flow[stage]) + ",";
 
@@ -1240,4 +1244,32 @@ bool Interpreter::isCleaningInProgress () const
     return _filterCleaning || _stageCleaning[0] || _stageCleaning[1] || _stageCleaning[2] || _stageCleaning[3];
 }
 
+
+QString Interpreter::setTargetFlow (const QStringList& args)
+{
+    int stage = args[0].toInt ();
+    double val = args[1].toDouble ();
+
+    if (_settings[stage].autoMode ())
+        throw QString ("Stage in auto mode");
+
+    _settings[stage].setTargetFlow (val);
+    _db.setStageSettings (stage, _settings[stage].toString ());
+    return QString ("OK\n");
+}
+
+
+QString Interpreter::getTargetFlow (const QStringList& args)
+{
+    QString res;
+
+    for (int i = 0; i < 4; i++) {
+        if (_settings[i].autoMode ())
+            res += "auto ";
+        else
+            res += QString::number (_settings[i].targetFlow ());
+    }
+
+    return res + "\n";
+}
 

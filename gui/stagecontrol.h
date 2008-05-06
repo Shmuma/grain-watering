@@ -26,10 +26,15 @@ protected slots:
     void humidityUpClicked ();
     void humidityDownClicked ();
 
+    void waterUpClicked ();
+    void waterDownClicked ();
+    void humidityEditorReturnPressed ();
+
 signals:
     void startPressed (int stage);
     void stopPressed (int stage);
     void targetHumidityUpdated (int stage, double value);
+    void targetWaterFlowUpdated (int stage, double value);
 
 public:
     StageControl (QWidget* parent);
@@ -95,8 +100,7 @@ public:
 
     bool autoMode () const
         { return _autoMode; };
-    void setAutoMode (bool mode)
-        { _autoMode = mode; update (); };
+    void setAutoMode (bool mode);
 
     bool waterPresent () const 
         { return _waterPresent; };
@@ -112,6 +116,10 @@ public:
         { return _cleaning; };
     void setCleaning (bool cleaning)
         { _cleaning = cleaning; update (); };
+
+    double targetWaterFlow () const
+        { return _targetWaterFlow; };
+    void setTargetWaterFlow (double val);
 
 private:
     int _number;
@@ -129,11 +137,13 @@ private:
     bool _waterPresent;
     grainstate_t _grainState;
     bool _cleaning;
+    double _targetWaterFlow;
 
     QToolButton *_start, *_stop;
     bool _inHandleState;
     QToolButton *_humidityUp, *_humidityDown;
     QToolButton *_waterUp, *_waterDown;
+    QLineEdit* _humidityEdit;
 
     // pixmaps
     QPixmap _imgWithSensors;

@@ -53,6 +53,7 @@ MainWindow::MainWindow ()
         connect (getStageControl (i), SIGNAL (startPressed (int)), this, SLOT (startButtonClicked (int)));
         connect (getStageControl (i), SIGNAL (stopPressed (int)), this, SLOT (stopButtonClicked (int)));
         connect (getStageControl (i), SIGNAL (targetHumidityUpdated (int, double)), this, SLOT (stageTargetHumidityUpdated (int, double)));
+        connect (getStageControl (i), SIGNAL (targetWaterFlowUpdated (int, double)), this, SLOT (stageTargetWaterFlowUpdated (int, double)));
         _stageCleaning[i] = false;
     }
 
@@ -874,8 +875,9 @@ void MainWindow::daemonCalculatedHumidityUpdated (int stage, double val)
 }
 
 
-void MainWindow::daemonTargetFlowUpdated (int, double)
+void MainWindow::daemonTargetFlowUpdated (int stage, double val)
 {
+    getStageControl (stage)->setTargetWaterFlow (val);
 }
 
 
@@ -1370,6 +1372,8 @@ void MainWindow::refreshHistoryButtonClicked ()
     if (sd)
         sd->setShowDate (need_date);
 
+    historyTable->clear ();
+
     switch (stage) {
     case HS_Events:
         _daemon.requestEvents (from.toTime_t (), to.toTime_t (), false);
@@ -1731,6 +1735,12 @@ void MainWindow::daemonGotCleanResult (bool s_w[4], bool s_r[4])
             Logger::instance ()->log (Logger::Information, msg);
             _daemon.logCleanResult (msg);
         }
+}
+
+
+void MainWindow::stageTargetWaterFlowUpdated (int stage, double value)
+{
+    _daemon.setTargetWaterFlow (stage, value);
 }
 
 
