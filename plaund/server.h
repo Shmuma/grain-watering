@@ -19,6 +19,7 @@ private:
     bool _autoMode;
     QList<QTcpSocket*> _socks;
     int _autoTimer, _checkTimer;
+    QString _buffer;
 
 protected slots:
     void newConnection ();

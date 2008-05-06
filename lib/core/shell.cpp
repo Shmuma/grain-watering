@@ -741,7 +741,7 @@ QString Interpreter::checkTick (const QStringList& args)
 
     inProgress = false;
 
-    return res + "\n";
+    return res + "\n> \n";
 }
 
 

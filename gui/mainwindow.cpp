@@ -446,9 +446,9 @@ void MainWindow::daemonHardwareConnected ()
     _daemon.getStages ();
 
     // grain sensors presense
+    _daemon.requestTempCoef ();
     _daemon.isGrainSensorsPresent ();
     _daemon.requestSettings ();
-    _daemon.requestTempCoef ();
     _daemon.getCleanState ();
     _daemon.checkTick ();
     Logger::instance ()->log (Logger::Information, tr ("Connection to controller established"));
@@ -1129,6 +1129,7 @@ void MainWindow::settingsGrainNatureCoeffTableClicked ()
 
 bool MainWindow::haveAccess (access_level_t level)
 {
+    return true;
     if (level <= _access)
         return true;
 
@@ -1685,7 +1686,7 @@ void MainWindow::daemonGotCleanState (bool filter, bool s1, bool s2, bool s3, bo
 
     if (filter || s1 || s2 || s3 || s4 ) {
         if (!_cleaningWatchdogTimer)
-            _cleaningWatchdogTimer = startTimer (1000);
+            _cleaningWatchdogTimer = startTimer (5000);
     }
     else {
         if (_cleaningWatchdogTimer)

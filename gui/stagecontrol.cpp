@@ -69,6 +69,10 @@ StageControl::StageControl (QWidget* parent)
     _humidityEdit->setGeometry (r);
 
     connect (_humidityEdit, SIGNAL (returnPressed ()), this, SLOT (humidityEditorReturnPressed ()));
+
+    QFont f = _humidityEdit->font ();
+    f.setPointSize (f.pointSize ()-2);
+    _humidityEdit->setFont (f);
 }
 
 
@@ -201,6 +205,8 @@ void StageControl::humidityDownClicked ()
 
 void StageControl::waterUpClicked ()
 {
+    printf ("%f\n", _targetWaterFlow);
+
     double val = _targetWaterFlow + 0.05;
     targetWaterFlowUpdated (_number, val);
 }
@@ -208,6 +214,7 @@ void StageControl::waterUpClicked ()
 
 void StageControl::waterDownClicked ()
 {
+    printf ("%f\n", _targetWaterFlow);
     double val = _targetWaterFlow - 0.05;
     if (val > 0)
         targetWaterFlowUpdated (_number, val);   

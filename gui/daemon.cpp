@@ -74,6 +74,7 @@ void Daemon::socketReadyRead ()
     QString prompt_prefix ("> ");
     QStringList replies;
     bool s1, s2, s3, s4;
+    int rev;
 
     reply = _data_buf + QString::fromUtf8 (_sock->readAll ());
 
@@ -82,11 +83,20 @@ void Daemon::socketReadyRead ()
         return;
     }
 
+    rev = reply.lastIndexOf (prompt_prefix);
+
+    if (rev+prompt_prefix.size () < reply.size ()) {
+        _data_buf = reply.right (reply.size () - rev - prompt_prefix.size ());
+        reply.truncate (rev);
+    }
+
     // split read data using prompt as separator
     replies = reply.split (prompt_prefix, QString::SkipEmptyParts);
 
     for (int i = 0; i < replies.size (); i++) {
         reply = replies[i];
+
+        //        printf ("%s\n", reply.toAscii ().constData ());
 
         if (reply.startsWith (cleanStarted_prefix)) {
             cleanStarted ();

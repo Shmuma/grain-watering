@@ -32,6 +32,8 @@ PlaundServer::PlaundServer (int tcp_port)
 
     _autoTimer = startTimer (5000);
     _checkTimer = startTimer (10000);
+
+    _buffer = QString ();
 }
 
 
@@ -65,15 +67,33 @@ void PlaundServer::handleCommand ()
     if (!sock)
         return;
 
-    while (sock->canReadLine ()) {
-        QString l = QString::fromUtf8 (sock->readLine ()).trimmed ().toLower ();
+    QString buf = _buffer + QString::fromUtf8 (sock->readAll ());
+    int rev;
 
-        if (l == "halt") {
+    if (!buf.contains ("\n")) {
+        _buffer = buf;
+        return;
+    }
+
+    rev = buf.lastIndexOf ("\n");
+
+    if (rev+1 < buf.size ()) {
+        _buffer = buf.right (buf.size () - rev - 1);
+        buf.truncate (rev);
+    }
+
+    QStringList l = buf.split("\n", QString::SkipEmptyParts);
+    QString cmd;
+
+    for (int i = 0; i < l.size (); i++) {
+        cmd = l[i].trimmed ().toLower ();
+
+        if (cmd == "halt") {
             QCoreApplication::quit ();
             return;
         }
 
-        QString r = _interp->exec (l);
+        QString r = _interp->exec (cmd);
         sock->write (r.toUtf8 ());
         sock->write ("> ");
         sock->flush ();
