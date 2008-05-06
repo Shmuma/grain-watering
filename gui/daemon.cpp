@@ -739,8 +739,11 @@ void Daemon::parseHistory (const QString& reply, history_stage_t stage, history_
     QStringList l = QString (reply).remove ("History:").trimmed ().split (",", QString::SkipEmptyParts);
     QList< QPair <uint, double> > res;
 
-    for (int i = 0; i < l.size (); i += 2)
+    for (int i = 0; i < l.size (); i += 2) {
+        if (i+1 == l.size ())
+            break;
         res.push_back (QPair<uint, double> (l[i].toUInt (), l[i+1].toDouble ()));
+    }
 
     historyGot (res, stage, kind);
 }
