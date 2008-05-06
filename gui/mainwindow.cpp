@@ -364,20 +364,20 @@ void MainWindow::cleanButtonToggled (bool on)
 void MainWindow::loggerMessage (Logger::severity_t severity, const QString& msg)
 {
     QListWidgetItem* item = new QListWidgetItem (QDateTime::currentDateTime ().toString ("hh:mm:ss ") + msg);
-    QBrush br = item->foreground ();
+    QBrush br;
 
     switch (severity) {
     case Logger::Debug:
-        br.setColor (Qt::gray);
+        br = QBrush (Qt::gray);
         break;
     case Logger::Information:
-        br.setColor (Qt::black);
+        br = QBrush (Qt::black);
         break;
     case Logger::Warning:
-        br.setColor (Qt::blue);
+        br = QBrush (Qt::blue);
         break;
     case Logger::Error:
-        br.setColor (Qt::red);
+        br = QBrush (Qt::red);
         break;
     }
 

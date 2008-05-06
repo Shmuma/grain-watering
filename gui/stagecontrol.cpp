@@ -65,14 +65,15 @@ StageControl::StageControl (QWidget* parent)
 
     // water flow editor
     _humidityEdit = new QLineEdit (this);
+//     QFont f = _humidityEdit->font ();
+//     f.setPointSize (f.pointSize ()-4);
+//     _humidityEdit->setFont (f);
+
     r = _svgWithSensors.boundsOnElement ("WaterFlow").toRect ();
     _humidityEdit->setGeometry (r);
 
     connect (_humidityEdit, SIGNAL (returnPressed ()), this, SLOT (humidityEditorReturnPressed ()));
 
-    QFont f = _humidityEdit->font ();
-    f.setPointSize (f.pointSize ()-2);
-    _humidityEdit->setFont (f);
 }
 
 
@@ -116,7 +117,7 @@ void StageControl::paintEvent (QPaintEvent*)
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.2f", _targetHumidity)));
 
     // fill grain area if grain present
-    r = _svgWithSensors.boundsOnElement ("GrainArea").adjusted (2, 2, -1, -1);
+    r = _svgWithSensors.boundsOnElement ("GrainArea").adjusted (1, 1, -2, -2);
 
     switch (_grainState) {
     case GS_GrainPresent:
@@ -132,7 +133,7 @@ void StageControl::paintEvent (QPaintEvent*)
     }
 
     // fill water area
-    r = _svgWithSensors.boundsOnElement ("WaterArea").adjusted (2, 2, -1, -1);
+    r = _svgWithSensors.boundsOnElement ("WaterArea").adjusted (1, 1, -2, -2);
     p.fillRect (r, QBrush (_waterPresent ? Qt::cyan : Qt::lightGray));
 
     // stage mode
@@ -205,19 +206,19 @@ void StageControl::humidityDownClicked ()
 
 void StageControl::waterUpClicked ()
 {
-    printf ("%f\n", _targetWaterFlow);
-
     double val = _targetWaterFlow + 0.05;
+    setTargetWaterFlow (val);
     targetWaterFlowUpdated (_number, val);
 }
 
 
 void StageControl::waterDownClicked ()
 {
-    printf ("%f\n", _targetWaterFlow);
     double val = _targetWaterFlow - 0.05;
-    if (val > 0)
+    if (val > 0) {
+        setTargetWaterFlow (val);
         targetWaterFlowUpdated (_number, val);   
+    }
 }
 
 
@@ -234,6 +235,7 @@ void StageControl::humidityEditorReturnPressed ()
     }
 
     targetWaterFlowUpdated (_number, val);
+    setTargetWaterFlow (val);
 }
 
 
@@ -243,7 +245,7 @@ void StageControl::setTargetWaterFlow (double val)
     update ();
 
     if (!_autoMode)
-        _humidityEdit->setText (QString::number (val, 'g', 2));
+        _humidityEdit->setText (QString ().sprintf ("%.02f", val));
 }
 
 

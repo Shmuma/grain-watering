@@ -81,6 +81,8 @@ void PlaundServer::handleCommand ()
         _buffer = buf.right (buf.size () - rev - 1);
         buf.truncate (rev);
     }
+    else
+        _buffer = QString ();
 
     QStringList l = buf.split("\n", QString::SkipEmptyParts);
     QString cmd;

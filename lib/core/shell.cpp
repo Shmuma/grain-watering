@@ -586,6 +586,10 @@ QString Interpreter::getStages (const QStringList& args)
         res += " 3";
     if (_stages & 1 << 3)
         res += " 4";
+
+    if (res.trimmed ().isEmpty ())
+        res = "empty";
+
     return res.trimmed ().replace (' ', ',') + "\n";
 }
 
@@ -705,7 +709,7 @@ QString Interpreter::checkTick (const QStringList& args)
 
         // 4. check for water present
         if (getWaterFlow (i) < _settings[i].minWaterFlow ()) {
-            res += "W=0";
+            res += "W=0,";
             //            continue;
             valid = false;
         }
@@ -741,7 +745,7 @@ QString Interpreter::checkTick (const QStringList& args)
 
     inProgress = false;
 
-    return res + "\n> \n";
+    return "\n" + res + "\n";
 }
 
 

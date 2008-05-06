@@ -151,7 +151,7 @@ public:
         { return _auto_mode; };
 
     void setTargetFlow (double val)
-        { _target_flow = _auto_mode ? 0.0 : val; };
+        { _target_flow = val; };
     double targetFlow () const
         { return _target_flow; };
 };

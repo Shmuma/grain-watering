@@ -30,14 +30,14 @@
      objecttolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="170.80756"
-     inkscape:cy="126.68914"
+     inkscape:zoom="5.6568542"
+     inkscape:cx="201.90206"
+     inkscape:cy="150.82486"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      width="250px"
      height="500px"
-     showgrid="true"
+     showgrid="false"
      inkscape:window-width="1598"
      inkscape:window-height="1172"
      inkscape:window-x="0"
@@ -62,7 +62,7 @@
     <image
        y="0"
        x="0"
-       id="image2651"
+       id="image2256"
        height="500"
        width="250"
        sodipodi:absref="/home/shmuma/work/grain-watering/gui/svg/stage1.png"
@@ -114,16 +114,16 @@
        inkscape:label="#path7086" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 142.88111,377.95827 L 142.88111,411.92749 L 173.39121,411.92749 L 173.39121,377.95827 L 142.88111,377.95827 z "
+       d="M 136.88111,377.95827 L 136.88111,411.92749 L 167.39121,411.92749 L 167.39121,377.95827 L 136.88111,377.95827 z "
        id="WaterArea"
        inkscape:label="#path7090" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 142.88111,343.98904 L 142.88111,377.95827 L 173.39121,377.95827 L 173.39121,343.98904 L 142.88111,343.98904 z "
+       d="M 136.88111,343.98904 L 136.88111,377.95827 L 167.39121,377.95827 L 167.39121,343.98904 L 136.88111,343.98904 z "
        id="path7092" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 183.56124,411.92749 L 224.24137,411.92749 L 224.24137,377.95827 L 183.56124,377.95827 L 183.56124,411.92749 z "
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.43797719;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 177.30998,411.87919 L 224.19307,411.87919 L 224.19307,378.00657 L 177.30998,378.00657 L 177.30998,411.87919 z "
        id="WaterFlow"
        inkscape:label="#path7096" />
     <path

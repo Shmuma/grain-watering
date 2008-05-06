@@ -34,7 +34,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="2"
      inkscape:cx="251.39875"
-     inkscape:cy="142.12732"
+     inkscape:cy="82.12732"
      inkscape:document-units="pt"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -126,25 +126,25 @@
        id="HumiditySpin"
        inkscape:label="#path7086" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 201.74601,411.39242 L 232.25611,411.39242 L 232.25611,422.7155 L 201.74601,422.7155 L 201.74601,411.39242 z "
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.21228993;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 201.68146,411.32787 L 226.32066,411.32787 L 226.32066,422.78005 L 201.68146,422.78005 L 201.68146,411.32787 z "
        id="path7088" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 232.25611,400.06935 L 232.25611,434.03857 L 262.76621,434.03857 L 262.76621,400.06935 L 232.25611,400.06935 z "
+       d="M 226.25611,400.06935 L 226.25611,434.03857 L 256.76621,434.03857 L 256.76621,400.06935 L 226.25611,400.06935 z "
        id="WaterArea"
        inkscape:label="#path7090" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 232.25611,366.10012 L 232.25611,400.06935 L 262.76621,400.06935 L 262.76621,366.10012 L 232.25611,366.10012 z "
+       d="M 226.25611,366.10012 L 226.25611,400.06935 L 256.76621,400.06935 L 256.76621,366.10012 L 226.25611,366.10012 z "
        id="path7092" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 262.76621,411.39242 L 272.93624,411.39242 L 272.93624,422.7155 L 262.76621,422.7155 L 262.76621,411.39242 z "
+       d="M 256.76621,411.39242 L 266.93624,411.39242 L 266.93624,422.7155 L 256.76621,422.7155 L 256.76621,411.39242 z "
        id="path7094" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 272.93624,434.03857 L 313.61637,434.03857 L 313.61637,400.06935 L 272.93624,400.06935 L 272.93624,434.03857 z "
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.43353808;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 266.98232,433.99249 L 313.57029,433.99249 L 313.57029,400.11543 L 266.98232,400.11543 L 266.98232,433.99249 z "
        id="path7096" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -152,8 +152,8 @@
        id="FlowSpin"
        inkscape:label="#path7098" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 272.93671,400.21037 L 272.93671,343.45449 L 323.78593,343.45449 L 323.78593,400.21037 L 272.93671,400.21037 z "
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.41644335;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 266.97424,400.17284 L 266.97424,343.49202 L 323.7484,343.49202 L 323.7484,400.17284 L 266.97424,400.17284 z "
        id="path7100" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.32042015;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -204,17 +204,18 @@
          y="473.04968">БШУ</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="298.49219"
-       y="357.88171"
-       id="text6234"><tspan
+       style="font-size:8.1880703px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="288.69699"
+       y="366.2951"
+       id="text6234"
+       transform="scale(1.0235088,0.9770312)"><tspan
          sodipodi:role="line"
          id="tspan6236"
-         x="298.49219"
-         y="357.88171">Регулятор</tspan><tspan
+         x="288.69699"
+         y="366.2951">Регулятор</tspan><tspan
          sodipodi:role="line"
-         x="298.49219"
-         y="367.88171"
+         x="288.69699"
+         y="376.53019"
          id="tspan6238">воды</tspan></text>
     <text
        xml:space="preserve"

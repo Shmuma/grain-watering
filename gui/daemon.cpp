@@ -89,14 +89,17 @@ void Daemon::socketReadyRead ()
         _data_buf = reply.right (reply.size () - rev - prompt_prefix.size ());
         reply.truncate (rev);
     }
+    else
+        _data_buf = QString ();
 
     // split read data using prompt as separator
     replies = reply.split (prompt_prefix, QString::SkipEmptyParts);
 
     for (int i = 0; i < replies.size (); i++) {
-        reply = replies[i];
+        reply = replies[i].trimmed ();
 
-        //        printf ("%s\n", reply.toAscii ().constData ());
+        if (reply.isEmpty ())
+            continue;
 
         if (reply.startsWith (cleanStarted_prefix)) {
             cleanStarted ();
@@ -110,7 +113,7 @@ void Daemon::socketReadyRead ()
 
         if (!reply.startsWith (check_prefix)) {
             if (!reply.startsWith (hist_prefix))
-                textArrived (reply+prompt_prefix);
+                textArrived (reply+"\n"+prompt_prefix);
 
             if (!_queue.isEmpty ()) {
                 DaemonCommand cmd = _queue.front ();
@@ -322,11 +325,14 @@ bool Daemon::parseStagesReply (const QString& reply, QString& msg, bool& s1, boo
         return false;
     }
 
+    s1 = s2 = s3 = s4 = false;
+
+    if (QString (reply).remove ('>').trimmed () == "empty")
+        return true;
+
     QStringList lst = QString (reply).remove ('>').trimmed ().split (',', QString::SkipEmptyParts);
     bool ok;
     int val;
-
-    s1 = s2 = s3 = s4 = false;
 
     for (int i = 0; i < lst.size (); i++) {
         val = lst[i].toInt (&ok);
