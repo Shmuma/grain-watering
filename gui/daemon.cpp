@@ -246,6 +246,11 @@ void Daemon::socketReadyRead ()
                         Logger::instance ()->log (Logger::Error, tr ("Cannot assign target water flow on stage %1. Reason: '%2'")
                                                   .arg (cmd.stage ()+1).arg (msg));                    
                     break;
+                case DaemonCommand::c_setminpressure:
+                    break;
+                case DaemonCommand::c_getminpressure:
+                    parseMinPressure (reply);
+                    break;
                 default:
                     break;
                 }
@@ -854,5 +859,33 @@ void Daemon::setTargetWaterFlow (int stage, double val)
 {
     sendCommand (QString ("settgtflow %1 %2\n").arg (stage).arg (val));
     _queue.push_back (DaemonCommand (DaemonCommand::c_settargetwaterflow, stage));
+}
+
+
+void Daemon::setMinPressure (double val)
+{
+    sendCommand (QString ("setminpressure %1\n").arg (val));
+    _queue.push_back (DaemonCommand::c_setminpressure);
+}
+
+
+void Daemon::getMinPressure ()
+{
+    sendCommand (QString ("getminpressure\n"));
+    _queue.push_back (DaemonCommand::c_getminpressure);   
+}
+
+
+void Daemon::parseMinPressure (const QString& reply)
+{
+    double val;
+    bool ok;
+
+    val = reply.toDouble (&ok);
+
+    if (!ok)
+        Logger::instance ()->log (Logger::Error, tr ("Cannot get min pressure. Reason: %1").arg (QString (reply).remove ("ERROR: ").trimmed ()));        
+    else
+        minPressureGot (val);
 }
 

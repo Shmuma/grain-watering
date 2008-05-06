@@ -350,7 +350,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex" >
-             <number>3</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="config" >
              <layout class="QVBoxLayout" >
@@ -392,6 +392,24 @@
                </widget>
               </item>
               <item>
+               <layout class="QHBoxLayout" >
+                <item>
+                 <widget class="QLabel" name="label_22" >
+                  <property name="text" >
+                   <string>Min pressure (bar)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="minPressureEdit" >
+                  <property name="text" >
+                   <string>2.0</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
                <widget class="QPushButton" name="applyStagesButton" >
                 <property name="text" >
                  <string>Apply</string>
@@ -405,8 +423,8 @@
                 </property>
                 <property name="sizeHint" >
                  <size>
-                  <width>321</width>
-                  <height>71</height>
+                  <width>315</width>
+                  <height>101</height>
                  </size>
                 </property>
                </spacer>
@@ -522,8 +540,8 @@
                 </property>
                 <property name="sizeHint" >
                  <size>
-                  <width>20</width>
-                  <height>40</height>
+                  <width>315</width>
+                  <height>171</height>
                  </size>
                 </property>
                </spacer>
@@ -1763,8 +1781,8 @@
               <property name="html" >
                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Terminus'; font-size:12pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt;">Plaund interactive console.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Terminus'; font-size:11pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Plaund interactive console.&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
              <widget class="QTextEdit" name="autoLogEditor" >
@@ -1777,8 +1795,8 @@ p, li { white-space: pre-wrap; }
               <property name="html" >
                <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Verdana'; font-size:12pt; font-weight:400; font-style:normal;">
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Terminus'; font-size:11pt;">&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Verdana'; font-size:11pt; font-weight:400; font-style:normal;">
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Terminus';">&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
             </widget>

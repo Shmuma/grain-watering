@@ -40,6 +40,8 @@ public:
         c_setstagemodes,
         c_getcleanresult,
         c_settargetwaterflow,
+        c_setminpressure,
+        c_getminpressure,
     };
     
 private:
@@ -107,6 +109,7 @@ protected:
     void parseEvents (const QString& reply);
     void parseCleanState (const QString& reply);
     void parseCleanResultReply (const QString& reply);
+    void parseMinPressure (const QString& reply);
 
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
@@ -163,6 +166,7 @@ signals:
     void cleanRequested ();
     void cleanStarted ();
     void cleanFinished ();
+    void minPressureGot (double);
 
 public:
     Daemon (const QString& host, int port);
@@ -217,6 +221,9 @@ public:
     void getCleanState ();
     void getCleanResult ();
     void setTargetWaterFlow (int stage, double val);
+
+    void setMinPressure (double val);
+    void getMinPressure ();
 };
 
 

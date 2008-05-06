@@ -37,6 +37,7 @@ Database::Database (const QString& file) throw (QString&)
         _db.exec ("create table settings (key integer, value text);");
         _db.exec (QString ().sprintf ("insert into settings (key, value) values ('%d', '0.0097');", S_TempK));
         _db.exec (QString ().sprintf ("insert into settings (key, value) values ('%d', '992');", S_TempResist));
+        _db.exec (QString ().sprintf ("insert into settings (key, value) values ('%d', '2.0');", S_MinPress));
     }
     if (!tables.contains ("messages")) {
         _db.exec ("create table messages (date integer, msg text);");
@@ -269,3 +270,34 @@ void Database::logCleanMessage (const QString& msg)
     if (!query.exec ())
         printf ("DB error: %s\n", QSqlDatabase::database ().lastError ().text ().toAscii ().constData ());   
 }
+
+
+double Database::getMinPressure ()
+{
+    QSqlQuery query (QSqlDatabase::database ());
+    QString res;
+    double def = 2.0;
+
+    query.prepare ("select value from settings where key = :key");
+    query.bindValue (":key", S_MinPress);
+    if (!query.exec ())
+        return def;
+
+    if (!query.next ())
+        return def;
+
+    return query.value (0).toDouble ();
+}
+
+
+void Database::setMinPressure (double val)
+{
+    QSqlQuery query (QSqlDatabase::database ());
+
+    query.prepare ("update settings set value = :val where key = :key");
+    query.bindValue (":val", QString::number (val));
+    query.bindValue (":key", S_MinPress);
+    query.exec ();
+}
+
+

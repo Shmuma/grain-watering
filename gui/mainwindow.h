@@ -95,6 +95,7 @@ protected slots:
     void daemonWaterStopped (int stage);
     void daemonGrainSensorsPresenceGot (bool value);
     void daemonGrainPresenceGot (int stage, bool value);
+    void daemonMinPressureGot (double val);
 
     // daemon check loop
     void daemonStageRunningUpdated (int stage, bool running);

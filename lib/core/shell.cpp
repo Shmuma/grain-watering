@@ -155,6 +155,10 @@ Interpreter::Interpreter (Broadcaster* broadcaster, Device* device)
                                                "Get current target water flows for stages.\n", CommandMeta::c_meta);
     _commands["settgtflow"] 	= CommandMeta (2, &Interpreter::setTargetFlow, "Assigns target water flow stage", "gettgtflow stage flow",
                                                "Assigns target water flow stage.\n", CommandMeta::c_meta);
+    _commands["getminpressure"] = CommandMeta (0, &Interpreter::getMinPressure, "Get minimal pressure value", "getminpressure",
+                                               "Get minimal pressure value.\n", CommandMeta::c_meta);
+    _commands["setminpressure"] = CommandMeta (1, &Interpreter::setMinPressure, "Set minimal pressure value", "setminpressure press",
+                                               "Set minimal pressure value.\n", CommandMeta::c_meta);
 }
 
 
@@ -1277,3 +1281,15 @@ QString Interpreter::getTargetFlow (const QStringList& args)
     return res + "\n";
 }
 
+
+QString Interpreter::setMinPressure (const QStringList& args)
+{
+    _db.setMinPressure (args[0].toDouble ());
+    return QString ("OK\n");
+}
+
+
+QString Interpreter::getMinPressure (const QStringList&)
+{
+    return QString::number (_db.getMinPressure ()) + "\n";
+}

@@ -142,6 +142,7 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (autoModeError (bool, bool)), this, SLOT (daemonAutoModeError (bool, bool)));
     connect (&_daemon, SIGNAL (gotCleanState (bool, bool, bool, bool, bool)), this, SLOT (daemonGotCleanState (bool, bool, bool, bool, bool)));
     connect (&_daemon, SIGNAL (gotCleanResult (bool[4], bool[4])), this, SLOT (daemonGotCleanResult (bool[4], bool[4])));
+    connect (&_daemon, SIGNAL (minPressureGot (double)), this, SLOT (daemonMinPressureGot (double)));
 
     connect (checkStateButton, SIGNAL (pressed ()), this, SLOT (checkStateButtonPressed ()));
     connect (checkWaterButton, SIGNAL (pressed ()), this, SLOT (checkWaterButtonPressed ()));
@@ -444,6 +445,7 @@ void MainWindow::daemonHardwareConnected ()
 {
     // enabled stages
     _daemon.getStages ();
+    _daemon.getMinPressure ();
 
     // grain sensors presense
     _daemon.requestTempCoef ();
@@ -514,6 +516,17 @@ void MainWindow::switchToConsoleView ()
 
 void MainWindow::applyStagesButtonClicked ()
 {
+    double minPress;
+    bool ok;
+
+    minPress = minPressureEdit->text ().toDouble (&ok);
+    
+    if (!ok) {
+        QMessageBox::warning (this, tr ("Invalid value"), tr ("minimal pressure is invalid"));
+        return;
+    }
+
+    _daemon.setMinPressure (minPress);
     _daemon.setStages (stage1ActiveCheckBox->isChecked (), stage2ActiveCheckBox->isChecked (), 
                        stage3ActiveCheckBox->isChecked (), stage4ActiveCheckBox->isChecked ());
     _daemon.requestSettings ();
@@ -1129,7 +1142,6 @@ void MainWindow::settingsGrainNatureCoeffTableClicked ()
 
 bool MainWindow::haveAccess (access_level_t level)
 {
-    return true;
     if (level <= _access)
         return true;
 
@@ -1745,6 +1757,13 @@ void MainWindow::stageTargetWaterFlowUpdated (int stage, double value)
 }
 
 
+void MainWindow::daemonMinPressureGot (double val)
+{
+    minPressureEdit->setText (QString::number (val));
+}
+
+
+
 // --------------------------------------------------
 // PlotScaleDraw
 // --------------------------------------------------
@@ -1752,4 +1771,5 @@ QwtText PlotScaleDraw::label (double v) const
 {
     return QDateTime::fromTime_t ((uint)v).toString (_show_date ? "dd.MM hh:mm" : "hh:mm:ss");
 }
+
 

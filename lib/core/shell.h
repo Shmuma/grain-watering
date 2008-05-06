@@ -142,6 +142,9 @@ private:
     QString setTargetFlow (const QStringList& args);
     QString getTargetFlow (const QStringList& args);
 
+    QString setMinPressure (const QStringList& args);
+    QString getMinPressure (const QStringList& args);
+
 protected:
     void timerEvent (QTimerEvent*);
 

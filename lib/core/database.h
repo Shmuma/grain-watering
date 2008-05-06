@@ -15,6 +15,7 @@ public:
     enum setting_t {
         S_TempK = 0,
         S_TempResist,
+        S_MinPress,
     };
 
 private:
@@ -43,6 +44,9 @@ public:
 
     void logMessage (const QString& msg);
     void logCleanMessage (const QString& msg);
+
+    double getMinPressure ();
+    void setMinPressure (double val);
 };
 
 
