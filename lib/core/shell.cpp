@@ -177,17 +177,17 @@ QString Interpreter::exec (const QString& line)
 
     // unknown command
     if (_commands.find (items[0]) == _commands.constEnd ())
-	return QString ("Error: unknown command '%1'\n").arg (items[0]);
+	return tr ("ERROR: unknown command '%1'\n").arg (items[0]);
 
     CommandMeta meta = _commands[items[0]];
 
     // too many arguments for command
     if (items[0] != "log" && items[0] != "log_clean" && meta.args () != items.size ()-1)
-	return QString ("Error: command %1 requires exactly %2 arguments\n").arg (items[0]).arg (meta.args ());
+	return tr ("ERROR: Command %1 requires exactly %2 arguments\n").arg (items[0]).arg (meta.args ());
 
     // handle commands
     if (!meta.handler ())
-	return QString ("Error: there is no handler associated with this command\n");
+	return tr ("ERROR: There is no handler associated with this command\n");
 
     handler_t h = meta.handler ();
     QString res;
@@ -200,9 +200,9 @@ QString Interpreter::exec (const QString& line)
     try {
         if (meta.kind () == CommandMeta::c_hardware) {
             if (_filterCleaning)
-                throw QString ("Filter cleaning in progress");
+                throw tr ("Filter cleaning in progress");
             if (isCleaningInProgress ())
-                throw QString ("Cleaning in progress");
+                throw tr ("Cleaning in progress");
         }
 
 	// throw away first argument (command)
@@ -265,7 +265,7 @@ DeviceCommand::stage_t Interpreter::parseStage (const QString& stage) throw (QSt
 
     res = stage.toInt (&ok);
     if (!ok)
-	throw QString ("stage is incorrect");
+	throw tr ("stage is incorrect");
 
     return (DeviceCommand::stage_t)res;
 }
@@ -278,7 +278,7 @@ int Interpreter::parseStageAsInt (const QString& stage) throw (QString)
 
     res = stage.toInt (&ok);
     if (!ok)
-	throw QString ("stage is incorrect");
+	throw tr ("stage is incorrect");
 
     return res-1;
 }
@@ -292,10 +292,10 @@ bool Interpreter::parseBool (const QString& value) throw (QString)
 
     res = value.toInt (&ok);
     if (!ok)
-	throw QString ("bool value '%s' is incorrect").arg (value);
+	throw tr ("bool value '%s' is incorrect").arg (value);
 
     if (res > 2 || res < 0)
-        throw QString ("bool value '%s' is incorrect").arg (value);
+        throw tr ("bool value '%s' is incorrect").arg (value);
 
     return res == 1;
 }
@@ -387,7 +387,7 @@ QString Interpreter::raw (const QStringList& args)
     for (int i = 0; i < 4; i++) {
         data.append (args[i].toUInt (&ok, 16));
         if (!ok)
-            return "ERROR: Invalid hexadecimal sequence\n";
+            throw tr ("Invalid hexadecimal sequence");
     }
 
     res = _dev->sendRawCommand (data);
@@ -419,27 +419,27 @@ QString Interpreter::setWaterGate (const QStringList& args)
 
     value = args[1].toInt (&ok);
     if (!ok)
-	throw QString ("value is incorrect");
+	throw tr ("value is incorrect");
 
     switch (stage) {
     case DeviceCommand::Stg_First:
         if (_stageCleaning[0])
-            throw QString ("Stage 1 is cleaning\n");
+            throw tr ("Stage 1 is cleaning");
         return checkBoolReply (_dev->setWaterGateS1 (value));
     case DeviceCommand::Stg_Second:
         if (_stageCleaning[1])
-            throw QString ("Stage 2 is cleaning\n");
+            throw tr ("Stage 2 is cleaning");
         return checkBoolReply (_dev->setWaterGateS2 (value));
     case DeviceCommand::Stg_Third:
         if (_stageCleaning[2])
-            throw QString ("Stage 3 is cleaning\n");
+            throw tr ("Stage 3 is cleaning");
         return checkBoolReply (_dev->setWaterGateS3 (value));
     case DeviceCommand::Stg_Fourth:
         if (_stageCleaning[3])
-            throw QString ("Stage 4 is cleaning\n");
+            throw tr ("Stage 4 is cleaning");
         return checkBoolReply (_dev->setWaterGateS4 (value));
     default:
-        throw QString ("unexpected stage");
+        throw tr ("unexpected stage");
     }
 }
 
@@ -484,7 +484,7 @@ QString Interpreter::startWater (const QStringList& args)
     int stage = parseStageAsInt (args[0]);
 
     if (_stageCleaning[stage])
-        throw QString ("Stage %1 is cleaning\n").arg (stage+1);
+        throw tr ("Stage %1 is cleaning").arg (stage+1);
 
     bool res = _dev->startWater (parseStage (args[0]));
 
@@ -499,7 +499,7 @@ QString Interpreter::stopWater (const QStringList& args)
     int stage = parseStageAsInt (args[0]);
 
     if (_stageCleaning[stage])
-        throw QString ("Stage %1 is cleaning\n").arg (stage+1);
+        throw tr ("Stage %1 is cleaning").arg (stage+1);
 
     bool res = _dev->stopWater (parseStage (args[0]));
 
@@ -546,7 +546,7 @@ QString Interpreter::drainWater (const QStringList& args)
     for (int i = 0; i < 4; i++) {
         s[i] = parseBool (args[i]);
         if (_stageCleaning[i])
-            throw QString ("Cannot drain water in stage %1, it is cleaning at the moment\n").arg (i+1);
+            throw tr ("Cannot drain water in stage %1, it is cleaning at the moment").arg (i+1);
     }
 
     return checkBoolReply (_dev->drainWater (s[0], s[1], s[2], s[3]));
@@ -597,7 +597,7 @@ QString Interpreter::getStages (const QStringList& args)
 QString Interpreter::getMetaState (const QStringList& args)
 {
     if (_filterCleaning)
-        throw QString ("Filter cleaning in progress");
+        throw tr ("Filter cleaning in progress");
 
     QString res;
     double wp = getWaterPressure ();
@@ -627,7 +627,7 @@ QString Interpreter::sleep (const QStringList& args)
     res = args[0].toUInt (&ok);
 
     if (!res)
-        return QString ("ERROR: not an integer value passed\n");
+        throw tr ("not an integer value passed");
 
     ::sleep (res);
 
@@ -832,7 +832,7 @@ QString Interpreter::setPass (const QStringList& args)
         return "OK\n";
     }
     else
-        return "ERROR: User unknown\n";
+        throw tr ("User unknown");
 }
 
 
@@ -1053,12 +1053,12 @@ QString Interpreter::setTempCoef (const QStringList& args)
     k = args[0].toDouble (&ok);
 
     if (!ok)
-        return QString ("Error: First argument parse error\n");
+        throw tr ("First argument parse error");
 
     res = args[1].toDouble (&ok);
     
     if (!ok)
-        return QString ("Error: Second argument parse error\n");
+        throw tr ("Second argument parse error");
 
     _db.setTempCoef (k, res);
     _temp_k = k;
@@ -1086,7 +1086,7 @@ QString Interpreter::calibrate (const QStringList& args)
     else if (args[1] == "nat")
         val = getGrainNature (stage);
     else
-        return QString ("ERROR: Unknown sensor key passed\n");
+        throw tr ("Unknown sensor key passed");
 
     return QString ("%1=%2\n").arg (args[1], QString::number (val));
 }
@@ -1111,10 +1111,10 @@ QString Interpreter::startStage (const QStringList& args)
     bool res = true;
 
     if (_filterCleaning)
-        throw QString ("Filter cleaning in progress");  
+        throw tr ("Filter cleaning in progress");  
 
     if (_stageCleaning[stage])
-        throw QString ("Canot start stage %1, it is cleaning at the moment").arg (stage);
+        throw tr ("Canot start stage %1, it is cleaning at the moment").arg (stage);
 
     // start water if needed
     if (!_waterRunning[stage]) {
@@ -1136,10 +1136,10 @@ QString Interpreter::stopStage (const QStringList& args)
     bool res = true;
 
     if (_filterCleaning)
-        throw QString ("Filter cleaning in progress");  
+        throw tr ("Filter cleaning in progress");  
 
     if (_stageCleaning[stage])
-        throw QString ("Canot start stage %1, it is cleaning at the moment").arg (stage);
+        throw tr ("Canot start stage %1, it is cleaning at the moment").arg (stage);
 
     // start water if needed
     if (_waterRunning[stage]) {
@@ -1181,7 +1181,7 @@ QString Interpreter::getEvents (const QStringList& args)
     to = args[2].toInt ();
 
     if (from == 0 || to == 0 || from > to)
-        return "Invalid timestamp\n";
+        return tr ("Invalid timestamp\n");
     
     QList<QPair <time_t, QString> > events = _db.getEvents (clean, from, to);
     QString res;
@@ -1255,7 +1255,7 @@ QString Interpreter::setTargetFlow (const QStringList& args)
     double val = args[1].toDouble ();
 
     if (_settings[stage].autoMode ())
-        throw QString ("Stage in auto mode");
+        throw tr ("Stage in auto mode");
 
     _settings[stage].setTargetFlow (val);
     _db.setStageSettings (stage, _settings[stage].toString ());
