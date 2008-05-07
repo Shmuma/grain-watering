@@ -51,6 +51,7 @@ private:
     bool _waitForCleanStart;
     bool _waterDraining;
     int _drainTimer;
+    uint _stageStartTime[4];
 
     static QString checkBoolReply (bool res)
         { return res ? "OK\n" : "ERROR\n"; };
@@ -151,6 +152,8 @@ protected:
     void timerEvent (QTimerEvent*);
 
     void stopAllStages ();
+
+    uint maxSecondsSinceStagesStarted ();
 
 public:
     Interpreter (Broadcaster* broadcaster, Device* device);

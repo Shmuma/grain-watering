@@ -1647,6 +1647,7 @@ void MainWindow::daemonDrainFinished ()
 void MainWindow::daemonStageStarted (int stage)
 {
     getStageControl (stage)->setRunning (true);
+    getStageControl (stage)->setWaterPresent (true);
     Logger::instance ()->log (Logger::Information, tr ("Stage %1 started").arg (stage+1));
 }
 
@@ -1654,6 +1655,7 @@ void MainWindow::daemonStageStarted (int stage)
 void MainWindow::daemonStageStopped (int stage)
 {
     getStageControl (stage)->setRunning (false);
+    getStageControl (stage)->setWaterPresent (false);
     Logger::instance ()->log (Logger::Information, tr ("Stage %1 stopped").arg (stage+1));
 }
 

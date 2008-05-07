@@ -25,6 +25,7 @@ Interpreter::Interpreter (Broadcaster* broadcaster, Device* device)
         _settings[i] = StageSettings (_db.getStageSettings (i));
         _stageCleaning[i] = _stageOperational[i] = false;
         _waterDraining = false;
+        _stageStartTime[i] = 0;
     }
 
     _filterCleanTimer = _stagesCleanTimer = 0;
@@ -675,6 +676,7 @@ QString Interpreter::checkTick (const QStringList& args)
 
     static bool inProgress = false;
     bool valid;
+    bool checkDelayPassed = maxSecondsSinceStagesStarted () > 60;
     QString res ("Check: ");
 
     if (inProgress)
@@ -700,7 +702,7 @@ QString Interpreter::checkTick (const QStringList& args)
     
     appendHistory (HS_Stage1, HK_WaterPress, wp);
 
-    if (wp < _db.getMinPressure ()) {
+    if (checkDelayPassed && wp < _db.getMinPressure ()) {
         // critical -- minimum water pressure. Turn off stages
         stopAllStages ();
         res += QString ().sprintf ("%1 %2: ").arg ("CRIT").arg (Err_WaterPress);
@@ -755,7 +757,7 @@ QString Interpreter::checkTick (const QStringList& args)
         res += ",";
 
         // check for grain amount
-        if (getGrainFlow (i) < _settings[i].minGrainFlow ()) {
+        if (checkDelayPassed && getGrainFlow (i) < _settings[i].minGrainFlow ()) {
             res += "GL=1";
             valid = false;
             stopStage (QStringList (QString::number (i+1)));
@@ -1148,8 +1150,10 @@ QString Interpreter::startStage (const QStringList& args)
             _waterRunning[stage] = true;
     }
 
-    if (res)
+    if (res) {
         _stageRunning[stage] = true;
+        _stageStartTime[stage] = QDateTime::currentDateTime ().toTime_t ();
+    }
     
     return checkBoolReply (res);
 }
@@ -1335,4 +1339,16 @@ void Interpreter::stopAllStages ()
     for (int i = 0; i < 4; i++) 
         if (_stageRunning[i])
             stopStage (QStringList (QString::number (i+1)));
+}
+
+
+uint Interpreter::maxSecondsSinceStagesStarted ()
+{
+    uint res = 0;
+
+    for (int i = 0; i < 4; i++)
+        if (_stageStartTime[i] > res)
+            res = _stageStartTime[i];
+
+    return QDateTime::currentDateTime ().toTime_t () - res;
 }
