@@ -968,10 +968,10 @@ QString Interpreter::getStageState (int stage)
             // calculate target water flow
             switch (_settings[stage].waterFormula ()) {
             case 0:
-                _last_tgt_water_flow[stage] = d_grain_flow * (_settings[stage].targetHumidity () - d_hum_cur) / (100 - _settings[stage].targetHumidity ());
+                _last_tgt_water_flow[stage] = 1000 * d_grain_flow * (_settings[stage].targetHumidity () - d_hum_cur) / (100 - _settings[stage].targetHumidity ());
                 break;
             case 1:
-                _last_tgt_water_flow[stage] = d_grain_flow * (_settings[stage].targetHumidity () - d_hum_cur) / 100;
+                _last_tgt_water_flow[stage] = 1000 * d_grain_flow * (_settings[stage].targetHumidity () - d_hum_cur) / 100;
                 break;
             default:
                 _last_tgt_water_flow[stage] = 0.0;
