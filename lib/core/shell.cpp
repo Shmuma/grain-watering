@@ -714,7 +714,7 @@ QString Interpreter::checkTick (const QStringList& args)
         // 3. check BSU power
         if (!_dev->getBSUPowered (DeviceCommand::stageByNum (i))) {
             res += "BSU=0";
-            //            continue;
+            stopStage (QStringList (QString::number (i+1)));
             valid = false;
         }
         else
@@ -723,7 +723,7 @@ QString Interpreter::checkTick (const QStringList& args)
         // 4. check for water present
         if (getWaterFlow (i) < _settings[i].minWaterFlow ()) {
             res += "W=0,";
-            //            continue;
+            stopStage (QStringList (QString::number (i+1)));
             valid = false;
         }
         else
@@ -743,6 +743,7 @@ QString Interpreter::checkTick (const QStringList& args)
         if (!grain) {
             // stop stage
             stopStage (QStringList (QString::number (i+1)));
+            valid = false;
             continue;
         }
         res += ",";
@@ -750,6 +751,8 @@ QString Interpreter::checkTick (const QStringList& args)
         // check for grain amount
         if (getGrainFlow (i) < _settings[i].minGrainFlow ()) {
             res += "GL=1";
+            valid = false;
+            stopStage (QStringList (QString::number (i+1)));
             continue;
         }
         else

@@ -1516,15 +1516,22 @@ void MainWindow::historyGot (const QList < QPair <uint, double> >& data, history
 
 void MainWindow::daemonBsuPoweredUpdated (int stage, bool on)
 {
-    if (!on)
-        Logger::instance ()->log (Logger::Warning, tr ("BSU in stage %1 not powered").arg (stage+1));
+    if (!on) {
+        if (getStageControl (stage)->running ())
+            Logger::instance ()->log (Logger::Error, tr ("BSU in stage %1 not powered, stopping stage").arg (stage+1));
+        else
+            Logger::instance ()->log (Logger::Warning, tr ("BSU in stage %1 not powered").arg (stage+1));
+    }
 }
 
 
 void MainWindow::daemonWaterPresentUpdated (int stage, bool on)
 {
-    if (!on && getStageControl (stage)->running ())
-        Logger::instance ()->log (Logger::Warning, tr ("Water not present in stage %1").arg (stage+1));
+    if (!on)
+        if (getStageControl (stage)->running ())
+            Logger::instance ()->log (Logger::Error, tr ("Water not present in stage %1, stopping stage").arg (stage+1));
+        else
+            Logger::instance ()->log (Logger::Warning, tr ("Water not present in stage %1").arg (stage+1));
     getStageControl (stage)->setWaterPresent (on);
 }
 
@@ -1532,12 +1539,15 @@ void MainWindow::daemonWaterPresentUpdated (int stage, bool on)
 void MainWindow::daemonGrainLowUpdated (int stage, bool on)
 {
     if (on)
-        Logger::instance ()->log (Logger::Warning, tr ("Grain is low in stage %1").arg (stage+1));
+        if (getStageControl (stage)->running ())
+            Logger::instance ()->log (Logger::Error, tr ("Grain is low in stage %1, stopping stage").arg (stage+1));
+        else
+            Logger::instance ()->log (Logger::Warning, tr ("Grain is low in stage %1").arg (stage+1));
     getStageControl (stage)->setGrainState (on ? StageControl::GS_GrainLow : StageControl::GS_GrainPresent);
 }
 
 
-void MainWindow::daemonAutoModeError (error_kind_t error, const QString& msg)
+void MainWindow::daemonAutoModeError (error_kind_t error, const QString&)
 {
     switch (error) {
     case Err_NoAnswer:

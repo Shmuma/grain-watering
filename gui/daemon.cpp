@@ -580,13 +580,14 @@ void Daemon::handleCheckTick (const QString& msg)
         return;
 
     waterPressureUpdated (val);
-    
+
     for (int i = 1; i < stages.count (); i++) {
         QString val_str;
         QStringList lst = stages[i].split (":", QString::SkipEmptyParts), l;
         int stage;
         QString key, val;
-        
+        bool running = false;
+            
         if (lst.count () != 2) {
             Logger::instance ()->log (Logger::Debug, QString ("CheckTick: Got invalid stage info at part %1").arg (i));
             printf ("Data: %s\n", stages[i].toAscii ().constData ());
@@ -609,7 +610,7 @@ void Daemon::handleCheckTick (const QString& msg)
             val = l[1];
             
             if (key == "R")
-                stageRunningUpdated (stage, val == "1");
+                running = val == "1";
             if (key == "G")
                 grainPresentUpdated (stage, val == "1");
             else if (key == "BSU")
@@ -635,6 +636,9 @@ void Daemon::handleCheckTick (const QString& msg)
             else if (key == "TS")
                 targetSettingUpdated (stage, val.toDouble ());
         }
+
+        // we must update running state the last, because we can lost some critical errors to display.
+        stageRunningUpdated (stage, running);
     }
 }
 
