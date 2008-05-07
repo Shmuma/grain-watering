@@ -23,7 +23,7 @@ public:
     void setWaterPressure (double press)
         { _waterPressure = press; update (); };
     double waterPressure () const
-        { return _waterPressure; };
+        { return _waterPressure < 0 ? 0.0 : _waterPressure; };
 
     void setCleaning (bool cleaning)
         { _cleaning = cleaning; update (); };

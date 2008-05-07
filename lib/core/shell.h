@@ -165,6 +165,8 @@ public:
         { return (_stages & (1 << n)) > 0; };
     bool isRunning (int stage) const
         { return _stageRunning[stage]; };
+    bool isAnyStageRunning ()
+        { return isRunning (0) || isRunning (1) || isRunning (2) || isRunning (3); };
 };
 
 

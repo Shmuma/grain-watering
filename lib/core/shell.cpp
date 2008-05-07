@@ -698,7 +698,7 @@ QString Interpreter::checkTick (const QStringList& args)
     inProgress = true;
 
     // get water pressure
-    double wp = getWaterPressure ();
+    double wp = isAnyStageRunning () ? getWaterPressure () : 0.0;
     
     appendHistory (HS_Stage1, HK_WaterPress, wp);
 
@@ -1177,8 +1177,10 @@ QString Interpreter::stopStage (const QStringList& args)
             _waterRunning[stage] = false;
     }
 
-    if (res)
+    if (res) {
         _stageRunning[stage] = false;
+        _stageStartTime[stage] = 0;
+    }
     
     return checkBoolReply (res);
 }
@@ -1350,5 +1352,5 @@ uint Interpreter::maxSecondsSinceStagesStarted ()
         if (_stageStartTime[i] > res)
             res = _stageStartTime[i];
 
-    return QDateTime::currentDateTime ().toTime_t () - res;
+    return res ? (QDateTime::currentDateTime ().toTime_t () - res) : 0;
 }

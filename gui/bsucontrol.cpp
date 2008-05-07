@@ -32,6 +32,6 @@ void BSUControl::paintEvent (QPaintEvent* event)
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("Cleaning"));
     }
     else
-        p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 bar").arg (QString ().sprintf ("%.2f", _waterPressure)));
+        p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 bar").arg (QString ().sprintf ("%.2f", waterPressure ())));
 
 }
