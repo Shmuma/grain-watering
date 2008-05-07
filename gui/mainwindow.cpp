@@ -137,7 +137,6 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (settingsGot ()), this, SLOT (daemonSettingsGot ()));
     connect (&_daemon, SIGNAL (calibrateReply (int, const QString&, double)), this, SLOT (daemonCalibrateReply (int, const QString&, double)));
     connect (&_daemon, SIGNAL (bsuPoweredUpdated (int, bool)), this, SLOT (daemonBsuPoweredUpdated (int, bool)));
-    connect (&_daemon, SIGNAL (waterPresentUpdated (int, bool)), this, SLOT (daemonWaterPresentUpdated (int, bool)));
     connect (&_daemon, SIGNAL (grainLowUpdated (int, bool)), this, SLOT (daemonGrainLowUpdated (int, bool)));
     connect (&_daemon, SIGNAL (autoModeError (error_kind_t, const QString& )), this, SLOT (daemonAutoModeError (error_kind_t, const QString& )));
     connect (&_daemon, SIGNAL (gotCleanState (bool, bool, bool, bool, bool)), this, SLOT (daemonGotCleanState (bool, bool, bool, bool, bool)));
@@ -714,12 +713,14 @@ void MainWindow::daemonMetaStateGot (double water_pres, QMap<int, QList<double> 
 void MainWindow::daemonWaterStarted (int stage)
 {
     Logger::instance ()->log (Logger::Information, tr ("Water started on %1 stage").arg (stage+1));
+    getStageControl (stage)->setWaterPresent (true);
 }
 
 
 void MainWindow::daemonWaterStopped (int stage)
 {
     Logger::instance ()->log (Logger::Information, tr ("Water stopped on %1 stage").arg (stage+1));
+    getStageControl (stage)->setWaterPresent (false);
 }
 
 
@@ -1523,17 +1524,6 @@ void MainWindow::daemonBsuPoweredUpdated (int stage, bool on)
         else
             Logger::instance ()->log (Logger::Warning, tr ("BSU in stage %1 not powered").arg (stage+1));
     }
-}
-
-
-void MainWindow::daemonWaterPresentUpdated (int stage, bool on)
-{
-    if (!on)
-        if (getStageControl (stage)->running ())
-            Logger::instance ()->log (Logger::Error, tr ("Water not present in stage %1, stopping stage").arg (stage+1));
-        else
-            Logger::instance ()->log (Logger::Warning, tr ("Water not present in stage %1").arg (stage+1));
-    getStageControl (stage)->setWaterPresent (on);
 }
 
 

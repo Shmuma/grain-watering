@@ -621,8 +621,6 @@ void Daemon::handleCheckTick (const QString& msg)
                 grainPresentUpdated (stage, val == "1");
             else if (key == "BSU")
                 bsuPoweredUpdated (stage, val == "1");
-            else if (key == "W")
-                waterPresentUpdated (stage, val == "1");
             else if (key == "GL")
                 grainLowUpdated (stage, val == "1");
             else if (key == "WF")

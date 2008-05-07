@@ -728,21 +728,12 @@ QString Interpreter::checkTick (const QStringList& args)
 
         // 3. check BSU power
         if (!_dev->getBSUPowered (DeviceCommand::stageByNum (i))) {
-            res += "BSU=0";
+            res += "BSU=0,";
             stopStage (QStringList (QString::number (i+1)));
             valid = false;
         }
         else
             res += "BSU=1,";
-
-        // 4. check for water present
-        if (getWaterFlow (i) < _settings[i].minWaterFlow ()) {
-            res += "W=0,";
-            stopStage (QStringList (QString::number (i+1)));
-            valid = false;
-        }
-        else
-            res += "W=1,";
 
         bool grain;
 

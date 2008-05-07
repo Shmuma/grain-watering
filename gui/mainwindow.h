@@ -112,7 +112,6 @@ protected slots:
     void daemonSettingsGot ();
     void daemonCalibrateReply (int stage, const QString& key, double val);
     void daemonBsuPoweredUpdated (int stage, bool on);
-    void daemonWaterPresentUpdated (int stage, bool on);
     void daemonGrainLowUpdated (int stage, bool on);
     void daemonAutoModeError (error_kind_t error, const QString& msg);
     void daemonCleanRequested ();

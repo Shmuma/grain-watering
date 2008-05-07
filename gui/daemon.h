@@ -154,7 +154,6 @@ signals:
     void tempCoefGot (double k, double resist);
     void calibrateReply (int stage, const QString& key, double val);
     void bsuPoweredUpdated (int stage, bool on);
-    void waterPresentUpdated (int stage, bool on);
     void grainLowUpdated (int stage, bool on);
     void autoModeError (error_kind_t err, const QString& msg);
 
