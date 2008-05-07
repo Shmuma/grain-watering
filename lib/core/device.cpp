@@ -435,8 +435,8 @@ bool Device::drainWater (bool s1, bool s2, bool s3, bool s4)
     DeviceCommand cmd (DeviceCommand::DrainWater, bitmask);
     _port->send (cmd.pack ());
 
-    bool res = DeviceCommand::isOK (_port->receive (cmd.delay ()+1), DeviceCommand::DrainWater, DeviceCommand::Stg_All);
-    return res & DeviceCommand::isOK (_port->receive (cmd.delay ()+1), DeviceCommand::DrainWater, DeviceCommand::Stg_All);;
+    return DeviceCommand::isOK (_port->receive (cmd.delay ()+1), DeviceCommand::DrainWater, DeviceCommand::Stg_All);
+//     return res & DeviceCommand::isOK (_port->receive (cmd.delay ()+1), DeviceCommand::DrainWater, DeviceCommand::Stg_All);;
 }
 
 
@@ -488,4 +488,10 @@ bool Device::cleaningStarted ()
 {
     QByteArray res = _port->receive (1);
     return (unsigned char)res[2] == 0xF0;
+}
+
+
+bool Device::waterDrained ()
+{
+    return DeviceCommand::isOK (_port->receive (1), DeviceCommand::DrainWater, DeviceCommand::Stg_All);
 }

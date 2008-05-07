@@ -24,6 +24,7 @@ Interpreter::Interpreter (Broadcaster* broadcaster, Device* device)
         _last_tgt_water_flow[i] = 0.0;
         _settings[i] = StageSettings (_db.getStageSettings (i));
         _stageCleaning[i] = _stageOperational[i] = false;
+        _waterDraining = false;
     }
 
     _filterCleanTimer = _stagesCleanTimer = 0;
@@ -208,6 +209,8 @@ QString Interpreter::exec (const QString& line)
                 throw tr ("Filter cleaning in progress");
             if (isCleaningInProgress ())
                 throw tr ("Cleaning in progress");
+            if (_waterDraining)
+                throw tr ("Wait for water draining finished");
         }
 
 	// throw away first argument (command)
@@ -554,7 +557,19 @@ QString Interpreter::drainWater (const QStringList& args)
             throw tr ("Cannot drain water in stage %1, it is cleaning at the moment").arg (i+1);
     }
 
-    return checkBoolReply (_dev->drainWater (s[0], s[1], s[2], s[3]));
+    for (int i = 0; i < 4; i++) {
+        if (isRunning (i))
+            throw tr ("Cannot drain water. Stage %1 is active").arg (i+1);
+    }
+
+    bool res = _dev->drainWater (s[0], s[1], s[2], s[3]);
+
+    if (res) {
+        _waterDraining = true;
+        _drainTimer = startTimer (1000);
+    }
+
+    return checkBoolReply (res);
 }
 
 
@@ -1238,6 +1253,7 @@ void Interpreter::timerEvent (QTimerEvent* e)
                 if (_dev->syncWithDevice ()) {
                     _broadcaster->broadcastMessage ("Cleaning finished\n");
                     killTimer (e->timerId ());
+                    _stagesCleanTimer = 0;
                     for (int i = 0; i < 4; i++)
                         _stageCleaning[i] = false;
                 }
@@ -1245,6 +1261,19 @@ void Interpreter::timerEvent (QTimerEvent* e)
         }
         catch (const QString& e) {
             // _dev methods can throw error message
+        }
+    }
+
+    if (e->timerId () == _drainTimer) {
+        try {
+            if (_dev->waterDrained ()) {
+                _broadcaster->broadcastMessage ("Water drained\n");
+                killTimer (_drainTimer);
+                _drainTimer = 0;
+                _waterDraining = false;
+            }
+        }
+        catch (const QString& e) {
         }
     }
 }

@@ -158,6 +158,7 @@ public:
     bool syncWithDevice ();
 
     bool cleaningStarted ();
+    bool waterDrained ();
 };
 
 

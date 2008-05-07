@@ -69,6 +69,7 @@ void Daemon::socketReadyRead ()
     //    QString auto_prefix ("Auto: ");
     QString cleanStarted_prefix ("Cleaning started");
     QString cleanFinished_prefix ("Cleaning finished");
+    QString drainFinished_prefix ("Water drained");
     QString check_prefix ("Check: ");
     QString hist_prefix ("History: ");
     QString prompt_prefix ("> ");
@@ -108,6 +109,11 @@ void Daemon::socketReadyRead ()
 
         if (reply.startsWith (cleanFinished_prefix)) {
             cleanFinished ();
+            continue;
+        }
+
+        if (reply.startsWith (drainFinished_prefix)) {
+            drainFinished ();
             continue;
         }
 
@@ -223,7 +229,7 @@ void Daemon::socketReadyRead ()
                     if (!parseGenericReply (reply.trimmed (), msg))
                         Logger::instance ()->log (Logger::Error, tr ("Drain finished with error. Reason: '%1'").arg (msg));
                     else
-                        drainFinished ();
+                        drainStarted ();
                     break;
                 case DaemonCommand::c_getcleanstate:
                     parseCleanState (reply.trimmed ());

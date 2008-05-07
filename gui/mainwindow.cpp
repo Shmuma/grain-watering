@@ -212,6 +212,7 @@ MainWindow::MainWindow ()
     connect (cleanFilterButton, SIGNAL (clicked ()), this, SLOT (cleanFilterButtonClicked ()));
     connect (cleanStagesButton, SIGNAL (clicked ()), this, SLOT (cleanStagesButtonClicked ()));
     connect (drainWaterButton, SIGNAL (clicked ()), this, SLOT (drainWaterButtonClicked ()));
+    connect (&_daemon, SIGNAL (drainStarted ()), this, SLOT (daemonDrainStarted ()));
     connect (&_daemon, SIGNAL (drainFinished ()), this, SLOT (daemonDrainFinished ()));
 }
 
@@ -1638,6 +1639,12 @@ void MainWindow::drainWaterButtonClicked ()
 {
     _daemon.drainWater (drainS1Check->isChecked (), drainS2Check->isChecked (), drainS3Check->isChecked (), drainS4Check->isChecked ());
     Logger::instance ()->log (Logger::Information, tr ("Drain water of specified stages started"));
+}
+
+
+void MainWindow::daemonDrainStarted ()
+{
+    Logger::instance ()->log (Logger::Information, tr ("Drain started"));
 }
 
 

@@ -161,6 +161,7 @@ signals:
     void historyGot (const QList< QPair <uint, double> >& res, history_stage_t stage, history_kind_t kind);
     void eventsGot (const QList< QPair <uint, QString> >& res);
     
+    void drainStarted ();
     void drainFinished ();
 
     void cleanRequested ();

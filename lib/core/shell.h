@@ -49,6 +49,8 @@ private:
     int _filterCleanTimer;
     int _stagesCleanTimer;
     bool _waitForCleanStart;
+    bool _waterDraining;
+    int _drainTimer;
 
     static QString checkBoolReply (bool res)
         { return res ? "OK\n" : "ERROR\n"; };
