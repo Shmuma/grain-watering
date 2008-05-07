@@ -821,7 +821,7 @@ void MainWindow::daemonGrainPresenceGot (int stage, bool value)
 {
     QString text (value ? tr ("Present") : tr ("Not present"));
 
-    Logger::instance ()->log (Logger::Information, value ? tr ("There are grain in stage %1").arg (stage+1) : tr ("There are no grain in stage %1").arg (stage+1));    
+    Logger::instance ()->log (value ? Logger::Information : Logger::Error, value ? tr ("There are grain in stage %1").arg (stage+1) : tr ("There are no grain in stage %1").arg (stage+1));    
 
     switch (stage) {
     case 0:

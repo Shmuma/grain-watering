@@ -740,8 +740,11 @@ QString Interpreter::checkTick (const QStringList& args)
 
         res += QString ("G=%1").arg (grain ? 1 : 0);
 
-        if (!grain)
+        if (!grain) {
+            // stop stage
+            stopStage (QStringList (QString::number (i+1)));
             continue;
+        }
         res += ",";
 
         // check for grain amount
@@ -1016,7 +1019,7 @@ QString Interpreter::getHistory (const QStringList& args)
     to = args[3].toInt ();
 
     if (from == 0 || to == 0 || from > to)
-        return "Invalid timestamp\n";
+        throw tr ("Invalid timestamp\n");
 
     if (hist == HK_WaterPress)
         stage = HS_Stage1;

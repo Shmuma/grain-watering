@@ -760,6 +760,8 @@ void Daemon::requestEvents (uint from, uint to, bool clean)
 
 void Daemon::parseHistory (const QString& reply, history_stage_t stage, history_kind_t kind)
 {
+    //    printf ("History catched: %s\n", reply.toAscii ().constData ());
+
     QStringList l = QString (reply).remove ("History:").trimmed ().split (",", QString::SkipEmptyParts);
     QList< QPair <uint, double> > res;
 
