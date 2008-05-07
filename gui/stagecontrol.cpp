@@ -159,10 +159,25 @@ void StageControl::setRunning (bool running)
     if (_running) {
         _start->setEnabled (false);
         _stop->setEnabled (true);
+
+        QPalette pal;
+
+        _start->setPalette (qApp->palette (_start));
+
+        pal = _stop->palette ();
+        pal.setColor (QPalette::Background, Qt::red);
+        _stop->setPalette (pal);
+
     }
     else {
         _start->setEnabled (true);
         _stop->setEnabled (false);
+
+        QPalette pal = _start->palette ();
+        pal.setColor (QPalette::Background, Qt::green);
+        _start->setPalette (pal);
+
+        _stop->setPalette (qApp->palette (_stop));
     }
     _inHandleState = false;
 }
