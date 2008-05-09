@@ -108,6 +108,10 @@ void StageControl::paintEvent (QPaintEvent*)
         p.setFont (QFont ("Arial", 16));
         r = _svgWithSensors.boundsOnElement ("GrainFlow").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 t/h").arg (QString ().sprintf ("%.2f", _flow)));
+
+        p.setFont (QFont ("Verdana", 8));
+        r = _svgWithSensors.boundsOnElement ("HumidityDelta").adjusted (2, 2, -2, -2);
+        p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1\n%").arg (QString ().sprintf ("%.1f", _targetHumidity - _humidity)));
     }
 
     p.setFont (QFont ("Verdana", 9));

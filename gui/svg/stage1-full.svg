@@ -32,14 +32,14 @@
      inkscape:pageshadow="2"
      inkscape:zoom="5.6568542"
      inkscape:cx="201.90206"
-     inkscape:cy="150.82486"
+     inkscape:cy="115.46952"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      width="250px"
      height="500px"
      showgrid="false"
-     inkscape:window-width="1598"
-     inkscape:window-height="1172"
+     inkscape:window-width="1278"
+     inkscape:window-height="994"
      inkscape:window-x="0"
      inkscape:window-y="0" />
   <metadata
@@ -120,7 +120,8 @@
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.34138477;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 136.88111,343.98904 L 136.88111,377.95827 L 167.39121,377.95827 L 167.39121,343.98904 L 136.88111,343.98904 z "
-       id="path7092" />
+       id="HumidityDelta"
+       inkscape:label="#path7092" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.43797719;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 177.30998,411.87919 L 224.19307,411.87919 L 224.19307,378.00657 L 177.30998,378.00657 L 177.30998,411.87919 z "
