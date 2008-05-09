@@ -17,7 +17,16 @@
    <property name="spacing" >
     <number>0</number>
    </property>
-   <property name="margin" >
+   <property name="leftMargin" >
+    <number>0</number>
+   </property>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
     <number>0</number>
    </property>
    <item>
@@ -37,7 +46,16 @@
         <property name="spacing" >
          <number>0</number>
         </property>
-        <property name="margin" >
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
          <number>0</number>
         </property>
         <item>
@@ -68,7 +86,16 @@
         <property name="spacing" >
          <number>0</number>
         </property>
-        <property name="margin" >
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
          <number>0</number>
         </property>
         <item>
@@ -163,7 +190,16 @@
         <property name="spacing" >
          <number>0</number>
         </property>
-        <property name="margin" >
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
          <number>0</number>
         </property>
         <item>
@@ -194,7 +230,16 @@
         <property name="spacing" >
          <number>0</number>
         </property>
-        <property name="margin" >
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
          <number>0</number>
         </property>
         <item>
@@ -241,7 +286,16 @@
         <property name="spacing" >
          <number>0</number>
         </property>
-        <property name="margin" >
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
          <number>0</number>
         </property>
         <item>
@@ -299,14 +353,6 @@
              <number>0</number>
             </property>
             <widget class="QWidget" name="config" >
-             <property name="geometry" >
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>372</width>
-               <height>540</height>
-              </rect>
-             </property>
              <layout class="QVBoxLayout" >
               <item>
                <widget class="QGroupBox" name="groupBox_2" >
@@ -375,7 +421,7 @@
                 <property name="orientation" >
                  <enum>Qt::Vertical</enum>
                 </property>
-                <property name="sizeHint" stdset="0" >
+                <property name="sizeHint" >
                  <size>
                   <width>315</width>
                   <height>101</height>
@@ -386,14 +432,6 @@
              </layout>
             </widget>
             <widget class="QWidget" name="mode" >
-             <property name="geometry" >
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>100</width>
-               <height>30</height>
-              </rect>
-             </property>
              <layout class="QVBoxLayout" >
               <item>
                <widget class="QGroupBox" name="groupBox_4" >
@@ -500,7 +538,7 @@
                 <property name="orientation" >
                  <enum>Qt::Vertical</enum>
                 </property>
-                <property name="sizeHint" stdset="0" >
+                <property name="sizeHint" >
                  <size>
                   <width>315</width>
                   <height>171</height>
@@ -511,14 +549,6 @@
              </layout>
             </widget>
             <widget class="QWidget" name="check" >
-             <property name="geometry" >
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>100</width>
-               <height>30</height>
-              </rect>
-             </property>
              <layout class="QVBoxLayout" >
               <item>
                <widget class="QPushButton" name="checkStateButton" >
@@ -575,14 +605,6 @@
                  <number>0</number>
                 </property>
                 <widget class="QWidget" name="state" >
-                 <property name="geometry" >
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>100</width>
-                   <height>30</height>
-                  </rect>
-                 </property>
                  <layout class="QVBoxLayout" >
                   <item>
                    <widget class="QTreeWidget" name="stateTreeWidget" >
@@ -611,14 +633,6 @@
                  </layout>
                 </widget>
                 <widget class="QWidget" name="water" >
-                 <property name="geometry" >
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>100</width>
-                   <height>30</height>
-                  </rect>
-                 </property>
                  <layout class="QVBoxLayout" >
                   <item>
                    <widget class="QCheckBox" name="checkWaterStage1Check" >
@@ -653,7 +667,7 @@
                     <property name="orientation" >
                      <enum>Qt::Vertical</enum>
                     </property>
-                    <property name="sizeHint" stdset="0" >
+                    <property name="sizeHint" >
                      <size>
                       <width>20</width>
                       <height>40</height>
@@ -671,14 +685,6 @@
                  </layout>
                 </widget>
                 <widget class="QWidget" name="sensors" >
-                 <property name="geometry" >
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>100</width>
-                   <height>30</height>
-                  </rect>
-                 </property>
                  <layout class="QVBoxLayout" >
                   <item>
                    <layout class="QGridLayout" >
@@ -745,7 +751,7 @@
                     <property name="orientation" >
                      <enum>Qt::Vertical</enum>
                     </property>
-                    <property name="sizeHint" stdset="0" >
+                    <property name="sizeHint" >
                      <size>
                       <width>256</width>
                       <height>71</height>
@@ -767,14 +773,6 @@
              </layout>
             </widget>
             <widget class="QWidget" name="params" >
-             <property name="geometry" >
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>100</width>
-               <height>30</height>
-              </rect>
-             </property>
              <layout class="QVBoxLayout" >
               <item>
                <widget class="QComboBox" name="settingsStageComboBox" >
@@ -877,7 +875,16 @@
                  <bool>false</bool>
                 </property>
                 <layout class="QVBoxLayout" >
-                 <property name="margin" >
+                 <property name="leftMargin" >
+                  <number>4</number>
+                 </property>
+                 <property name="topMargin" >
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin" >
+                  <number>4</number>
+                 </property>
+                 <property name="bottomMargin" >
                   <number>4</number>
                  </property>
                  <item>
@@ -886,14 +893,6 @@
                     <number>0</number>
                    </property>
                    <widget class="QWidget" name="tab" >
-                    <property name="geometry" >
-                     <rect>
-                      <x>0</x>
-                      <y>0</y>
-                      <width>800</width>
-                      <height>480</height>
-                     </rect>
-                    </property>
                     <attribute name="title" >
                      <string>Water</string>
                     </attribute>
@@ -979,7 +978,7 @@
                        <property name="orientation" >
                         <enum>Qt::Vertical</enum>
                        </property>
-                       <property name="sizeHint" stdset="0" >
+                       <property name="sizeHint" >
                         <size>
                          <width>20</width>
                          <height>81</height>
@@ -990,14 +989,6 @@
                     </layout>
                    </widget>
                    <widget class="QWidget" name="tab_2" >
-                    <property name="geometry" >
-                     <rect>
-                      <x>0</x>
-                      <y>0</y>
-                      <width>800</width>
-                      <height>480</height>
-                     </rect>
-                    </property>
                     <attribute name="title" >
                      <string>Grain</string>
                     </attribute>
@@ -1042,7 +1033,7 @@
                        <property name="orientation" >
                         <enum>Qt::Vertical</enum>
                        </property>
-                       <property name="sizeHint" stdset="0" >
+                       <property name="sizeHint" >
                         <size>
                          <width>20</width>
                          <height>40</height>
@@ -1067,14 +1058,6 @@
              </layout>
             </widget>
             <widget class="QWidget" name="sensors" >
-             <property name="geometry" >
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>100</width>
-               <height>30</height>
-              </rect>
-             </property>
              <layout class="QVBoxLayout" >
               <item>
                <widget class="QGroupBox" name="groupBox_3" >
@@ -1171,7 +1154,16 @@
                  <string>Calibrate</string>
                 </property>
                 <layout class="QVBoxLayout" >
-                 <property name="margin" >
+                 <property name="leftMargin" >
+                  <number>5</number>
+                 </property>
+                 <property name="topMargin" >
+                  <number>5</number>
+                 </property>
+                 <property name="rightMargin" >
+                  <number>5</number>
+                 </property>
+                 <property name="bottomMargin" >
                   <number>5</number>
                  </property>
                  <item>
@@ -1285,7 +1277,7 @@
                 <property name="orientation" >
                  <enum>Qt::Vertical</enum>
                 </property>
-                <property name="sizeHint" stdset="0" >
+                <property name="sizeHint" >
                  <size>
                   <width>20</width>
                   <height>21</height>
@@ -1296,14 +1288,6 @@
              </layout>
             </widget>
             <widget class="QWidget" name="page" >
-             <property name="geometry" >
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>100</width>
-               <height>30</height>
-              </rect>
-             </property>
              <layout class="QVBoxLayout" >
               <item>
                <widget class="QPushButton" name="cleanFilterButton" >
@@ -1405,7 +1389,7 @@
                 <property name="orientation" >
                  <enum>Qt::Vertical</enum>
                 </property>
-                <property name="sizeHint" stdset="0" >
+                <property name="sizeHint" >
                  <size>
                   <width>20</width>
                   <height>40</height>
@@ -1426,14 +1410,6 @@
           <number>1</number>
          </property>
          <widget class="QWidget" name="page_2" >
-          <property name="geometry" >
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>100</width>
-            <height>30</height>
-           </rect>
-          </property>
           <layout class="QHBoxLayout" >
            <item>
             <widget class="QFrame" name="outlinePanel" >
@@ -1443,7 +1419,7 @@
                 <property name="orientation" >
                  <enum>Qt::Horizontal</enum>
                 </property>
-                <property name="sizeHint" stdset="0" >
+                <property name="sizeHint" >
                  <size>
                   <width>21</width>
                   <height>20</height>
@@ -1459,7 +1435,7 @@
                 <property name="orientation" >
                  <enum>Qt::Horizontal</enum>
                 </property>
-                <property name="sizeHint" stdset="0" >
+                <property name="sizeHint" >
                  <size>
                   <width>21</width>
                   <height>20</height>
@@ -1475,7 +1451,7 @@
                 <property name="orientation" >
                  <enum>Qt::Horizontal</enum>
                 </property>
-                <property name="sizeHint" stdset="0" >
+                <property name="sizeHint" >
                  <size>
                   <width>21</width>
                   <height>20</height>
@@ -1491,7 +1467,7 @@
                 <property name="orientation" >
                  <enum>Qt::Horizontal</enum>
                 </property>
-                <property name="sizeHint" stdset="0" >
+                <property name="sizeHint" >
                  <size>
                   <width>16</width>
                   <height>20</height>
@@ -1507,7 +1483,7 @@
                 <property name="orientation" >
                  <enum>Qt::Horizontal</enum>
                 </property>
-                <property name="sizeHint" stdset="0" >
+                <property name="sizeHint" >
                  <size>
                   <width>16</width>
                   <height>20</height>
@@ -1521,14 +1497,6 @@
           </layout>
          </widget>
          <widget class="QWidget" name="page_4" >
-          <property name="geometry" >
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>587</width>
-            <height>562</height>
-           </rect>
-          </property>
           <layout class="QVBoxLayout" >
            <item>
             <layout class="QGridLayout" >
@@ -1736,14 +1704,6 @@
               <number>1</number>
              </property>
              <widget class="QWidget" name="tab_3" >
-              <property name="geometry" >
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>800</width>
-                <height>480</height>
-               </rect>
-              </property>
               <attribute name="title" >
                <string>&amp;Table</string>
               </attribute>
@@ -1768,14 +1728,6 @@
               </layout>
              </widget>
              <widget class="QWidget" name="plotWidget" >
-              <property name="geometry" >
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>565</width>
-                <height>429</height>
-               </rect>
-              </property>
               <attribute name="title" >
                <string>&amp;Graph</string>
               </attribute>
@@ -1790,14 +1742,6 @@
           </layout>
          </widget>
          <widget class="QWidget" name="page_3" >
-          <property name="geometry" >
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>100</width>
-            <height>30</height>
-           </rect>
-          </property>
           <layout class="QVBoxLayout" >
            <item>
             <layout class="QHBoxLayout" >
@@ -1835,11 +1779,10 @@
                <bool>true</bool>
               </property>
               <property name="html" >
-               <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Terminus'; font-size:12pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt;">Plaund interactive console.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Terminus'; font-size:11pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Plaund interactive console.&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
              <widget class="QTextEdit" name="autoLogEditor" >
@@ -1850,11 +1793,10 @@ p, li { white-space: pre-wrap; }
                <bool>true</bool>
               </property>
               <property name="html" >
-               <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Verdana'; font-size:12pt; font-weight:400; font-style:normal;">
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Terminus'; font-size:11pt;">&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Verdana'; font-size:11pt; font-weight:400; font-style:normal;">
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Terminus';">&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
             </widget>

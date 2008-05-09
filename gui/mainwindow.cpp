@@ -664,8 +664,11 @@ void MainWindow::stopButtonClicked (int stage)
 void MainWindow::globalStopButtonClicked ()
 {
     for (int i = 0; i < 4; i++)
-        _daemon.stopStage (i);
-    Logger::instance ()->log (Logger::Information, tr ("Stopping all active stages"));
+        if (getStageControl (i)->running ()) {
+            _daemon.stopStage (i);
+            Logger::instance ()->log (Logger::Information, tr ("Request stop of stage %1").arg (i+1));
+        }
+    globalStopButton->setEnabled (false);
 }
 
 
@@ -1649,6 +1652,7 @@ void MainWindow::daemonStageStarted (int stage)
     getStageControl (stage)->setRunning (true);
     getStageControl (stage)->setWaterPresent (true);
     Logger::instance ()->log (Logger::Information, tr ("Stage %1 started").arg (stage+1));
+    globalStopButton->setEnabled (true);
 }
 
 
@@ -1657,16 +1661,23 @@ void MainWindow::daemonStageStopped (int stage)
     getStageControl (stage)->setRunning (false);
     getStageControl (stage)->setWaterPresent (false);
     Logger::instance ()->log (Logger::Information, tr ("Stage %1 stopped").arg (stage+1));
+    if (!haveActiveStages ())
+        globalStopButton->setEnabled (false);
 }
 
 
 void MainWindow::daemonStageRunningUpdated (int stage, bool running)
 {
     if (getStageControl (stage)->running () != running) {
-        if (running)
+        if (running) {
             Logger::instance ()->log (Logger::Information, tr ("Stage %1 currently at running state").arg (stage+1));
-        else
+            globalStopButton->setEnabled (true);
+        }
+        else {
             Logger::instance ()->log (Logger::Information, tr ("Stage %1 currently at stopped state").arg (stage+1));
+            if (!haveActiveStages ())
+                globalStopButton->setEnabled (false);
+        }
         getStageControl (stage)->setRunning (running);
     }
 }
