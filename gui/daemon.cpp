@@ -23,7 +23,7 @@ Daemon::Daemon (const QString& host, int port)
 
 void Daemon::connect ()
 {
-    Logger::instance ()->log (Logger::Information, QString ("Connecting to daemon at %1:%2").
+    Logger::instance ()->log (Logger::Information, tr ("Connecting to daemon at %1:%2").
                               arg (_host, QString::number (_port)));
     _sock->connectToHost (_host, _port);
 }
@@ -31,7 +31,7 @@ void Daemon::connect ()
 
 void Daemon::disconnect ()
 {
-    Logger::instance ()->log (Logger::Debug, "Disconnect from daemon");
+    Logger::instance ()->log (Logger::Debug, tr ("Disconnect from daemon"));
     _sock->disconnectFromHost ();
 }
 
@@ -42,13 +42,13 @@ void Daemon::socketStateChanged (QAbstractSocket::SocketState state)
     case QAbstractSocket::UnconnectedState:
         connectedChanged (false);
         _connected = _hw_connected = false;
-        Logger::instance ()->log (Logger::Debug, "Disconnected");
+        Logger::instance ()->log (Logger::Debug, tr ("Disconnected"));
         break;
 
     case QAbstractSocket::ConnectedState:
         connectedChanged (true);
         _connected = true;
-        Logger::instance ()->log (Logger::Debug, "Connected");
+        Logger::instance ()->log (Logger::Debug, tr ("Connected"));
 
         // right after the connect to socket, daemon sends us welcome
         // message and then waits for our input. This state waits for
@@ -139,7 +139,7 @@ void Daemon::socketReadyRead ()
                     if (!parseGenericReply (reply, msg)) {
                         // connect to hardware failed
                         _hw_connected = false;
-                        Logger::instance ()->log (Logger::Error, tr ("Connection to hardware failed. Reason: '%1'").arg (msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Connection to hardware failed. Reason: '%1'").arg (trDaemon (msg)));
                     }
                     else {
                         _hw_connected = true;
@@ -149,19 +149,19 @@ void Daemon::socketReadyRead ()
                     break;
                 case DaemonCommand::c_setstages:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot set active stages. Reason: '%1'").arg (msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot set active stages. Reason: '%1'").arg (trDaemon (msg)));
                     else
                         stagesActivityChanged (_s1, _s2, _s3, _s4);
                     break;
                 case DaemonCommand::c_startstage:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot start stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()+1), msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot start stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()+1), trDaemon (msg)));
                     else
                         stageStarted (cmd.stage ());
                     break;
                 case DaemonCommand::c_stopstage:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot stop stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()+1), msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot stop stage %1. Reason: '%2'").arg (QString::number (cmd.stage ()+1), trDaemon (msg)));
                     else
                         stageStopped (cmd.stage ());
                     break;
@@ -171,20 +171,20 @@ void Daemon::socketReadyRead ()
                 case DaemonCommand::c_startwater:
                     if (!parseGenericReply (reply, msg))
                         Logger::instance ()->log (Logger::Error, tr ("Cannot start water at stage %1. Reason: '%2'").
-                                                  arg (QString::number (cmd.stage ()+1), msg));
+                                                  arg (QString::number (cmd.stage ()+1), trDaemon (msg)));
                     else
                         waterStarted (cmd.stage ());
                     break;
                 case DaemonCommand::c_stopwater:
                     if (!parseGenericReply (reply, msg))
                         Logger::instance ()->log (Logger::Error, tr ("Cannot stop water at stage %1. Reason: '%2'").
-                                                  arg (QString::number (cmd.stage ()+1), msg));
+                                                  arg (QString::number (cmd.stage ()+1), trDaemon (msg)));
                     else
                         waterStopped (cmd.stage ());
                     break;
                 case DaemonCommand::c_getstages:
                     if (!parseStagesReply (reply, msg, s1, s2, s3, s4))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot get active stages. Reason: '%1'").arg (msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot get active stages. Reason: '%1'").arg (trDaemon (msg)));
                     else {
                         stagesActivityChanged (s1, s2, s3, s4);
                         _s1 = s1; _s2 = s2; _s3 = s3; _s4 = s4;
@@ -195,7 +195,7 @@ void Daemon::socketReadyRead ()
                     break;
                 case DaemonCommand::c_setgrainsensors:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Cannot change grain sensors presence. Reason: '%1'").arg (msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Cannot change grain sensors presence. Reason: '%1'").arg (trDaemon (msg)));
                     else 
                         grainSensorsPresenceGot (cmd.stage () != 0);
                     break;
@@ -221,13 +221,13 @@ void Daemon::socketReadyRead ()
                     break;
                 case DaemonCommand::c_clean:
                     if (!parseGenericReply (reply, msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Clean request finished with error. Reason: '%1'").arg (msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Clean request finished with error. Reason: '%1'").arg (trDaemon (msg)));
                     else
                         cleanRequested ();
                     break;
                 case DaemonCommand::c_drain:
                     if (!parseGenericReply (reply.trimmed (), msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Drain finished with error. Reason: '%1'").arg (msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Drain finished with error. Reason: '%1'").arg (trDaemon (msg)));
                     else
                         drainStarted ();
                     break;
@@ -236,7 +236,7 @@ void Daemon::socketReadyRead ()
                     break;
                 case DaemonCommand::c_startfilterautomat:
                     if (!parseGenericReply (reply.trimmed (), msg))
-                        Logger::instance ()->log (Logger::Error, tr ("Filter clean error. Reason: '%1'").arg (msg));
+                        Logger::instance ()->log (Logger::Error, tr ("Filter clean error. Reason: '%1'").arg (trDaemon (msg)));
                     break;
                 case DaemonCommand::c_setsensors:
                     break;
@@ -250,7 +250,7 @@ void Daemon::socketReadyRead ()
                 case DaemonCommand::c_settargetwaterflow:
                     if (!parseGenericReply (reply.trimmed (), msg))
                         Logger::instance ()->log (Logger::Error, tr ("Cannot assign target water flow on stage %1. Reason: '%2'")
-                                                  .arg (cmd.stage ()+1).arg (msg));                    
+                                                  .arg (cmd.stage ()+1).arg (trDaemon (msg)));                    
                     break;
                 case DaemonCommand::c_setminpressure:
                     break;
@@ -304,7 +304,7 @@ void Daemon::parseCleanResultReply (const QString& reply)
     QString msg = QString (reply).remove ("ERROR:").remove ('>').trimmed ();
 
     if (reply.startsWith ("ERROR:")) {
-        Logger::instance ()->log (Logger::Error, tr ("Cannot get clean result. Reason: '%1'").arg (msg));
+        Logger::instance ()->log (Logger::Error, tr ("Cannot get clean result. Reason: '%1'").arg (trDaemon (msg)));
         return;
     }
         
@@ -729,7 +729,7 @@ void Daemon::calibrate (int stage, const QString& key)
 void Daemon::parseCalibrateReply (int stage, const QString& reply)
 {
     if (reply.startsWith ("ERROR"))
-        Logger::instance ()->log (Logger::Error, tr ("Calibration failed. Reason: %1").arg (QString (reply).remove ("ERROR: ").trimmed ()));
+        Logger::instance ()->log (Logger::Error, tr ("Calibration failed. Reason: %1").arg (trDaemon (QString (reply).remove ("ERROR: ").trimmed ())));
     else {
         QStringList l = reply.trimmed ().split ("=", QString::SkipEmptyParts);
         
@@ -897,8 +897,13 @@ void Daemon::parseMinPressure (const QString& reply)
     val = reply.toDouble (&ok);
 
     if (!ok)
-        Logger::instance ()->log (Logger::Error, tr ("Cannot get min pressure. Reason: %1").arg (QString (reply).remove ("ERROR: ").trimmed ()));        
+        Logger::instance ()->log (Logger::Error, tr ("Cannot get min pressure. Reason: %1").arg (trDaemon (QString (reply).remove ("ERROR: ").trimmed ())));
     else
         minPressureGot (val);
 }
 
+
+QString Daemon::trDaemon (const QString& msg)
+{
+    return QCoreApplication::translate ("Interpreter", msg.toAscii ().constData ());
+}

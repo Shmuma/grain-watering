@@ -111,6 +111,8 @@ protected:
     void parseCleanResultReply (const QString& reply);
     void parseMinPressure (const QString& reply);
 
+    QString trDaemon (const QString& msg);
+
 protected slots:
     void socketStateChanged (QAbstractSocket::SocketState state);
     void socketReadyRead ();
