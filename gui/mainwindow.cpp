@@ -757,7 +757,7 @@ void MainWindow::applyCheckWaterButtonClicked ()
     QCheckBox* boxes[] = { checkWaterStage1Check, checkWaterStage2Check, checkWaterStage3Check, checkWaterStage4Check };
 
     for (int i = 0; i < 4; i++)
-        if (_daemon.isStageEnabled (i))
+        if (_daemon.isStageEnabled (i) && !getStageControl (i)->running ())
             if (boxes[i]->isChecked ()) {
                 _daemon.startWater (i);
             }
