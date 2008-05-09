@@ -1253,7 +1253,7 @@
     <message>
         <location filename="mainwindow.ui" line="1654"/>
         <source>&amp;Start</source>
-        <translation>&amp;Начать</translation>
+        <translation>&amp;Начало</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1669"/>
