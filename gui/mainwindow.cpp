@@ -939,6 +939,8 @@ void MainWindow::daemonSettingsGot ()
         getStageControl (i)->setLabel (_daemon.getSettings (i).bsuLabel ());
         getStageControl (i)->setAutoMode (_daemon.getSettings (i).autoMode ());
         getStageControl (i)->setTargetHumidity (_daemon.getSettings (i).targetHumidity ());
+        getStageControl (i)->setMinMaxWaterFlow (_daemon.getSettings (i).minWaterFlow (), 
+                                                 _daemon.getSettings (i).maxWaterFlow ());
     }
 }
 
@@ -1063,6 +1065,8 @@ void MainWindow::saveSettingsPage (int stage)
     _daemon.setSettings (stage, sett);
     _settingsChanged = false;
     Logger::instance ()->log (Logger::Information, tr ("Your setting for stage %1 saved and now active").arg (stage+1));
+
+    getStageControl (stage)->setMinMaxWaterFlow (sett.minWaterFlow (), sett.maxWaterFlow ());
 }
 
 

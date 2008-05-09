@@ -121,6 +121,9 @@ public:
         { return _targetWaterFlow; };
     void setTargetWaterFlow (double val);
 
+    void setMinMaxWaterFlow (double min, double max)
+        { _minWaterFlow = min; _maxWaterFlow = max; };
+
 private:
     int _number;
     bool _enabled, _running;
@@ -138,6 +141,8 @@ private:
     grainstate_t _grainState;
     bool _cleaning;
     double _targetWaterFlow;
+
+    double _minWaterFlow, _maxWaterFlow;
 
     QToolButton *_start, *_stop;
     bool _inHandleState;

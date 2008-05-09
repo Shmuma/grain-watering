@@ -19,6 +19,8 @@ StageControl::StageControl (QWidget* parent)
     _label = QString ();
     setEnabled (false);
     _cleaning = false;
+    _minWaterFlow = 0;
+    _maxWaterFlow = 1e10;
 
     // control buttons
     _start = new QToolButton (this);
@@ -244,8 +246,18 @@ void StageControl::humidityEditorReturnPressed ()
 
     val = _humidityEdit->text ().toDouble (&ok);
 
-    if (!ok || val < 0) {
-        QMessageBox::warning (this, tr ("Invalid water flow value"), tr ("You've entered nvalid water flow value."));
+    if (!ok) {
+        QMessageBox::warning (this, tr ("Invalid water flow value"), tr ("You've entered invalid water flow value."));
+        return;
+    }
+    
+    if (val < _minWaterFlow) {
+        QMessageBox::warning (this, tr ("Invalid water flow value"), tr ("Value of water flow is less than minimal for this stage"));
+        return;
+    }
+
+    if (val > _maxWaterFlow) {
+        QMessageBox::warning (this, tr ("Invalid water flow value"), tr ("Value of water flow is greater than maximum for this stage"));
         return;
     }
 
