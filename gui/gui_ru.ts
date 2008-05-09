@@ -135,7 +135,7 @@
     <message>
         <location filename="../lib/core/shell.cpp" line="1173"/>
         <source>Filter cleaning in progress</source>
-        <translation>Выполняется промыка фильтра</translation>
+        <translation>Выполняется промывка фильтра</translation>
     </message>
     <message>
         <location filename="../lib/core/shell.cpp" line="211"/>
