@@ -26,6 +26,7 @@ protected:
     void paintEvent (QPaintEvent* event);
     void mousePressEvent (QMouseEvent* e);
     void mouseReleaseEvent (QMouseEvent* e);
+    void setColor (QPainter& p, const char* color);
 
 protected slots:
     void startClicked ();

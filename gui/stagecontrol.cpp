@@ -65,9 +65,7 @@ StageControl::StageControl (QWidget* parent)
 
     // water flow editor
     _humidityEdit = new QLineEdit (this);
-//     QFont f = _humidityEdit->font ();
-//     f.setPointSize (f.pointSize ()-4);
-//     _humidityEdit->setFont (f);
+    _humidityEdit->setFont (QFont ("Verdana", 7));
 
     r = _svgWithSensors.boundsOnElement ("WaterFlow").toRect ();
     _humidityEdit->setGeometry (r);
@@ -98,32 +96,38 @@ void StageControl::paintEvent (QPaintEvent*)
     }
 
     if (_autoMode) {
-        p.setFont (QFont ("Arial", 16));
+        setColor (p, "#E7B953");
+        p.setFont (QFont ("Arial", 11));
         r = _svgWithSensors.boundsOnElement ("GrainHumidity").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.2f", _humidity)));
 
-        p.setFont (QFont ("Arial", 15));
+        setColor (p, "#E7B953");
+        p.setFont (QFont ("Arial", 10));
         r = _svgWithSensors.boundsOnElement ("GrainTemperature").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 C").arg (QString ().sprintf ("%.0f", _temp)));
 
-        p.setFont (QFont ("Arial", 15));
+        p.setFont (QFont ("Arial", 10));
         r = _svgWithSensors.boundsOnElement ("GrainNature").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 g/l").arg (QString ().sprintf ("%.2f", _nature)));
     
-        p.setFont (QFont ("Arial", 16));
+        setColor (p, "#E7B953");
+        p.setFont (QFont ("Arial", 11));
         r = _svgWithSensors.boundsOnElement ("GrainFlow").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 t/h").arg (QString ().sprintf ("%.2f", _flow)));
 
-        p.setFont (QFont ("Verdana", 8));
+        setColor (p, "#C1E8FB");
+        p.setFont (QFont ("Verdana", 7));
         r = _svgWithSensors.boundsOnElement ("HumidityDelta").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1\n%").arg (QString ().sprintf ("%.1f", _targetHumidity - _humidity)));
     }
 
-    p.setFont (QFont ("Verdana", 9));
+    setColor (p, "#F1FAFE");
+    p.setFont (QFont ("Verdana", 8));
     r = _svgWithSensors.boundsOnElement ("WaterFlow").adjusted (2, 2, -2, -2);
-    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1\nl/h").arg (QString ().sprintf ("%.0f", _waterFlow)));
+    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1").arg (QString ().sprintf ("%.0f", _waterFlow)));
 
-    p.setFont (QFont ("Verdana", 9));
+    setColor (p, "#C1E8FB");
+    p.setFont (QFont ("Verdana", 7));
     r = _svgWithSensors.boundsOnElement ("TargetHumidity").adjusted (2, 2, -2, -2);
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.2f", _targetHumidity)));
 
@@ -148,11 +152,12 @@ void StageControl::paintEvent (QPaintEvent*)
     p.fillRect (r, QBrush (_waterPresent ? Qt::cyan : Qt::lightGray));
 
     // stage mode
-    p.setFont (QFont ("Arial", 13));
+    p.setFont (QFont ("Arial", 12));
+    setColor (p, "#626262");
     r = _svgWithSensors.boundsOnElement ("StageMode").adjusted (2, 2, -2, -2);
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, _autoMode ? tr ("Auto", "Auto mode") : tr ("S/A", "Semiauto mode"));
 
-    p.setFont (QFont ("Arial", 16));
+    p.setFont (QFont ("Arial", 14));
     r = _svgWithSensors.boundsOnElement ("StageTitle").adjusted (2, 2, -2, -2);
     if (_cleaning) {
         QPen pen (p.pen ());
@@ -300,4 +305,12 @@ void StageControl::mouseReleaseEvent (QMouseEvent* e)
 
     if (_stopRect.contains (e->pos ()) && _running)
         stopClicked ();
+}
+
+
+void StageControl::setColor (QPainter& p, const char* color)
+{
+    QPen pen (p.pen ());
+    pen.setColor (QColor (color));
+    p.setPen (pen);
 }
