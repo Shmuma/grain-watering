@@ -199,7 +199,8 @@ SerialDeviceModel::SerialDeviceModel ()
     : SerialPort (),
       _last (NULL),
       _cleaningWait (false),
-      _cleaning (false)
+      _cleaning (false),
+      _drainWater (false)
 {
     for (int i = 0; i < 4; i++) {
         _waterGate[i] = 0xFFFF >> 1;
@@ -253,6 +254,19 @@ QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
         if (counter == 20) {
             _cleaning = false;
             counter = 0;
+        }
+
+        throw QString ("Timeout reading serial port");
+    }
+
+    if (_drainWater) {
+        counter++;
+        sleep (1);
+
+        if (counter == 5) {
+            _drainWater = false;
+            counter = 0;
+            return DeviceCommand (DeviceCommand::DrainWater, (DeviceCommand::stage_t)_drainStages).pack ();
         }
 
         throw QString ("Timeout reading serial port");
@@ -359,6 +373,13 @@ QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
 
     case DeviceCommand::GetCleanResult:
         res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0xFF, 0).pack ();
+        break;
+
+    case DeviceCommand::DrainWater:
+        res = DeviceCommand (kind, (DeviceCommand::stage_t)_last->low ()).pack ();
+        _drainWater = true;
+        _drainStages = _last->low ();
+        counter = 0;
         break;
 
     default:

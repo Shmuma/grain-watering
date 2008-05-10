@@ -164,7 +164,8 @@ DeviceCommand::stage_t DeviceCommand::stageByNum (int stage)
 Device::Device (SerialPort* port) throw (QString)
     : _port (port),
       _manual (true),
-      _connected (false)
+      _connected (false),
+      _drainBitmask (0)
 {
 }
 
@@ -434,9 +435,9 @@ bool Device::drainWater (bool s1, bool s2, bool s3, bool s4)
 
     DeviceCommand cmd (DeviceCommand::DrainWater, bitmask);
     _port->send (cmd.pack ());
+    _drainBitmask = bitmask;
 
-    return DeviceCommand::isOK (_port->receive (cmd.delay ()+1), DeviceCommand::DrainWater, DeviceCommand::Stg_All);
-//     return res & DeviceCommand::isOK (_port->receive (cmd.delay ()+1), DeviceCommand::DrainWater, DeviceCommand::Stg_All);;
+    return DeviceCommand::isOK (_port->receive (cmd.delay ()+1), DeviceCommand::DrainWater, (DeviceCommand::stage_t)bitmask);
 }
 
 
@@ -493,5 +494,6 @@ bool Device::cleaningStarted ()
 
 bool Device::waterDrained ()
 {
-    return DeviceCommand::isOK (_port->receive (1), DeviceCommand::DrainWater, DeviceCommand::Stg_All);
+    return DeviceCommand::isOK (_port->receive (1), DeviceCommand::DrainWater, (DeviceCommand::stage_t)_drainBitmask);
 }
+

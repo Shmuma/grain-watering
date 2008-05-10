@@ -86,6 +86,8 @@ private:
     bool _waterRunning[4];
     bool _cleaningWait;
     bool _cleaning;
+    bool _drainWater;
+    unsigned char _drainStages;
 
 public:
     SerialDeviceModel ();

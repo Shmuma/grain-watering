@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ru">
+<defaultcodec></defaultcodec>
 <context>
     <name>BSUControl</name>
     <message>
@@ -164,7 +165,7 @@
     <message>
         <location filename="../lib/core/shell.cpp" line="214"/>
         <source>Wait for water draining finished</source>
-        <translation>Слив воды выполнен</translation>
+        <translation>Выполняется слив воды</translation>
     </message>
     <message>
         <location filename="../lib/core/shell.cpp" line="290"/>

@@ -200,7 +200,7 @@ QString Interpreter::exec (const QString& line)
     QString res;
     bool ok;
 
-    if (_filterCleaning || isCleaningInProgress ())
+    if (_filterCleaning || isCleaningInProgress () || _waterDraining)
         if (items[0] == "checktick" || items[0] == "automodetick")
             return QString ();
 

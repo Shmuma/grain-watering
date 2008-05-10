@@ -102,6 +102,7 @@ class Device
 private:
     SerialPort* _port;
     bool _manual, _connected;
+    char _drainBitmask;
     
 protected:
     static unsigned char getLow (unsigned int value)

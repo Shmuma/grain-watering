@@ -1634,8 +1634,10 @@ void MainWindow::daemonCleanFinished ()
 
 void MainWindow::drainWaterButtonClicked ()
 {
-    _daemon.drainWater (drainS1Check->isChecked (), drainS2Check->isChecked (), drainS3Check->isChecked (), drainS4Check->isChecked ());
-    Logger::instance ()->log (Logger::Information, tr ("Drain water of specified stages started"));
+    if (drainS1Check->isChecked () || drainS2Check->isChecked () || drainS3Check->isChecked () || drainS4Check->isChecked ()) {
+        _daemon.drainWater (drainS1Check->isChecked (), drainS2Check->isChecked (), drainS3Check->isChecked (), drainS4Check->isChecked ());
+        Logger::instance ()->log (Logger::Information, tr ("Drain water of specified stages started"));
+    }
 }
 
 
