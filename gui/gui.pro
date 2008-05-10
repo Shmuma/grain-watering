@@ -14,7 +14,7 @@ QMAKE_LFLAGS_DEBUG += -g
 
 # Input
 HEADERS += mainwindow.h doubleclickbutton.h stagecontrol.h daemon.h logger.h bsucontrol.h tableform.h
-SOURCES += main.cpp mainwindow.cpp doubleclickbutton.cpp stagecontrol.cpp daemon.cpp logger.cpp bsucontrol.cpp tableform.cpp
+SOURCES += main.cpp mainwindow.cpp doubleclickbutton.cpp stagecontrol.cpp daemon.cpp logger.cpp bsucontrol.cpp tableform.cpp 
 FORMS += mainwindow.ui tableform.ui
 
 LIBS += -L../lib/core -lcore

@@ -16,8 +16,16 @@ public:
         GS_GrainPresent,
     };
 
+    enum button_state_t {
+        BS_Normal = 0,
+        BS_Pressed,
+        BS_Disabled
+    };
+
 protected:
     void paintEvent (QPaintEvent* event);
+    void mousePressEvent (QMouseEvent* e);
+    void mouseReleaseEvent (QMouseEvent* e);
 
 protected slots:
     void startClicked ();
@@ -144,8 +152,6 @@ private:
 
     double _minWaterFlow, _maxWaterFlow;
 
-    QToolButton *_start, *_stop;
-    bool _inHandleState;
     QToolButton *_humidityUp, *_humidityDown;
     QToolButton *_waterUp, *_waterDown;
     QLineEdit* _humidityEdit;
@@ -155,6 +161,12 @@ private:
     
     // SVG helpers
     QSvgRenderer _svgWithSensors;
+
+    // buttons pixmaps
+    QPixmap _startImages[3];
+    QPixmap _stopImages[3];
+    QRect _startRect, _stopRect;
+    bool _startPressed, _stopPressed;
 };
 
 #endif

@@ -8,7 +8,6 @@
 // --------------------------------------------------
 StageControl::StageControl (QWidget* parent)
     : QWidget (parent),
-      _inHandleState (false),
       _imgWithSensors (QString (":/stages/svg/stage1.png"), "PNG"),
       _svgWithSensors (QString (":/stages/svg/stage1-full.svg"), this)
 {
@@ -22,22 +21,21 @@ StageControl::StageControl (QWidget* parent)
     _minWaterFlow = 0;
     _maxWaterFlow = 1e10;
 
-    // control buttons
-    _start = new QToolButton (this);
-    _stop = new QToolButton (this);
+    // load images for buttons
+    _startPressed = _stopPressed = false;
 
-    connect (_start, SIGNAL (clicked ()), this, SLOT (startClicked ()));
-    connect (_stop, SIGNAL (clicked ()), this, SLOT (stopClicked ()));
+    _startImages[0] = QPixmap (":/stages/buttons/start-normal.png");
+    _startImages[1] = QPixmap (":/stages/buttons/start-pressed.png");
+    _startImages[2] = QPixmap (":/stages/buttons/start-disabled.png");
 
-    _start->setText (tr ("Start"));
-    _stop->setText (tr ("Stop"));
+    _stopImages[0] = QPixmap (":/stages/buttons/stop-normal.png");
+    _stopImages[1] = QPixmap (":/stages/buttons/stop-pressed.png");
+    _stopImages[2] = QPixmap (":/stages/buttons/stop-disabled.png");
 
     QRect r;
 
-    r = _svgWithSensors.boundsOnElement ("StartButton").adjusted (-4, -4, 4, 4).toRect ();
-    _start->setGeometry (r);
-    r = _svgWithSensors.boundsOnElement ("StopButton").adjusted (-4, -4, 4, 4).toRect ();
-    _stop->setGeometry (r);
+    _startRect = _svgWithSensors.boundsOnElement ("StartButton").toRect ();
+    _stopRect =  _svgWithSensors.boundsOnElement ("StopButton").toRect ();
 
     setRunning (false);
 
@@ -75,7 +73,6 @@ StageControl::StageControl (QWidget* parent)
     _humidityEdit->setGeometry (r);
 
     connect (_humidityEdit, SIGNAL (returnPressed ()), this, SLOT (humidityEditorReturnPressed ()));
-
 }
 
 
@@ -90,7 +87,15 @@ void StageControl::paintEvent (QPaintEvent*)
     // draw underlying pixmap
     p.drawPixmap (QPoint (0, 0), _imgWithSensors);
 
-    //     p.drawRect (QRect (0, 0, geometry ().width ()-1, geometry ().height ()-1));
+    // draw buttons
+    if (_running) {
+        p.drawPixmap (_startRect.topLeft (), _startImages[2]);
+        p.drawPixmap (_stopRect.topLeft (), _stopImages[_stopPressed ? 1 : 0]);
+    }
+    else {
+        p.drawPixmap (_startRect.topLeft (), _startImages[_startPressed ? 1 : 0]);
+        p.drawPixmap (_stopRect.topLeft (), _stopImages[2]);       
+    }
 
     if (_autoMode) {
         p.setFont (QFont ("Arial", 16));
@@ -160,49 +165,19 @@ void StageControl::paintEvent (QPaintEvent*)
 
 void StageControl::setRunning (bool running)
 {
-    _inHandleState = true;
     _running = running;
-    if (_running) {
-        _start->setEnabled (false);
-        _stop->setEnabled (true);
-
-        QPalette pal;
-
-        _start->setPalette (qApp->palette (_start));
-
-        pal = _stop->palette ();
-        pal.setColor (QPalette::Background, Qt::red);
-        _stop->setPalette (pal);
-
-    }
-    else {
-        _start->setEnabled (true);
-        _stop->setEnabled (false);
-
-        QPalette pal = _start->palette ();
-        pal.setColor (QPalette::Background, Qt::green);
-        _start->setPalette (pal);
-
-        _stop->setPalette (qApp->palette (_stop));
-    }
-    _inHandleState = false;
+     update ();
 }
 
 
 void StageControl::startClicked ()
 {
-    if (_inHandleState)
-        return;
-
     startPressed (_number);
 }
 
 
 void StageControl::stopClicked ()
 {
-    if (_inHandleState)
-        return;
-
     stopPressed (_number);
 }
 
@@ -294,4 +269,35 @@ void StageControl::setAutoMode (bool mode)
         _waterUp->show ();
         _waterDown->show ();
     }
+}
+
+
+void StageControl::mousePressEvent (QMouseEvent* e)
+{
+    if (_startRect.contains (e->pos ()) && !_running) {
+        _startPressed = true;
+        update ();
+    }
+    else
+        _startPressed = false;
+
+    if (_stopRect.contains (e->pos ()) && _running) {
+        _stopPressed = true;
+        update ();
+    }
+    else
+        _stopPressed = false;
+}
+
+
+void StageControl::mouseReleaseEvent (QMouseEvent* e)
+{
+    _startPressed = _stopPressed = false;
+    update ();
+
+    if (_startRect.contains (e->pos ()) && !_running)
+        startClicked ();
+
+    if (_stopRect.contains (e->pos ()) && _running)
+        stopClicked ();
 }

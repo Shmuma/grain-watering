@@ -1,8 +1,14 @@
 <RCC>
-    <qresource prefix="/stages" >
-        <file>svg/filter-full.svg</file>
-        <file>svg/filter.png</file>
-        <file>svg/stage1-full.svg</file>
-        <file>svg/stage1.png</file>
-    </qresource>
+  <qresource prefix="/stages" >
+    <file>buttons/start-disabled.png</file>
+    <file>buttons/start-normal.png</file>
+    <file>buttons/start-pressed.png</file>
+    <file>buttons/stop-disabled.png</file>
+    <file>buttons/stop-normal.png</file>
+    <file>buttons/stop-pressed.png</file>
+    <file>svg/filter-full.svg</file>
+    <file>svg/filter.png</file>
+    <file>svg/stage1-full.svg</file>
+    <file>svg/stage1.png</file>
+  </qresource>
 </RCC>
