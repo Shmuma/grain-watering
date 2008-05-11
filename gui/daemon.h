@@ -49,22 +49,26 @@ private:
     int _stage;
     history_stage_t _hist_stage;
     history_kind_t _hist_kind;
+    double _val;
 
 public:
-    DaemonCommand (kind_t kind, int stage = 0)
+    DaemonCommand (kind_t kind, int stage = 0, double val = 0.0)
         : _kind (kind),
-          _stage (stage) {};
+          _stage (stage),
+          _val (val) {};
 
     DaemonCommand (kind_t kind, history_stage_t hist_stage, history_kind_t hist_kind)
         : _kind (kind),
           _hist_stage (hist_stage),
-          _hist_kind (hist_kind) {};
+          _hist_kind (hist_kind),
+          _val (0.0) {};
 
     kind_t kind () const
         { return _kind; };
-
     int stage () const
         { return _stage; };
+    double val () const
+        { return _val; };
 
     history_stage_t historyStage () const
         { return _hist_stage; }

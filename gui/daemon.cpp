@@ -251,6 +251,8 @@ void Daemon::socketReadyRead ()
                     if (!parseGenericReply (reply.trimmed (), msg))
                         Logger::instance ()->log (Logger::Error, tr ("Cannot assign target water flow on stage %1. Reason: '%2'")
                                                   .arg (cmd.stage ()+1).arg (trDaemon (msg)));                    
+                    else
+                        targetFlowUpdated (cmd.stage (), cmd.val ());
                     break;
                 case DaemonCommand::c_setminpressure:
                     break;
@@ -888,7 +890,7 @@ void Daemon::getCleanResult ()
 void Daemon::setTargetWaterFlow (int stage, double val)
 {
     sendCommand (QString ("settgtflow %1 %2\n").arg (stage).arg (val));
-    _queue.push_back (DaemonCommand (DaemonCommand::c_settargetwaterflow, stage));
+    _queue.push_back (DaemonCommand (DaemonCommand::c_settargetwaterflow, stage, val));
 }
 
 

@@ -895,7 +895,7 @@ void MainWindow::daemonCalculatedHumidityUpdated (int stage, double val)
 
 void MainWindow::daemonTargetFlowUpdated (int stage, double val)
 {
-    getStageControl (stage)->setTargetWaterFlow (val);
+   getStageControl (stage)->setTargetWaterFlow (val);
 }
 
 
