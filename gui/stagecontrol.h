@@ -4,6 +4,8 @@
 #include <QtGui>
 #include <QtSvg>
 
+#include "settings.h"
+
 
 class StageControl : public QWidget
 {
@@ -107,9 +109,9 @@ public:
     void setLabel (const QString& label)
         { _label = label; update (); };
 
-    bool autoMode () const
-        { return _autoMode; };
-    void setAutoMode (bool mode);
+    StageSettings::mode_t mode () const
+        { return _mode; };
+    void setMode (StageSettings::mode_t mode);
 
     bool waterPresent () const 
         { return _waterPresent; };
@@ -145,7 +147,7 @@ private:
     double _setting;
     bool _sensors;
     QString _label;
-    bool _autoMode;
+    StageSettings::mode_t _mode;
     bool _waterPresent;
     grainstate_t _grainState;
     bool _cleaning;

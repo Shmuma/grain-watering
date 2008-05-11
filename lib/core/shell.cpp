@@ -930,23 +930,27 @@ QString Interpreter::getStageState (int stage)
         return "cleaning";
 
     if (_settings[stage].sensors ()) {
-        if (_settings[stage].autoMode ()) {
-            d_temp = getGrainTemperature (stage);
+
+        if (_settings[stage].mode () != StageSettings::M_SemiAuto) {
             d_grain_flow = getGrainFlow (stage);
+            appendHistory ((history_stage_t)stage, HK_GrainFlow, d_grain_flow);
+            res += "GF=" + QString::number (d_grain_flow) + ",";
+        }
+
+        res += "R="  + QString::number (_stageRunning[stage] ? 1 : 0) + ",";
+
+        if (_settings[stage].mode () == StageSettings::M_Auto) {
+            d_temp = getGrainTemperature (stage);
             d_hum = getGrainHumidity (stage);
             temp = round (d_temp);
             d_wf = getWaterFlow (stage);
             d_gn = getGrainNature (stage);
 
-            appendHistory ((history_stage_t)stage, HK_GrainFlow, d_grain_flow);
             appendHistory ((history_stage_t)stage, HK_GrainTemp, d_temp);
             appendHistory ((history_stage_t)stage, HK_GrainNature, d_gn);
             appendHistory ((history_stage_t)stage, HK_WaterFlow, d_wf);
 
-            res += "R="  + QString::number (_stageRunning[stage] ? 1 : 0) + ",";
             res += "WF=" + QString::number (d_wf) + ",";
-            res += "GF=" + QString::number (d_grain_flow) + ",";
-            //        res += "GH=" + QString::number (d_hum) + ",";
             res += "GT=" + QString::number (d_temp) + ",";
             res += "GN=" + QString::number (d_gn) + ",";
 
@@ -957,7 +961,12 @@ QString Interpreter::getStageState (int stage)
             appendHistory ((history_stage_t)stage, HK_GrainHumidity, d_hum_cur);
 
             res += "GH=" + QString::number (d_hum_cur) + ",";
+        }
 
+        if (_settings[stage].mode () == StageSettings::M_Fixed)
+            d_hum_cur = _settings[stage].fixedHumidity ();
+
+        if (_settings[stage].mode () != StageSettings::M_SemiAuto) {
             // calculate target water flow
             switch (_settings[stage].waterFormula ()) {
             case 0:
@@ -1124,7 +1133,7 @@ QString Interpreter::setStageModes (const QStringList& args)
     bool modes[4];
 
     for (int i = 0; i < 4; i++) {
-        _settings[i].setAutoMode (args[i] == "auto");
+        _settings[i].setMode (args[i]);
         _db.setStageSettings (i, _settings[i].toString ());
     }
 
@@ -1299,8 +1308,8 @@ QString Interpreter::setTargetFlow (const QStringList& args)
     int stage = args[0].toInt ();
     double val = args[1].toDouble ();
 
-    if (_settings[stage].autoMode ())
-        throw tr ("Stage in auto mode");
+    if (_settings[stage].mode () != StageSettings::M_SemiAuto)
+        throw tr ("Stage not in semi-auto mode");
 
     _settings[stage].setTargetFlow (val);
     _db.setStageSettings (stage, _settings[stage].toString ());
@@ -1313,7 +1322,7 @@ QString Interpreter::getTargetFlow (const QStringList& args)
     QString res;
 
     for (int i = 0; i < 4; i++) {
-        if (_settings[i].autoMode ())
+        if (_settings[i].mode () != StageSettings::M_SemiAuto)
             res += "auto ";
         else
             res += QString::number (_settings[i].targetFlow ());

@@ -1083,7 +1083,7 @@
     <message>
         <location filename="mainwindow.ui" line="823"/>
         <source>Humidity coeff</source>
-        <translation>Кэффициент влажности</translation>
+        <translation>Коэффициент влажности</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="840"/>

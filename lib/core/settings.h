@@ -5,6 +5,13 @@
 
 class StageSettings
 {
+public:
+    enum mode_t {
+        M_Auto = 0,
+        M_SemiAuto,
+        M_Fixed,
+    };
+
 private:
     double _targetHumidity, _humidityCoeff, _minGrainFlow;
     double _waterFlowK, _minWaterFlow, _maxWaterFlow;
@@ -12,8 +19,9 @@ private:
     bool _sensors;
     bool _valid;
     QString _bsu_label;
-    bool _auto_mode;
+    mode_t _mode;
     double _target_flow;
+    double _fixedHumidity;
 
     QMap<int, double> _humidityTable;
     QMap<int, double> _grainFlowTable;
@@ -37,7 +45,9 @@ public:
           _sensors (true),
           _valid (false),
           _bsu_label (QString ()),
-          _auto_mode (true)
+          _mode (M_Auto),
+          _target_flow (0.0),
+          _fixedHumidity (0.0)
     {
         _humidityTable.clear ();
         _grainFlowTable.clear ();
@@ -59,7 +69,9 @@ public:
           _sensors (sett._sensors),
           _valid (sett._valid),
           _bsu_label (sett._bsu_label),
-          _auto_mode (sett._auto_mode),
+          _mode (sett._mode),
+          _target_flow (sett._target_flow),
+          _fixedHumidity (sett._fixedHumidity),
           _humidityTable (sett._humidityTable),
           _grainFlowTable (sett._grainFlowTable),
           _grainNatureTable (sett._grainNatureTable),
@@ -144,16 +156,22 @@ public:
         { _sensors = sensors; };
     bool sensors () const
         { return _sensors; };
-
-    void setAutoMode (bool mode)
-        { _auto_mode = mode; };
-    bool autoMode () const
-        { return _auto_mode; };
+   
+    void setMode (mode_t mode)
+        { _mode = mode; };
+    void setMode (const QString& str);
+    mode_t mode () const
+        { return _mode; };
 
     void setTargetFlow (double val)
         { _target_flow = val; };
     double targetFlow () const
         { return _target_flow; };
+
+    void setFixedHumidity (double val)
+        { _fixedHumidity = val; };
+    double fixedHumidity () const 
+        { return _fixedHumidity; };
 };
 
 

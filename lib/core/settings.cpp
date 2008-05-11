@@ -18,8 +18,9 @@ StageSettings::StageSettings (const QString& str)
       _sensors (true),
       _valid (false),
       _bsu_label (QString ()),
-      _auto_mode (true),
-      _target_flow (0.0)
+      _mode (M_Auto),
+      _target_flow (0.0),
+      _fixedHumidity (0.0)
 {
     _humidityTable.clear ();
     _grainFlowTable.clear ();
@@ -57,7 +58,7 @@ StageSettings::StageSettings (const QString& str)
         else if (l[0] == "bsu")
             _bsu_label = l[1];
         else if (l[0] == "mode")
-            _auto_mode = l[1] == "auto";
+            setMode (l[1]);
         else {
             val = l[1].toDouble (&ok);
             if (!ok)
@@ -81,6 +82,8 @@ StageSettings::StageSettings (const QString& str)
                 _waterFormula = l[1].toInt ();
             else if (l[0] == "sens")
                 _sensors = l[1] != "0";
+            else if (l[0] == "fix")
+                _fixedHumidity = val;
         }
     }
 
@@ -93,11 +96,21 @@ QString StageSettings::toString () const
     if (!_valid)
         return QString ("invalid");
 
-//     printf ("toString: TH=%f,HC=%f,minGF=%f,WFK=%f,minWF=%f,maxWF=%f,WF=%d\n", 
-//             _targetHumidity, _humidityCoeff, _minGrainFlow, _waterFlowK, 
-//             _minWaterFlow, _maxWaterFlow, _waterFormula);
-        
-    return QString ().sprintf ("TH=%f,HC=%f,minGF=%f,WFK=%f,minWF=%f,maxWF=%f,WF=%d,HT=%s,GF=%s,GN=%s,GT=%s,GNC=%s,SENS=%d,BSU=%s,MODE=%s,TF=%f", 
+    QString modeLabel;
+
+    switch (_mode) {
+    case M_Auto:
+        modeLabel = "auto";
+        break;
+    case M_SemiAuto:
+        modeLabel = "semi";
+        break;
+    case M_Fixed:
+        modeLabel = "fixed";
+        break;
+    }
+
+    return QString ().sprintf ("TH=%f,HC=%f,minGF=%f,WFK=%f,minWF=%f,maxWF=%f,WF=%d,HT=%s,GF=%s,GN=%s,GT=%s,GNC=%s,SENS=%d,BSU=%s,MODE=%s,TF=%f,FIX=%f", 
                                _targetHumidity, _humidityCoeff, _minGrainFlow, _waterFlowK, 
                                _minWaterFlow, _maxWaterFlow, _waterFormula, 
                                hash2string (_humidityTable).toAscii ().constData (),
@@ -107,8 +120,9 @@ QString StageSettings::toString () const
                                hash2string (_grainNatureCoeffTable).toAscii ().constData (),
                                _sensors ? 1 : 0,
                                _bsu_label.toUtf8 ().constData (),
-                               _auto_mode ? "auto" : "semi",
-                               _target_flow);
+                               modeLabel.toAscii ().constData (),
+                               _target_flow,
+                               _fixedHumidity);
 }
 
 
@@ -137,4 +151,15 @@ QString StageSettings::hash2string (const QMap<int, double>& hash) const
     }
 
     return res;
+}
+
+
+void StageSettings::setMode (const QString& str)
+{
+    if (str == "auto")
+        _mode = M_Auto;
+    else if (str == "semi")
+        _mode = M_SemiAuto;
+    else
+        _mode = M_Fixed;
 }

@@ -1,6 +1,7 @@
 #include <QtGui>
 #include <QtSvg>
 #include "stagecontrol.h"
+#include "settings.h"
 
 
 // --------------------------------------------------
@@ -11,6 +12,7 @@ StageControl::StageControl (QWidget* parent)
       _imgWithSensors (QString (":/stages/svg/stage1.png"), "PNG"),
       _svgWithSensors (QString (":/stages/svg/stage1-full.svg"), this)
 {
+    _mode = StageSettings::M_Auto;
     _number = 0;
     _grainState = GS_GrainMissing;
     _waterPresent = false;
@@ -95,7 +97,14 @@ void StageControl::paintEvent (QPaintEvent*)
         p.drawPixmap (_stopRect.topLeft (), _stopImages[2]);       
     }
 
-    if (_autoMode) {
+    if (_mode != StageSettings::M_SemiAuto) {
+        setColor (p, "#E7B953");
+        p.setFont (QFont ("Arial", 11));
+        r = _svgWithSensors.boundsOnElement ("GrainFlow").adjusted (2, 2, -2, -2);
+        p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 t/h").arg (QString ().sprintf ("%.2f", _flow)));
+    }
+
+    if (_mode == StageSettings::M_Auto) {
         setColor (p, "#E7B953");
         p.setFont (QFont ("Arial", 11));
         r = _svgWithSensors.boundsOnElement ("GrainHumidity").adjusted (2, 2, -2, -2);
@@ -110,11 +119,6 @@ void StageControl::paintEvent (QPaintEvent*)
         r = _svgWithSensors.boundsOnElement ("GrainNature").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 g/l").arg (QString ().sprintf ("%.2f", _nature)));
     
-        setColor (p, "#E7B953");
-        p.setFont (QFont ("Arial", 11));
-        r = _svgWithSensors.boundsOnElement ("GrainFlow").adjusted (2, 2, -2, -2);
-        p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 t/h").arg (QString ().sprintf ("%.2f", _flow)));
-
         setColor (p, "#C1E8FB");
         p.setFont (QFont ("Verdana", 7));
         r = _svgWithSensors.boundsOnElement ("HumidityDelta").adjusted (2, 2, -2, -2);
@@ -155,7 +159,21 @@ void StageControl::paintEvent (QPaintEvent*)
     p.setFont (QFont ("Arial", 12));
     setColor (p, "#626262");
     r = _svgWithSensors.boundsOnElement ("StageMode").adjusted (2, 2, -2, -2);
-    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, _autoMode ? tr ("Auto", "Auto mode") : tr ("S/A", "Semiauto mode"));
+    QString modeLabel;
+
+    switch (_mode) {
+    case StageSettings::M_Auto:
+        modeLabel = tr ("Auto", "Auto mode");
+        break;
+    case StageSettings::M_SemiAuto:
+        modeLabel = tr ("S/A", "Semiauto mode");
+        break;
+    case StageSettings::M_Fixed:
+        modeLabel = tr ("Fixed", "Fixed humidity mode");
+        break;
+    }
+
+    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, modeLabel);
 
     p.setFont (QFont ("Arial", 14));
     r = _svgWithSensors.boundsOnElement ("StageTitle").adjusted (2, 2, -2, -2);
@@ -255,16 +273,16 @@ void StageControl::setTargetWaterFlow (double val)
     _targetWaterFlow = val;
     update ();
 
-    if (!_autoMode)
+    if (_mode != StageSettings::M_SemiAuto)
         _humidityEdit->setText (QString ().sprintf ("%.02f", val));
 }
 
 
-void StageControl::setAutoMode (bool mode)
+void StageControl::setMode (StageSettings::mode_t mode)
 {
-    _autoMode = mode; update ();
+    _mode = mode; update ();
 
-    if (_autoMode) {
+    if (_mode != StageSettings::M_SemiAuto) {
         _humidityEdit->hide ();
         _waterUp->hide ();
         _waterDown->hide ();

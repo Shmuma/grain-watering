@@ -296,7 +296,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex" >
-             <number>0</number>
+             <number>3</number>
             </property>
             <widget class="QWidget" name="config" >
              <property name="geometry" >
@@ -390,8 +390,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>100</width>
-               <height>30</height>
+               <width>361</width>
+               <height>527</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" >
@@ -420,6 +420,11 @@
                      <string>Semi-auto</string>
                     </property>
                    </item>
+                   <item>
+                    <property name="text" >
+                     <string>Fixed humidity</string>
+                    </property>
+                   </item>
                   </widget>
                  </item>
                  <item row="1" column="0" >
@@ -439,6 +444,11 @@
                    <item>
                     <property name="text" >
                      <string>Semi-auto</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text" >
+                     <string>Fixed humidity</string>
                     </property>
                    </item>
                   </widget>
@@ -462,6 +472,11 @@
                      <string>Semi-auto</string>
                     </property>
                    </item>
+                   <item>
+                    <property name="text" >
+                     <string>Fixed humidity</string>
+                    </property>
+                   </item>
                   </widget>
                  </item>
                  <item row="3" column="0" >
@@ -481,6 +496,11 @@
                    <item>
                     <property name="text" >
                      <string>Semi-auto</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text" >
+                     <string>Fixed humidity</string>
                     </property>
                    </item>
                   </widget>
@@ -515,8 +535,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>100</width>
-               <height>30</height>
+               <width>361</width>
+               <height>527</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" >
@@ -579,8 +599,8 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>100</width>
-                   <height>30</height>
+                   <width>343</width>
+                   <height>353</height>
                   </rect>
                  </property>
                  <layout class="QVBoxLayout" >
@@ -771,11 +791,11 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>100</width>
-               <height>30</height>
+               <width>361</width>
+               <height>562</height>
               </rect>
              </property>
-             <layout class="QVBoxLayout" >
+             <layout class="QVBoxLayout" name="verticalLayout" >
               <item>
                <widget class="QComboBox" name="settingsStageComboBox" >
                 <item>
@@ -801,7 +821,7 @@
                </widget>
               </item>
               <item>
-               <layout class="QGridLayout" >
+               <layout class="QGridLayout" name="gridLayout" >
                 <item row="0" column="0" >
                  <widget class="QLabel" name="label_2" >
                   <property name="text" >
@@ -820,47 +840,64 @@
                  </widget>
                 </item>
                 <item row="1" column="0" >
-                 <widget class="QLabel" name="label_5" >
+                 <widget class="QLabel" name="label_23" >
                   <property name="text" >
-                   <string>Humidity coeff</string>
+                   <string>Fixed humidity</string>
                   </property>
                  </widget>
                 </item>
                 <item row="1" column="1" >
-                 <widget class="QLineEdit" name="settingsHumidityCoeffEdit" />
+                 <widget class="QLineEdit" name="settingsFixedHumidityEdit" />
                 </item>
                 <item row="1" column="2" >
-                 <widget class="QLabel" name="label_4" >
+                 <widget class="QLabel" name="label_24" >
                   <property name="text" >
                    <string>%</string>
                   </property>
                  </widget>
                 </item>
                 <item row="2" column="0" >
+                 <widget class="QLabel" name="label_5" >
+                  <property name="text" >
+                   <string>Humidity coeff</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1" >
+                 <widget class="QLineEdit" name="settingsHumidityCoeffEdit" />
+                </item>
+                <item row="2" column="2" >
+                 <widget class="QLabel" name="label_4" >
+                  <property name="text" >
+                   <string>%</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0" >
                  <widget class="QLabel" name="label_6" >
                   <property name="text" >
                    <string>Min grain flow</string>
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="1" >
+                <item row="3" column="1" >
                  <widget class="QLineEdit" name="settingsMinGrainFlowEdit" />
                 </item>
-                <item row="2" column="2" >
+                <item row="3" column="2" >
                  <widget class="QLabel" name="label_7" >
                   <property name="text" >
                    <string>t/h</string>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0" >
+                <item row="4" column="0" >
                  <widget class="QLabel" name="label_20" >
                   <property name="text" >
                    <string>BSU label</string>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="1" >
+                <item row="4" column="1" >
                  <widget class="QLineEdit" name="bsuLabelEdit" />
                 </item>
                </layout>
@@ -890,8 +927,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>640</width>
-                      <height>409</height>
+                      <width>327</width>
+                      <height>225</height>
                      </rect>
                     </property>
                     <attribute name="title" >
@@ -994,8 +1031,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>640</width>
-                      <height>409</height>
+                      <width>327</width>
+                      <height>225</height>
                      </rect>
                     </property>
                     <attribute name="title" >
@@ -1526,7 +1563,7 @@
             <x>0</x>
             <y>0</y>
             <width>546</width>
-            <height>549</height>
+            <height>584</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" >
@@ -1741,7 +1778,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>524</width>
-                <height>419</height>
+                <height>454</height>
                </rect>
               </property>
               <attribute name="title" >
@@ -1773,7 +1810,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>524</width>
-                <height>419</height>
+                <height>454</height>
                </rect>
               </property>
               <attribute name="title" >

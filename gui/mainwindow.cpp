@@ -929,15 +929,15 @@ void MainWindow::daemonSettingsGot ()
     else
         stage4SensorsCheckbox->setChecked (false);
 
-    s1modeCombo->setCurrentIndex (_daemon.getSettings (0).autoMode () ? 0 : 1);
-    s2modeCombo->setCurrentIndex (_daemon.getSettings (1).autoMode () ? 0 : 1);
-    s3modeCombo->setCurrentIndex (_daemon.getSettings (2).autoMode () ? 0 : 1);
-    s4modeCombo->setCurrentIndex (_daemon.getSettings (3).autoMode () ? 0 : 1);
+    s1modeCombo->setCurrentIndex (_daemon.getSettings (0).mode ());
+    s2modeCombo->setCurrentIndex (_daemon.getSettings (1).mode ());
+    s3modeCombo->setCurrentIndex (_daemon.getSettings (2).mode ());
+    s4modeCombo->setCurrentIndex (_daemon.getSettings (3).mode ());
 
     for (int i = 0; i < 4; i++) {
         getStageControl (i)->setSensors (_daemon.getSettings (i).sensors ());
         getStageControl (i)->setLabel (_daemon.getSettings (i).bsuLabel ());
-        getStageControl (i)->setAutoMode (_daemon.getSettings (i).autoMode ());
+        getStageControl (i)->setMode (_daemon.getSettings (i).mode ());
         getStageControl (i)->setTargetHumidity (_daemon.getSettings (i).targetHumidity ());
         getStageControl (i)->setMinMaxWaterFlow (_daemon.getSettings (i).minWaterFlow (), 
                                                  _daemon.getSettings (i).maxWaterFlow ());
@@ -967,6 +967,7 @@ void MainWindow::settingsStageComboActivated (int item)
     }
 
     settingsTargetHumidityEdit->setText (QString::number (sett.targetHumidity ()));
+    settingsFixedHumidityEdit->setText (QString::number (sett.fixedHumidity ()));
     settingsHumidityCoeffEdit->setText (QString::number (sett.humidityCoeff ()));
     settingsMinGrainFlowEdit->setText (QString::number (sett.minGrainFlow ()));
     settingsWaterFlowKEdit->setText (QString::number (sett.waterFlowK ()));
@@ -1002,6 +1003,15 @@ void MainWindow::saveSettingsPage (int stage)
     }
     else {
         QMessageBox::warning (this, tr ("Value error"), tr ("Target humidity have invalid format"));
+        return;
+    }
+
+    val = settingsFixedHumidityEdit->text ().toDouble (&ok);
+    if (ok) {
+        sett.setFixedHumidity (val);
+    }
+    else {
+        QMessageBox::warning (this, tr ("Value error"), tr ("Fixed humidity have invalid format"));
         return;
     }
 
@@ -1337,19 +1347,19 @@ void MainWindow::daemonCalibrateReply (int stage, const QString&, double val)
 
 void MainWindow::stageModesApplyButtonClicked ()
 {
-    QString modes[] = { tr ("Auto"), tr ("Semi-auto") };
+    QString modes[] = { tr ("Auto"), tr ("Semi-auto"), tr ("Fixed humidity") };
 
-    _daemon.setStageModes (s1modeCombo->currentIndex () == 0, s2modeCombo->currentIndex () == 0, 
-                           s3modeCombo->currentIndex () == 0, s4modeCombo->currentIndex () == 0);
+    _daemon.setStageModes ((StageSettings::mode_t)s1modeCombo->currentIndex (), (StageSettings::mode_t)s2modeCombo->currentIndex (), 
+                           (StageSettings::mode_t)s3modeCombo->currentIndex (), (StageSettings::mode_t)s4modeCombo->currentIndex ());
     Logger::instance ()->log (Logger::Information, tr ("Request new stages modes: %1, %2, %3, %4")
                               .arg (modes[s1modeCombo->currentIndex ()])
                               .arg (modes[s2modeCombo->currentIndex ()])
                               .arg (modes[s3modeCombo->currentIndex ()])
                               .arg (modes[s4modeCombo->currentIndex ()]));
-    stageControl1->setAutoMode (s1modeCombo->currentIndex () == 0);
-    stageControl2->setAutoMode (s2modeCombo->currentIndex () == 0);
-    stageControl3->setAutoMode (s3modeCombo->currentIndex () == 0);
-    stageControl4->setAutoMode (s4modeCombo->currentIndex () == 0);
+    stageControl1->setMode ((StageSettings::mode_t)s1modeCombo->currentIndex ());
+    stageControl2->setMode ((StageSettings::mode_t)s2modeCombo->currentIndex ());
+    stageControl3->setMode ((StageSettings::mode_t)s3modeCombo->currentIndex ());
+    stageControl4->setMode ((StageSettings::mode_t)s4modeCombo->currentIndex ());
 }
 
 

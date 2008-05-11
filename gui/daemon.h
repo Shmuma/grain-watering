@@ -209,7 +209,7 @@ public:
 
     void calibrate (int stage, const QString& key);
 
-    void setStageModes (bool s1, bool s2, bool s3, bool s4);
+    void setStageModes (StageSettings::mode_t s1, StageSettings::mode_t s2, StageSettings::mode_t s3, StageSettings::mode_t s4);
     void requestHistory (history_stage_t stage, history_kind_t kind, uint from, uint to);
     void requestEvents (uint from, uint to, bool clean);
 

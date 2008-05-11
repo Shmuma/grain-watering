@@ -741,13 +741,30 @@ void Daemon::parseCalibrateReply (int stage, const QString& reply)
 }
 
 
-void Daemon::setStageModes (bool s1, bool s2, bool s3, bool s4)
+static const char* mode2label (StageSettings::mode_t m) 
 {
+    switch (m) {
+    case StageSettings::M_Auto:
+        return "auto";
+    case StageSettings::M_SemiAuto:
+        return "semi";
+    case StageSettings::M_Fixed:
+        return "fixed";
+    default:
+        return "unknown";
+    }
+}
+
+
+void Daemon::setStageModes (StageSettings::mode_t s1, StageSettings::mode_t s2, StageSettings::mode_t s3, StageSettings::mode_t s4)
+{
+    _sett[0].setMode (s1);
+    _sett[1].setMode (s2);
+    _sett[2].setMode (s3);
+    _sett[3].setMode (s4);
     sendCommand (QString ().sprintf ("setstagemodes %s %s %s %s\n", 
-                                     s1 ? "auto" : "semi", 
-                                     s2 ? "auto" : "semi", 
-                                     s3 ? "auto" : "semi", 
-                                     s4 ? "auto" : "semi"));
+                                     mode2label (s1), mode2label (s2),
+                                     mode2label (s3), mode2label (s4)));
     _queue.push_back (DaemonCommand (DaemonCommand::c_setstagemodes));
 }
 
