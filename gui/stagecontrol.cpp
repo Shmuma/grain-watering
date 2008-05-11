@@ -139,7 +139,7 @@ void StageControl::paintEvent (QPaintEvent*)
     setColor (p, "#C1E8FB");
     p.setFont (QFont ("Verdana", 7));
     r = _svg[_mode]->boundsOnElement ("TargetHumidity").adjusted (2, 2, -2, -2);
-    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.2f", _targetHumidity)));
+    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.1f", _targetHumidity)));
 
     // fill grain area if grain present
     r = _svg[_mode]->boundsOnElement ("GrainArea").adjusted (1, 1, -2, -2);
@@ -213,7 +213,7 @@ void StageControl::stopClicked ()
 
 void StageControl::humidityUpClicked ()
 {
-    _targetHumidity += 0.05;
+    _targetHumidity += 0.1;
     targetHumidityUpdated (_number, _targetHumidity);
     update ();
 }
@@ -221,7 +221,7 @@ void StageControl::humidityUpClicked ()
 
 void StageControl::humidityDownClicked ()
 {
-    _targetHumidity -= 0.05;
+    _targetHumidity -= 0.1;
     if (_targetHumidity < 0)
         _targetHumidity = 0;
     targetHumidityUpdated (_number, _targetHumidity);
