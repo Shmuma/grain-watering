@@ -756,8 +756,10 @@ QString Interpreter::checkTick (const QStringList& args)
         }
         res += ",";
 
+	double grain_flow = getGrainFlow (i);
+
         // check for grain amount
-        if (checkDelayPassed && getGrainFlow (i) < _settings[i].minGrainFlow ()) {
+        if (_settings[i].mode () != StageSettings::M_SemiAuto && checkDelayPassed && getGrainFlow (i) < _settings[i].minGrainFlow ()) {
             res += "GL=1";
             valid = false;
             stopStage (QStringList (QString::number (i+1)));
