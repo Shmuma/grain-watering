@@ -937,6 +937,9 @@ QString Interpreter::getStageState (int stage)
             d_grain_flow = getGrainFlow (stage);
             appendHistory ((history_stage_t)stage, HK_GrainFlow, d_grain_flow);
             res += "GF=" + QString::number (d_grain_flow) + ",";
+            d_wf = getWaterFlow (stage);
+            appendHistory ((history_stage_t)stage, HK_WaterFlow, d_wf);
+            res += "WF=" + QString::number (d_wf) + ",";
         }
 
         res += "R="  + QString::number (_stageRunning[stage] ? 1 : 0) + ",";
@@ -945,14 +948,11 @@ QString Interpreter::getStageState (int stage)
             d_temp = getGrainTemperature (stage);
             d_hum = getGrainHumidity (stage);
             temp = round (d_temp);
-            d_wf = getWaterFlow (stage);
             d_gn = getGrainNature (stage);
 
             appendHistory ((history_stage_t)stage, HK_GrainTemp, d_temp);
             appendHistory ((history_stage_t)stage, HK_GrainNature, d_gn);
-            appendHistory ((history_stage_t)stage, HK_WaterFlow, d_wf);
 
-            res += "WF=" + QString::number (d_wf) + ",";
             res += "GT=" + QString::number (d_temp) + ",";
             res += "GN=" + QString::number (d_gn) + ",";
 
