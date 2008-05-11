@@ -937,7 +937,15 @@ QString Interpreter::getStageState (int stage)
             d_grain_flow = getGrainFlow (stage);
             appendHistory ((history_stage_t)stage, HK_GrainFlow, d_grain_flow);
             res += "GF=" + QString::number (d_grain_flow) + ",";
+
             d_wf = getWaterFlow (stage);
+
+            // special case: compare with minimal and maximum water flow
+            if (d_wf < _settings[stage].minWaterFlow ())
+                d_wf = _settings[stage].minWaterFlow ();
+            if (d_wf > _settings[stage].maxWaterFlow ())
+                d_wf = _settings[stage].maxWaterFlow ();
+            
             appendHistory ((history_stage_t)stage, HK_WaterFlow, d_wf);
             res += "WF=" + QString::number (d_wf) + ",";
         }
