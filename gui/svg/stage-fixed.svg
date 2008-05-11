@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 12.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 51448)  -->
 <svg
+   xmlns:ns="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:cc="http://web.resource.org/cc/"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
@@ -16,13 +17,16 @@
    overflow="visible"
    xml:space="preserve"
    sodipodi:version="0.32"
-   inkscape:version="0.45+devel"
-   sodipodi:docname="ystage1-full.svg"
+   inkscape:version="0.45.1"
+   sodipodi:docname="stage-auto.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="/inst/PLAUN/ystage1.png"
    inkscape:export-xdpi="171.10397"
-   inkscape:export-ydpi="171.10397"><metadata
-   id="metadata852"><rdf:RDF><cc:Work
+   inkscape:export-ydpi="171.10397"
+   sodipodi:docbase="/home/shmuma/work/grain-watering/gui/svg"><metadata
+   id="metadata852"><rdf:RDF><ns:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></ns:Work><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
    id="defs850"><inkscape:perspective
@@ -1207,8 +1211,8 @@
    inkscape:vp_y="0 : 1000 : 0"
    inkscape:vp_x="-50 : 600 : 1"
    sodipodi:type="inkscape:persp3d" /></defs><sodipodi:namedview
-   inkscape:window-height="941"
-   inkscape:window-width="618"
+   inkscape:window-height="994"
+   inkscape:window-width="1278"
    inkscape:pageshadow="2"
    inkscape:pageopacity="0.0"
    guidetolerance="10.0"
@@ -1320,9 +1324,10 @@
    points="119.112,175.113 119.112,174.863 24.529,174.863 24.529,157.029 118.862,157.029 118.862,175.113 119.112,175.113 119.112,174.863 119.112,175.113 119.362,175.113 119.362,156.529 24.029,156.529 24.029,175.363 119.362,175.363 119.362,175.113 119.112,175.113 "
    transform="matrix(1.9003156,0,0,1.8998327,-5.9686884e-5,5.9679301e-5)" /><polygon
    style="fill:#414142"
-   id="polygon680"
+   id="SnekArea"
    points="116.369,173.78 116.369,173.53 89.284,173.53 89.284,158.363 116.119,158.363 116.119,173.78 116.369,173.78 116.369,173.53 116.369,173.78 116.619,173.78 116.619,157.863 88.784,157.863 88.784,174.03 116.619,174.03 116.619,173.78 116.369,173.78 "
-   transform="matrix(1.9003156,0,0,1.8998327,-5.9686884e-5,5.9679301e-5)" /><polyline
+   transform="matrix(1.9003156,0,0,1.8998327,-5.9686884e-5,5.9679301e-5)"
+   inkscape:label="#polygon680" /><polyline
    style="fill:#414142"
    id="polyline682"
    points="91.528,159.821 91.528,159.988 92.028,159.988 92.028,159.821  "

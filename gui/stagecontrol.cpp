@@ -40,6 +40,21 @@ StageControl::StageControl (QWidget* parent)
     _stopImages[1] = QPixmap (":/stages/buttons/stop-pressed.png");
     _stopImages[2] = QPixmap (":/stages/buttons/stop-disabled.png");
 
+    // load water pixmaps
+    _waterImages[0] = QPixmap (":/stages/svg/water-no.png");
+    _waterImages[1] = QPixmap (":/stages/svg/water.png");
+
+    // load grain pixmaps
+    _grainImages[0] = QPixmap (":/stages/svg/grain-no.png");
+    _grainImages[1] = QPixmap (":/stages/svg/grain-low.png");
+    _grainImages[2] = QPixmap (":/stages/svg/grain.png");
+
+    // snek 
+    _snekCounter = 0;
+    for (int i = 0; i < 5; i++)
+        _snekImages[i] = QPixmap (QString (":/stages/svg/snek-%1.png").arg (i));
+    _snekTimer = 0;
+
     QRect r;
 
     _startRect = _svg[_mode]->boundsOnElement ("StartButton").toRect ();
@@ -141,25 +156,28 @@ void StageControl::paintEvent (QPaintEvent*)
     r = _svg[_mode]->boundsOnElement ("TargetHumidity").adjusted (2, 2, -2, -2);
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.1f", _targetHumidity)));
 
-    // fill grain area if grain present
+    // grain area
     r = _svg[_mode]->boundsOnElement ("GrainArea").adjusted (1, 1, -2, -2);
 
     switch (_grainState) {
     case GS_GrainPresent:
-        p.fillRect (r, QBrush (Qt::yellow));
+        p.drawPixmap (r.topLeft (), _grainImages[2]);
         break;
     case GS_GrainMissing:
-        p.fillRect (r, QBrush (Qt::lightGray));
+        p.drawPixmap (r.topLeft (), _grainImages[0]);
         break;
     case GS_GrainLow:
-        p.fillRect (r.adjusted (0, 0, 0, -r.height ()/2), QBrush (Qt::lightGray));
-        p.fillRect (r.adjusted (0, r.height ()/2, 0, 0), QBrush (Qt::yellow));
+        p.drawPixmap (r.topLeft (), _grainImages[1]);
         break;
     }
 
-    // fill water area
+    // water area
     r = _svg[_mode]->boundsOnElement ("WaterArea").adjusted (1, 1, -2, -2);
-    p.fillRect (r, QBrush (_waterPresent ? Qt::cyan : Qt::lightGray));
+    p.drawPixmap (r.topLeft (), _waterPresent ? _waterImages[1] : _waterImages[0]);
+
+    // snek area
+    r = _svg[_mode]->boundsOnElement ("SnekArea").adjusted (1, 1, -2, -2);
+    p.drawPixmap (r.topLeft (), _snekImages[_snekCounter]);
 
     // stage mode
     p.setFont (QFont ("Arial", 12));
@@ -195,7 +213,29 @@ void StageControl::paintEvent (QPaintEvent*)
 void StageControl::setRunning (bool running)
 {
     _running = running;
+    _waterPresent = running;
      update ();
+
+     if (running) {
+         if (_snekTimer)
+             killTimer (_snekTimer);
+         _snekTimer = startTimer (500);
+     }
+     else {
+         if (_snekTimer)
+             killTimer (_snekTimer);
+         _snekTimer = 0;
+     }
+}
+
+
+void StageControl::timerEvent (QTimerEvent* e)
+{
+    if (e->timerId () == _snekTimer) {
+        _snekCounter += 1;
+        _snekCounter %= 5;
+        update ();
+    }
 }
 
 

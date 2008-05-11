@@ -29,6 +29,7 @@ protected:
     void mousePressEvent (QMouseEvent* e);
     void mouseReleaseEvent (QMouseEvent* e);
     void setColor (QPainter& p, const char* color);
+    void timerEvent (QTimerEvent* e);
 
 protected slots:
     void startClicked ();
@@ -170,6 +171,15 @@ private:
     QPixmap _stopImages[3];
     QRect _startRect, _stopRect;
     bool _startPressed, _stopPressed;
+
+    // water pixmap
+    QPixmap _waterImages[2];
+    QPixmap _grainImages[3];
+
+    // snek pixmaps and counter
+    QPixmap _snekImages[5];
+    int _snekCounter;
+    int _snekTimer;
 };
 
 #endif
