@@ -8,10 +8,16 @@
 // StageControl
 // --------------------------------------------------
 StageControl::StageControl (QWidget* parent)
-    : QWidget (parent),
-      _imgWithSensors (QString (":/stages/svg/stage1.png"), "PNG"),
-      _svgWithSensors (QString (":/stages/svg/stage1-full.svg"), this)
+    : QWidget (parent)
 {
+    _img[StageSettings::M_Auto] = QPixmap (QString (":/stages/svg/stage-auto.png"), "PNG");
+    _img[StageSettings::M_SemiAuto] = QPixmap (QString (":/stages/svg/stage-semi.png"), "PNG");
+    _img[StageSettings::M_Fixed] = QPixmap (QString (":/stages/svg/stage-fixed.png"), "PNG");
+
+    _svg[StageSettings::M_Auto] = new QSvgRenderer (QString (":/stages/svg/stage-auto.svg"), this);
+    _svg[StageSettings::M_SemiAuto] = new QSvgRenderer (QString (":/stages/svg/stage-semi.svg"), this);
+    _svg[StageSettings::M_Fixed] = new QSvgRenderer (QString (":/stages/svg/stage-fixed.svg"), this);
+
     _mode = StageSettings::M_Auto;
     _number = 0;
     _grainState = GS_GrainMissing;
@@ -36,8 +42,8 @@ StageControl::StageControl (QWidget* parent)
 
     QRect r;
 
-    _startRect = _svgWithSensors.boundsOnElement ("StartButton").toRect ();
-    _stopRect =  _svgWithSensors.boundsOnElement ("StopButton").toRect ();
+    _startRect = _svg[_mode]->boundsOnElement ("StartButton").toRect ();
+    _stopRect =  _svg[_mode]->boundsOnElement ("StopButton").toRect ();
 
     setRunning (false);
 
@@ -46,7 +52,7 @@ StageControl::StageControl (QWidget* parent)
     _humidityDown = new QToolButton (this);
     _humidityUp->setText ("+");
     _humidityDown->setText ("-");
-    r = _svgWithSensors.boundsOnElement ("HumiditySpin").toRect ();
+    r = _svg[_mode]->boundsOnElement ("HumiditySpin").toRect ();
     _humidityUp->setGeometry (r.adjusted (0, 0, 0, -r.height () / 2));
     _humidityDown->setGeometry (r.adjusted (0, r.height () / 2, 0, 0));
 
@@ -58,7 +64,7 @@ StageControl::StageControl (QWidget* parent)
     _waterDown = new QToolButton (this);
     _waterUp->setText ("+");
     _waterDown->setText ("-");
-    r = _svgWithSensors.boundsOnElement ("FlowSpin").toRect ();
+    r = _svg[_mode]->boundsOnElement ("FlowSpin").toRect ();
     _waterUp->setGeometry (r.adjusted (0, 0, 0, -r.height () / 2));
     _waterDown->setGeometry (r.adjusted (0, r.height () / 2, 0, 0));
 
@@ -69,7 +75,7 @@ StageControl::StageControl (QWidget* parent)
     _humidityEdit = new QLineEdit (this);
     _humidityEdit->setFont (QFont ("Verdana", 7));
 
-    r = _svgWithSensors.boundsOnElement ("WaterFlow").toRect ();
+    r = _svg[_mode]->boundsOnElement ("WaterFlow").toRect ();
     _humidityEdit->setGeometry (r);
 
     connect (_humidityEdit, SIGNAL (returnPressed ()), this, SLOT (humidityEditorReturnPressed ()));
@@ -85,7 +91,7 @@ void StageControl::paintEvent (QPaintEvent*)
     QRectF r;
 
     // draw underlying pixmap
-    p.drawPixmap (QPoint (0, 0), _imgWithSensors);
+    p.drawPixmap (QPoint (0, 0), _img[_mode]);
 
     // draw buttons
     if (_running) {
@@ -100,43 +106,43 @@ void StageControl::paintEvent (QPaintEvent*)
     if (_mode != StageSettings::M_SemiAuto) {
         setColor (p, "#E7B953");
         p.setFont (QFont ("Arial", 11));
-        r = _svgWithSensors.boundsOnElement ("GrainFlow").adjusted (2, 2, -2, -2);
+        r = _svg[_mode]->boundsOnElement ("GrainFlow").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 t/h").arg (QString ().sprintf ("%.2f", _flow)));
     }
 
     if (_mode == StageSettings::M_Auto) {
         setColor (p, "#E7B953");
         p.setFont (QFont ("Arial", 11));
-        r = _svgWithSensors.boundsOnElement ("GrainHumidity").adjusted (2, 2, -2, -2);
+        r = _svg[_mode]->boundsOnElement ("GrainHumidity").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.2f", _humidity)));
 
         setColor (p, "#E7B953");
         p.setFont (QFont ("Arial", 10));
-        r = _svgWithSensors.boundsOnElement ("GrainTemperature").adjusted (2, 2, -2, -2);
+        r = _svg[_mode]->boundsOnElement ("GrainTemperature").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 C").arg (QString ().sprintf ("%.0f", _temp)));
 
         p.setFont (QFont ("Arial", 10));
-        r = _svgWithSensors.boundsOnElement ("GrainNature").adjusted (2, 2, -2, -2);
+        r = _svg[_mode]->boundsOnElement ("GrainNature").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 g/l").arg (QString ().sprintf ("%.2f", _nature)));
     
         setColor (p, "#C1E8FB");
         p.setFont (QFont ("Verdana", 7));
-        r = _svgWithSensors.boundsOnElement ("HumidityDelta").adjusted (2, 2, -2, -2);
+        r = _svg[_mode]->boundsOnElement ("HumidityDelta").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1\n%").arg (QString ().sprintf ("%.1f", _targetHumidity - _humidity)));
     }
 
     setColor (p, "#F1FAFE");
     p.setFont (QFont ("Verdana", 8));
-    r = _svgWithSensors.boundsOnElement ("WaterFlow").adjusted (2, 2, -2, -2);
+    r = _svg[_mode]->boundsOnElement ("WaterFlow").adjusted (2, 2, -2, -2);
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1").arg (QString ().sprintf ("%.0f", _waterFlow)));
 
     setColor (p, "#C1E8FB");
     p.setFont (QFont ("Verdana", 7));
-    r = _svgWithSensors.boundsOnElement ("TargetHumidity").adjusted (2, 2, -2, -2);
+    r = _svg[_mode]->boundsOnElement ("TargetHumidity").adjusted (2, 2, -2, -2);
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.2f", _targetHumidity)));
 
     // fill grain area if grain present
-    r = _svgWithSensors.boundsOnElement ("GrainArea").adjusted (1, 1, -2, -2);
+    r = _svg[_mode]->boundsOnElement ("GrainArea").adjusted (1, 1, -2, -2);
 
     switch (_grainState) {
     case GS_GrainPresent:
@@ -152,13 +158,13 @@ void StageControl::paintEvent (QPaintEvent*)
     }
 
     // fill water area
-    r = _svgWithSensors.boundsOnElement ("WaterArea").adjusted (1, 1, -2, -2);
+    r = _svg[_mode]->boundsOnElement ("WaterArea").adjusted (1, 1, -2, -2);
     p.fillRect (r, QBrush (_waterPresent ? Qt::cyan : Qt::lightGray));
 
     // stage mode
     p.setFont (QFont ("Arial", 12));
     setColor (p, "#626262");
-    r = _svgWithSensors.boundsOnElement ("StageMode").adjusted (2, 2, -2, -2);
+    r = _svg[_mode]->boundsOnElement ("StageMode").adjusted (2, 2, -2, -2);
     QString modeLabel;
 
     switch (_mode) {
@@ -176,7 +182,7 @@ void StageControl::paintEvent (QPaintEvent*)
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, modeLabel);
 
     p.setFont (QFont ("Arial", 14));
-    r = _svgWithSensors.boundsOnElement ("StageTitle").adjusted (2, 2, -2, -2);
+    r = _svg[_mode]->boundsOnElement ("StageTitle").adjusted (2, 2, -2, -2);
     if (_cleaning) {
         QPen pen (p.pen ());
         pen.setColor (Qt::red);

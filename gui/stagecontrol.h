@@ -159,11 +159,11 @@ private:
     QToolButton *_waterUp, *_waterDown;
     QLineEdit* _humidityEdit;
 
-    // pixmaps
-    QPixmap _imgWithSensors;
+    // pixmaps (argument - mode)
+    QPixmap _img[3];
     
-    // SVG helpers
-    QSvgRenderer _svgWithSensors;
+    // SVG helpers (argument - mode)
+    QSvgRenderer* _svg[3];
 
     // buttons pixmaps
     QPixmap _startImages[3];

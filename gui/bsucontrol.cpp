@@ -10,7 +10,7 @@ BSUControl::BSUControl (QWidget* parent)
       _waterPressure (0),
       _cleaning (false),
       _img (QString (":/stages/svg/filter.png"), "PNG"),
-      _svg (QString (":/stages/svg/filter-full.svg"), this)
+      _svg (QString (":/stages/svg/filter.svg"), this)
 {
 }
 

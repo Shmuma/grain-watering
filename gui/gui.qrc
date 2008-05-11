@@ -6,9 +6,13 @@
     <file>buttons/stop-disabled.png</file>
     <file>buttons/stop-normal.png</file>
     <file>buttons/stop-pressed.png</file>
-    <file>svg/filter-full.svg</file>
     <file>svg/filter.png</file>
-    <file>svg/stage1-full.svg</file>
-    <file>svg/stage1.png</file>
+    <file>svg/filter.svg</file>
+    <file>svg/stage-auto.png</file>
+    <file>svg/stage-auto.svg</file>
+    <file>svg/stage-fixed.png</file>
+    <file>svg/stage-fixed.svg</file>
+    <file>svg/stage-semi.png</file>
+    <file>svg/stage-semi.svg</file>
   </qresource>
 </RCC>

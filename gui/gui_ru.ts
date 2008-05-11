@@ -1526,7 +1526,7 @@ l/h</source>
         <location filename="stagecontrol.cpp" line="172"/>
         <source>Fixed</source>
         <comment>Fixed humidity mode</comment>
-        <translation>Фиксированая влажность</translation>
+        <translation>Фикс</translation>
     </message>
 </context>
 <context>
