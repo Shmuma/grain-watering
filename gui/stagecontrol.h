@@ -57,7 +57,7 @@ public:
         { return _number; };
     
     void setEnabled (bool enabled)
-        { _enabled = enabled; setFixedSize (_enabled ? QSize (250, 500) : QSize (0, 0)); update (); };
+        { _enabled = enabled; setFixedSize (_enabled ? QSize (314, 666) : QSize (0, 0)); update (); };
     bool enabled () const
         { return _enabled; };
 

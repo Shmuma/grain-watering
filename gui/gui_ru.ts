@@ -114,12 +114,12 @@
     <message>
         <location filename="daemon.cpp" line="27"/>
         <source>Connecting to daemon at %1:%2</source>
-        <translation>Выполняется подключение к демону по адресу %1:%2</translation>
+        <translation>Выполняется подключение к сервису по адресу %1:%2</translation>
     </message>
     <message>
         <location filename="daemon.cpp" line="34"/>
         <source>Disconnect from daemon</source>
-        <translation>Отключаемся от демона</translation>
+        <translation>Отключаемся от сервиса</translation>
     </message>
     <message>
         <location filename="daemon.cpp" line="45"/>
@@ -344,22 +344,22 @@
     <message>
         <location filename="mainwindow.cpp" line="415"/>
         <source>Disconnecting from daemon</source>
-        <translation>Выполняется отключение от демона</translation>
+        <translation>Выполняется отключение от сервиса</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="419"/>
         <source>Connecting to daemon</source>
-        <translation>Выполняется подключение к демону</translation>
+        <translation>Выполняется подключение к сервису</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="439"/>
         <source>Connected to daemon, obtaining state</source>
-        <translation>Подключение к демону выполнено, получаем состояние</translation>
+        <translation>Подключение к сервису выполнено, получаем состояние</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="439"/>
         <source>Disconnected from daemon</source>
-        <translation>Отключен от демона</translation>
+        <translation>Отключен от сервиса</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="456"/>
@@ -813,7 +813,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1565"/>
         <source>Daemon not connected with controller</source>
-        <translation>Демон не подключен к контроллеру</translation>
+        <translation>Сервис не подключен к контроллеру</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1568"/>

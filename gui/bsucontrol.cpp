@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <QtSvg>
 #include "bsucontrol.h"
 
 

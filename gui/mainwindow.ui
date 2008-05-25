@@ -155,9 +155,12 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox" >
-       <property name="title" >
-        <string/>
+      <widget class="QFrame" name="frame_7" >
+       <property name="frameShape" >
+        <enum>QFrame::Panel</enum>
+       </property>
+       <property name="frameShadow" >
+        <enum>QFrame::Raised</enum>
        </property>
        <layout class="QHBoxLayout" >
         <property name="spacing" >
@@ -179,24 +182,6 @@
           </property>
          </widget>
         </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QFrame" name="frame_7" >
-       <property name="frameShape" >
-        <enum>QFrame::Panel</enum>
-       </property>
-       <property name="frameShadow" >
-        <enum>QFrame::Raised</enum>
-       </property>
-       <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>0</number>
-        </property>
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <item>
          <widget class="QPushButton" name="cleanButton" >
           <property name="enabled" >
@@ -599,8 +584,8 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>343</width>
-                   <height>353</height>
+                   <width>353</width>
+                   <height>402</height>
                   </rect>
                  </property>
                  <layout class="QVBoxLayout" >
@@ -791,8 +776,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>361</width>
-               <height>562</height>
+               <width>323</width>
+               <height>499</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout" >
@@ -927,8 +912,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>327</width>
-                      <height>225</height>
+                      <width>285</width>
+                      <height>196</height>
                      </rect>
                     </property>
                     <attribute name="title" >
@@ -1031,8 +1016,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>327</width>
-                      <height>225</height>
+                      <width>285</width>
+                      <height>196</height>
                      </rect>
                     </property>
                     <attribute name="title" >
@@ -1562,8 +1547,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>546</width>
-            <height>584</height>
+            <width>526</width>
+            <height>513</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" >
@@ -1777,8 +1762,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>524</width>
-                <height>454</height>
+                <width>506</width>
+                <height>403</height>
                </rect>
               </property>
               <attribute name="title" >
@@ -1809,18 +1794,23 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>524</width>
-                <height>454</height>
+                <width>506</width>
+                <height>403</height>
                </rect>
               </property>
               <attribute name="title" >
                <string>&amp;Graph</string>
               </attribute>
-              <layout class="QVBoxLayout" >
-               <item>
-                <widget class="QwtPlot" name="plot" />
-               </item>
-              </layout>
+              <widget class="QwtPlot" name="plot" >
+               <property name="geometry" >
+                <rect>
+                 <x>4</x>
+                 <y>4</y>
+                 <width>498</width>
+                 <height>395</height>
+                </rect>
+               </property>
+              </widget>
              </widget>
             </widget>
            </item>
@@ -1875,8 +1865,8 @@
                <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Terminus'; font-size:11pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Plaund interactive console.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Terminus'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt;">Plaund interactive console.&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
              <widget class="QTextEdit" name="autoLogEditor" >
@@ -1890,8 +1880,8 @@ p, li { white-space: pre-wrap; }
                <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Verdana'; font-size:11pt; font-weight:400; font-style:normal;">
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Terminus';">&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Arial'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Terminus'; font-size:11pt;">&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
             </widget>
@@ -1923,7 +1913,7 @@ p, li { white-space: pre-wrap; }
             </property>
             <property name="minimumSize" >
              <size>
-              <width>220</width>
+              <width>312</width>
               <height>0</height>
              </size>
             </property>
@@ -1953,6 +1943,7 @@ p, li { white-space: pre-wrap; }
    <class>QwtPlot</class>
    <extends>QFrame</extends>
    <header>qwt_plot.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>DoubleClickButton</class>

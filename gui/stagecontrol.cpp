@@ -178,7 +178,7 @@ void StageControl::paintEvent (QPaintEvent*)
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.1f", _targetHumidity)));
 
     // grain area
-    r = _svg[_mode]->boundsOnElement ("GrainArea").adjusted (0, 0, -1, -1);
+    r = _svg[_mode]->boundsOnElement ("GrainArea").adjusted (-1, -1, -1, -1);
 
     switch (_grainState) {
     case GS_GrainPresent:
@@ -202,7 +202,7 @@ void StageControl::paintEvent (QPaintEvent*)
     }
 
     // snek area
-    r = _svg[_mode]->boundsOnElement ("SnekArea").adjusted (0, 0, -1, -1);
+    r = _svg[_mode]->boundsOnElement ("SnekArea").adjusted (-1, -1, -1, -1);
     p.drawPixmap (r.topLeft (), _snekImages[_snekCounter]);
 
     // stage mode
