@@ -41,17 +41,38 @@ StageControl::StageControl (QWidget* parent)
     _stopImages[2] = QPixmap (":/stages/buttons/stop-disabled.png");
 
     // load water pixmaps
-    _waterImages[0] = QPixmap (":/stages/svg/water-no.png");
-    _waterImages[1] = QPixmap (":/stages/svg/water.png");
+
+    _waterCounter = 0;
+    for (int i = 0; i < 3; i++)
+        _waterImages[i] = QPixmap (QString (":/stages/svg/water-%1.png").arg (i));
+    _waterTimer = 0;
+
+    _waternoCounter = 0;
+    for (int i = 0; i < 2; i++)
+        _waternoImages[i] = QPixmap (QString (":/stages/svg/water-no%1.png").arg (i));
+    _waternoTimer = 0;
 
     // load grain pixmaps
-    _grainImages[0] = QPixmap (":/stages/svg/grain-no.png");
-    _grainImages[1] = QPixmap (":/stages/svg/grain-low.png");
-    _grainImages[2] = QPixmap (":/stages/svg/grain.png");
+
+    _grainCounter = 0;
+    for (int i = 0; i < 3; i++)
+        _grainImages[i] = QPixmap (QString (":/stages/svg/grain-%1.png").arg (i));
+    _grainTimer = 0;
+
+    _grainlowCounter = 0;
+    for (int i = 0; i < 3; i++)
+        _grainlowImages[i] = QPixmap (QString (":/stages/svg/grain-low%1.png").arg (i));
+    _grainlowTimer = 0;
+
+    _grainnoCounter = 0;
+    for (int i = 0; i < 2; i++)
+        _grainnoImages[i] = QPixmap (QString (":/stages/svg/grain-no%1.png").arg (i));
+    _grainnoTimer = 0;
+
 
     // snek 
     _snekCounter = 0;
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 4; i++)
         _snekImages[i] = QPixmap (QString (":/stages/svg/snek-%1.png").arg (i));
     _snekTimer = 0;
 
@@ -157,26 +178,31 @@ void StageControl::paintEvent (QPaintEvent*)
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.1f", _targetHumidity)));
 
     // grain area
-    r = _svg[_mode]->boundsOnElement ("GrainArea").adjusted (1, 1, -2, -2);
+    r = _svg[_mode]->boundsOnElement ("GrainArea").adjusted (0, 0, -1, -1);
 
     switch (_grainState) {
     case GS_GrainPresent:
-        p.drawPixmap (r.topLeft (), _grainImages[2]);
+        p.drawPixmap (r.topLeft (), _grainImages[_grainCounter]);
         break;
     case GS_GrainMissing:
-        p.drawPixmap (r.topLeft (), _grainImages[0]);
+        p.drawPixmap (r.topLeft (), _grainnoImages[_grainnoCounter]);
         break;
     case GS_GrainLow:
-        p.drawPixmap (r.topLeft (), _grainImages[1]);
+        p.drawPixmap (r.topLeft (), _grainlowImages[_grainlowCounter]);
         break;
     }
 
     // water area
-    r = _svg[_mode]->boundsOnElement ("WaterArea").adjusted (1, 1, -2, -2);
-    p.drawPixmap (r.topLeft (), _waterPresent ? _waterImages[1] : _waterImages[0]);
+    r = _svg[_mode]->boundsOnElement ("WaterArea").adjusted (0, 0, -1, -1);
+    if (_waterPresent) {
+        p.drawPixmap (r.topLeft (), _waterImages[_waterCounter]);
+    }
+    else {
+        p.drawPixmap (r.topLeft (), _waternoImages[_waternoCounter]);
+    }
 
     // snek area
-    r = _svg[_mode]->boundsOnElement ("SnekArea").adjusted (1, 1, -2, -2);
+    r = _svg[_mode]->boundsOnElement ("SnekArea").adjusted (0, 0, -1, -1);
     p.drawPixmap (r.topLeft (), _snekImages[_snekCounter]);
 
     // stage mode
@@ -219,12 +245,42 @@ void StageControl::setRunning (bool running)
      if (running) {
          if (_snekTimer)
              killTimer (_snekTimer);
-         _snekTimer = startTimer (500);
+         _snekTimer = startTimer (180);
+         if (_waterTimer)
+             killTimer (_waterTimer);
+         _waterTimer = startTimer (250);
+         if (_waternoTimer)
+             killTimer (_waternoTimer);
+         _waternoTimer = startTimer (1000);
+         if (_grainTimer)
+             killTimer (_grainTimer);
+         _grainTimer = startTimer (280);
+         if (_grainlowTimer)
+             killTimer (_grainlowTimer);
+         _grainlowTimer = startTimer (280);
+         if (_grainnoTimer)
+             killTimer (_grainnoTimer);
+         _grainnoTimer = startTimer (1000);
      }
      else {
          if (_snekTimer)
              killTimer (_snekTimer);
          _snekTimer = 0;
+         if (_waterTimer)
+             killTimer (_waterTimer);
+         _waterTimer = 0;
+         if (_waternoTimer)
+             killTimer (_waternoTimer);
+         _waternoTimer = 0;
+         if (_grainTimer)
+             killTimer (_grainTimer);
+         _grainTimer = 0;
+         if (_grainlowTimer)
+             killTimer (_grainlowTimer);
+         _grainlowTimer = 0;
+         if (_grainnoTimer)
+             killTimer (_grainnoTimer);
+         _grainnoTimer = 0;
      }
 }
 
@@ -232,9 +288,34 @@ void StageControl::setRunning (bool running)
 void StageControl::timerEvent (QTimerEvent* e)
 {
     if (e->timerId () == _snekTimer) {
-        _snekCounter += 1;
-        _snekCounter %= 5;
-        update ();
+	    _snekCounter += 1;
+    	    _snekCounter %= 4;
+    	    update ();
+    }
+    if (e->timerId () == _waterTimer) {
+	    _waterCounter += 1;
+    	    _waterCounter %= 3;
+    	    update ();
+    }
+    if (e->timerId () == _waternoTimer) {
+	    _waternoCounter += 1;
+    	    _waternoCounter %= 2;
+    	    update ();
+    }
+    if (e->timerId () == _grainTimer) {
+	    _grainCounter += 1;
+    	    _grainCounter %= 3;
+    	    update ();
+    }
+    if (e->timerId () == _grainlowTimer) {
+	    _grainlowCounter += 1;
+    	    _grainlowCounter %= 3;
+    	    update ();
+    }
+    if (e->timerId () == _grainnoTimer) {
+	    _grainnoCounter += 1;
+    	    _grainnoCounter %= 2;
+    	    update ();
     }
 }
 

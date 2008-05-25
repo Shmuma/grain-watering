@@ -173,8 +173,23 @@ private:
     bool _startPressed, _stopPressed;
 
     // water pixmap
-    QPixmap _waterImages[2];
-    QPixmap _grainImages[3];
+    QPixmap _waterImages[4];
+    QPixmap _waternoImages[3];
+    int _waterCounter;
+    int _waterTimer;
+    int _waternoCounter;
+    int _waternoTimer;
+
+    // grain pixmap
+    QPixmap _grainImages[4];
+    QPixmap _grainlowImages[4];
+    QPixmap _grainnoImages[3];
+    int _grainCounter;
+    int _grainTimer;
+    int _grainlowCounter;
+    int _grainlowTimer;
+    int _grainnoCounter;
+    int _grainnoTimer;
 
     // snek pixmaps and counter
     QPixmap _snekImages[5];

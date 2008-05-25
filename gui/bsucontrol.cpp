@@ -22,7 +22,10 @@ void BSUControl::paintEvent (QPaintEvent* event)
 
     p.drawPixmap (QPoint (0, 0), _img);
 
-    p.setFont (QFont ("Arial", 15));
+    QPen pen (p.pen ());
+    pen.setColor (QColor ("#F1FAFE"));
+    p.setPen (pen);
+    p.setFont (QFont ("Verdana", 10));
     r = _svg.boundsOnElement ("StateArea").adjusted (2, 2, -2, -2);
 
     if (_cleaning) {

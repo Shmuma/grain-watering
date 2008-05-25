@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-CONFIG += debug debian
+CONFIG += debug
 QT += network svg
 TARGET =
 DEPENDPATH += .
