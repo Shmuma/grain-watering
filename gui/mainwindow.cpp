@@ -686,29 +686,42 @@ void MainWindow::daemonMetaStateGot (double water_pres, QMap<int, QList<double> 
     for (int i = 1; i <= 4; i++) {
         if (vals.find (i) == vals.end ())
             continue;
+
+	int s = vals[i].size ();
+
         QTreeWidgetItem* item = new QTreeWidgetItem (stateTreeWidget);
         item->setExpanded (true);
         item->setText (0, tr ("Stage %1").arg (i));
         
-        n = new QTreeWidgetItem (item);
-        n->setText (0, tr ("Water flow"));
-        n->setText (1, QString::number (vals[i][0]));
-            
-        n = new QTreeWidgetItem (item);
-        n->setText (0, tr ("Grain flow"));
-        n->setText (1, QString::number (vals[i][1]));
-            
-        n = new QTreeWidgetItem (item);
-        n->setText (0, tr ("Grain humidity"));
-        n->setText (1, QString::number (vals[i][2]));
-            
-        n = new QTreeWidgetItem (item);
-        n->setText (0, tr ("Grain temp."));
-        n->setText (1, QString::number (vals[i][3]));
-            
-        n = new QTreeWidgetItem (item);
-        n->setText (0, tr ("Grain nature"));
-        n->setText (1, QString::number (vals[i][4]));
+	if (s > 0) {
+		n = new QTreeWidgetItem (item);
+        	n->setText (0, tr ("Water flow"));
+        	n->setText (1, QString::number (vals[i][0]));
+        }
+
+	if (s > 1) {
+        	n = new QTreeWidgetItem (item);
+        	n->setText (0, tr ("Grain flow"));
+        	n->setText (1, QString::number (vals[i][1]));
+        }
+
+	if (s > 2) {
+        	n = new QTreeWidgetItem (item);
+        	n->setText (0, tr ("Grain humidity"));
+        	n->setText (1, QString::number (vals[i][2]));
+        }
+
+	if (s > 3) {
+        	n = new QTreeWidgetItem (item);
+        	n->setText (0, tr ("Grain temp."));
+        	n->setText (1, QString::number (vals[i][3]));
+        }
+
+	if (s > 4) {
+        	n = new QTreeWidgetItem (item);
+        	n->setText (0, tr ("Grain nature"));
+        	n->setText (1, QString::number (vals[i][4]));
+	}
     }
 }
 

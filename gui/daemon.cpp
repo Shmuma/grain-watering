@@ -473,8 +473,9 @@ bool Daemon::handleMetaState (const QString& msg)
             
                         if (index == 0)
                             water_pres = val;
-                        else
+                        else {
                             vals[index].push_back (val);
+			    }
                     }
                 }
 
