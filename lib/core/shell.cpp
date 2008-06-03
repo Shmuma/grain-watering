@@ -761,6 +761,7 @@ QString Interpreter::checkTick (const QStringList& args)
         // check for grain amount
         if (_settings[i].mode () != StageSettings::M_SemiAuto && checkDelayPassed && getGrainFlow (i) < _settings[i].minGrainFlow ()) {
             res += "GL=1";
+	    _stageOperational[i] = false;
             valid = false;
             stopStage (QStringList (QString::number (i+1)));
             continue;
@@ -768,7 +769,21 @@ QString Interpreter::checkTick (const QStringList& args)
         else
             res += "GL=0";
 
-        res += "," + getStageState (i);
+	// if water flow is less than 10 l/h stop stage
+	double cur_val = getWaterFlow (i);
+
+	printf ("%f\n", cur_val);
+
+	res += ",";
+
+	if (checkDelayPassed && cur_val < 10) {
+		res += "WF=0";
+		valid = false;
+		stopStage (QStringList (QString::number (i+1)));
+		continue;
+	}
+
+        res += getStageState (i);
         _stageOperational[i] = valid;
     }
 
