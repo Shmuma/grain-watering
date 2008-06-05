@@ -10,14 +10,14 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="314"
    height="666"
-   id="svg5847"
+   id="svg5851"
    sodipodi:version="0.32"
-   inkscape:version="0.45+devel"
+   inkscape:version="0.46"
    version="1.0"
-   sodipodi:docname="stage-grid.svg"
+   sodipodi:docname="stage-grid2.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
-     id="defs3">
+     id="defs5853">
     <linearGradient
        y2="415.0957"
        x2="98.357399"
@@ -95,22 +95,6 @@
          offset="0.0056" />
       <stop
          id="stop450"
-         style="stop-color:#003314"
-         offset="0.9944" />
-    </linearGradient>
-    <linearGradient
-       y2="507.32599"
-       x2="202.0137"
-       y1="527.21393"
-       x1="202.0137"
-       gradientUnits="userSpaceOnUse"
-       id="XMLID_122_">
-      <stop
-         id="stop263"
-         style="stop-color:#324938"
-         offset="0.0056" />
-      <stop
-         id="stop265"
          style="stop-color:#003314"
          offset="0.9944" />
     </linearGradient>
@@ -194,33 +178,52 @@
          style="stop-color:#003314"
          offset="0.9944" />
     </linearGradient>
+    <linearGradient
+       y2="507.32599"
+       x2="202.0137"
+       y1="527.21393"
+       x1="202.0137"
+       gradientUnits="userSpaceOnUse"
+       id="XMLID_122_">
+      <stop
+         id="stop263"
+         style="stop-color:#324938"
+         offset="0.0056" />
+      <stop
+         id="stop265"
+         style="stop-color:#003314"
+         offset="0.9944" />
+    </linearGradient>
     <inkscape:perspective
        sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="-50 : 600 : 1"
+       inkscape:vp_x="0 : 526.18109 : 1"
        inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="700 : 600 : 1"
-       inkscape:persp3d-origin="300 : 400 : 1"
-       id="perspective5853" />
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective5859" />
   </defs>
   <sodipodi:namedview
-     inkscape:document-units="mm"
      id="base"
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="148.48319"
-     inkscape:cy="614.7632"
+     inkscape:zoom="0.6996997"
+     inkscape:cx="157"
+     inkscape:cy="333"
+     inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1085"
-     inkscape:window-height="672"
-     inkscape:window-x="0"
+     inkscape:window-width="1165"
+     inkscape:window-height="688"
+     inkscape:window-x="271"
      inkscape:window-y="0" />
   <metadata
-     id="metadata4">
+     id="metadata5856">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -234,74 +237,55 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <path
-       d="M 269.63923,157.30275 C 269.63923,164.24981 264.27002,169.88183 257.64582,169.88183 L 221.17038,169.88183 C 214.54618,169.88183 209.17697,164.24981 209.17697,157.30275 L 209.17697,156.25426 C 209.17697,149.30583 214.54618,143.67518 221.17038,143.67518 L 257.64582,143.67518 C 264.27002,143.67518 269.63923,149.30583 269.63923,156.25426 L 269.63923,157.30275 z"
-       id="StartButton"
-       style="fill:none;stroke:#7e8082;stroke-width:1.3347193;display:inline;enable-background:new"
-       inkscape:label="#path724" />
-    <path
-       d="M 269.63923,203.05604 C 269.63923,210.00311 264.27002,215.63513 257.64582,215.63513 L 221.17038,215.63513 C 214.54618,215.63513 209.17697,210.00311 209.17697,203.05604 L 209.17697,202.00756 C 209.17697,195.05913 214.54618,189.42848 221.17038,189.42848 L 257.64582,189.42848 C 264.27002,189.42848 269.63923,195.05913 269.63923,202.00756 L 269.63923,203.05604 z"
-       id="StopButton"
-       style="fill:none;stroke:#7e8082;stroke-width:1.3347193;display:inline;enable-background:new"
-       inkscape:label="#path743" />
     <rect
-       style="fill:none;display:inline;enable-background:new"
+       style="fill:none;display:inline;enable-background:new;stroke:#000000;stroke-opacity:1"
        id="GrainArea"
        height="129.22153"
        width="35.001518"
-       y="374.32401"
-       x="64.016708"
+       y="373.64694"
+       x="63.401955"
        inkscape:label="#rect123" />
     <rect
        style="fill:none;stroke:#414142;stroke-width:0.66941786000000003;display:inline;enable-background:new"
        id="WaterArea"
        height="30.144217"
        width="55.97493"
-       y="457.11301"
-       x="131.95485"
+       y="456.43594"
+       x="131.3401"
        inkscape:label="#rect240" />
     <rect
-       x="208.52666"
-       y="507.32431"
+       x="207.9119"
+       y="506.64725"
        width="76.12941"
        height="47.574131"
        id="SnekArea"
        style="fill:none;stroke:#414142;stroke-width:0.66735964999999997;display:inline;enable-background:new"
        inkscape:label="#rect498" />
     <rect
-       style="fill:none;stroke:#414142;stroke-width:0.66735964999999997;display:inline;enable-background:new"
+       style="fill:none;stroke:#000000;stroke-width:0.66735964999999997;display:inline;enable-background:new;stroke-opacity:1"
        id="WaterFlow"
        height="24.147955"
        width="52.212963"
-       y="450.98917"
-       x="208.743"
+       y="450.31213"
+       x="208.12822"
        inkscape:label="#rect452" />
     <rect
-       style="fill:none;stroke:#414142;stroke-width:0.66735964999999997;display:inline;enable-background:new"
-       id="TargetHumidity"
-       height="27.963232"
-       width="56.815891"
-       y="565.63348"
-       x="205.69478"
-       inkscape:label="#rect267" />
-    <rect
-       style="fill:none;stroke:#414142;stroke-width:0.66735964999999997;display:inline;enable-background:new"
+       style="fill:none;stroke:#000000;stroke-width:0.66735964999999997;display:inline;enable-background:new;stroke-opacity:1"
        id="HumidityDelta"
        height="26.656387"
        width="55.897129"
-       y="430.89578"
-       x="132.01933"
+       y="430.21872"
+       x="131.40457"
        inkscape:label="#rect247" />
     <g
-       style="display:inline;enable-background:new;fill:none"
+       style="display:inline;enable-background:new"
        id="FlowSpin"
-       transform="matrix(1.3032064,0,0,1.3669942,-29.162551,-127.48999)"
+       transform="matrix(1.3032064,0,0,1.3669942,-29.777307,-128.16705)"
        inkscape:label="#g468">
       <g
-         id="g470"
-         style="fill:none">
+         id="g470">
         <rect
-           style="fill:none;stroke:#414142;stroke-width:0.50000000000000000"
+           style="fill:#9d9fa1;stroke:#414142;stroke-width:0.5"
            id="rect472"
            height="17.663"
            width="10.466"
@@ -309,16 +293,74 @@
            x="226.229" />
       </g>
     </g>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.32529128px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;enable-background:new"
+       d="M 0.6138297,0.5608301 L 0.6138297,39.248344 L 313.87095,39.248344 L 313.87095,0.5608301 L 0.6138297,0.5608301 z"
+       id="StageTitle"
+       inkscape:label="#path6469" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.5228411;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline;enable-background:new"
+       d="M 199.87801,137.98505 L 275.79052,137.98505 L 275.79052,114.3712 L 199.87801,114.3712 L 199.87801,137.98505 z"
+       id="StageMode"
+       inkscape:label="#path7109" />
+    <path
+       d="M 269.02448,156.62569 C 269.02448,163.57275 263.65527,169.20477 257.03107,169.20477 L 220.55563,169.20477 C 213.93143,169.20477 208.56222,163.57275 208.56222,156.62569 L 208.56222,155.5772 C 208.56222,148.62877 213.93143,142.99812 220.55563,142.99812 L 257.03107,142.99812 C 263.65527,142.99812 269.02448,148.62877 269.02448,155.5772 L 269.02448,156.62569 z"
+       id="StartButton"
+       style="fill:none;stroke:#7e8082;stroke-width:1.3347193;display:inline;enable-background:new"
+       inkscape:label="#path724" />
+    <path
+       d="M 269.02448,202.37898 C 269.02448,209.32605 263.65527,214.95807 257.03107,214.95807 L 220.55563,214.95807 C 213.93143,214.95807 208.56222,209.32605 208.56222,202.37898 L 208.56222,201.3305 C 208.56222,194.38207 213.93143,188.75142 220.55563,188.75142 L 257.03107,188.75142 C 263.65527,188.75142 269.02448,194.38207 269.02448,201.3305 L 269.02448,202.37898 z"
+       id="StopButton"
+       style="fill:none;stroke:#7e8082;stroke-width:1.3347193;display:inline;enable-background:new"
+       inkscape:label="#path743" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.66735964999999997;display:inline;enable-background:new;stroke-opacity:1"
+       id="GrainHumidity"
+       d="M 151.03217,187.3981 C 151.03217,196.77978 148.72158,204.38437 136.7373,204.38437 L 82.045623,204.38437 C 70.061337,204.38437 67.750752,196.77978 67.750752,187.3981 L 67.750752,187.3981 C 67.750752,178.01641 70.061337,170.41182 82.045623,170.41182 L 136.7373,170.41182 C 148.72158,170.41182 151.03217,178.01641 151.03217,187.3981 L 151.03217,187.3981 z"
+       inkscape:label="#path287" />
+    <rect
+       style="fill:none;stroke:#414142;stroke-width:0.66735964999999997;display:inline;enable-background:new"
+       id="GrainTemperature"
+       height="28.216129"
+       width="64.609062"
+       y="229.9567"
+       x="78.575172"
+       inkscape:label="#rect459" />
+    <rect
+       style="fill:none;stroke:#414142;stroke-width:0.66735964999999997;display:inline;enable-background:new"
+       id="GrainNature"
+       height="28.149143"
+       width="64.459198"
+       y="269.00079"
+       x="78.28978"
+       inkscape:label="#rect466" />
+    <path
+       style="fill:none;stroke:#b7b9bc;stroke-width:0.66735964999999997;display:inline;enable-background:new"
+       id="path5855"
+       d="M 151.12585,340.31567 C 151.12585,349.69735 148.81526,357.30194 136.83098,357.30194 L 82.139298,357.30194 C 70.155012,357.30194 67.844427,349.69735 67.844427,340.31567 L 67.844427,340.31567 C 67.844427,330.93399 70.155012,323.3294 82.139298,323.3294 L 136.83098,323.3294 C 148.81526,323.3294 151.12585,330.93399 151.12585,340.31567 L 151.12585,340.31567 z"
+       inkscape:label="#path280" />
+    <path
+       style="fill:none;stroke:#b7b9bc;stroke-width:0.66735964999999997;display:inline;enable-background:new"
+       id="GrainFlow"
+       d="M 151.03217,340.50145 C 151.03217,349.88313 148.72158,357.48772 136.7373,357.48772 L 82.045623,357.48772 C 70.061337,357.48772 67.750752,349.88313 67.750752,340.50145 L 67.750752,340.50145 C 67.750752,331.11977 70.061337,323.51518 82.045623,323.51518 L 136.7373,323.51518 C 148.72158,323.51518 151.03217,331.11977 151.03217,340.50145 L 151.03217,340.50145 z"
+       inkscape:label="#path280" />
+    <rect
+       style="fill:none;stroke:#414142;stroke-width:0.66735964999999997;display:inline;enable-background:new"
+       id="TargetHumidity"
+       height="27.963232"
+       width="56.815891"
+       y="564.95642"
+       x="205.08002"
+       inkscape:label="#rect267" />
     <g
-       style="display:inline;enable-background:new;fill:none"
+       style="display:inline;enable-background:new"
        id="HumiditySpin"
-       transform="matrix(1.3032064,0,0,1.3669942,-29.162551,-127.48999)"
+       transform="matrix(1.3032064,0,0,1.3669942,-29.777307,-128.16705)"
        inkscape:label="#g474">
       <g
-         id="g476"
-         style="fill:none">
+         id="g476">
         <rect
-           style="fill:none;stroke:#414142;stroke-width:0.50000000000000000"
+           style="fill:#9d9fa1;stroke:#414142;stroke-width:0.5"
            id="rect478"
            height="21.101"
            width="12.504"
@@ -326,41 +368,5 @@
            x="228.979" />
       </g>
     </g>
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.32529128px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;enable-background:new"
-       d="M 1.2285886,1.2378871 L 1.2285886,39.925397 L 314.4857,39.925397 L 314.4857,1.2378871 L 1.2285886,1.2378871 z"
-       id="StageTitle"
-       inkscape:label="#path6469" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.5228411;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline;enable-background:new"
-       d="M 200.49276,138.66211 L 276.40527,138.66211 L 276.40527,115.04826 L 200.49276,115.04826 L 200.49276,138.66211 z"
-       id="StageMode"
-       inkscape:label="#path7109" />
-    <path
-       style="fill:none;stroke:#b7b9bc;stroke-width:0.66735964999999997;display:inline;enable-background:new"
-       id="GrainHumidity"
-       d="M 151.64692,188.07516 C 151.64692,197.45684 149.33633,205.06143 137.35205,205.06143 L 82.660379,205.06143 C 70.676099,205.06143 68.365509,197.45684 68.365509,188.07516 L 68.365509,188.07516 C 68.365509,178.69347 70.676099,171.08888 82.660379,171.08888 L 137.35205,171.08888 C 149.33633,171.08888 151.64692,178.69347 151.64692,188.07516 L 151.64692,188.07516 z"
-       inkscape:label="#path287" />
-    <rect
-       style="fill:none;stroke:#414142;stroke-width:0.66735964999999997;display:inline;enable-background:new"
-       id="GrainTemperature"
-       height="28.216129"
-       width="64.609062"
-       y="230.63376"
-       x="79.189926"
-       inkscape:label="#rect459" />
-    <rect
-       style="fill:none;stroke:#414142;stroke-width:0.66735964999999997;display:inline;enable-background:new"
-       id="GrainNature"
-       height="28.149143"
-       width="64.459198"
-       y="269.67786"
-       x="78.904526"
-       inkscape:label="#rect466" />
-    <path
-       style="fill:none;stroke:#b7b9bc;stroke-width:0.66735964999999997;display:inline;enable-background:new"
-       id="GrainFlow"
-       d="M 151.64692,341.17851 C 151.64692,350.56019 149.33633,358.16478 137.35205,358.16478 L 82.660379,358.16478 C 70.676099,358.16478 68.365509,350.56019 68.365509,341.17851 L 68.365509,341.17851 C 68.365509,331.79683 70.676099,324.19224 82.660379,324.19224 L 137.35205,324.19224 C 149.33633,324.19224 151.64692,331.79683 151.64692,341.17851 L 151.64692,341.17851 z"
-       inkscape:label="#path280" />
   </g>
 </svg>
