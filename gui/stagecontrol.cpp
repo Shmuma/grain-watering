@@ -418,6 +418,8 @@ void StageControl::setMode (StageSettings::mode_t mode)
         _humidityEdit->show ();
         _waterUp->show ();
         _waterDown->show ();
+        _humidityUp->hide ();
+        _humidityDown->hide ();
     }
 }
 
