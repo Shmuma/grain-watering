@@ -190,6 +190,7 @@ private:
     int _grainlowTimer;
     int _grainnoCounter;
     int _grainnoTimer;
+    int _updateTimer;
 
     // snek pixmaps and counter
     QPixmap _snekImages[5];

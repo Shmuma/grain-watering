@@ -261,6 +261,9 @@ void StageControl::setRunning (bool running)
          if (_grainnoTimer)
              killTimer (_grainnoTimer);
          _grainnoTimer = startTimer (1000);
+         if (_updateTimer)
+             killTimer (_updateTimer);
+         _updateTimer = startTimer (250);
      }
      else {
          if (_snekTimer)
@@ -281,6 +284,9 @@ void StageControl::setRunning (bool running)
          if (_grainnoTimer)
              killTimer (_grainnoTimer);
          _grainnoTimer = 0;
+         if (_updateTimer)
+             killTimer (_updateTimer);
+         _updateTimer = 0;
      }
 }
 
@@ -290,33 +296,29 @@ void StageControl::timerEvent (QTimerEvent* e)
     if (e->timerId () == _snekTimer) {
 	    _snekCounter += 1;
     	    _snekCounter %= 4;
-    	    update ();
     }
     if (e->timerId () == _waterTimer) {
 	    _waterCounter += 1;
     	    _waterCounter %= 3;
-    	    update ();
     }
     if (e->timerId () == _waternoTimer) {
 	    _waternoCounter += 1;
     	    _waternoCounter %= 2;
-    	    update ();
     }
     if (e->timerId () == _grainTimer) {
 	    _grainCounter += 1;
     	    _grainCounter %= 3;
-    	    update ();
     }
     if (e->timerId () == _grainlowTimer) {
 	    _grainlowCounter += 1;
     	    _grainlowCounter %= 3;
-    	    update ();
     }
     if (e->timerId () == _grainnoTimer) {
 	    _grainnoCounter += 1;
     	    _grainnoCounter %= 2;
-    	    update ();
     }
+    if (e->timerId () == _updateTimer)
+        update ();
 }
 
 
