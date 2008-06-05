@@ -979,7 +979,7 @@ void MainWindow::settingsStageComboActivated (int item)
         _settingsChanged = false;
     }
 
-    settingsTargetHumidityEdit->setText (QString::number (sett.targetHumidity (), 'g', 1));
+    settingsTargetHumidityEdit->setText (QString::number (sett.targetHumidity (), 'f', 1));
     settingsFixedHumidityEdit->setText (QString::number (sett.fixedHumidity ()));
     settingsHumidityCoeffEdit->setText (QString::number (sett.humidityCoeff ()));
     settingsMinGrainFlowEdit->setText (QString::number (sett.minGrainFlow ()));
@@ -1719,7 +1719,7 @@ void MainWindow::stageTargetHumidityUpdated (int stage, double value)
     _daemon.setSettings (stage, sett);
 
     if (stage == settingsStageComboBox->currentIndex ())
-        settingsTargetHumidityEdit->setText (QString::number (value, 'g', 1));
+        settingsTargetHumidityEdit->setText (QString::number (value, 'f', 1));
 }
 
 
