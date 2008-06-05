@@ -772,8 +772,6 @@ QString Interpreter::checkTick (const QStringList& args)
 	// if water flow is less than 10 l/h stop stage
 	double cur_val = getWaterFlow (i);
 
-	printf ("%f\n", cur_val);
-
 	res += ",";
 
 	if (checkDelayPassed && cur_val < 10) {
