@@ -150,6 +150,10 @@ void StageControl::paintEvent (QPaintEvent*)
 	r = _svg[_mode]->boundsOnElement ("TargetHumidity").adjusted (1, 1, -1, -1);
 	p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.1f", _targetHumidity)));
 
+	setColor (p, "#F1FAFE");
+	p.setFont (QFont ("Verdana", 9));
+	r = _svg[_mode]->boundsOnElement ("WaterFlow").adjusted (2, 2, -2, -2);
+	p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1").arg (QString ().sprintf ("%.0f", _waterFlow)));
     }
 
     if (_mode == StageSettings::M_Auto) {
@@ -172,11 +176,6 @@ void StageControl::paintEvent (QPaintEvent*)
         r = _svg[_mode]->boundsOnElement ("HumidityDelta").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1\n%").arg (QString ().sprintf ("%.1f", _targetHumidity - _humidity)));
     }
-
-    setColor (p, "#F1FAFE");
-    p.setFont (QFont ("Verdana", 9));
-    r = _svg[_mode]->boundsOnElement ("WaterFlow").adjusted (2, 2, -2, -2);
-    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1").arg (QString ().sprintf ("%.0f", _waterFlow)));
 
 
     // grain area
@@ -414,15 +413,18 @@ void StageControl::setMode (StageSettings::mode_t mode)
     _mode = mode; update ();
 
     if (_mode != StageSettings::M_SemiAuto) {
-        _humidityEdit->hide ();
         _waterUp->hide ();
         _waterDown->hide ();
+        _humidityEdit->hide ();
+        _humidityUp->show ();
+        _humidityDown->show ();
     }
     else {
         _waterUp->show ();
         _waterDown->show ();
         _humidityUp->hide ();
         _humidityDown->hide ();
+        _humidityEdit->show ();
     }
 }
 

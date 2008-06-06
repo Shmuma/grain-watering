@@ -723,7 +723,7 @@
     <message>
         <location filename="mainwindow.ui" line="493"/>
         <source>Auto</source>
-        <translation>Автоматической</translation>
+        <translation>Автоматический</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="498"/>
