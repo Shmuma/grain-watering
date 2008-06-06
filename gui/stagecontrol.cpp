@@ -141,44 +141,46 @@ void StageControl::paintEvent (QPaintEvent*)
 
     if (_mode != StageSettings::M_SemiAuto) {
         setColor (p, "#E7B953");
-        p.setFont (QFont ("Arial", 11));
+        p.setFont (QFont ("Arial", 14));
         r = _svg[_mode]->boundsOnElement ("GrainFlow").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 t/h").arg (QString ().sprintf ("%.2f", _flow)));
+        
+        setColor (p, "#C1E8FB");
+	p.setFont (QFont ("Verdana", 9));
+	r = _svg[_mode]->boundsOnElement ("TargetHumidity").adjusted (1, 1, -1, -1);
+	p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.1f", _targetHumidity)));
+
     }
 
     if (_mode == StageSettings::M_Auto) {
         setColor (p, "#E7B953");
-        p.setFont (QFont ("Arial", 11));
+        p.setFont (QFont ("Arial", 14));
         r = _svg[_mode]->boundsOnElement ("GrainHumidity").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.2f", _humidity)));
 
         setColor (p, "#E7B953");
-        p.setFont (QFont ("Arial", 10));
+        p.setFont (QFont ("Arial", 12));
         r = _svg[_mode]->boundsOnElement ("GrainTemperature").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 C").arg (QString ().sprintf ("%.0f", _temp)));
 
-        p.setFont (QFont ("Arial", 10));
+        p.setFont (QFont ("Arial", 12));
         r = _svg[_mode]->boundsOnElement ("GrainNature").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 g/l").arg (QString ().sprintf ("%.2f", _nature)));
     
         setColor (p, "#C1E8FB");
-        p.setFont (QFont ("Verdana", 7));
+        p.setFont (QFont ("Verdana", 9));
         r = _svg[_mode]->boundsOnElement ("HumidityDelta").adjusted (2, 2, -2, -2);
         p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1\n%").arg (QString ().sprintf ("%.1f", _targetHumidity - _humidity)));
     }
 
     setColor (p, "#F1FAFE");
-    p.setFont (QFont ("Verdana", 8));
+    p.setFont (QFont ("Verdana", 9));
     r = _svg[_mode]->boundsOnElement ("WaterFlow").adjusted (2, 2, -2, -2);
     p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1").arg (QString ().sprintf ("%.0f", _waterFlow)));
 
-    setColor (p, "#C1E8FB");
-    p.setFont (QFont ("Verdana", 7));
-    r = _svg[_mode]->boundsOnElement ("TargetHumidity").adjusted (2, 2, -2, -2);
-    p.drawText (r, Qt::AlignHCenter | Qt::AlignVCenter, tr ("%1 %").arg (QString ().sprintf ("%.1f", _targetHumidity)));
 
     // grain area
-    r = _svg[_mode]->boundsOnElement ("GrainArea").adjusted (-1, -1, -1, -1);
+    r = _svg[_mode]->boundsOnElement ("GrainArea").adjusted (0, 0, 0, 0);
 
     switch (_grainState) {
     case GS_GrainPresent:
@@ -193,7 +195,7 @@ void StageControl::paintEvent (QPaintEvent*)
     }
 
     // water area
-    r = _svg[_mode]->boundsOnElement ("WaterArea").adjusted (0, 0, -1, -1);
+    r = _svg[_mode]->boundsOnElement ("WaterArea").adjusted (1, 0, 0, 0);
     if (_waterPresent) {
         p.drawPixmap (r.topLeft (), _waterImages[_waterCounter]);
     }
@@ -417,7 +419,6 @@ void StageControl::setMode (StageSettings::mode_t mode)
         _waterDown->hide ();
     }
     else {
-        _humidityEdit->show ();
         _waterUp->show ();
         _waterDown->show ();
         _humidityUp->hide ();
