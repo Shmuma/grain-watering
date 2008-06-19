@@ -33,7 +33,7 @@ RealSerialPort::RealSerialPort (const QString& device) throw (QString)
     tcgetattr(_fd, &oldtio);
     memset (&newtio, 0, sizeof (newtio));
 
-    newtio.c_cflag = B19200 | CRTSCTS | CS8 | CLOCAL | CREAD;
+    newtio.c_cflag = B19200 | CS8 | CLOCAL | CREAD;
     newtio.c_iflag = IGNPAR | ICRNL;
     newtio.c_oflag = 0;
     newtio.c_cc[VINTR]    = 0;     /* Ctrl-c */ 
