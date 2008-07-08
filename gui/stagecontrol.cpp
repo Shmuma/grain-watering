@@ -403,7 +403,7 @@ void StageControl::setTargetWaterFlow (double val)
     _targetWaterFlow = val;
     update ();
 
-    if (_mode == StageSettings::M_SemiAuto)
+    if (_mode == StageSettings::M_SemiAuto && !_humidityEdit->hasFocus ())
         _humidityEdit->setText (QString ().sprintf ("%.0f", val));
 }
 
