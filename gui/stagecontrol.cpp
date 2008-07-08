@@ -109,7 +109,7 @@ StageControl::StageControl (QWidget* parent)
 
     // water flow editor
     _humidityEdit = new QLineEdit (this);
-    _humidityEdit->setFont (QFont ("Verdana", 7));
+    _humidityEdit->setFont (QFont ("Verdana", 9));
 
     r = _svg[_mode]->boundsOnElement ("WaterFlow").toRect ();
     _humidityEdit->setGeometry (r);
