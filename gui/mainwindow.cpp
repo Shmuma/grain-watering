@@ -1790,7 +1790,7 @@ void MainWindow::daemonGotCleanResult (bool s_w[4], bool s_r[4])
     QString msg;
 
     for (i = 0; i < 4; i++)
-        if (getStageControl (i)->enabled ()) {
+        if (getStageControl (i)->enabled () && getStageControl (i)->cleaned ()) {
             if (s_w[i])
                 msg = tr ("Stage %1 cleaning with water performed").arg (i+1);
             else
@@ -1800,7 +1800,7 @@ void MainWindow::daemonGotCleanResult (bool s_w[4], bool s_r[4])
         }
 
     for (i = 0; i < 4; i++)
-        if (getStageControl (i)->enabled ()) {
+        if (getStageControl (i)->enabled () && getStageControl (i)->cleaned ()) {
             if (s_r[i])
                 msg = tr ("Stage %1 cleaning from Rottenberg performed").arg (i+1);
             else

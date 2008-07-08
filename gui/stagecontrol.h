@@ -127,7 +127,10 @@ public:
     bool cleaning () const
         { return _cleaning; };
     void setCleaning (bool cleaning)
-        { _cleaning = cleaning; update (); };
+        { _cleaned = _cleaning; _cleaning = cleaning; update (); };
+    /* this property is holding previous cleaning state */
+    bool cleaned () const
+        { return _cleaned; };
 
     double targetWaterFlow () const
         { return _targetWaterFlow; };
@@ -151,7 +154,7 @@ private:
     StageSettings::mode_t _mode;
     bool _waterPresent;
     grainstate_t _grainState;
-    bool _cleaning;
+    bool _cleaning, _cleaned;
     double _targetWaterFlow;
 
     double _minWaterFlow, _maxWaterFlow;

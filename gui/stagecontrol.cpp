@@ -25,7 +25,7 @@ StageControl::StageControl (QWidget* parent)
     _targetWaterFlow = _flow = _humidity = _nature = _temp = _waterFlow = _targetHumidity = 0;
     _label = QString ();
     setEnabled (false);
-    _cleaning = false;
+    _cleaning = _cleaned = false;
     _minWaterFlow = 0;
     _maxWaterFlow = 1e10;
 
