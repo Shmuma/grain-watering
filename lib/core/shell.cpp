@@ -945,23 +945,23 @@ QString Interpreter::getStageState (int stage)
         return "cleaning";
 
     if (_settings[stage].sensors ()) {
+        d_grain_flow = getGrainFlow (stage);
+        appendHistory ((history_stage_t)stage, HK_GrainFlow, d_grain_flow);
 
-        if (_settings[stage].mode () != StageSettings::M_SemiAuto) {
-            d_grain_flow = getGrainFlow (stage);
-            appendHistory ((history_stage_t)stage, HK_GrainFlow, d_grain_flow);
+        if (_settings[stage].mode () != StageSettings::M_SemiAuto)
             res += "GF=" + QString::number (d_grain_flow) + ",";
 
-            d_wf = getWaterFlow (stage);
+        d_wf = getWaterFlow (stage);
 
-            // special case: compare with minimal and maximum water flow
-            if (d_wf < _settings[stage].minWaterFlow ())
-                d_wf = _settings[stage].minWaterFlow ();
-            if (d_wf > _settings[stage].maxWaterFlow ())
-                d_wf = _settings[stage].maxWaterFlow ();
-            
-            appendHistory ((history_stage_t)stage, HK_WaterFlow, d_wf);
+        // special case: compare with minimal and maximum water flow
+        if (d_wf < _settings[stage].minWaterFlow ())
+            d_wf = _settings[stage].minWaterFlow ();
+        if (d_wf > _settings[stage].maxWaterFlow ())
+            d_wf = _settings[stage].maxWaterFlow ();
+
+        appendHistory ((history_stage_t)stage, HK_WaterFlow, d_wf);
+        if (_settings[stage].mode () != StageSettings::M_SemiAuto)
             res += "WF=" + QString::number (d_wf) + ",";
-        }
 
         res += "R="  + QString::number (_stageRunning[stage] ? 1 : 0) + ",";
 

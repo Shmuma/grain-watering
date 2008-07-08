@@ -776,8 +776,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>323</width>
-               <height>499</height>
+               <width>361</width>
+               <height>562</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout" >
@@ -912,8 +912,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>285</width>
-                      <height>196</height>
+                      <width>327</width>
+                      <height>225</height>
                      </rect>
                     </property>
                     <attribute name="title" >
@@ -1547,8 +1547,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>526</width>
-            <height>513</height>
+            <width>546</width>
+            <height>584</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" >
@@ -1794,23 +1794,18 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>506</width>
-                <height>403</height>
+                <width>524</width>
+                <height>454</height>
                </rect>
               </property>
               <attribute name="title" >
                <string>&amp;Graph</string>
               </attribute>
-              <widget class="QwtPlot" name="plot" >
-               <property name="geometry" >
-                <rect>
-                 <x>4</x>
-                 <y>4</y>
-                 <width>498</width>
-                 <height>395</height>
-                </rect>
-               </property>
-              </widget>
+              <layout class="QVBoxLayout" name="verticalLayout_2" >
+               <item>
+                <widget class="QwtPlot" name="plot" />
+               </item>
+              </layout>
              </widget>
             </widget>
            </item>
@@ -1865,8 +1860,8 @@
                <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Terminus'; font-size:9pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt;">Plaund interactive console.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Terminus'; font-size:11pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Plaund interactive console.&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
              <widget class="QTextEdit" name="autoLogEditor" >
@@ -1880,8 +1875,8 @@ p, li { white-space: pre-wrap; }
                <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Arial'; font-size:9pt; font-weight:400; font-style:normal;">
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Terminus'; font-size:11pt;">&lt;/p>&lt;/body>&lt;/html></string>
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Verdana'; font-size:11pt; font-weight:400; font-style:normal;">
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Terminus';">&lt;/p>&lt;/body>&lt;/html></string>
               </property>
              </widget>
             </widget>
