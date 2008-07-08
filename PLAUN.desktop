@@ -1,0 +1,19 @@
+[Desktop Entry]
+Comment=
+Comment[ru]=
+Encoding=UTF-8
+Exec[$e]='/inst/PLAUN/latest-git/grain-watering/gui/gui'
+GenericName=
+GenericName[ru]=
+Icon=kbinaryclock
+MimeType=
+Name=PLAUN
+Name[ru]=PLAUN
+Path[$e]=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DCOP-ServiceType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=

@@ -1,0 +1,519 @@
+
+lib/core/database.cpp,690
+Database::Database 10,163
+Database::~Database 51,2061
+void Database::appendCommandHistory 57,2130
+QString Database::getStageSettings 70,2699
+void Database::setStageSettings 84,3044
+void Database::setPass 113,4095
+QString Database::getPass 124,4362
+QList< QPair <time_t, double> > Database::getHistory 144,4753
+void Database::addHistory 164,5409
+void Database::setTempCoef 177,5952
+double Database::getTempK 193,6430
+double Database::getTempResist 211,6799
+void Database::logMessage 230,7180
+QList< QPair <time_t, QString> > Database::getEvents 241,7602
+void Database::logCleanMessage 264,8398
+double Database::getMinPressure 275,8831
+void Database::setMinPressure 293,9200
+
+lib/core/moc_database.cpp,370
+static const uint qt_meta_data_Database[qt_meta_data_Database20,736
+static const char qt_meta_stringdata_Database[qt_meta_stringdata_Database33,997
+const QMetaObject Database::staticMetaObject 37,1070
+const QMetaObject *Database::metaObject(Database::metaObject42,1219
+void *Database::qt_metacast(Database::qt_metacast47,1302
+int Database::qt_metacall(55,1539
+
+lib/core/shell.cpp,3280
+Interpreter::Interpreter 14,266
+QString Interpreter::exec 169,15056
+QString Interpreter::getHelp 233,16917
+DeviceCommand::stage_t Interpreter::parseStage 270,18279
+int Interpreter::parseStageAsInt 283,18515
+bool Interpreter::parseBool 297,18716
+QString Interpreter::connect 313,19028
+QString Interpreter::getStateWord 319,19138
+QString Interpreter::getGrainFlow 330,19326
+QString Interpreter::getGrainHumidity 336,19470
+QString Interpreter::getGrainTemperature 342,19622
+QString Interpreter::getGrainNature 348,19780
+QString Interpreter::getWaterFlow 354,19928
+QString Interpreter::getWaterPressure 360,20072
+QString Interpreter::getControllerID 366,20199
+QString Interpreter::getP4State 372,20330
+QString Interpreter::getP5State 378,20451
+QString Interpreter::getCleanResult 384,20572
+QString Interpreter::raw 390,20701
+QString Interpreter::isGrainPresent 411,21148
+QString Interpreter::isBSUPowered 417,21287
+QString Interpreter::setWaterGate 423,21422
+QString Interpreter::setFilterGate 456,22432
+QString Interpreter::setKGates 467,22675
+QString Interpreter::setStages 473,22848
+QString Interpreter::startWater 491,23354
+QString Interpreter::stopWater 506,23674
+QString Interpreter::powerGate 522,24011
+QString Interpreter::cleanSystem 528,24164
+QString Interpreter::drainWater 551,24639
+QString Interpreter::setOutputSignal 577,25253
+QString Interpreter::startFilterAutomat 584,25396
+QString Interpreter::getStages 598,25691
+QString Interpreter::getMetaState 618,26068
+QString Interpreter::sleep 643,26573
+QString Interpreter::getGrainSensors 659,26810
+QString Interpreter::setGrainSensors 665,26950
+QString Interpreter::checkTick 672,27091
+QString Interpreter::autoModeTick 794,30376
+QString Interpreter::getSettings 833,31319
+QString Interpreter::setSettings 850,31695
+QString Interpreter::setPass 868,32058
+double Interpreter::getWaterFlow 881,32322
+double Interpreter::getWaterPressure 890,32566
+double Interpreter::getGrainTemperature 896,32665
+double Interpreter::getGrainFlow 907,32981
+double Interpreter::getGrainHumidity 916,33223
+double Interpreter::getGrainNature 925,33472
+QString Interpreter::getStageState 934,33720
+QString Interpreter::setDebug 1027,37268
+QString Interpreter::setSensors 1034,37401
+QString Interpreter::getSensors 1044,37639
+QString Interpreter::getHistory 1055,37835
+QString Interpreter::addHistory 1082,38558
+void Interpreter::appendHistory 1101,38975
+QString Interpreter::setTempCoef 1107,39154
+QString Interpreter::getTempCoef 1130,39552
+QString Interpreter::calibrate 1136,39683
+QString Interpreter::setStageModes 1154,40134
+QString Interpreter::startStage 1167,40391
+QString Interpreter::stopStage 1194,41069
+QString Interpreter::logMessage 1221,41705
+QString Interpreter::logCleanMessage 1229,41853
+QString Interpreter::getEvents 1237,42011
+void Interpreter::timerEvent 1262,42622
+QString Interpreter::getCleanState 1311,44183
+bool Interpreter::isCleaningInProgress 1323,44409
+QString Interpreter::setTargetFlow 1329,44575
+QString Interpreter::getTargetFlow 1343,44964
+QString Interpreter::setMinPressure 1358,45282
+QString Interpreter::getMinPressure 1365,45425
+void Interpreter::stopAllStages 1371,45547
+uint Interpreter::maxSecondsSinceStagesStarted 1379,45712
+
+lib/core/serial.cpp,538
+RealSerialPort::RealSerialPort 20,421
+void RealSerialPort::send 65,2018
+QByteArray RealSerialPort::receive 72,2216
+FileSerialPort::FileSerialPort 121,3348
+void FileSerialPort::send 134,3796
+QByteArray FileSerialPort::receive 140,3891
+SerialRecorder::SerialRecorder 155,4232
+SerialRecorder::~SerialRecorder 168,4656
+void SerialRecorder::send 176,4754
+QByteArray SerialRecorder::receive 184,4893
+SerialDeviceModel::SerialDeviceModel 198,5201
+void SerialDeviceModel::send 212,5479
+QByteArray SerialDeviceModel::receive 226,5757
+
+lib/core/device.cpp,1725
+DeviceCommand::DeviceCommand 11,187
+DeviceCommand::DeviceCommand 25,438
+DeviceCommand::DeviceCommand 34,630
+DeviceCommand::DeviceCommand 65,1539
+bool DeviceCommand::operator == DeviceCommand::operator ==73,1694
+QByteArray DeviceCommand::pack 82,1857
+int DeviceCommand::delay 96,2064
+void DeviceCommand::setStage 118,2419
+bool DeviceCommand::isOK 136,2720
+DeviceCommand::stage_t DeviceCommand::stageByNum 143,2942
+Device::Device 164,3332
+bool Device::initialize 173,3480
+void Device::updateState 190,3847
+unsigned int Device::getGrainFlow 214,4308
+unsigned int Device::getGrainHumidity 222,4550
+unsigned int Device::getGrainTemperature 230,4800
+unsigned int Device::getGrainNature 238,5056
+unsigned int Device::getWaterFlow 246,5302
+bool Device::getGrainPresent 254,5545
+bool Device::getBSUPowered 262,5807
+unsigned int Device::getWaterPressure 270,6065
+unsigned int Device::getControllerID 278,6274
+unsigned int Device::getP5State 286,6482
+unsigned int Device::getP4State 294,6678
+unsigned int Device::getCleanResult 302,6874
+bool Device::setWaterGateS1 310,7078
+bool Device::setWaterGateS2 318,7375
+bool Device::setWaterGateS3 326,7673
+bool Device::setWaterGateS4 334,7970
+bool Device::setFilterGates 342,8268
+bool Device::setKGates 358,8768
+bool Device::setStages 370,9124
+bool Device::startWater 384,9527
+bool Device::stopWater 392,9783
+bool Device::powerGates 400,10036
+bool Device::cleanSystem 408,10316
+bool Device::drainWater 428,10844
+bool Device::setOutputSignal 444,11289
+bool Device::startFilterAutomat 452,11558
+QByteArray Device::sendRawCommand 460,11814
+bool Device::syncWithDevice 471,12014
+bool Device::cleaningStarted 488,12374
+bool Device::waterDrained 495,12495
+
+lib/core/settings.cpp,214
+StageSettings::StageSettings 10,169
+QString StageSettings::toString 94,2599
+QMap<int, double> StageSettings::parseHash 129,3974
+QString StageSettings::hash2string 140,4257
+void StageSettings::setMode 157,4632
+
+lib/core/moc_shell.cpp,400
+static const uint qt_meta_data_Interpreter[qt_meta_data_Interpreter20,727
+static const char qt_meta_stringdata_Interpreter[qt_meta_stringdata_Interpreter33,991
+const QMetaObject Interpreter::staticMetaObject 37,1070
+const QMetaObject *Interpreter::metaObject(Interpreter::metaObject42,1228
+void *Interpreter::qt_metacast(Interpreter::qt_metacast47,1314
+int Interpreter::qt_metacall(55,1560
+
+lib/core/log.cpp,102
+Logger::Logger 9,177
+Logger::~Logger 16,259
+void Logger::setActive 23,327
+void Logger::add 37,674
+
+gui/moc_doubleclickbutton.cpp,508
+static const uint qt_meta_data_DoubleClickButton[qt_meta_data_DoubleClickButton20,763
+static const char qt_meta_stringdata_DoubleClickButton[qt_meta_stringdata_DoubleClickButton36,1121
+const QMetaObject DoubleClickButton::staticMetaObject 40,1231
+const QMetaObject *DoubleClickButton::metaObject(DoubleClickButton::metaObject45,1411
+void *DoubleClickButton::qt_metacast(DoubleClickButton::qt_metacast50,1503
+int DoubleClickButton::qt_metacall(58,1771
+void DoubleClickButton::doubleClicked(73,2111
+
+gui/moc_bsucontrol.cpp,391
+static const uint qt_meta_data_BSUControl[qt_meta_data_BSUControl20,742
+static const char qt_meta_stringdata_BSUControl[qt_meta_stringdata_BSUControl33,1005
+const QMetaObject BSUControl::staticMetaObject 37,1082
+const QMetaObject *BSUControl::metaObject(BSUControl::metaObject42,1237
+void *BSUControl::qt_metacast(BSUControl::qt_metacast47,1322
+int BSUControl::qt_metacall(55,1565
+
+gui/moc_mainwindow.cpp,396
+static const uint qt_meta_data_MainWindow[qt_meta_data_MainWindow20,742
+static const char qt_meta_stringdata_MainWindow[qt_meta_stringdata_MainWindow126,4151
+const QMetaObject MainWindow::staticMetaObject 216,7956
+const QMetaObject *MainWindow::metaObject(MainWindow::metaObject221,8111
+void *MainWindow::qt_metacast(MainWindow::qt_metacast226,8196
+int MainWindow::qt_metacall(234,8439
+
+gui/logger.cpp,114
+Logger* Logger::_instance 8,158
+Logger::Logger 11,194
+Logger* Logger::instance 17,240
+void Logger::log 25,351
+
+gui/main.cpp,15
+int main 6,51
+
+gui/qrc_gui.cpp,294
+static const unsigned char qt_resource_data[qt_resource_data12,364
+static const unsigned char qt_resource_name[qt_resource_name8448,684246
+static const unsigned char qt_resource_struct[qt_resource_struct8625,690116
+int QT_MANGLE_NAMESPACE(8710,693674
+Q_CONSTRUCTOR_FUNCTION(8717,693859
+
+gui/mainwindow.cpp,5080
+MainWindow::MainWindow 17,358
+void MainWindow::setSettingsPanelVisible 219,13408
+void MainWindow::timerEvent 234,13704
+void MainWindow::refreshScreenClock 245,13938
+void MainWindow::configButtonToggled 251,14075
+void MainWindow::modeButtonToggled 270,14599
+void MainWindow::checkButtonToggled 289,15123
+void MainWindow::paramsButtonToggled 308,15647
+void MainWindow::sensorsButtonToggled 327,16171
+void MainWindow::cleanButtonToggled 346,16695
+void MainWindow::loggerMessage 365,17219
+StageControl* MainWindow::getStageControl 391,17854
+void MainWindow::connectButtonClicked 409,18163
+void MainWindow::connectedChanged 425,18636
+void MainWindow::daemonHardwareConnected 444,19283
+void MainWindow::daemonTextReceived 460,19698
+void MainWindow::daemonAutoTextReceived 467,19844
+void MainWindow::daemonCommandSent 474,19994
+void MainWindow::consoleSendButtonClicked 481,20148
+void MainWindow::switchToStagesView 496,20544
+void MainWindow::switchToHistoryView 502,20631
+void MainWindow::switchToConsoleView 508,20719
+void MainWindow::applyStagesButtonClicked 517,20892
+void MainWindow::daemonStagesActivityChanged 548,22032
+void MainWindow::daemonGrainFlowGot 644,25078
+void MainWindow::startButtonClicked 650,25194
+void MainWindow::stopButtonClicked 657,25380
+void MainWindow::globalStopButtonClicked 664,25563
+void MainWindow::daemonMetaStateGot 675,25882
+void MainWindow::daemonWaterStarted 729,27406
+void MainWindow::daemonWaterStopped 736,27613
+void MainWindow::stateRefreshButtonClicked 743,27821
+void MainWindow::checkStateButtonPressed 750,27995
+void MainWindow::checkWaterButtonPressed 756,28090
+void MainWindow::checkGrainSensorsButtonPressed 762,28185
+void MainWindow::applyCheckWaterButtonClicked 768,28287
+void MainWindow::sendFileButtonClicked 782,28724
+void MainWindow::daemonGrainSensorsPresenceGot 801,29226
+void MainWindow::grainSensorsEnabledChecked 812,29550
+void MainWindow::checkGrainStageApplyClicked 819,29814
+void MainWindow::daemonGrainPresenceGot 838,30495
+void MainWindow::daemonWaterPressureUpdated 861,31146
+void MainWindow::daemonGrainPresentUpdated 867,31249
+void MainWindow::daemonWaterFlowUpdated 873,31442
+void MainWindow::daemonGrainFlowUpdated 879,31561
+void MainWindow::daemonGrainHumidityUpdated 885,31680
+void MainWindow::daemonGrainTemperatureUpdated 891,31802
+void MainWindow::daemonGrainNatureUpdated 897,31930
+void MainWindow::daemonCalculatedHumidityUpdated 903,32048
+void MainWindow::daemonTargetFlowUpdated 909,32181
+void MainWindow::daemonTargetSettingUpdated 915,32306
+void MainWindow::daemonSettingsGot 921,32427
+bool MainWindow::haveActiveStages 961,34104
+void MainWindow::settingsStageComboActivated 970,34273
+void MainWindow::applySettingsButtonClicked 1000,35759
+void MainWindow::saveSettingsPage 1006,35875
+void MainWindow::settingsValueEdited 1097,38830
+void MainWindow::settingsHumidityTableClicked 1103,38919
+void MainWindow::settingsGrainFlowTableClicked 1117,39264
+void MainWindow::settingsGrainNatureTableClicked 1131,39618
+void MainWindow::settingsGrainTempTableClicked 1145,39984
+void MainWindow::settingsGrainNatureCoeffTableClicked 1160,40397
+bool MainWindow::haveAccess 1175,40822
+void MainWindow::settingsAdvancedGroupBoxChecked 1215,41862
+void MainWindow::tempSensorsGroupboxChecked 1225,42044
+void MainWindow::stageSensorsApplyButtonClicked 1236,42217
+void MainWindow::tempCoefGot 1262,43191
+void MainWindow::calibrateS1Checked 1269,43356
+void MainWindow::calibrateS2Checked 1284,43731
+void MainWindow::calibrateS3Checked 1299,44106
+void MainWindow::calibrateS4Checked 1314,44481
+void MainWindow::calibrateButtonClicked 1329,44856
+void MainWindow::daemonCalibrateReply 1353,45558
+void MainWindow::stageModesApplyButtonClicked 1361,45947
+void MainWindow::historyPeriodComboChanged 1379,47072
+void MainWindow::refreshHistoryButtonClicked 1385,47159
+void MainWindow::graphResetButtonClicked 1436,48538
+void MainWindow::historyGot 1463,49056
+void MainWindow::daemonBsuPoweredUpdated 1549,51150
+void MainWindow::daemonGrainLowUpdated 1560,51527
+void MainWindow::daemonAutoModeError 1571,51996
+void MainWindow::cleanFilterButtonClicked 1590,52657
+void MainWindow::cleanStagesButtonClicked 1604,53065
+void MainWindow::daemonCleanRequested 1638,53956
+void MainWindow::daemonCleanStarted 1644,54097
+void MainWindow::daemonCleanFinished 1650,54216
+void MainWindow::drainWaterButtonClicked 1658,54423
+void MainWindow::daemonDrainStarted 1667,54852
+void MainWindow::daemonDrainFinished 1673,54971
+void MainWindow::daemonStageStarted 1679,55092
+void MainWindow::daemonStageStopped 1688,55379
+void MainWindow::daemonStageRunningUpdated 1698,55703
+void MainWindow::stageTargetHumidityUpdated 1715,56332
+void MainWindow::historyItemChanged 1726,56674
+void MainWindow::eventsGot 1735,56984
+void MainWindow::daemonGotCleanState 1753,57402
+void MainWindow::daemonGotCleanResult 1785,58349
+void MainWindow::stageTargetWaterFlowUpdated 1812,59250
+void MainWindow::daemonMinPressureGot 1818,59374
+QwtText PlotScaleDraw::label 1828,59611
+
+gui/daemon.cpp,2078
+Daemon::Daemon 11,221
+void Daemon::connect 24,657
+void Daemon::disconnect 32,886
+void Daemon::socketStateChanged 39,1030
+void Daemon::socketReadyRead 66,1890
+bool Daemon::parseGenericReply 273,11001
+bool Daemon::parseNumberReply 286,11299
+void Daemon::parseCleanResultReply 304,11727
+bool Daemon::parseStagesReply 334,12442
+bool Daemon::parseAutoModeTick 375,13379
+void Daemon::parseTempCoef 389,13707
+void Daemon::parseCleanState 404,13982
+void Daemon::sendCommand 417,14346
+void Daemon::sendRawCommand 425,14500
+void Daemon::setStages 431,14580
+void Daemon::refreshState 439,14871
+bool Daemon::handleMetaState 446,15097
+void Daemon::startWater 495,16351
+void Daemon::stopWater 502,16535
+bool Daemon::isStageEnabled 509,16716
+void Daemon::getStages 526,16952
+void Daemon::isGrainSensorsPresent 533,17094
+void Daemon::setGrainSensorsEnabled 540,17260
+void Daemon::isGrainPresent 549,17475
+void Daemon::handleCheckTick 556,17665
+void Daemon::requestSettings 656,20780
+void Daemon::parseSettings 663,20932
+void Daemon::setSettings 689,21503
+bool Daemon::checkPass 699,21818
+void Daemon::setSensors 707,21987
+void Daemon::requestTempCoef 714,22237
+void Daemon::setTempCoef 721,22379
+void Daemon::calibrate 728,22578
+void Daemon::parseCalibrateReply 735,22799
+static const char* mode2label 750,23392
+void Daemon::setStageModes 765,23688
+void Daemon::requestHistory 778,24218
+void Daemon::requestEvents 785,24505
+void Daemon::parseHistory 792,24733
+void Daemon::cleanFilter 809,25271
+void Daemon::cleanStages 816,25423
+void Daemon::drainWater 823,25664
+void Daemon::checkTick 830,25909
+void Daemon::startStage 836,25974
+void Daemon::stopStage 843,26158
+void Daemon::logMessage 850,26339
+void Daemon::logCleanResult 856,26439
+void Daemon::parseEvents 862,26549
+void Daemon::getCleanState 880,26981
+void Daemon::getCleanResult 887,27135
+void Daemon::setTargetWaterFlow 894,27292
+void Daemon::setMinPressure 901,27514
+void Daemon::getMinPressure 908,27678
+void Daemon::parseMinPressure 915,27822
+QString Daemon::trDaemon 929,28153
+
+gui/doubleclickbutton.cpp,146
+DoubleClickButton::DoubleClickButton 9,180
+void DoubleClickButton::mouseDoubleClickEvent 15,268
+void DoubleClickButton::mousePressEvent 21,357
+
+gui/tableform.cpp,431
+TableForm::TableForm 10,190
+void TableForm::okButtonClicked 39,1309
+void TableForm::cancelButtonClicked 46,1394
+void TableForm::addButtonClicked 52,1454
+void TableForm::removeButtonClicked 97,2628
+void TableForm::tableItemChanged 104,2754
+void TableForm::setData 110,2878
+void TableForm::clearTableButtonClicked 128,3244
+QMap<int, double> TableForm::dataFromTable 134,3320
+void TableForm::calculateButtonClicked 149,3717
+
+gui/moc_tableform.cpp,381
+static const uint qt_meta_data_TableForm[qt_meta_data_TableForm20,739
+static const char qt_meta_stringdata_TableForm[qt_meta_stringdata_TableForm42,1291
+const QMetaObject TableForm::staticMetaObject 51,1604
+const QMetaObject *TableForm::metaObject(TableForm::metaObject56,1756
+void *TableForm::qt_metacast(TableForm::qt_metacast61,1840
+int TableForm::qt_metacall(69,2080
+
+gui/moc_stagecontrol.cpp,597
+static const uint qt_meta_data_StageControl[qt_meta_data_StageControl20,748
+static const char qt_meta_stringdata_StageControl[qt_meta_stringdata_StageControl48,1493
+const QMetaObject StageControl::staticMetaObject 59,1897
+const QMetaObject *StageControl::metaObject(StageControl::metaObject64,2058
+void *StageControl::qt_metacast(StageControl::qt_metacast69,2145
+int StageControl::qt_metacall(77,2394
+void StageControl::startPressed(102,3384
+void StageControl::stopPressed(109,3581
+void StageControl::targetHumidityUpdated(116,3777
+void StageControl::targetWaterFlowUpdated(123,4051
+
+gui/stagecontrol.cpp,709
+StageControl::StageControl 10,208
+void StageControl::paintEvent 121,4329
+void StageControl::setRunning 240,8716
+void StageControl::timerEvent 295,10292
+void StageControl::startClicked 326,11021
+void StageControl::stopClicked 332,11090
+void StageControl::humidityUpClicked 338,11157
+void StageControl::humidityDownClicked 346,11300
+void StageControl::waterUpClicked 356,11503
+void StageControl::waterDownClicked 364,11658
+void StageControl::humidityEditorReturnPressed 374,11851
+void StageControl::setTargetWaterFlow 401,12600
+void StageControl::setMode 411,12812
+void StageControl::mousePressEvent 432,13273
+void StageControl::mouseReleaseEvent 450,13630
+void StageControl::setColor 463,13904
+
+gui/moc_daemon.cpp,1997
+static const uint qt_meta_data_Daemon[qt_meta_data_Daemon20,730
+static const char qt_meta_stringdata_Daemon[qt_meta_stringdata_Daemon80,2557
+const QMetaObject Daemon::staticMetaObject 121,4355
+const QMetaObject *Daemon::metaObject(Daemon::metaObject126,4498
+void *Daemon::qt_metacast(Daemon::qt_metacast131,4579
+int Daemon::qt_metacall(139,4810
+void Daemon::connectedChanged(196,9465
+void Daemon::hardwareConnected(203,9661
+void Daemon::stagesActivityChanged(209,9769
+void Daemon::grainFlowGot(216,10168
+void Daemon::grainSensorsPresenceGot(223,10424
+void Daemon::textArrived(230,10627
+void Daemon::autoTextArrived(237,10829
+void Daemon::commandSent(244,11035
+void Daemon::stageStarted(251,11237
+void Daemon::stageStopped(258,11428
+void Daemon::waterStarted(265,11620
+void Daemon::waterStopped(272,11813
+void Daemon::metaStateGot(279,12006
+void Daemon::grainPresenceGot(286,12288
+void Daemon::settingsGot(293,12551
+void Daemon::gotCleanState(299,12655
+void Daemon::gotCleanResult(306,13114
+void Daemon::stageRunningUpdated(313,13382
+void Daemon::waterPressureUpdated(320,13648
+void Daemon::grainPresentUpdated(327,13852
+void Daemon::waterFlowUpdated(334,14118
+void Daemon::grainFlowUpdated(341,14383
+void Daemon::grainHumidityUpdated(348,14648
+void Daemon::grainTemperatureUpdated(355,14917
+void Daemon::grainNatureUpdated(362,15189
+void Daemon::calculatedHumidityUpdated(369,15456
+void Daemon::targetFlowUpdated(376,15730
+void Daemon::targetSettingUpdated(383,15996
+void Daemon::tempCoefGot(390,16265
+void Daemon::calibrateReply(397,16528
+void Daemon::bsuPoweredUpdated(404,16868
+void Daemon::grainLowUpdated(411,17132
+void Daemon::autoModeError(418,17394
+void Daemon::historyGot(425,17674
+void Daemon::eventsGot(432,18049
+void Daemon::drainStarted(439,18271
+void Daemon::drainFinished(445,18376
+void Daemon::cleanRequested(451,18482
+void Daemon::cleanStarted(457,18589
+void Daemon::cleanFinished(463,18694
+void Daemon::minPressureGot(469,18800
+
+gui/moc_logger.cpp,381
+static const uint qt_meta_data_Logger[qt_meta_data_Logger20,730
+static const char qt_meta_stringdata_Logger[qt_meta_stringdata_Logger36,1077
+const QMetaObject Logger::staticMetaObject 40,1194
+const QMetaObject *Logger::metaObject(Logger::metaObject45,1337
+void *Logger::qt_metacast(Logger::qt_metacast50,1418
+int Logger::qt_metacall(58,1649
+void Logger::message(73,2064
+
+gui/bsucontrol.cpp,66
+BSUControl::BSUControl 8,165
+void BSUControl::paintEvent 18,399
+
+plaund/main.cpp,16
+int main 9,100
+
+plaund/server.cpp,242
+PlaundServer::PlaundServer 18,287
+PlaundServer::~PlaundServer 40,1025
+void PlaundServer::newConnection 49,1121
+void PlaundServer::handleCommand 63,1503
+void PlaundServer::timerEvent 106,2389
+void PlaundServer::broadcastMessage 128,2909
+
+plaund/moc_server.cpp,411
+static const uint qt_meta_data_PlaundServer[qt_meta_data_PlaundServer20,730
+static const char qt_meta_stringdata_PlaundServer[qt_meta_stringdata_PlaundServer37,1115
+const QMetaObject PlaundServer::staticMetaObject 42,1239
+const QMetaObject *PlaundServer::metaObject(PlaundServer::metaObject47,1403
+void *PlaundServer::qt_metacast(PlaundServer::qt_metacast52,1490
+int PlaundServer::qt_metacall(62,1853
