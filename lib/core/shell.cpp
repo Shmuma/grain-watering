@@ -698,7 +698,7 @@ QString Interpreter::checkTick (const QStringList& args)
     inProgress = true;
 
     // get water pressure
-    double wp = isAnyStageRunning () ? getWaterPressure () : 0.0;
+    double wp = getWaterPressure ();
     
     appendHistory (HS_Stage1, HK_WaterPress, wp);
 

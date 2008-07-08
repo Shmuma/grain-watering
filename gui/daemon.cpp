@@ -575,9 +575,9 @@ void Daemon::handleCheckTick (const QString& msg)
     double val;
     bool ok;
 
-    if (stages.count () < 2)
+    if (!stages.count ())
         return;
-    
+
     if (!stages[0].startsWith ("WP="))
         return;
 
@@ -589,6 +589,9 @@ void Daemon::handleCheckTick (const QString& msg)
         return;
 
     waterPressureUpdated (val);
+
+    if (stages.count () < 2)
+        return;
 
     for (int i = 1; i < stages.count (); i++) {
         QString val_str;
