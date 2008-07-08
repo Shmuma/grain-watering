@@ -872,6 +872,8 @@ void MainWindow::daemonGrainPresentUpdated (int stage, bool present)
 
 void MainWindow::daemonWaterFlowUpdated (int stage, double val)
 {
+    if (val < 10 && getStageControl (stage)->running ())
+        Logger::instance ()->log (Logger::Error, tr ("Water flow too low at stage %1. Stage stopped.").arg (stage+1));
     getStageControl (stage)->setWaterFlow (val);
 }
 

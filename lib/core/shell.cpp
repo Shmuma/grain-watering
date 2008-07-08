@@ -774,7 +774,7 @@ QString Interpreter::checkTick (const QStringList& args)
 
 	res += ",";
 
-	if (checkDelayPassed && cur_val < 10) {
+	if (checkDelayPassed && cur_val < 10 && _stageRunning[i]) {
 		res += "WF=0";
 		valid = false;
 		stopStage (QStringList (QString::number (i+1)));

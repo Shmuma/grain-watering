@@ -629,11 +629,8 @@ void Daemon::handleCheckTick (const QString& msg)
                 bsuPoweredUpdated (stage, val == "1");
             else if (key == "GL")
                 grainLowUpdated (stage, val == "1");
-            else if (key == "WF") {
-	    	if (val.toDouble () < 10) 
-			Logger::instance ()->log (Logger::Error, tr ("Water flow too low at stage %1. Stage stopped.").arg (stage+1));
+            else if (key == "WF")
                 waterFlowUpdated (stage, val.toDouble ());
-	    }
             else if (key == "GF")
                 grainFlowUpdated (stage, val.toDouble ());
             else if (key == "GH")
