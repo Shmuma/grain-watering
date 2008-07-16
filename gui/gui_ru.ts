@@ -77,37 +77,37 @@
         <translation>Ошибка промывки фильтра. Причина: &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="daemon.cpp" line="253"/>
+        <location filename="daemon.cpp" line="251"/>
         <source>Cannot assign target water flow on stage %1. Reason: &apos;%2&apos;</source>
         <translation>Не могу назначить уставку этапа %1. Причина: &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="daemon.cpp" line="354"/>
+        <location filename="daemon.cpp" line="352"/>
         <source>Expected number, got &apos;%1&apos;</source>
         <translation>Ожидалось число, получено &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="daemon.cpp" line="309"/>
+        <location filename="daemon.cpp" line="307"/>
         <source>Cannot get clean result. Reason: &apos;%1&apos;</source>
         <translation>Не могу получить результат промывки. Причина: &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="daemon.cpp" line="409"/>
+        <location filename="daemon.cpp" line="407"/>
         <source>Cannot get clean state. Reason: &apos;%1&apos;</source>
         <translation>Не могу получить состояние промывки. Причина: &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="daemon.cpp" line="738"/>
+        <location filename="daemon.cpp" line="729"/>
         <source>Calibration failed. Reason: %1</source>
         <translation>Ошибка калибровки. Причина: &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="daemon.cpp" line="743"/>
+        <location filename="daemon.cpp" line="734"/>
         <source>Calibration failed. Unexpected reply: %1</source>
         <translation>Ошибка калибровки. Неожиданый ответ: %1</translation>
     </message>
     <message>
-        <location filename="daemon.cpp" line="923"/>
+        <location filename="daemon.cpp" line="914"/>
         <source>Cannot get min pressure. Reason: %1</source>
         <translation>Не могу получить минимальное давление. Причина: &apos;%1&apos;</translation>
     </message>
@@ -134,48 +134,48 @@
     <message>
         <location filename="daemon.cpp" line="631"/>
         <source>Water flow too low at stage %1. Stage stopped.</source>
-        <translation>Недостаточный расход воды на этапе %1. Этап остановлен.</translation>
+        <translation type="obsolete">Недостаточный расход воды на этапе %1. Этап остановлен.</translation>
     </message>
 </context>
 <context>
     <name>Interpreter</name>
     <message>
-        <location filename="../lib/core/shell.cpp" line="187"/>
+        <location filename="../lib/core/shell.cpp" line="183"/>
         <source>ERROR: unknown command &apos;%1&apos;
 </source>
-        <translation type="obsolete">ERROR: неизвестная команда &apos;%1&apos;\n</translation>
+        <translation>ERROR: неизвестная команда &apos;%1&apos;\n</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/shell.cpp" line="189"/>
+        <source>ERROR: Command %1 requires exactly %2 arguments
+</source>
+        <translation>ERROR: Команда %1 требует %2 аргумента\n</translation>
     </message>
     <message>
         <location filename="../lib/core/shell.cpp" line="193"/>
-        <source>ERROR: Command %1 requires exactly %2 arguments
-</source>
-        <translation type="obsolete">ERROR: Команда %1 требует %2 аргумента\n</translation>
-    </message>
-    <message>
-        <location filename="../lib/core/shell.cpp" line="197"/>
         <source>ERROR: There is no handler associated with this command
 </source>
-        <translation type="obsolete">ERROR: Команде не назначен обработчик\n</translation>
+        <translation>ERROR: Команде не назначен обработчик\n</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="1177"/>
+        <location filename="../lib/core/shell.cpp" line="1186"/>
         <source>Filter cleaning in progress</source>
-        <translation type="obsolete">Выполняется промывка фильтра</translation>
+        <translation>Выполняется промывка фильтра</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="212"/>
+        <location filename="../lib/core/shell.cpp" line="208"/>
         <source>Cleaning in progress</source>
-        <translation type="obsolete">Выполняется промывка</translation>
+        <translation>Выполняется промывка</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="214"/>
+        <location filename="../lib/core/shell.cpp" line="210"/>
         <source>Wait for water draining finished</source>
-        <translation type="obsolete">Выполняется слив воды</translation>
+        <translation>Выполняется слив воды</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="290"/>
+        <location filename="../lib/core/shell.cpp" line="286"/>
         <source>stage is incorrect</source>
-        <translation type="obsolete">неверный этап</translation>
+        <translation>неверный этап</translation>
     </message>
     <message>
         <location filename="../lib/core/shell.cpp" line="307"/>
@@ -183,90 +183,90 @@
         <translation type="obsolete">логическое значение &apos;%s&apos; неверно</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="399"/>
+        <location filename="../lib/core/shell.cpp" line="406"/>
         <source>Invalid hexadecimal sequence</source>
-        <translation type="obsolete">Неверное шестандцатеричное значение</translation>
+        <translation>Неверное шестандцатеричное значение</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="431"/>
+        <location filename="../lib/core/shell.cpp" line="438"/>
         <source>value is incorrect</source>
-        <translation type="obsolete">значение неверно</translation>
+        <translation>значение неверно</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="436"/>
+        <location filename="../lib/core/shell.cpp" line="443"/>
         <source>Stage 1 is cleaning</source>
-        <translation type="obsolete">Выполняется промывка этапа 1</translation>
+        <translation>Выполняется промывка этапа 1</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="440"/>
+        <location filename="../lib/core/shell.cpp" line="447"/>
         <source>Stage 2 is cleaning</source>
-        <translation type="obsolete">Выполняется промывка этапа 2</translation>
-    </message>
-    <message>
-        <location filename="../lib/core/shell.cpp" line="444"/>
-        <source>Stage 3 is cleaning</source>
-        <translation type="obsolete">Выполняется промывка этапа 3</translation>
-    </message>
-    <message>
-        <location filename="../lib/core/shell.cpp" line="448"/>
-        <source>Stage 4 is cleaning</source>
-        <translation type="obsolete">Выполняется промывка этапа 4</translation>
+        <translation>Выполняется промывка этапа 2</translation>
     </message>
     <message>
         <location filename="../lib/core/shell.cpp" line="451"/>
+        <source>Stage 3 is cleaning</source>
+        <translation>Выполняется промывка этапа 3</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/shell.cpp" line="455"/>
+        <source>Stage 4 is cleaning</source>
+        <translation>Выполняется промывка этапа 4</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/shell.cpp" line="458"/>
         <source>unexpected stage</source>
-        <translation type="obsolete">неверный этап</translation>
+        <translation>неверный этап</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="511"/>
+        <location filename="../lib/core/shell.cpp" line="518"/>
         <source>Stage %1 is cleaning</source>
-        <translation type="obsolete">Выполняется промывка этапа %1</translation>
+        <translation>Выполняется промывка этапа %1</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="558"/>
+        <location filename="../lib/core/shell.cpp" line="565"/>
         <source>Cannot drain water in stage %1, it is cleaning at the moment</source>
-        <translation type="obsolete">Не могу слить воду из этапа %1, выполняется его промывка</translation>
+        <translation>Не могу слить воду из этапа %1, выполняется его промывка</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="563"/>
+        <location filename="../lib/core/shell.cpp" line="570"/>
         <source>Cannot drain water. Stage %1 is active</source>
-        <translation type="obsolete">Не могу слить воду. Этап %1 активен</translation>
+        <translation>Не могу слить воду. Этап %1 активен</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="651"/>
+        <location filename="../lib/core/shell.cpp" line="658"/>
         <source>not an integer value passed</source>
-        <translation type="obsolete">передано неверное числовое значение</translation>
+        <translation>передано неверное числовое значение</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="862"/>
+        <location filename="../lib/core/shell.cpp" line="884"/>
         <source>User unknown</source>
-        <translation type="obsolete">Неизвестный пользователь</translation>
+        <translation>Неизвестный пользователь</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="1224"/>
+        <location filename="../lib/core/shell.cpp" line="1233"/>
         <source>Invalid timestamp
 </source>
-        <translation type="obsolete">Неверное время\n</translation>
+        <translation>Неверное время\n</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="1092"/>
+        <location filename="../lib/core/shell.cpp" line="1101"/>
         <source>First argument parse error</source>
-        <translation type="obsolete">Ошибка разбора первого аргумента</translation>
+        <translation>Ошибка разбора первого аргумента</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="1097"/>
+        <location filename="../lib/core/shell.cpp" line="1106"/>
         <source>Second argument parse error</source>
-        <translation type="obsolete">Ошибка разбора второго аргумента</translation>
+        <translation>Ошибка разбора второго аргумента</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="1125"/>
+        <location filename="../lib/core/shell.cpp" line="1134"/>
         <source>Unknown sensor key passed</source>
-        <translation type="obsolete">Передан неверное назчание датчика</translation>
+        <translation>Передан неверное назчание датчика</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="1180"/>
+        <location filename="../lib/core/shell.cpp" line="1189"/>
         <source>Canot start stage %1, it is cleaning at the moment</source>
-        <translation type="obsolete">Не могу запустить этап %1, выполняется промывка</translation>
+        <translation>Не могу запустить этап %1, выполняется промывка</translation>
     </message>
     <message>
         <location filename="../lib/core/shell.cpp" line="1303"/>
@@ -274,9 +274,20 @@
         <translation type="obsolete">Этап находится в автоматическом режиме</translation>
     </message>
     <message>
-        <location filename="../lib/core/shell.cpp" line="1312"/>
+        <location filename="../lib/core/shell.cpp" line="1321"/>
         <source>Stage not in semi-auto mode</source>
-        <translation type="obsolete">Этап не не в полуавтоматическом режиме</translation>
+        <translation>Этап не в полуавтоматическом режиме</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/shell.cpp" line="303"/>
+        <source>bool value &apos;%1&apos; is incorrect</source>
+        <translation>логическое значение &apos;%1&apos; не верно</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/shell.cpp" line="320"/>
+        <source>Program version mismatch. Expected %1, but got %2
+</source>
+        <translation>Версия программы не соответствует версии контроллера. Версия программ %1, контроллера %2\n</translation>
     </message>
 </context>
 <context>
@@ -312,37 +323,37 @@
         <translation>Ctrl+C</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1632"/>
+        <location filename="mainwindow.ui" line="1604"/>
         <source>Grain flow</source>
         <translation>Расход зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1637"/>
+        <location filename="mainwindow.ui" line="1609"/>
         <source>Grain temperature</source>
         <translation>Температура зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1642"/>
+        <location filename="mainwindow.ui" line="1614"/>
         <source>Grain nature</source>
         <translation>Натура зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1647"/>
+        <location filename="mainwindow.ui" line="1619"/>
         <source>Water pressure</source>
         <translation>Давление воды</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="710"/>
+        <location filename="mainwindow.cpp" line="701"/>
         <source>Grain humidity</source>
         <translation>Влажность зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1657"/>
+        <location filename="mainwindow.ui" line="1629"/>
         <source>Water flow</source>
         <translation>Расход воды</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1662"/>
+        <location filename="mainwindow.ui" line="1634"/>
         <source>Setting</source>
         <translation>Уставка</translation>
     </message>
@@ -404,324 +415,324 @@
         <translation>Изменяем активность этапов:</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1577"/>
+        <location filename="mainwindow.ui" line="1549"/>
         <source>Stage 1</source>
         <translation>Этап 1</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1582"/>
+        <location filename="mainwindow.ui" line="1554"/>
         <source>Stage 2</source>
         <translation>Этап 2</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1587"/>
+        <location filename="mainwindow.ui" line="1559"/>
         <source>Stage 3</source>
         <translation>Этап 3</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1592"/>
+        <location filename="mainwindow.ui" line="1564"/>
         <source>Stage 4</source>
         <translation>Этап 4</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1597"/>
+        <location filename="mainwindow.ui" line="1569"/>
         <source>Events</source>
         <translation>События</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1602"/>
+        <location filename="mainwindow.ui" line="1574"/>
         <source>Cleanings</source>
         <translation>Промывки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="653"/>
+        <location filename="mainwindow.cpp" line="644"/>
         <source>Request start of stage %1</source>
         <translation>Запускаем этап %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="669"/>
+        <location filename="mainwindow.cpp" line="660"/>
         <source>Request stop of stage %1</source>
         <translation>Запрашиваем остановку этапа %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="679"/>
+        <location filename="mainwindow.cpp" line="670"/>
         <source>Global</source>
         <translation>Общие</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="694"/>
+        <location filename="mainwindow.cpp" line="685"/>
         <source>Stage %1</source>
         <translation>Этап %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="716"/>
+        <location filename="mainwindow.cpp" line="707"/>
         <source>Grain temp.</source>
         <translation>Температура зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="731"/>
+        <location filename="mainwindow.cpp" line="722"/>
         <source>Water started on %1 stage</source>
         <translation>Запущена вода в этапе %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="738"/>
+        <location filename="mainwindow.cpp" line="729"/>
         <source>Water stopped on %1 stage</source>
         <translation>Остановлена вода в этапе %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="746"/>
+        <location filename="mainwindow.cpp" line="737"/>
         <source>Fetching state for active stages</source>
         <translation>Получаем информацию об активных этапах</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="784"/>
+        <location filename="mainwindow.cpp" line="775"/>
         <source>Open script</source>
         <translation>Открыть скрипт</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="784"/>
+        <location filename="mainwindow.cpp" line="775"/>
         <source>Scripts (*.txt)</source>
         <translation>Скрипты (*.txt)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="793"/>
+        <location filename="mainwindow.cpp" line="784"/>
         <source>Cannot open script file &apos;%1&apos; for reading.</source>
         <translation>Не могу прочитать скрипт &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="815"/>
+        <location filename="mainwindow.cpp" line="806"/>
         <source>%1 grain sensors</source>
         <translation>%1 датчики зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="815"/>
+        <location filename="mainwindow.cpp" line="806"/>
         <source>Enabling</source>
         <comment>grain sensors</comment>
         <translation>Включаем</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="815"/>
+        <location filename="mainwindow.cpp" line="806"/>
         <source>Disabling</source>
         <comment>grain sensors</comment>
         <translation>Выключаем</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="834"/>
+        <location filename="mainwindow.cpp" line="825"/>
         <source>Checking grain presense in selected stages</source>
         <translation>Проверяем наличие зерна в выбраных этапах</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="840"/>
+        <location filename="mainwindow.cpp" line="831"/>
         <source>Present</source>
         <translation>Есть зерно</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="840"/>
+        <location filename="mainwindow.cpp" line="831"/>
         <source>Not present</source>
         <translation>нет зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="842"/>
+        <location filename="mainwindow.cpp" line="833"/>
         <source>There are grain in stage %1</source>
         <translation>В этапе %1 есть зерно</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="842"/>
+        <location filename="mainwindow.cpp" line="833"/>
         <source>There are no grain in stage %1</source>
         <translation>В этапе %1 нет зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="975"/>
+        <location filename="mainwindow.cpp" line="947"/>
         <source>Settings changed warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="976"/>
+        <location filename="mainwindow.cpp" line="948"/>
         <source>Your settings changes have not applied. Do you want to save them?</source>
         <translation>Ваши параметры изменены и не сохранены. Хотите ли вы сохранить их?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1072"/>
+        <location filename="mainwindow.cpp" line="1044"/>
         <source>Value error</source>
         <translation>Неверное значение</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1018"/>
+        <location filename="mainwindow.cpp" line="990"/>
         <source>Target humidity have invalid format</source>
         <translation>Целевая влажность указана неверно</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1035"/>
+        <location filename="mainwindow.cpp" line="1007"/>
         <source>Humidity coefficient have invalid format</source>
         <translation>Коэффициент влажности указан неверно</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1043"/>
+        <location filename="mainwindow.cpp" line="1015"/>
         <source>Min grain flow have invalid format</source>
         <translation>Минимальный расход зерна указан неверно</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1051"/>
+        <location filename="mainwindow.cpp" line="1023"/>
         <source>Water flow coefficient have invalid format</source>
         <translation>Коэффициент расхода воды указан неверно</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1059"/>
+        <location filename="mainwindow.cpp" line="1031"/>
         <source>Max water flow have invalid format</source>
         <translation>Максимальный расход воды указан неверно</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1067"/>
+        <location filename="mainwindow.cpp" line="1039"/>
         <source>Min water flow have invalid format</source>
         <translation>Минимальный расход воды указан неверно</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1072"/>
+        <location filename="mainwindow.cpp" line="1044"/>
         <source>BSU label cannot contain spaces, comma and equal sign</source>
         <translation>Название этапа не может содержать пробелы, запятые и знак равенства</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1090"/>
+        <location filename="mainwindow.cpp" line="1062"/>
         <source>Your setting for stage %1 saved and now active</source>
         <translation>Новые параметры этапа %1 сохранены и активированы</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1105"/>
+        <location filename="mainwindow.cpp" line="1077"/>
         <source>Humidity table editor</source>
         <translation>Редактор таблицы влажности</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1105"/>
+        <location filename="mainwindow.cpp" line="1077"/>
         <source>Key (0..255) -&gt; Humidity map</source>
         <translation>Код (0..255) -&gt; Значение влажности</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1785"/>
+        <location filename="mainwindow.ui" line="1757"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1627"/>
+        <location filename="mainwindow.ui" line="1599"/>
         <source>Humidity</source>
         <translation>Влажность</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1119"/>
+        <location filename="mainwindow.cpp" line="1091"/>
         <source>Grain flow table editor</source>
         <translation>Редактор таблицы расхода зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1119"/>
+        <location filename="mainwindow.cpp" line="1091"/>
         <source>Key (0..255) -&gt; Grain flow map</source>
         <translation>Код (0..255) -&gt; Расход зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1133"/>
+        <location filename="mainwindow.cpp" line="1105"/>
         <source>Grain nature table editor</source>
         <translation>Редактор таблицы натуры зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1133"/>
+        <location filename="mainwindow.cpp" line="1105"/>
         <source>Key (0..255) -&gt; Grain nature map</source>
         <translation>Код (0..255) -&gt; Натура зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1147"/>
+        <location filename="mainwindow.cpp" line="1119"/>
         <source>Grain temperature table editor</source>
         <translation>Редактор таблицы температуры зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1147"/>
+        <location filename="mainwindow.cpp" line="1119"/>
         <source>Temperature -&gt; Grain temperature coeff map</source>
         <translation>Температура -&gt; Коэффициент температуры зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1163"/>
+        <location filename="mainwindow.cpp" line="1135"/>
         <source>Temperature</source>
         <translation>Температура</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1148"/>
+        <location filename="mainwindow.cpp" line="1120"/>
         <source>Grain temperature coeff</source>
         <translation>Коэффициент температуры</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1162"/>
+        <location filename="mainwindow.cpp" line="1134"/>
         <source>Grain nature coeff table editor</source>
         <translation>Редактор таблицы коэффициента натуры зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1162"/>
+        <location filename="mainwindow.cpp" line="1134"/>
         <source>Temperature -&gt; Grain nature coeff map</source>
         <translation>Температура -&gt; Коэффициент натуры зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1163"/>
+        <location filename="mainwindow.cpp" line="1135"/>
         <source>Grain nature coeff</source>
         <translation>Коэффициент натуры</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1185"/>
+        <location filename="mainwindow.cpp" line="1157"/>
         <source>Enter configurator password</source>
         <translation>Введите пароль конфигурирования</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1189"/>
+        <location filename="mainwindow.cpp" line="1161"/>
         <source>Enter administrator password</source>
         <translation>Введите пароль администрирования</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1197"/>
+        <location filename="mainwindow.cpp" line="1169"/>
         <source>Password dialog</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1203"/>
+        <location filename="mainwindow.cpp" line="1175"/>
         <source>Access denied</source>
         <translation>Доступ запрещен</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1203"/>
+        <location filename="mainwindow.cpp" line="1175"/>
         <source>Invalid password</source>
         <translation>Неверный пароль</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1204"/>
+        <location filename="mainwindow.cpp" line="1176"/>
         <source>Access to %1 account not granted</source>
         <translation>Доступ к учетной записи %1 не разрешен</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1209"/>
+        <location filename="mainwindow.cpp" line="1181"/>
         <source>Access to %1 account have granted</source>
         <translation>Доступ к учетной записи %1 разрешен</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1255"/>
+        <location filename="mainwindow.cpp" line="1219"/>
         <source>Values error</source>
         <translation>Ошибка значений</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1255"/>
+        <location filename="mainwindow.cpp" line="1219"/>
         <source>Value you&apos;ve entered is not valid</source>
         <translation>Введены неверные значения</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1258"/>
+        <location filename="mainwindow.cpp" line="1222"/>
         <source>Sensors settings saved and now active</source>
         <translation>Параметры датчиков сохранены и активированы</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1322"/>
+        <location filename="mainwindow.cpp" line="1286"/>
         <source>Calibrate stage %1</source>
         <translation>Калибровка этапа %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1349"/>
+        <location filename="mainwindow.cpp" line="1313"/>
         <source>Calibration of sensor &apos;%1&apos; on stage %2 started</source>
         <translation>Начата калибровка датчиков &apos;%1&apos; этапа %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1356"/>
+        <location filename="mainwindow.cpp" line="1320"/>
         <source>Calibration of sensor &apos;%1&apos; on stage %2 finished. Value = %3</source>
         <translation>Калибровка датчика &apos;%1&apos; этапа %2 завершена. Значение = %3</translation>
     </message>
@@ -736,57 +747,57 @@
         <translation>Полуавтоматический</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1368"/>
+        <location filename="mainwindow.cpp" line="1332"/>
         <source>Request new stages modes: %1, %2, %3, %4</source>
         <translation>Изменяем режим работы этапов: %1, %2, %3, %4</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1504"/>
+        <location filename="mainwindow.cpp" line="1468"/>
         <source>Clearnings</source>
         <translation>История промывок</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1512"/>
+        <location filename="mainwindow.cpp" line="1476"/>
         <source>Grain flow history</source>
         <translation>История расхода зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1515"/>
+        <location filename="mainwindow.cpp" line="1479"/>
         <source>Grain temperature history</source>
         <translation>История температуры зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1518"/>
+        <location filename="mainwindow.cpp" line="1482"/>
         <source>Grain nature history</source>
         <translation>История натуры зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1521"/>
+        <location filename="mainwindow.cpp" line="1485"/>
         <source>Water pressure history</source>
         <translation>История давления воды</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1524"/>
+        <location filename="mainwindow.cpp" line="1488"/>
         <source>Grain humidity history</source>
         <translation>История влажности зерна</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1527"/>
+        <location filename="mainwindow.cpp" line="1491"/>
         <source>Water flow history</source>
         <translation>История расхода воды</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1530"/>
+        <location filename="mainwindow.cpp" line="1494"/>
         <source>Setting history</source>
         <translation>История уставок</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1553"/>
+        <location filename="mainwindow.cpp" line="1517"/>
         <source>BSU in stage %1 not powered, stopping stage</source>
         <translation>БШУ этапа %1 выключен, останавливаем работу этапа</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1555"/>
+        <location filename="mainwindow.cpp" line="1519"/>
         <source>BSU in stage %1 not powered</source>
         <translation>БШУ этапа %1 выключен</translation>
     </message>
@@ -801,137 +812,137 @@
         <translation type="obsolete">Нет воды в этапе %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1564"/>
+        <location filename="mainwindow.cpp" line="1528"/>
         <source>Grain is low in stage %1, stopping stage</source>
         <translation>Нет зерна в этапе %1, останавливаем работу этапа</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1566"/>
+        <location filename="mainwindow.cpp" line="1530"/>
         <source>Grain is low in stage %1</source>
         <translation>Нет зерна в этапе %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1575"/>
+        <location filename="mainwindow.cpp" line="1539"/>
         <source>Cannot communicate with controller</source>
         <translation>Ошибка связи с контроллером</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1578"/>
+        <location filename="mainwindow.cpp" line="1542"/>
         <source>Daemon not connected with controller</source>
         <translation>Сервис не подключен к контроллеру</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1581"/>
+        <location filename="mainwindow.cpp" line="1545"/>
         <source>System in manual mode</source>
         <translation>Система в ручном режиме</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1584"/>
+        <location filename="mainwindow.cpp" line="1548"/>
         <source>Water pressure is below it&apos;s minimum. All stages are stopped.</source>
         <translation>Давление воды ниже минимального. Все активные этапы остановлены.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1594"/>
+        <location filename="mainwindow.cpp" line="1558"/>
         <source>Filter cleaning cannot be started, because there are active stages</source>
         <translation>Промывка фильтров не может быть запущена, некоторые этапы активны</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1600"/>
+        <location filename="mainwindow.cpp" line="1564"/>
         <source>Filter cleaning requested</source>
         <translation>Запрошена промывка фильтров</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1615"/>
+        <location filename="mainwindow.cpp" line="1579"/>
         <source>Cannot clean stages, because there are active stages</source>
         <translation>Не могу запустить промывку этапов, некоторые этапы активны</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1624"/>
+        <location filename="mainwindow.cpp" line="1588"/>
         <source>stage %1</source>
         <translation>этап %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1633"/>
+        <location filename="mainwindow.cpp" line="1597"/>
         <source>Clean of %1 requested</source>
         <translation>Запущена промывка этапа %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1640"/>
+        <location filename="mainwindow.cpp" line="1604"/>
         <source>Clean initiated. Wait for button.</source>
         <translation>Запрошена промывка. Нажмите кнопку промывки.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1646"/>
+        <location filename="mainwindow.cpp" line="1610"/>
         <source>Clean started</source>
         <translation>Промывка начата</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1652"/>
+        <location filename="mainwindow.cpp" line="1616"/>
         <source>Clean finished, requesting clean result</source>
         <translation>Промывка завершена, запрашиваем результат промывки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1662"/>
+        <location filename="mainwindow.cpp" line="1626"/>
         <source>Drain water of specified stages started</source>
         <translation>Запущен слив воды из указаных этапов</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1669"/>
+        <location filename="mainwindow.cpp" line="1633"/>
         <source>Drain started</source>
         <translation>Слив воды начат</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1675"/>
+        <location filename="mainwindow.cpp" line="1639"/>
         <source>Drain finished</source>
         <translation>Слив воды завершен</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1683"/>
+        <location filename="mainwindow.cpp" line="1647"/>
         <source>Stage %1 started</source>
         <translation>Этап %1 запущен</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1692"/>
+        <location filename="mainwindow.cpp" line="1656"/>
         <source>Stage %1 stopped</source>
         <translation>Этап %1 остановлен</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1702"/>
+        <location filename="mainwindow.cpp" line="1666"/>
         <source>Stage %1 currently at running state</source>
         <translation>Этап %1 работает</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1706"/>
+        <location filename="mainwindow.cpp" line="1670"/>
         <source>Stage %1 currently at stopped state</source>
         <translation>Этап %1 не активен</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1768"/>
+        <location filename="mainwindow.cpp" line="1732"/>
         <source>Filter cleaning started</source>
         <translation>Начата промывка фильтров</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1772"/>
+        <location filename="mainwindow.cpp" line="1736"/>
         <source>Filter cleaning finished</source>
         <translation>Завершена промывка фильтров</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1793"/>
+        <location filename="mainwindow.cpp" line="1757"/>
         <source>Stage %1 cleaning with water performed</source>
         <translation>Промывка этапа %1 водой выполнена</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1795"/>
+        <location filename="mainwindow.cpp" line="1759"/>
         <source>Stage %1 cleaning with water not performed</source>
         <translation>Промывка этапа %1 водой не выполнена</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1803"/>
+        <location filename="mainwindow.cpp" line="1767"/>
         <source>Stage %1 cleaning from Rottenberg performed</source>
         <translation>Промывка этапа %1 от аппарата Ротенберг выполнена</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1805"/>
+        <location filename="mainwindow.cpp" line="1769"/>
         <source>Stage %1 cleaning from Rottenberg not performed</source>
         <translation>Промывка этапа %1 от аппарата Ротенберг не выполнена</translation>
     </message>
@@ -1006,7 +1017,7 @@
         <translation>2.0</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1301"/>
+        <location filename="mainwindow.ui" line="1273"/>
         <source>Apply</source>
         <translation>Сохранить</translation>
     </message>
@@ -1081,7 +1092,7 @@
         <translation>Проверить зерно</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1652"/>
+        <location filename="mainwindow.ui" line="1624"/>
         <source>Target humidity</source>
         <translation>Целевая влажность</translation>
     </message>
@@ -1191,157 +1202,157 @@
         <translation>Датчики этапов</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1193"/>
+        <location filename="mainwindow.ui" line="1165"/>
         <source>Calibrate</source>
         <translation>Калибровка</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1203"/>
+        <location filename="mainwindow.ui" line="1175"/>
         <source>Humidity sensor</source>
         <translation>Датчики влажности</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1213"/>
+        <location filename="mainwindow.ui" line="1185"/>
         <source>Nature sensor</source>
         <translation>Датчики натуры</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1223"/>
+        <location filename="mainwindow.ui" line="1195"/>
         <source>Measure</source>
         <translation>Измерение</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1230"/>
+        <location filename="mainwindow.ui" line="1202"/>
         <source>Answer</source>
         <translation>Ответ</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1249"/>
+        <location filename="mainwindow.ui" line="1221"/>
         <source>e</source>
         <translation>e</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1252"/>
+        <location filename="mainwindow.ui" line="1224"/>
         <source>Temperature sensors</source>
         <translation>Датчики температуры</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1264"/>
+        <location filename="mainwindow.ui" line="1236"/>
         <source>Temp &amp;k</source>
         <translation>Коэффициент &amp;температуры</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1274"/>
+        <location filename="mainwindow.ui" line="1246"/>
         <source>0.0097</source>
         <translation>0.0097</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1281"/>
+        <location filename="mainwindow.ui" line="1253"/>
         <source>&amp;Resistor</source>
         <translation>&amp;Сопротивление</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1291"/>
+        <location filename="mainwindow.ui" line="1263"/>
         <source>992</source>
         <translation>992</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1333"/>
+        <location filename="mainwindow.ui" line="1305"/>
         <source>Clean filter</source>
         <translation>Промывка фильтра</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1340"/>
+        <location filename="mainwindow.ui" line="1312"/>
         <source>Auto clean</source>
         <translation>Автопромывка</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1374"/>
+        <location filename="mainwindow.ui" line="1346"/>
         <source>Start cleaning</source>
         <translation>Запустить промывку</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1418"/>
+        <location filename="mainwindow.ui" line="1390"/>
         <source>Drain water</source>
         <translation>Слить воду</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1566"/>
+        <location filename="mainwindow.ui" line="1538"/>
         <source>&amp;Values</source>
         <translation>&amp;Значения</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1616"/>
+        <location filename="mainwindow.ui" line="1588"/>
         <source>&amp;History kind</source>
         <translation>&amp;Параметр</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1676"/>
+        <location filename="mainwindow.ui" line="1648"/>
         <source>&amp;Start</source>
         <translation>&amp;Начало</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1691"/>
+        <location filename="mainwindow.ui" line="1663"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1706"/>
+        <location filename="mainwindow.ui" line="1678"/>
         <source>&amp;Period</source>
         <translation>&amp;Период</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1719"/>
+        <location filename="mainwindow.ui" line="1691"/>
         <source>Hour</source>
         <translation>Час</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1724"/>
+        <location filename="mainwindow.ui" line="1696"/>
         <source>Day</source>
         <translation>День</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1729"/>
+        <location filename="mainwindow.ui" line="1701"/>
         <source>Week</source>
         <translation>Неделя</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1734"/>
+        <location filename="mainwindow.ui" line="1706"/>
         <source>Month</source>
         <translation>Месяц</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1739"/>
+        <location filename="mainwindow.ui" line="1711"/>
         <source>Year</source>
         <translation>Год</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1747"/>
+        <location filename="mainwindow.ui" line="1719"/>
         <source>&amp;Refresh</source>
         <translation>&amp;Обновить</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1770"/>
+        <location filename="mainwindow.ui" line="1742"/>
         <source>&amp;Table</source>
         <translation>&amp;Значения</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1780"/>
+        <location filename="mainwindow.ui" line="1752"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1802"/>
+        <location filename="mainwindow.ui" line="1774"/>
         <source>&amp;Graph</source>
         <translation>&amp;График</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1837"/>
+        <location filename="mainwindow.ui" line="1804"/>
         <source>&amp;Send</source>
         <translation>&amp;Отправить</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1844"/>
+        <location filename="mainwindow.ui" line="1811"/>
         <source>Send &amp;file</source>
         <translation>Отправить &amp;файл</translation>
     </message>
@@ -1394,7 +1405,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Terminus&apos;;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1027"/>
+        <location filename="mainwindow.cpp" line="999"/>
         <source>Fixed humidity have invalid format</source>
         <translation>Фиксированая флажность указана неверно</translation>
     </message>
@@ -1404,26 +1415,26 @@ p, li { white-space: pre-wrap; }
         <translation>Фиксированая влажность</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1875"/>
+        <location filename="mainwindow.ui" line="1832"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Terminus&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Plaund interactive console.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Terminus&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Plaund interactive console.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1890"/>
+        <location filename="mainwindow.ui" line="1847"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Verdana&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Terminus&apos;;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Verdana&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -1436,20 +1447,84 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Terminus&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt;&quot;&gt;Plaund interactive console.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation type="obsolete">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Terminus&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt;&quot;&gt;Plaund interactive console.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt; {3C?} {4.0/?} {3.?} {40/?} {1&quot;?} {9p?} {400;?} {0p?} {0p?} {0p?} {0p?} {0;?} {0p?} {11p?}</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1880"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Arial&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Terminus&apos;; font-size:11pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
+        <location filename="mainwindow.cpp" line="867"/>
+        <source>Water flow too low at stage %1. Stage stopped.</source>
+        <translation>Недостаточный расход воды на этапе %1. Этап остановлен.</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="../lib/core/serial.cpp" line="31"/>
+        <source>Cannot open device %1</source>
+        <translation>Не могу открыть устройство %1</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/serial.cpp" line="59"/>
+        <source>Serial line initialization error %1</source>
+        <translation>Ошибка инициализации последовательного порта %1</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/serial.cpp" line="68"/>
+        <source>Error transmitting data %d</source>
+        <translation>Ошибка передачи данных %d</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/serial.cpp" line="272"/>
+        <source>Timeout reading serial port</source>
+        <translation>Превышено время ожидания данных контроллера</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/serial.cpp" line="95"/>
+        <source>Error occured while waiting for data</source>
+        <translation>Во время ожидания данных произошла ошибка</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/serial.cpp" line="107"/>
+        <source>Error receiving data %d</source>
+        <translation>Ошибка получения данных &apos;%d&apos;</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/serial.cpp" line="127"/>
+        <source>Cannot open file %1 for reading</source>
+        <translation>Не могу открыть файл %1 для чтения</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/serial.cpp" line="129"/>
+        <source>Cannot open file %1 for writing</source>
+        <translation>Не могу открыть файл %1 для записи</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/serial.cpp" line="161"/>
+        <source>Serial recorder cannot open input file &apos;%1&apos;</source>
+        <translation>Эмулятор последовательного порта не может открыть файл &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/serial.cpp" line="163"/>
+        <source>Serial recorder cannot open output file &apos;%1&apos;</source>
+        <translation>Эмулятор последовательного порта не может открыть файл &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/serial.cpp" line="221"/>
+        <source>Invalid command data</source>
+        <translation>Ошибка данных команды</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/serial.cpp" line="276"/>
+        <source>There is no command to wait reply</source>
+        <translation>Команда не требует ожидания ответа</translation>
+    </message>
+    <message>
+        <location filename="../lib/core/serial.cpp" line="388"/>
+        <source>Command %1 unsupported so far</source>
+        <translation>Команда %1 не поддерживается</translation>
     </message>
 </context>
 <context>

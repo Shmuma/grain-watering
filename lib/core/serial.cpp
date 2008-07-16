@@ -28,7 +28,7 @@ RealSerialPort::RealSerialPort (const QString& device) throw (QString)
     _fd = open (device.toAscii ().constData (), O_RDWR | O_NOCTTY);
     
     if (_fd < 0)
-        throw QString ("Cannot open device %1").arg (device);
+        throw QObject::tr ("Cannot open device %1").arg (device);
 
     tcgetattr(_fd, &oldtio);
     memset (&newtio, 0, sizeof (newtio));
@@ -56,7 +56,7 @@ RealSerialPort::RealSerialPort (const QString& device) throw (QString)
     tcflush (_fd, TCIFLUSH);
     
     if (tcsetattr (_fd, TCSANOW, &newtio) < -1)
-        throw QString ("Serial line initialization error %1").arg (errno);
+        throw QObject::tr ("Serial line initialization error %1").arg (errno);
 
     setValid ();
 }
@@ -65,7 +65,7 @@ RealSerialPort::RealSerialPort (const QString& device) throw (QString)
 void RealSerialPort::send (const QByteArray& data) throw (QString)
 {
     if (write (_fd, data.constData (), data.count ()) < 0)
-        throw QString ("Error transmitting data %d").arg (errno);
+        throw QObject::tr ("Error transmitting data %d").arg (errno);
 }
 
 
@@ -90,12 +90,12 @@ QByteArray RealSerialPort::receive (int timeout) throw (QString)
 
         // timeout
         if (!ret)
-            throw QString ("Timeout reading serial port");
+            throw QObject::tr ("Timeout reading serial port");
         if (ret < 0)
-            throw QString ("Error occured while waiting for data");
+            throw QObject::tr ("Error occured while waiting for data");
         
         if (read (_fd, &c, 1) < 0)
-            throw QString ("Error receiving data %d").arg (errno);
+            throw QObject::tr ("Error receiving data %d").arg (errno);
         if (c == (char)0xAA)
             break;
     }
@@ -104,7 +104,7 @@ QByteArray RealSerialPort::receive (int timeout) throw (QString)
     
     // read four bytes of data
     if (read (_fd, cc, 4) < 0)
-        throw QString ("Error receiving data %d").arg (errno);
+        throw QObject::tr ("Error receiving data %d").arg (errno);
     
     res.append (cc[0]);
     res.append (cc[1]);
@@ -124,9 +124,9 @@ FileSerialPort::FileSerialPort (const QString& input, const QString& output) thr
 {
     setValid (false);
     if (!in.open (QIODevice::ReadOnly | QIODevice::Unbuffered))
-        throw QString ("Cannot open file %1 for reading").arg (input);
+        throw QObject::tr ("Cannot open file %1 for reading").arg (input);
     if (!out.open (QIODevice::WriteOnly | QIODevice::Unbuffered))
-        throw QString ("Cannot open file %1 for writing").arg (output);
+        throw QObject::tr ("Cannot open file %1 for writing").arg (output);
     setValid ();
 }
 
@@ -158,9 +158,9 @@ SerialRecorder::SerialRecorder (SerialPort* port, const QString& inFile, const Q
       _outf (outFile)
 {
     if (!_inf.open (QIODevice::WriteOnly))
-        throw QString ("Serial recorder cannot open input file '%1'").arg (inFile);
+        throw QObject::tr ("Serial recorder cannot open input file '%1'").arg (inFile);
     if (!_outf.open (QIODevice::WriteOnly))
-        throw QString ("Serial recorder cannot open output file '%1'").arg (outFile);
+        throw QObject::tr ("Serial recorder cannot open output file '%1'").arg (outFile);
 
 }
 
@@ -218,7 +218,7 @@ void SerialDeviceModel::send (const QByteArray& data) throw (QString)
     if (!_last->valid ()) {
         delete _last;
         _last = NULL;
-        throw QString ("Invalid command data");
+        throw QObject::tr ("Invalid command data");
     }
 }
 
@@ -237,7 +237,7 @@ QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
         sleep (1);
         
         if (counter != 10)
-            throw QString ("Timeout reading serial port");
+            throw QObject::tr ("Timeout reading serial port");
 
         // clean started
         res = DeviceCommand (cleanStages, 0xF0, 0x00).pack (); 
@@ -256,7 +256,7 @@ QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
             counter = 0;
         }
 
-        throw QString ("Timeout reading serial port");
+        throw QObject::tr ("Timeout reading serial port");
     }
 
     if (_drainWater) {
@@ -269,11 +269,11 @@ QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
             return DeviceCommand (DeviceCommand::DrainWater, (DeviceCommand::stage_t)_drainStages).pack ();
         }
 
-        throw QString ("Timeout reading serial port");
+        throw QObject::tr ("Timeout reading serial port");
     }
 
     if (!_last)
-        throw QString ("There is no command to wait reply");
+        throw QObject::tr ("There is no command to wait reply");
 
     kind = _last->kind ();
 
@@ -385,7 +385,7 @@ QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
     default:
         delete _last;
         _last = NULL;
-        throw QString ("Command %1 unsupported so far").arg (kind);
+        throw QObject::tr ("Command %1 unsupported so far").arg (kind);
     }
 
     delete _last;
