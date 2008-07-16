@@ -297,10 +297,10 @@ bool Interpreter::parseBool (const QString& value) throw (QString)
 
     res = value.toInt (&ok);
     if (!ok)
-	throw tr ("bool value '%s' is incorrect").arg (value);
+	throw tr ("bool value '%1' is incorrect").arg (value);
 
     if (res > 2 || res < 0)
-        throw tr ("bool value '%s' is incorrect").arg (value);
+        throw tr ("bool value '%1' is incorrect").arg (value);
 
     return res == 1;
 }
@@ -308,7 +308,18 @@ bool Interpreter::parseBool (const QString& value) throw (QString)
 
 QString Interpreter::connect (const QStringList& args)
 {
-    return checkBoolReply (_dev->initialize ());
+    bool res = _dev->initialize ();
+    unsigned int version;
+
+    if (!res)
+        return checkBoolReply (res);
+
+    version = _dev->getControllerID ();
+
+    if (version != PROGRAM_VERSION)
+        return QString ("ERROR: ") + tr ("Program version mismatch. Expected %1, but got %2\n").arg (PROGRAM_VERSION).arg (version);
+
+    return checkBoolReply (true);
 }
 
 

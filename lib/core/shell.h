@@ -14,6 +14,9 @@ class Interpreter;
 typedef QString (Interpreter::*handler_t) (const QStringList&);
 
 
+#define PROGRAM_VERSION (0x0B01)
+
+
 // abstract interface which allows interpreter to broadcast messages to all clients
 class Broadcaster 
 {

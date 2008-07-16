@@ -313,7 +313,7 @@ QByteArray SerialDeviceModel::receive (int timeout) throw (QString)
         break;
 
     case DeviceCommand::GetControllerID:
-        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0x12, 0x34).pack ();
+        res = DeviceCommand ((DeviceCommand::stage_t)_last->low (), 0x01, 0x0B).pack ();
         break;
 
     case DeviceCommand::GetP4State:
