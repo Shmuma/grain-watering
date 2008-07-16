@@ -152,11 +152,6 @@ public:
     QMap<int, double> grainNatureCoeffTable () const
         { return _grainNatureCoeffTable; };
 
-    void setSensors (bool sensors)
-        { _sensors = sensors; };
-    bool sensors () const
-        { return _sensors; };
-   
     void setMode (mode_t mode)
         { _mode = mode; };
     void setMode (const QString& str);

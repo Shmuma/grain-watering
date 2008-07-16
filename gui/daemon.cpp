@@ -238,8 +238,6 @@ void Daemon::socketReadyRead ()
                     if (!parseGenericReply (reply.trimmed (), msg))
                         Logger::instance ()->log (Logger::Error, tr ("Filter clean error. Reason: '%1'").arg (trDaemon (msg)));
                     break;
-                case DaemonCommand::c_setsensors:
-                    break;
                 case DaemonCommand::c_settempcoef:
                     break;
                 case DaemonCommand::c_setstagemodes:
@@ -701,13 +699,6 @@ bool Daemon::checkPass (const QString& user, const QString& pass)
     if (_pass.find (user) == _pass.end ())
         return false;
     return _pass[user] == pass;
-}
-
-
-void Daemon::setSensors (bool s1, bool s2, bool s3, bool s4)
-{
-    sendCommand (QString ().sprintf ("setsensors %d %d %d %d\n", s1 ? 1 : 0, s2 ? 1 : 0, s3 ? 1 : 0, s4 ? 1 : 0));
-    _queue.push_back (DaemonCommand (DaemonCommand::c_setsensors));
 }
 
 

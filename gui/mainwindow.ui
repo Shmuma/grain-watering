@@ -281,7 +281,7 @@
              </sizepolicy>
             </property>
             <property name="currentIndex" >
-             <number>3</number>
+             <number>4</number>
             </property>
             <widget class="QWidget" name="config" >
              <property name="geometry" >
@@ -1093,8 +1093,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>100</width>
-               <height>30</height>
+               <width>361</width>
+               <height>562</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" >
@@ -1105,13 +1105,6 @@
                 </property>
                 <layout class="QGridLayout" >
                  <item row="0" column="0" >
-                  <widget class="QCheckBox" name="stage1SensorsCheckbox" >
-                   <property name="text" >
-                    <string>Stage 1</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1" >
                   <widget class="QPushButton" name="calibrateS1Button" >
                    <property name="text" >
                     <string>Calibrate</string>
@@ -1125,13 +1118,6 @@
                   </widget>
                  </item>
                  <item row="1" column="0" >
-                  <widget class="QCheckBox" name="stage2SensorsCheckbox" >
-                   <property name="text" >
-                    <string>Stage 2</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1" >
                   <widget class="QPushButton" name="calibrateS2Button" >
                    <property name="text" >
                     <string>Calibrate</string>
@@ -1145,13 +1131,6 @@
                   </widget>
                  </item>
                  <item row="2" column="0" >
-                  <widget class="QCheckBox" name="stage3SensorsCheckbox" >
-                   <property name="text" >
-                    <string>Stage 3</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1" >
                   <widget class="QPushButton" name="calibrateS3Button" >
                    <property name="text" >
                     <string>Calibrate</string>
@@ -1165,13 +1144,6 @@
                   </widget>
                  </item>
                  <item row="3" column="0" >
-                  <widget class="QCheckBox" name="stage4SensorsCheckbox" >
-                   <property name="text" >
-                    <string>Stage 4</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="1" >
                   <widget class="QPushButton" name="calibrateS4Button" >
                    <property name="text" >
                     <string>Calibrate</string>

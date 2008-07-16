@@ -35,7 +35,6 @@ public:
         c_drain,
         c_getcleanstate,
         c_startfilterautomat,
-        c_setsensors,
         c_settempcoef,
         c_setstagemodes,
         c_getcleanresult,
@@ -195,7 +194,6 @@ public:
     void isGrainPresent (int stage);
 
     void sendRawCommand (const QString& text);
-    void setSensors (bool s1, bool s2, bool s3, bool s4);
 
     void refreshState ();
 

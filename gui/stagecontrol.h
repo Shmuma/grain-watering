@@ -100,11 +100,6 @@ public:
     double setting () const
         { return _setting; };
 
-    void setSensors (bool sensors)
-        { _sensors = sensors; update (); };
-    bool sensors () const
-        { return _sensors; };
-
     QString label () const
         { return _label; };
     void setLabel (const QString& label)

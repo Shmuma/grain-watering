@@ -580,15 +580,6 @@ void MainWindow::daemonStagesActivityChanged (bool s1, bool s2, bool s3, bool s4
     settingsStageComboBox->setCurrentIndex (0);
 
     // sensors page
-    stage1SensorsCheckbox->setEnabled (s1);
-    stage1SensorsCheckbox->setChecked (s1);
-    stage2SensorsCheckbox->setEnabled (s2);
-    stage2SensorsCheckbox->setChecked (s2);
-    stage3SensorsCheckbox->setEnabled (s3);
-    stage3SensorsCheckbox->setChecked (s3);
-    stage4SensorsCheckbox->setEnabled (s4);
-    stage4SensorsCheckbox->setChecked (s4);
-
     calibrateS1Button->setEnabled (s1);
     calibrateS2Button->setEnabled (s2);
     calibrateS3Button->setEnabled (s3);
@@ -924,33 +915,12 @@ void MainWindow::daemonSettingsGot ()
 {
     settingsStageComboActivated (settingsStageComboBox->currentIndex ());
 
-    if (stage1SensorsCheckbox->isEnabled ())
-        stage1SensorsCheckbox->setChecked (_daemon.getSettings (0).sensors ());
-    else
-        stage1SensorsCheckbox->setChecked (false);
-
-    if (stage2SensorsCheckbox->isEnabled ())
-        stage2SensorsCheckbox->setChecked (_daemon.getSettings (1).sensors ());
-    else
-        stage2SensorsCheckbox->setChecked (false);
-
-    if (stage3SensorsCheckbox->isEnabled ())
-        stage3SensorsCheckbox->setChecked (_daemon.getSettings (2).sensors ());
-    else
-        stage3SensorsCheckbox->setChecked (false);
-
-    if (stage4SensorsCheckbox->isEnabled ())
-        stage4SensorsCheckbox->setChecked (_daemon.getSettings (3).sensors ());
-    else
-        stage4SensorsCheckbox->setChecked (false);
-
     s1modeCombo->setCurrentIndex (_daemon.getSettings (0).mode ());
     s2modeCombo->setCurrentIndex (_daemon.getSettings (1).mode ());
     s3modeCombo->setCurrentIndex (_daemon.getSettings (2).mode ());
     s4modeCombo->setCurrentIndex (_daemon.getSettings (3).mode ());
 
     for (int i = 0; i < 4; i++) {
-        getStageControl (i)->setSensors (_daemon.getSettings (i).sensors ());
         getStageControl (i)->setLabel (_daemon.getSettings (i).bsuLabel ());
         getStageControl (i)->setMode (_daemon.getSettings (i).mode ());
         getStageControl (i)->setTargetHumidity (_daemon.getSettings (i).targetHumidity ());
@@ -1237,14 +1207,6 @@ void MainWindow::tempSensorsGroupboxChecked (bool on)
 
 void MainWindow::stageSensorsApplyButtonClicked ()
 {
-    _daemon.setSensors (stage1SensorsCheckbox->isChecked (), stage2SensorsCheckbox->isChecked (), 
-                        stage3SensorsCheckbox->isChecked (), stage4SensorsCheckbox->isChecked ());
-
-    getStageControl (0)->setSensors (stage1SensorsCheckbox->isChecked ());
-    getStageControl (1)->setSensors (stage2SensorsCheckbox->isChecked ());
-    getStageControl (2)->setSensors (stage3SensorsCheckbox->isChecked ());
-    getStageControl (3)->setSensors (stage4SensorsCheckbox->isChecked ());
-
     double k, resist;
     bool ok;
 
