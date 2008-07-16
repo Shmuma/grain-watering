@@ -1122,14 +1122,14 @@ QString Interpreter::getTempCoef (const QStringList& args)
 QString Interpreter::calibrate (const QStringList& args)
 {
     int stage = parseStageAsInt (args[0]);
-    double val;
+    unsigned int val;
 
     if (args[1] == "hum")
-        val = getGrainHumidity (stage);
+        val = _dev->getGrainHumidity (DeviceCommand::stageByNum (stage));
     else if (args[1] == "gf")
-        val = getGrainFlow (stage);
+        val = _dev->getGrainFlow (DeviceCommand::stageByNum (stage));
     else if (args[1] == "nat")
-        val = getGrainNature (stage);
+        val = _dev->getGrainNature (DeviceCommand::stageByNum (stage));
     else
         throw tr ("Unknown sensor key passed");
 
