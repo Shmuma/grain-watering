@@ -356,7 +356,7 @@ void StageControl::humidityDownClicked ()
 void StageControl::waterUpClicked ()
 {
     double val = _targetWaterFlow + 1;
-    setTargetWaterFlow (val);
+    setTargetWaterFlow (val, true);
     targetWaterFlowUpdated (_number, val);
 }
 
@@ -365,7 +365,7 @@ void StageControl::waterDownClicked ()
 {
     double val = _targetWaterFlow - 1;
     if (val > 0) {
-        setTargetWaterFlow (val);
+        setTargetWaterFlow (val, true);
         targetWaterFlowUpdated (_number, val);   
     }
 }
@@ -398,12 +398,12 @@ void StageControl::humidityEditorReturnPressed ()
 }
 
 
-void StageControl::setTargetWaterFlow (double val)
+void StageControl::setTargetWaterFlow (double val, bool force)
 {
     _targetWaterFlow = val;
     update ();
 
-    if (_mode == StageSettings::M_SemiAuto && !_humidityEdit->hasFocus ())
+    if (force || (_mode == StageSettings::M_SemiAuto && !_humidityEdit->hasFocus ()))
         _humidityEdit->setText (QString ().sprintf ("%.0f", val));
 }
 

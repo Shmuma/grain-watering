@@ -134,7 +134,7 @@ public:
 
     double targetWaterFlow () const
         { return _targetWaterFlow; };
-    void setTargetWaterFlow (double val);
+    void setTargetWaterFlow (double val, bool force = false);
 
     void setMinMaxWaterFlow (double min, double max)
         { _minWaterFlow = min; _maxWaterFlow = max; };
