@@ -963,6 +963,10 @@ QString Interpreter::getStageState (int stage)
     if (_settings[stage].mode () == StageSettings::M_Auto) {
         d_temp = getGrainTemperature (stage);
         d_hum = getGrainHumidity (stage);
+
+        if (d_temp < 0)
+            d_temp = 0;
+
         temp = round (d_temp);
         d_gn = getGrainNature (stage);
 
