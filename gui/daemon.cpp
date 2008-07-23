@@ -18,6 +18,7 @@ Daemon::Daemon (const QString& host, int port)
 {
     QObject::connect (_sock, SIGNAL (stateChanged (QAbstractSocket::SocketState)), this, SLOT (socketStateChanged (QAbstractSocket::SocketState)));
     QObject::connect (_sock, SIGNAL (readyRead ()), this, SLOT (socketReadyRead ()));
+    _pass["admin"] = "admin";
 }
 
 
@@ -919,5 +920,5 @@ void Daemon::parseMinPressure (const QString& reply)
 
 QString Daemon::trDaemon (const QString& msg)
 {
-    return QCoreApplication::translate ("Interpreter", msg.toAscii ().constData ());
+    return QCoreApplication::translate ("QObject", QCoreApplication::translate ("Interpreter", msg.toAscii ().constData ()).toAscii ().constData ());
 }
