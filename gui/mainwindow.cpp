@@ -140,7 +140,7 @@ MainWindow::MainWindow ()
     connect (&_daemon, SIGNAL (grainLowUpdated (int, bool)), this, SLOT (daemonGrainLowUpdated (int, bool)));
     connect (&_daemon, SIGNAL (autoModeError (error_kind_t, const QString& )), this, SLOT (daemonAutoModeError (error_kind_t, const QString& )));
     connect (&_daemon, SIGNAL (gotCleanState (bool, bool, bool, bool, bool)), this, SLOT (daemonGotCleanState (bool, bool, bool, bool, bool)));
-    connect (&_daemon, SIGNAL (gotCleanResult (bool[4], bool[4])), this, SLOT (daemonGotCleanResult (bool[4], bool[4])));
+    connect (&_daemon, SIGNAL (gotCleanResult (bool, bool, bool, bool, bool, bool, bool, bool)), this, SLOT (daemonGotCleanResult (bool, bool, bool, bool, bool, bool, bool, bool)));
     connect (&_daemon, SIGNAL (minPressureGot (double)), this, SLOT (daemonMinPressureGot (double)));
 
     connect (checkStateButton, SIGNAL (pressed ()), this, SLOT (checkStateButtonPressed ()));
@@ -1746,10 +1746,11 @@ void MainWindow::daemonGotCleanState (bool filter, bool s1, bool s2, bool s3, bo
 }
 
 
-void MainWindow::daemonGotCleanResult (bool s_w[4], bool s_r[4])
+void MainWindow::daemonGotCleanResult (bool s_w1, bool s_w2, bool s_w3, bool s_w4, bool s_r1, bool s_r2, bool s_r3, bool s_r4)
 {
     int i;
     QString msg;
+    bool s_w[4] = {s_w1, s_w2, s_w3, s_w4}, s_r[4] = {s_r1, s_r2, s_r3, s_r4};
 
     for (i = 0; i < 4; i++)
         if (getStageControl (i)->enabled () && getStageControl (i)->cleaned ()) {

@@ -324,7 +324,7 @@ void Daemon::parseCleanResultReply (const QString& reply)
         s_r[i] = val & (2 << (i*2));
     }
 
-    gotCleanResult (s_w, s_r);
+    gotCleanResult (s_w[0], s_w[1], s_w[2], s_w[3], s_r[0], s_r[1], s_r[2], s_r[3]);
 
     return;
 }

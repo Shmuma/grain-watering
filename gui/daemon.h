@@ -142,7 +142,7 @@ signals:
     void grainPresenceGot (int stage, bool val);
     void settingsGot ();
     void gotCleanState (bool filter, bool s1, bool s2, bool s3, bool s4);
-    void gotCleanResult (bool s_w[4], bool s_r[4]);
+    void gotCleanResult (bool s_w1, bool s_w2, bool s_w3, bool s_w4,  bool s_r1, bool s_r2, bool s_r3, bool s_r4);
 
     // check loop signals
     void stageRunningUpdated (int stage, bool runnning);
