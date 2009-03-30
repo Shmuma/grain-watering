@@ -1,4 +1,4 @@
 #!/bin/sh
 
 git push shared
-(cd /var/www/1/plaun.git; git update-server-info)
+(cd /var/www/scm/plaun.git; git update-server-info)
