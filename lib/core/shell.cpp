@@ -672,6 +672,7 @@ QString Interpreter::getGrainSensors (const QStringList&)
 QString Interpreter::setGrainSensors (const QStringList& args)
 {
     _grainSensorsPresent = args[0] != "0";
+    setOutputSignal (args[0]);
     return QString ("OK\n");
 }
 
