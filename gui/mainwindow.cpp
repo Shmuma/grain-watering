@@ -642,6 +642,8 @@ void MainWindow::startButtonClicked (int stage)
 {
     _daemon.startStage (stage);
     Logger::instance ()->log (Logger::Information, tr ("Request start of stage %1").arg (stage+1));
+    if (getStageControl (stage)->grainState () == StageControl::GS_GrainMissing)
+        Logger::instance ()->log (Logger::Warning, tr ("It seems that there is no grain in stage %1, we'll wait for one minute and stop").arg (stage+1));
 }
 
 
@@ -857,6 +859,9 @@ void MainWindow::daemonWaterPressureUpdated (double val)
 
 void MainWindow::daemonGrainPresentUpdated (int stage, bool present)
 {
+    if (!present)
+        if (getStageControl (stage)->grainState () != (present ? StageControl::GS_GrainPresent : StageControl::GS_GrainMissing))
+            Logger::instance ()->log (Logger::Error, tr ("Grain is not present in stage %1, stopping stage").arg (stage+1));
     getStageControl (stage)->setGrainState (present ? StageControl::GS_GrainPresent : StageControl::GS_GrainMissing);
 }
 
